@@ -1,0 +1,90 @@
+{
+  "nodes": {
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1605370193,
+        "narHash": "sha256-YyMTf3URDL/otKdKgtoMChu4vfVL3vCMkRqpGifhUn0=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "5021eac20303a61fafe17224c087f5519baed54d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1610819105,
+        "narHash": "sha256-OVuLkMkISP/KXqHCwJZqtNsSKqLGQyMWHSnEJGppceQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a71a2f2d251205a3566e9910a42a5178f3f7bd33",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1608723372,
+        "narHash": "sha256-XoCD827n1+bBPVxjKFmAikh7KSIspj9BBj2vnWhtTC4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b67ba0bfcc714453cdeb8d713e35751eb8b4c8f4",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "spago2nix": "spago2nix",
+        "utils": "utils"
+      }
+    },
+    "spago2nix": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1602604874,
+        "narHash": "sha256-uIVlFzsayjCr7tBpx+ROTavPO0Rl63u3caJIGhsN68U=",
+        "owner": "justinwoo",
+        "repo": "spago2nix",
+        "rev": "898798204fa8f53837bbcf71e30aeb425deb0906",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justinwoo",
+        "repo": "spago2nix",
+        "type": "github"
+      }
+    },
+    "utils": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1608846826,
+        "narHash": "sha256-Er+wYQR5wNvz+KeC7ZhAiMEiBs2pxyWyLpauSSFSJVk=",
+        "owner": "ursi",
+        "repo": "flake-utils",
+        "rev": "80e28ed52b349af275d1fc61a696476ed8e1f314",
+        "type": "github"
+      },
+      "original": {
+        "id": "utils",
+        "type": "indirect"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

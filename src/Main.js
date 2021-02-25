@@ -1,0 +1,1 @@
+exports.typeset = () => MathJax.typeset();
