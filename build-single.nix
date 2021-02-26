@@ -5,6 +5,10 @@
 , src
 }:
 let
+  log = a: builtins.trace a a;
+  logShow = a: builtins.trace (toString a) a;
+  logNames = a: builtins.trace (toString (builtins.map (b: b.name) a)) a;
+
   inherit (pkgs.stdenv) mkDerivation;
 
   mergeCache = with pkgs;
@@ -55,9 +59,27 @@ in
 
       srcs =
         let
+          paths =
+            builtins.filter
+              (a: pathFilter (toString a))
+              (lib.filesystem.listFilesRecursive src);
+
+          pathSuffixPrefix = (builtins.replaceStrings [ "." ] [ "/" ] name) + ".";
+
+          subSrc =
+            let
+              match =
+                builtins.match
+                  "(.*)/[^/]+$"
+                  pathSuffixPrefix;
+            in
+              if match == null then
+                src
+              else
+                src + ("/" + builtins.head match);
+
           pathFilter = path:
             let
-              pathSuffixPrefix = (builtins.replaceStrings [ "." ] [ "/" ] name) + ".";
               js = pathSuffixPrefix + "js";
               purs = pathSuffixPrefix + "purs";
             in
@@ -65,44 +87,58 @@ in
         in
           builtins.filterSource
             (path: _: pathFilter path)
-            src;
+            subSrc;
 
       output =
-        mkDerivation {
-          inherit name srcs;
-          dontUnpack = true;
-          nativeBuildInputs =
-            [ purescript mergeCache ]
-              ++ builtins.map
-                   (a: a.bin)
-                   localDeps;
-
-          buildPhase =
+        let
+          transLocalDeps =
             let
-              augmentations =
-                toString
-                  (builtins.map
-                     (a: "${a.name} output;")
-                     localDeps
-                  );
-
-              localDepsSrcs =
-                toString
-                  (builtins.map
-                    (a: ''"${a.srcs}/**/*.purs"'')
-                    localDeps
-                  );
+              go = lds:
+                builtins.foldl'
+                  (acc: ld:
+                    acc ++ go ld.localDeps
+                  )
+                  []
+                  lds
+                  ++ lds;
             in
-              ''
-              cp --no-preserve=mode --preserve=timestamps -r ${builtDeps} output
-              ${augmentations}
-              purs compile "$srcs/**/*.purs" ${localDepsSrcs} ${depsSrcs}
-              '';
+              lib.unique (go localDeps);
+        in
+          mkDerivation
+            { inherit name srcs;
+              dontUnpack = true;
+              nativeBuildInputs =
+                [ purescript mergeCache ]
+                  ++ builtins.map
+                       (a: a.bin)
+                       transLocalDeps;
 
-          installPhase = "mv output $out";
-        };
+              buildPhase =
+                let
+                  augmentations =
+                    toString
+                      (builtins.map
+                         (a: "${a.name} output;")
+                         transLocalDeps
+                      );
+
+                  localDepsSrcs =
+                    toString
+                      (builtins.map
+                        (a: ''"${a.srcs}/**/*.purs"'')
+                        transLocalDeps
+                      );
+                in
+                  ''
+                  cp --no-preserve=mode --preserve=timestamps -r ${builtDeps} output
+                  ${augmentations}
+                  purs compile "$srcs/**/*.purs" ${localDepsSrcs} ${depsSrcs}
+                  '';
+
+              installPhase = "mv output $out";
+            };
     in
-      { inherit name srcs;
+      { inherit localDeps name output srcs;
         bin =
           mkDerivation
             { inherit name;
