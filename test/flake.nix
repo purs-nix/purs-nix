@@ -48,10 +48,7 @@
             mkShell
               { buildInputs =
                   [ dhall
-                    gnumake
-                    inotify-tools
                     nodejs
-                    electron
                     purescript
                     spago
                     (import spago2nix { inherit pkgs; })
