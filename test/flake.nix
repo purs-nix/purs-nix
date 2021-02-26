@@ -1,10 +1,14 @@
 {
-  inputs.spago2nix = {
-    url = "github:justinwoo/spago2nix";
-    flake = false;
-  };
+  inputs =
+    { mkBuildSingle.url = "/home/mason/git/nix-purescript-module-cache";
 
-  outputs = { self, nixpkgs, utils, spago2nix }:
+      spago2nix =
+        { url = "github:justinwoo/spago2nix";
+          flake = false;
+        };
+    };
+
+  outputs = { self, nixpkgs, utils, spago2nix, mkBuildSingle }:
     utils.defaultSystems
       ({ pkgs, system }: with pkgs;
         { defaultPackage =
@@ -17,10 +21,11 @@
                   let
                     deps = (import ./spago-packages.nix { inherit pkgs; }).inputs;
 
-                    buildSingle = import ./build-single.nix
-                      { inherit deps pkgs lib;
-                        src = ./src;
-                      };
+                    buildSingle =
+                      mkBuildSingle
+                        { inherit deps lib pkgs;
+                          src = ./src;
+                        };
 
                     Main = buildSingle
                       { name = "Main";
