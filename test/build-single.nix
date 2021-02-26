@@ -28,7 +28,7 @@ let
       mkDerivation
         { name = "merge-cache";
           buildInputs = [ makeWrapper nodejs ];
-          exe = writeShellScript "exe" "node ${js} $1 $2 $3";
+          exe = writeShellScript "exe" "node ${js} $@";
           dontUnpack = true;
 
           installPhase = ''
