@@ -1,14 +1,5 @@
-let testDependencies = [ "substitute" ]
-
-in  { name = "my-project"
-    , dependencies =
-          [ "elmish"
-          , "mason-prelude"
-          , "node-process"
-          , "string-parsers"
-          , "task-file"
-          ]
-        # testDependencies
-    , packages = ./packages.dhall
-    , sources = [ "src/**/*.purs", "test/**/*.purs" ]
-    }
+{ name = "my-project"
+, dependencies = [ "console", "effect", "psci-support" ]
+, packages = ./packages.dhall
+, sources = [ "src/**/*.purs" ]
+}
