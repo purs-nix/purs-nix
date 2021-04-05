@@ -11,12 +11,10 @@
       , purescript ? pkgs.purescript
       }:
         let
-          p = pkgs;
+          l = lib; p = pkgs;
           inherit (p.stdenv) mkDerivation;
-        in
-          { name
-          , local-deps ? []
-          }:
+
+          build-single = name: local-deps:
             let
               deps-srcs =
                 toString
@@ -138,5 +136,57 @@
                       { buildInputs = [ p.makeWrapper ]; }
                       "makeWrapper ${exe} $out --set PATH $PATH";
               };
+
+          builds =
+            let
+              local-graph =
+                let
+                  make-graph = extra:
+                    builtins.fromJSON
+                      (builtins.readFile
+                         (p.runCommand "purescript-dependency-graph"
+                            { buildInputs = [ purescript ]; }
+                            ''
+                            purs graph ${extra} ${
+                            toString
+                              (l.mapAttrsToList
+                                 (k: v:
+                                   "\"" + toString(v) + "/**/*.purs\""
+                                 )
+                                 deps
+                              )
+                            } > $out
+                            ''
+                         )
+                      );
+
+                  deps-graph = make-graph "";
+                  graph = make-graph "${src}/*.purs ${src}/**/*.purs";
+
+                  partial =
+                    l.filterAttrs
+                      (n: v: !deps-graph?${n})
+                      graph;
+                in
+                l.mapAttrs
+                  (module: v:
+                     { depends =
+                         builtins.filter
+                           (v: partial?${v})
+                           v.depends;
+                     }
+                  )
+                  partial;
+            in
+            l.mapAttrs
+              (name: v:
+                 build-single
+                   name
+                   # [])
+                   (builtins.map (v: builds.${v}) v.depends)
+              )
+              local-graph;
+        in
+        builds;
     };
 }
