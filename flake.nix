@@ -128,19 +128,16 @@
             in
               { inherit local-deps name output srcs;
                 bin =
-                  mkDerivation
-                    { inherit name;
-                      phases = [ "installPhase" ];
-                      buildInputs = [ pkgs.makeWrapper merge-cache ];
-
-                      exe = pkgs.writeShellScript "exe"
-                        ''
-                        cp --no-preserve=mode --preserve=timestamps -r ${output}/${name} $1/${name}
-                        merge-cache ${output}/cache-db.json $1/cache-db.json $1/cache-db.json
-                        '';
-                      installPhase =
-                        "makeWrapper $exe $out --set PATH $PATH";
-                    };
+                  let
+                    exe = pkgs.writeShellScript "exe"
+                      ''
+                      cp --no-preserve=mode --preserve=timestamps -r ${output}/${name} $1/${name}
+                      merge-cache ${output}/cache-db.json $1/cache-db.json $1/cache-db.json
+                      '';
+                  in
+                    pkgs.runCommand name
+                      { buildInputs = [ pkgs.makeWrapper merge-cache ]; }
+                      "makeWrapper ${exe} $out --set PATH $PATH";
               };
     };
 }
