@@ -99,19 +99,14 @@
                   mkDerivation
                     { inherit name srcs;
                       phases = [ "buildPhase" "installPhase" ];
-
-                      nativeBuildInputs =
-                        [ purescript merge-cache ]
-                          ++ builtins.map
-                               (a: a.bin)
-                               trans-local-deps;
+                      nativeBuildInputs = [ purescript ];
 
                       buildPhase =
                         let
                           augmentations =
                             toString
                               (builtins.map
-                                 (a: "${a.name} output;")
+                                 (a: "${a.bin} output;")
                                  trans-local-deps
                               );
 
@@ -143,12 +138,8 @@
                         cp --no-preserve=mode --preserve=timestamps -r ${output}/${name} $1/${name}
                         merge-cache ${output}/cache-db.json $1/cache-db.json $1/cache-db.json
                         '';
-
                       installPhase =
-                        ''
-                        mkdir -p $out/bin
-                        makeWrapper $exe $out/bin/${name} --set PATH $PATH
-                        '';
+                        "makeWrapper $exe $out --set PATH $PATH";
                     };
               };
     };
