@@ -11,7 +11,8 @@
       , purescript ? pkgs.purescript
       }:
         let
-          inherit (pkgs.stdenv) mkDerivation;
+          p = pkgs;
+          inherit (p.stdenv) mkDerivation;
 
           merge-cache =
             (utils.builders system).write-js-script
@@ -127,14 +128,14 @@
               { inherit local-deps name output srcs;
                 bin =
                   let
-                    exe = pkgs.writeShellScript "exe"
+                    exe = p.writeShellScript "exe"
                       ''
                       cp --no-preserve=mode --preserve=timestamps -r ${output}/${name} $1/${name}
                       ${merge-cache} ${output}/cache-db.json $1/cache-db.json $1/cache-db.json
                       '';
                   in
-                    pkgs.runCommand name
-                      { buildInputs = [ pkgs.makeWrapper ]; }
+                    p.runCommand name
+                      { buildInputs = [ p.makeWrapper ]; }
                       "makeWrapper ${exe} $out --set PATH $PATH";
               };
     };
