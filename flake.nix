@@ -14,20 +14,18 @@
           inherit (pkgs.stdenv) mkDerivation;
 
           merge-cache =
-            utils.builders.writeJsScriptBin
-              { name = "merge-cache";
-                js =
-                  ''
-                  const fs = require(`fs`);
+            (utils.builders system).write-js-script-bin
+              "merge-cache"
+              ''
+              const fs = require(`fs`);
 
-                  const [c1Path, c2Path, outPath] = process.argv.slice(2);
+              const [c1Path, c2Path, outPath] = process.argv.slice(2);
 
-                  c1 = JSON.parse(fs.readFileSync(c1Path));
-                  c2 = JSON.parse(fs.readFileSync(c2Path));
+              c1 = JSON.parse(fs.readFileSync(c1Path));
+              c2 = JSON.parse(fs.readFileSync(c2Path));
 
-                  fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
-                  '';
-              };
+              fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
+              '';
         in
           { name
           , local-deps ? []
