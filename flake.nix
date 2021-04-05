@@ -13,20 +13,6 @@
         let
           p = pkgs;
           inherit (p.stdenv) mkDerivation;
-
-          merge-cache =
-            (utils.builders system).write-js-script
-              "merge-cache"
-              ''
-              const fs = require(`fs`);
-
-              const [c1Path, c2Path, outPath] = process.argv.slice(2);
-
-              c1 = JSON.parse(fs.readFileSync(c1Path));
-              c2 = JSON.parse(fs.readFileSync(c2Path));
-
-              fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
-              '';
         in
           { name
           , local-deps ? []
@@ -128,6 +114,20 @@
               { inherit local-deps name output srcs;
                 bin =
                   let
+                    merge-cache =
+                      (utils.builders system).write-js-script
+                        "merge-cache"
+                        ''
+                        const fs = require(`fs`);
+
+                        const [c1Path, c2Path, outPath] = process.argv.slice(2);
+
+                        c1 = JSON.parse(fs.readFileSync(c1Path));
+                        c2 = JSON.parse(fs.readFileSync(c2Path));
+
+                        fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
+                        '';
+
                     exe = p.writeShellScript "exe"
                       ''
                       cp --no-preserve=mode --preserve=timestamps -r ${output}/${name} $1/${name}
