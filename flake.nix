@@ -14,7 +14,7 @@
           inherit (pkgs.stdenv) mkDerivation;
 
           merge-cache =
-            (utils.builders system).write-js-script-bin
+            (utils.builders system).write-js-script
               "merge-cache"
               ''
               const fs = require(`fs`);
@@ -130,11 +130,11 @@
                     exe = pkgs.writeShellScript "exe"
                       ''
                       cp --no-preserve=mode --preserve=timestamps -r ${output}/${name} $1/${name}
-                      merge-cache ${output}/cache-db.json $1/cache-db.json $1/cache-db.json
+                      ${merge-cache} ${output}/cache-db.json $1/cache-db.json $1/cache-db.json
                       '';
                   in
                     pkgs.runCommand name
-                      { buildInputs = [ pkgs.makeWrapper merge-cache ]; }
+                      { buildInputs = [ pkgs.makeWrapper ]; }
                       "makeWrapper ${exe} $out --set PATH $PATH";
               };
     };
