@@ -43,7 +43,7 @@
               builtDeps =
                 mkDerivation
                   { name = "built-deps";
-                    dontUnpack = true;
+                    phases = [ "buildPhase" "installPhase" ];
                     nativeBuildInputs = [ purescript ];
                     buildPhase ="purs compile ${depsSrcs}";
                     installPhase = "mv output $out";
@@ -92,13 +92,14 @@
                           )
                           []
                           lds
-                          ++ lds;
+                        ++ lds;
                     in
                       lib.unique (go localDeps);
                 in
                   mkDerivation
                     { inherit name srcs;
-                      dontUnpack = true;
+                      phases = [ "buildPhase" "installPhase" ];
+
                       nativeBuildInputs =
                         [ purescript mergeCache ]
                           ++ builtins.map
@@ -134,7 +135,7 @@
                 bin =
                   mkDerivation
                     { inherit name;
-                      dontUnpack = true;
+                      phases = [ "installPhase" ];
                       buildInputs = [ pkgs.makeWrapper mergeCache ];
 
                       exe = pkgs.writeShellScript "exe"
