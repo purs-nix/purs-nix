@@ -13,7 +13,7 @@
         let
           inherit (pkgs.stdenv) mkDerivation;
 
-          mergeCache =
+          merge-cache =
             utils.builders.writeJsScriptBin
               { name = "merge-cache";
                 js =
@@ -30,22 +30,22 @@
               };
         in
           { name
-          , localDeps ? []
+          , local-deps ? []
           }:
             let
-              depsSrcs =
+              deps-srcs =
                 toString
                   (builtins.map
                      (a: ''"${a}/src/**/*.purs"'')
                      (builtins.attrValues deps)
                   );
 
-              builtDeps =
+              built-deps =
                 mkDerivation
                   { name = "built-deps";
                     phases = [ "buildPhase" "installPhase" ];
                     nativeBuildInputs = [ purescript ];
-                    buildPhase ="purs compile ${depsSrcs}";
+                    buildPhase ="purs compile ${deps-srcs}";
                     installPhase = "mv output $out";
                   };
 
@@ -56,14 +56,14 @@
                       (a: pathFilter (toString a))
                       (lib.filesystem.listFilesRecursive src);
 
-                  pathSuffixPrefix = (builtins.replaceStrings [ "." ] [ "/" ] name) + ".";
+                  path-suffix-prefix = (builtins.replaceStrings [ "." ] [ "/" ] name) + ".";
 
-                  subSrc =
+                  sub-src =
                     let
                       match =
                         builtins.match
                           "(.*)/[^/]+$"
-                          pathSuffixPrefix;
+                          path-suffix-prefix;
                     in
                       if match == null then
                         src
@@ -72,39 +72,39 @@
 
                   pathFilter = path:
                     let
-                      js = pathSuffixPrefix + "js";
-                      purs = pathSuffixPrefix + "purs";
+                      js = path-suffix-prefix + "js";
+                      purs = path-suffix-prefix + "purs";
                     in
                       lib.hasSuffix js path || lib.hasSuffix purs path;
                 in
                   builtins.filterSource
                     (path: _: pathFilter path)
-                    subSrc;
+                    sub-src;
 
               output =
                 let
-                  transLocalDeps =
+                  trans-local-deps =
                     let
                       go = lds:
                         builtins.foldl'
                           (acc: ld:
-                            acc ++ go ld.localDeps
+                            acc ++ go ld.local-deps
                           )
                           []
                           lds
                         ++ lds;
                     in
-                      lib.unique (go localDeps);
+                      lib.unique (go local-deps);
                 in
                   mkDerivation
                     { inherit name srcs;
                       phases = [ "buildPhase" "installPhase" ];
 
                       nativeBuildInputs =
-                        [ purescript mergeCache ]
+                        [ purescript merge-cache ]
                           ++ builtins.map
                                (a: a.bin)
-                               transLocalDeps;
+                               trans-local-deps;
 
                       buildPhase =
                         let
@@ -112,31 +112,31 @@
                             toString
                               (builtins.map
                                  (a: "${a.name} output;")
-                                 transLocalDeps
+                                 trans-local-deps
                               );
 
-                          localDepsSrcs =
+                          local-deps-srcs =
                             toString
                               (builtins.map
                                 (a: ''"${a.srcs}/**/*.purs"'')
-                                transLocalDeps
+                                trans-local-deps
                               );
                         in
                           ''
-                          cp --no-preserve=mode --preserve=timestamps -r ${builtDeps} output
+                          cp --no-preserve=mode --preserve=timestamps -r ${built-deps} output
                           ${augmentations}
-                          purs compile "$srcs/**/*.purs" ${localDepsSrcs} ${depsSrcs}
+                          purs compile "$srcs/**/*.purs" ${local-deps-srcs} ${deps-srcs}
                           '';
 
                       installPhase = "mv output $out";
                     };
             in
-              { inherit localDeps name output srcs;
+              { inherit local-deps name output srcs;
                 bin =
                   mkDerivation
                     { inherit name;
                       phases = [ "installPhase" ];
-                      buildInputs = [ pkgs.makeWrapper mergeCache ];
+                      buildInputs = [ pkgs.makeWrapper merge-cache ];
 
                       exe = pkgs.writeShellScript "exe"
                         ''
