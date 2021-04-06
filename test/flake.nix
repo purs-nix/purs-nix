@@ -1,59 +1,38 @@
-{
-  inputs =
+{ inputs =
     { mkBuildSingle.url = "/home/mason/git/nix-purescript-module-cache";
 
-      spago2nix =
-        { url = "github:justinwoo/spago2nix";
+      easy-ps =
+        { url = "github:justinwoo/easy-purescript-nix";
           flake = false;
         };
+
+      psnp.url = "github:ursi/psnp";
     };
 
-  outputs = { self, nixpkgs, utils, spago2nix, mkBuildSingle }:
+  outputs = { nixpkgs, utils, easy-ps, mkBuildSingle, psnp, ... }:
     utils.defaultSystems
       ({ pkgs, system }: with pkgs;
-        { defaultPackage =
-            stdenv.mkDerivation
-              { name = "purescript";
-                dontUnpack = true;
-                nativeBuildInputs = [ purescript ];
+         { defaultPackage =
+             let deps = import ./deps.nix; in
+             (mkBuildSingle
+               { inherit deps pkgs system;
+                 src = ./src;
+               }
+             ).Main.output;
 
-                output =
-                  let
-                    deps = (import ./spago-packages.nix { inherit pkgs; }).inputs;
-
-                    buildSingle =
-                      mkBuildSingle
-                        { inherit deps lib pkgs;
-                          src = ./src;
-                        };
-
-                    Main = buildSingle
-                      { name = "Main";
-                        localDeps = [ Dependency ];
-                      };
-
-                    Dependency = buildSingle
-                      { name = "Dependency";
-                        localDeps = [ NestedDependency ];
-                      };
-
-                    NestedDependency = buildSingle { name = "Nested.Dependency"; };
-                  in
-                    Main.output;
-
-                  installPhase = "cp -r $output $out";
-                };
-
-          devShell =
-            mkShell
-              { buildInputs =
-                  [ dhall
-                    nodejs
-                    purescript
-                    spago
-                    (import spago2nix { inherit pkgs; })
-                  ];
-              };
+           devShell =
+             mkShell
+               { buildInputs =
+                   [ dhall
+                     nodejs
+                     purescript
+                   ]
+                   ++ (with import easy-ps { inherit pkgs; };
+                       [ spago
+                         spago2nix
+                       ]
+                      );
+               };
         }
       )
       nixpkgs;
