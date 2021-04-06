@@ -1,6 +1,6 @@
 { inputs.utils.url = "github:ursi/flake-utils";
 
-  outputs = { self, nixpkgs, utils }:
+  outputs = { nixpkgs, utils, ... }:
     { __functor = _:
       { deps
       , src
