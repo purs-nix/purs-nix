@@ -198,6 +198,8 @@
             )
             local-graph;
       in
-      builds;
+      l.mapAttrs
+        (_: v: { inherit (v) bundle output; })
+        builds;
     };
 }
