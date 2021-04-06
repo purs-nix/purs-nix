@@ -3,14 +3,13 @@
   outputs = { self, nixpkgs, utils }:
     { __functor = _:
       { deps
-      , lib
       , src
       , system
       , pkgs ? nixpkgs.legacyPackages.${system}
       , purescript ? pkgs.purescript
       }:
       let
-        l = lib; p = pkgs;
+        l = p.lib; p = pkgs;
         inherit (p.stdenv) mkDerivation;
 
         build-single = name: local-deps:
