@@ -1,20 +1,18 @@
 { inputs =
-    { mkBuildSingle.url = "/home/mason/git/nix-purescript-module-cache";
+    { purs2nix.url = "path:..";
 
       easy-ps =
         { url = "github:justinwoo/easy-purescript-nix";
           flake = false;
         };
-
-      psnp.url = "github:ursi/psnp";
     };
 
-  outputs = { nixpkgs, utils, easy-ps, mkBuildSingle, psnp, ... }:
+  outputs = { nixpkgs, utils, easy-ps, purs2nix, ... }:
     utils.defaultSystems
       ({ pkgs, system }: with pkgs;
          { defaultPackage =
              let deps = import ./deps.nix; in
-             (mkBuildSingle
+             (purs2nix
                { inherit deps pkgs system;
                  src = ./src;
                }
