@@ -31,16 +31,16 @@
                   installPhase = "mv output $out";
                 };
 
-            srcs =
+            src' =
               let
                 paths =
                   builtins.filter
-                    (a: pathFilter (toString a))
+                    (a: path-filter (toString a))
                     (lib.filesystem.listFilesRecursive src);
 
                 path-suffix-prefix = (builtins.replaceStrings [ "." ] [ "/" ] name) + ".";
 
-                sub-src =
+                subsrc =
                   let
                     match =
                       builtins.match
@@ -52,7 +52,7 @@
                   else
                     src + ("/" + builtins.head match);
 
-                pathFilter = path:
+                path-filter = path:
                   let
                     js = path-suffix-prefix + "js";
                     purs = path-suffix-prefix + "purs";
@@ -60,26 +60,26 @@
                   lib.hasSuffix js path || lib.hasSuffix purs path;
               in
               builtins.filterSource
-                (path: _: pathFilter path)
-                sub-src;
+                (path: _: path-filter path)
+                subsrc;
 
             output =
               let
-                trans-local-deps =
+                trans-deps =
                   let
-                    go = lds:
+                    go = ds:
                       builtins.foldl'
-                        (acc: ld:
-                          acc ++ go ld.local-deps
+                        (acc: d:
+                          acc ++ go d.local-deps
                         )
                         []
-                        lds
-                      ++ lds;
+                        ds
+                      ++ ds;
                   in
                   lib.unique (go local-deps);
               in
               mkDerivation
-                { inherit name srcs;
+                { inherit name;
                   phases = [ "buildPhase" "installPhase" ];
                   nativeBuildInputs = [ purescript ];
 
@@ -89,26 +89,27 @@
                         toString
                           (builtins.map
                              (a: "${a.bin} output;")
-                             trans-local-deps
+                             trans-deps
                           );
 
                       local-deps-srcs =
                         toString
                           (builtins.map
-                            (a: ''"${a.srcs}/**/*.purs"'')
-                            trans-local-deps
+                            (a: ''"${a.src}/**/*.purs"'')
+                            trans-deps
                           );
                     in
                     ''
                     cp --no-preserve=mode --preserve=timestamps -r ${built-deps} output
                     ${augmentations}
-                    purs compile "$srcs/**/*.purs" ${local-deps-srcs} ${deps-srcs}
+                    purs compile "${src'}/**/*.purs" ${local-deps-srcs} ${deps-srcs}
                     '';
 
                   installPhase = "mv output $out";
                 };
           in
-          { inherit local-deps name output srcs;
+          { inherit local-deps name output;
+            src = src';
 
             bin =
               let
