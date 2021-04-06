@@ -184,7 +184,6 @@
             (name: v:
                build-single
                  name
-                 # [])
                  (builtins.map (v: builds.${v}) v.depends)
             )
             local-graph;
