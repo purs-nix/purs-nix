@@ -107,8 +107,18 @@
 
                   installPhase = "mv output $out";
                 };
+
+            bundle = { main ? true, namespace ? null }:
+              p.runCommand "purescript-bundle"
+                { buildInputs = [ purescript ]; }
+                ''purs bundle "${output}/**/*.js" -m ${name} ${
+                if main then "--main ${name}" else ""
+                } ${
+                if namespace == null then ""
+                else "-n ${namespace}"
+                } -o $out'';
           in
-          { inherit local-deps name output;
+          { inherit bundle local-deps name output;
             src = src';
 
             bin =
