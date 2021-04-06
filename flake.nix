@@ -162,7 +162,7 @@
                           toString
                             (l.mapAttrsToList
                                (k: v:
-                                  "\"" + toString(v) + "/**/*.purs\""
+                                  "\"" + toString(v) + "/src/**/*.purs\""
                                )
                                deps
                             )
