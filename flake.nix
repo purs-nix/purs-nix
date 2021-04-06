@@ -5,7 +5,7 @@
       { deps
       , lib
       , src
-      , system ? "x86_64-linux"
+      , system
       , pkgs ? nixpkgs.legacyPackages.${system}
       , purescript ? pkgs.purescript
       }:
