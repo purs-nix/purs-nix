@@ -36,7 +36,7 @@
                 paths =
                   builtins.filter
                     (a: path-filter (toString a))
-                    (lib.filesystem.listFilesRecursive src);
+                    (l.filesystem.listFilesRecursive src);
 
                 path-suffix-prefix = (builtins.replaceStrings [ "." ] [ "/" ] name) + ".";
 
@@ -57,7 +57,7 @@
                     js = path-suffix-prefix + "js";
                     purs = path-suffix-prefix + "purs";
                   in
-                  lib.hasSuffix js path || lib.hasSuffix purs path;
+                  l.hasSuffix js path || l.hasSuffix purs path;
               in
               builtins.filterSource
                 (path: _: path-filter path)
@@ -76,7 +76,7 @@
                         ds
                       ++ ds;
                   in
-                  lib.unique (go local-deps);
+                  l.unique (go local-deps);
               in
               mkDerivation
                 { inherit name;
