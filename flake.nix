@@ -70,7 +70,7 @@
                     go = ds:
                       builtins.foldl'
                         (acc: d:
-                          acc ++ go d.local-deps
+                           acc ++ go d.local-deps
                         )
                         []
                         ds
