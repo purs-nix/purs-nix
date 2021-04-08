@@ -108,7 +108,7 @@
                 };
 
             bundle = { main ? true, namespace ? null }:
-              p.runCommand "purescript-bundle"
+              p.runCommand "${name}-bundle"
                 { buildInputs = [ purescript ]; }
                 ''purs bundle "${output}/**/*.js" -m ${name} ${
                 if main then "--main ${name}" else ""
