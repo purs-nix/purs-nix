@@ -1,5 +1,5 @@
 { inputs =
-    { purs2nix.url = "path:..";
+    { purs-nix.url = "path:..";
 
       easy-ps =
         { url = "github:justinwoo/easy-purescript-nix";
@@ -7,16 +7,23 @@
         };
     };
 
-  outputs = { nixpkgs, utils, easy-ps, purs2nix, ... }:
+  outputs = { nixpkgs, utils, easy-ps, purs-nix, ... }:
     utils.defaultSystems
       ({ pkgs, system }: with pkgs;
          { defaultPackage =
-             let deps = import ./deps.nix; in
-             (purs2nix
-               { inherit deps pkgs system;
-                 src = ./src;
-               }
-             ).Main.output;
+             let inherit (purs-nix { inherit system; }) purs ps-pkgs; in
+             (purs
+                { inherit pkgs system;
+                  deps =
+                    with ps-pkgs;
+                    [ console
+                      effect
+                      prelude
+                    ];
+
+                  src = ./src;
+                }
+             ).Main.bundle {};
 
            devShell =
              mkShell

@@ -102,13 +102,13 @@
         "type": "indirect"
       }
     },
-    "purs2nix": {
+    "purs-nix": {
       "inputs": {
         "nixpkgs": "nixpkgs_2",
         "utils": "utils"
       },
       "locked": {
-        "narHash": "sha256-T2jOT7O2I7cHDGtIVL3j7R/xPcL3tksj480H2zZYAek=",
+        "narHash": "sha256-CXSob02Bu+sZ9AeOso4uAcWB6QYeqiStUP8XSlJDVyk=",
         "path": "..",
         "type": "path"
       },
@@ -121,7 +121,7 @@
       "inputs": {
         "easy-ps": "easy-ps",
         "nixpkgs": "nixpkgs",
-        "purs2nix": "purs2nix",
+        "purs-nix": "purs-nix",
         "utils": "utils_2"
       }
     },
