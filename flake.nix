@@ -2,7 +2,7 @@
 
   outputs = { nixpkgs, utils, ... }:
     { __functor = _:
-      { deps
+      { deps ? []
       , src
       , system
       , pkgs ? nixpkgs.legacyPackages.${system}
@@ -13,10 +13,24 @@
         inherit (p.stdenv) mkDerivation;
 
         deps-srcs =
+          let
+            trans-deps =
+              let
+                go = ds:
+                  builtins.foldl'
+                    (acc: d:
+                       acc ++ go d.dependencies
+                    )
+                    []
+                    ds
+                  ++ ds;
+              in
+              l.unique (go deps);
+          in
           toString
             (builtins.map
-               (a: ''"${a}/src/**/*.purs"'')
-               (builtins.attrValues deps)
+               (a: ''"${a}/**/*.purs"'')
+               trans-deps
             );
 
         build-single = name: local-deps:
