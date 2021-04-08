@@ -5,7 +5,7 @@
         { inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
 
           purs =
-            { deps ? []
+            { dependencies ? []
             , src
             , purescript ? pkgs.purescript
             }:
@@ -26,7 +26,7 @@
                           ds
                         ++ ds;
                     in
-                    l.unique (go deps);
+                    l.unique (go dependencies);
                 in
                 toString
                   (builtins.map
