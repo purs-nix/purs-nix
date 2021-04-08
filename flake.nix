@@ -7,8 +7,6 @@
           purs =
             { deps ? []
             , src
-            , system
-            , pkgs ? nixpkgs.legacyPackages.${system}
             , purescript ? pkgs.purescript
             }:
             let
