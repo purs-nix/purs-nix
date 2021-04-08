@@ -162,7 +162,7 @@
                     );
 
                 deps-graph = make-graph "";
-                graph = make-graph "${src}/*.purs ${src}/**/*.purs";
+                graph = make-graph ''"${src}/**/*.purs"'';
 
                 partial =
                   l.filterAttrs
