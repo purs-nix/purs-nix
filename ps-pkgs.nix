@@ -346,7 +346,7 @@
         rev = "2f0a5239efab68179a684603263bcec8f1489b08";
       };
 
-    point-free = import /home/mason/git/purescript-point-free/package.nix ps-pkgs;
+    point-free = import ((builtins.fetchGit { rev = "6cbeb854d7e669069bbfed7dd0b8c840fea6aef7"; url = "https://github.com/ursi/purescript-point-free.git"; }) + /package.nix) args;
 
     prelude =
       { version = "5.0.0";
