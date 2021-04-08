@@ -201,9 +201,11 @@
                   )
                   local-graph;
             in
-            l.mapAttrs
-              (_: v: { inherit (v) bundle output; })
-              builds;
+            { modules =
+                l.mapAttrs
+                  (_: v: { inherit (v) bundle output; })
+                  builds;
+            };
         };
     };
 }
