@@ -12,15 +12,15 @@
         l = p.lib; p = pkgs;
         inherit (p.stdenv) mkDerivation;
 
+        deps-srcs =
+          toString
+            (builtins.map
+               (a: ''"${a}/src/**/*.purs"'')
+               (builtins.attrValues deps)
+            );
+
         build-single = name: local-deps:
           let
-            deps-srcs =
-              toString
-                (builtins.map
-                   (a: ''"${a}/src/**/*.purs"'')
-                   (builtins.attrValues deps)
-                );
-
             built-deps =
               mkDerivation
                 { name = "built-deps";
@@ -157,17 +157,7 @@
                     (builtins.readFile
                        (p.runCommand "purescript-dependency-graph"
                           { buildInputs = [ purescript ]; }
-                          ''
-                          purs graph ${extra} ${
-                          toString
-                            (l.mapAttrsToList
-                               (k: v:
-                                  "\"" + toString(v) + "/src/**/*.purs\""
-                               )
-                               deps
-                            )
-                          } > $out
-                          ''
+                          "purs graph ${extra} ${deps-srcs} > $out"
                        )
                     );
 
