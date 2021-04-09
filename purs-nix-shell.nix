@@ -108,11 +108,11 @@
   p.writeShellScriptBin "purs-nix"
     ''
     case $1 in
-      bundle ) ${bundle' bundle};;
       compile ) ${compile' compile};;
-      output ) ${p.purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
+      bundle ) ${bundle' bundle};;
       package-info ) ${package-info} $2;;
       packages ) ${packages};;
+      output ) ${p.purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
       srcs ) ${p.purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${deps-srcs};;
       * ) echo ${help};;
     esac
