@@ -2,6 +2,7 @@
   with ps-pkgs;
   { ursi =
       { debug = import ((builtins.fetchGit { rev = "c57b867dd6403dba3223e5db28c82c351757f4df"; url = "https://github.com/ursi/purescript-debuggest.git"; }) + /package.nix) pkgs;
+        elmish = import ((builtins.fetchGit { rev = "fd610ec4a7493ad0070f36bab9c2fb534154ff68"; url = "https://github.com/ursi/purescript-elmish.git"; }) + /package.nix) pkgs;
 
         ffi-options =
           { repo = "https://github.com/ursi/purescript-ffi-options.git";

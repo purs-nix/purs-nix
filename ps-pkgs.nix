@@ -20,6 +20,12 @@
           ];
       };
 
+    arraybuffer-types =
+      { version = "3.0.0";
+        repo = "https://github.com/purescript-contrib/purescript-arraybuffer-types.git";
+        rev = "2c63e02e7ff091e88e147e98c97ec70e1462f586";
+      };
+
     bifunctors =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-bifunctors.git";
@@ -389,6 +395,79 @@
         dependencies = [ prelude safe-coerce ];
       };
 
+    node-buffer =
+      { version = "7.0.0";
+        repo = "https://github.com/purescript-node/purescript-node-buffer.git";
+        rev = "8ec24154287bf90b7a5d9565a92ea12ea7ab06db";
+        dependencies =
+          [ arraybuffer-types
+            effect
+            maybe
+            st
+            unsafe-coerce
+          ];
+      };
+
+    node-fs =
+      { version = "6.0.0";
+        repo = "https://github.com/purescript-node/purescript-node-fs.git";
+        rev = "009787abd658fdb206147ef0e00d9a35ec3dab74";
+        dependencies =
+          [ datetime
+            effect
+            either
+            enums
+            exceptions
+            functions
+            integers
+            js-date
+            maybe
+            node-buffer
+            node-path
+            node-streams
+            nullable
+            partial
+            prelude
+            strings
+            unsafe-coerce
+          ];
+      };
+
+    node-path =
+      { version = "4.0.0";
+        repo = "https://github.com/purescript-node/purescript-node-path.git";
+        rev = "a2d7cf05e40b607ef7d048a3684cda788cd42890";
+        dependencies = [ effect ];
+      };
+
+    node-process =
+      { version = "8.1.0";
+        repo = "https://github.com/purescript-node/purescript-node-process.git";
+        rev = "2b745b0b60824fca873482fb33e3b8d6cb1cf219";
+        dependencies =
+          [ effect
+            foreign-object
+            maybe
+            node-streams
+            posix-types
+            prelude
+            unsafe-coerce
+          ];
+      };
+
+    node-streams =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript-node/purescript-node-streams.git";
+        rev = "886bb2045685e3b9031687d69ccfed29972147bb";
+        dependencies =
+          [ effect
+            either
+            exceptions
+            node-buffer
+            prelude
+          ];
+      };
+
     nonempty =
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-nonempty.git";
@@ -481,6 +560,14 @@
 
     point-free = import ((builtins.fetchGit { rev = "6cbeb854d7e669069bbfed7dd0b8c840fea6aef7"; url = "https://github.com/ursi/purescript-point-free.git"; }) + /package.nix) pkgs;
 
+    posix-types =
+      { version = "8.1.0";
+        repo = "https://github.com/purescript-node/purescript-posix-types.git";
+        rev = "e562680fce64b67e26741a61a51160a04fd3e7fb";
+        dependencies = [ maybe prelude ];
+      };
+
+
     prelude =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-prelude.git";
@@ -537,6 +624,24 @@
             prelude
             tailrec
             unsafe-coerce
+          ];
+      };
+
+    string-parsers =
+      { version = "6.0.0";
+        repo = "https://github.com/purescript-contrib/purescript-string-parsers.git";
+        rev = "8cf080bf0f11b07afb8ae9da5d9da328bf4ba4c2";
+        dependencies =
+          [ arrays
+            bifunctors
+            control
+            either
+            foldable-traversable
+            lists
+            maybe
+            prelude
+            strings
+            tailrec
           ];
       };
 
