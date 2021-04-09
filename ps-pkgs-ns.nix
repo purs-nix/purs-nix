@@ -1,16 +1,39 @@
 { ps-pkgs, ps-pkgs-ns }@pkgs:
   with ps-pkgs;
   { ursi =
-      { debug = import ((builtins.fetchGit { rev = "c57b867dd6403dba3223e5db28c82c351757f4df"; url = "https://github.com/ursi/purescript-debuggest.git"; }) + /package.nix) pkgs;
-        elmish = import ((builtins.fetchGit { rev = "47deb688c8ec62e15d7dc1264e39998633761803"; url = "https://github.com/ursi/purescript-elmish.git"; }) + /package.nix) pkgs;
+      { debug =
+          { repo = "https://github.com/ursi/purescript-debuggest.git";
+            rev = "b57a0ec5ba96eddd06659397b623bc012bb8e8c9";
+            info = /package.nix;
+          };
+
+        elmish =
+          { repo = "https://github.com/ursi/purescript-elmish.git";
+            rev = "71d4403156aea2ce5b73f25ec515d54fd19bfb23";
+            info = /package.nix;
+          };
 
         ffi-options =
           { repo = "https://github.com/ursi/purescript-ffi-options.git";
             rev = "568f213577549e958f931f4d9e7dc7c57bf5fadc";
           };
 
-        html = import ((builtins.fetchGit { rev = "7eecd40cceeb03ade75ba7268b3befae0580d3c9"; url = "https://github.com/ursi/purescript-whatwg-html.git"; }) + /package.nix) pkgs;
-        task-file = import ((builtins.fetchGit { rev = "b8956d010f28aa2c5ae5bfd8ffab17b484548075"; url = "https://github.com/ursi/purescript-task-file.git"; }) + /package.nix) pkgs;
-        prelude = import ((builtins.fetchGit { rev = "281d8e7ab24ff840b08608d2d8ded457daf88b0d"; url = "https://github.com/ursi/purescript-mason-prelude.git"; }) + /package.nix) pkgs;
+        html =
+          { repo = "https://github.com/ursi/purescript-whatwg-html.git";
+            rev = "b020cd05e0dd7b926abbe987c119b7d7fc685f8c";
+            info = /package.nix;
+          };
+
+        task-file =
+          { repo = "https://github.com/ursi/purescript-task-file.git";
+            rev = "9926d479af55a7568032a1360c9e0d8790b64bd7";
+            info = /package.nix;
+          };
+
+        prelude =
+          { repo = "https://github.com/ursi/purescript-mason-prelude.git";
+            rev = "186ceb912daf157bb0054fb2264f5bf962e0be1a";
+            info = /package.nix;
+          };
       };
   }

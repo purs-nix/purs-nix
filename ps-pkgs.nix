@@ -576,7 +576,11 @@
         rev = "2f0a5239efab68179a684603263bcec8f1489b08";
       };
 
-    point-free = import ((builtins.fetchGit { rev = "6cbeb854d7e669069bbfed7dd0b8c840fea6aef7"; url = "https://github.com/ursi/purescript-point-free.git"; }) + /package.nix) pkgs;
+    point-free =
+      { repo = "https://github.com/ursi/purescript-point-free.git";
+        rev = "703a87be330e762d66148e9baa3c1b9f5c6f148f";
+        info = /package.nix;
+      };
 
     posix-types =
       { version = "8.1.0";
@@ -703,7 +707,11 @@
           ];
       };
 
-    task = import ((builtins.fetchGit { rev = "eeaaa4f93178622a2ebb4cfa308d3f592a4d2d9a"; url = "https://github.com/ursi/purescript-task.git"; }) + /package.nix) pkgs;
+    task =
+      { repo = "https://github.com/ursi/purescript-task.git";
+        rev = "ffd9c147261ba5cbf2c49e7250595815f7879503";
+        info = /package.nix;
+      };
 
     transformers =
       { version = "5.0.0";

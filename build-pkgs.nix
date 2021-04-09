@@ -5,30 +5,40 @@ pkgs:
     build =
       { repo
       , rev
-      , name ? "purescript-package"
-      , version ? null
-      , ref ? null
-      , src ? "src"
-      , dependencies ? []
-      }:
+      , name
+      , info ? null
+      , ps-pkgs
+      , ps-pkgs-ns
+      , ...
+      }@args:
       let
-        ref' =
-          if ref == null then
-            if version == null then null
-            else "refs/tags/v" + version
+        git-src =
+          builtins.fetchGit
+            ({ url = repo;
+               inherit rev;
+             }
+             // (if ref == null then {}
+                 else { inherit ref; }
+                )
+            );
+
+        info' =
+          if builtins.isPath info then
+            import (git-src + info) args
           else
-            ref;
+            args;
+
+        dependencies = info'.dependencies or [];
+        src = info'.src or "src";
+        version = info'.version or null;
+
+        ref = args.ref
+              or (if args?version then "refs/tags/v" + args.version
+                  else null
+                 );
       in
       p.stdenv.mkDerivation
-        ({ src =
-             builtins.fetchGit
-               ({ url = repo;
-                  inherit rev;
-                }
-                // (if ref' == null then {}
-                    else { ref = ref'; }
-                   )
-               );
+        ({ src = git-src;
            phases = [ "unpackPhase" "installPhase" ];
            passthru = { inherit dependencies repo rev; };
            installPhase = "ln -s $src/${src} $out";
@@ -51,7 +61,15 @@ pkgs:
       l.fix
         (self:
            l.mapAttrs
-             (n: v: build (v // { name = n; }))
+             (n: v:
+                build
+                  (v
+                   // { name = n;
+                        ps-pkgs = self;
+                        inherit ps-pkgs-ns;
+                      }
+                  )
+             )
              (f self)
         );
 
@@ -68,10 +86,18 @@ pkgs:
       l.fix
         (self:
            l.mapAttrs
-             (ns: ps-pkgs':
+             (ns: pkgs':
                l.mapAttrs
-                 (n: v: build (v // { name = ns + "." + n; }))
-                 ps-pkgs'
+                 (n: v:
+                    build
+                      (v
+                       // { name = "${ns}.${n}";
+                            inherit ps-pkgs;
+                            ps-pkgs-ns = self;
+                          }
+                      )
+                 )
+                 pkgs'
              )
              (f self)
         );
