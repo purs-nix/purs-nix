@@ -34,8 +34,7 @@
       in
       ''
       ${command} compile || echo "'${command} compile' failed"
-      ${p.purescript}/bin/purs bundle ${flags} "${compiler-output}/**/*.js"
-      '';
+      ${p.purescript}/bin/purs bundle ${flags} "${compiler-output}/**/*.js"'';
 
     compile' =
       { verbose-errors ? false
@@ -91,7 +90,9 @@
         Commands:
         ------------------------------------------------------------------------
         compile    Compile your project.
-        bundle     Compile and bundle your project.
+        bundle     Compile then bundle your project.
+        run        Compile then run the the output 'purs-nix bundle' would
+                   produce.
         ------------------------------------------------------------------------
         package-info <name>    Show the info of a specific package.
         packages               Show the info of all the packages in your project.
@@ -110,6 +111,7 @@
     case $1 in
       compile ) ${compile' compile};;
       bundle ) ${bundle' bundle};;
+      run ) ${bundle' (bundle // { output = null; })} | ${p.nodejs}/bin/node;;
       package-info ) ${package-info} $2;;
       packages ) ${packages};;
       output ) ${p.purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
