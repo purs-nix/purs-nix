@@ -1,6 +1,17 @@
 { ps-pkgs, ps-pkgs-ns }@pkgs:
   with ps-pkgs;
-  { arrays =
+  { ansi =
+      { version = "6.1.0";
+        repo = "https://github.com/hdgarrood/purescript-ansi.git";
+        rev = "e89e6fede616bd16b001841cf30ac320c95313a6";
+        dependencies =
+          [ foldable-traversable
+            lists
+            strings
+          ];
+      };
+
+    arrays =
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-arrays.git";
         rev = "5b71501b04f96cee4234447b35d62d041317f64b";
@@ -24,6 +35,13 @@
       { version = "3.0.0";
         repo = "https://github.com/purescript-contrib/purescript-arraybuffer-types.git";
         rev = "2c63e02e7ff091e88e147e98c97ec70e1462f586";
+      };
+
+    "assert" =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript/purescript-assert.git";
+        rev = "71a3b1f3b9917c23691fdbb1858de171be871a10";
+        dependencies = [ console effect prelude ];
       };
 
     bifunctors =
