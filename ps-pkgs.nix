@@ -155,6 +155,25 @@
           ];
       };
 
+    foreign-object =
+      { version = "3.0.0";
+        repo = "https://github.com/purescript/purescript-foreign-object.git";
+        rev = "c9a7b7bb8bed1b87c5545c4ebe85a70f86c0e6b1";
+        dependencies =
+          [ arrays
+            foldable-traversable
+            functions
+            gen
+            lists
+            prelude
+            st
+            tailrec
+            tuples
+            typelevel-prelude
+            unfoldable
+          ];
+      };
+
     functions =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-functions.git";
@@ -201,6 +220,20 @@
           ];
       };
 
+    heterogeneous =
+      { version = "0.5.0";
+        repo = "https://github.com/natefaubion/purescript-heterogeneous.git";
+        rev = "55f7563d1945785d6648d0f814f163e9b0970b2f";
+        dependencies =
+          [ either
+            functors
+            prelude
+            record
+            tuples
+            variant
+          ];
+      };
+
     identity =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-identity.git";
@@ -230,6 +263,13 @@
         repo = "https://github.com/purescript/purescript-invariant.git";
         rev = "c421b49dec7a1511073bb408a08bdd8c9d17d7b1";
         dependencies = [ control prelude ];
+      };
+
+    js-timers =
+      { version = "5.0.1";
+        repo = "https://github.com/purescript-contrib/purescript-js-timers.git";
+        rev = "a298417b239581608b7a4f6173246c4ae36a698f";
+        dependencies = [ effect ];
       };
 
     lazy =
@@ -370,6 +410,17 @@
           ];
       };
 
+    record =
+      { version = "3.0.0";
+        repo = "https://github.com/purescript/purescript-record.git";
+        rev = "091495d61fcaa9d8d8232e7b800f403a3165a38f";
+        dependencies =
+          [ functions
+            prelude
+            unsafe-coerce
+          ];
+      };
+
     refs =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-refs.git";
@@ -475,6 +526,13 @@
         rev = "f7644468f22ed267a15d398173d234fa6f45e2e0";
       };
 
+    typelevel-prelude =
+      { version = "6.0.0";
+        repo = "https://github.com/purescript/purescript-typelevel-prelude.git";
+        rev = "83ddcdb23d06c8d5ea6196596a70438f42cd4afd";
+        dependencies = [ prelude type-equality ];
+      };
+
     unfoldable =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-unfoldable.git";
@@ -492,5 +550,21 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-unsafe-coerce.git";
         rev = "ee24f0d3b94bf925d9c50fcc2b449579580178c0";
+      };
+
+    variant =
+      { version = "7.0.2";
+        repo = "https://github.com/natefaubion/purescript-variant.git";
+        rev = "2a2e02e68a02911799bb99bb82e3d9ace182cd47";
+        dependencies =
+          [ enums
+            lists
+            maybe
+            partial
+            prelude
+            record
+            tuples
+            unsafe-coerce
+          ];
       };
   }
