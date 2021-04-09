@@ -214,7 +214,7 @@
                 , compiler-output ? "output"
                 , module ? "Main"
                 , output ? "index.js"
-                , main ? "Main"
+                , main ? module
                 , namespace ? null
                 , source-maps ? false
                 , debug ? false
