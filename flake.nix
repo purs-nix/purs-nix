@@ -218,5 +218,37 @@
               shell = import ./purs-nix-shell.nix { inherit dependencies deps-srcs pkgs; };
             };
         };
-    };
+    }
+    // utils.defaultSystems
+         ({ pkgs, system }:
+            let
+              l = p.lib; p = pkgs;
+              inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
+            in
+            { apps =
+                { package-info =
+                    l.mapAttrs
+                      (n: v:
+                         { type = "app";
+                           program = "${p.writeScript "package-info-${v.name}" (import ./info.nix v)}";
+                         }
+                      )
+                      ps-pkgs;
+
+                  package-info-ns =
+                    l.mapAttrs
+                      (ns: pkgs':
+                         l.mapAttrs
+                           (n: v:
+                             { type = "app";
+                               program = "${p.writeScript "package-info-${v.name}" (import ./info.nix v)}";
+                             }
+                           )
+                           pkgs'
+                      )
+                      ps-pkgs-ns;
+                };
+            }
+         )
+         nixpkgs;
 }

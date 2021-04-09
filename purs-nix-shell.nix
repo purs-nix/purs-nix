@@ -58,22 +58,13 @@
       ''${p.purescript}/bin/purs compile ${flags} "${src}/**/*.purs" ${deps-srcs}'';
 
     package-info =
-      let
-        info = pkg:
-          ''
-          echo "name:    ${pkg.pname or pkg.name}"
-          echo "version: ${pkg.version or "none"}"
-          echo "repo:    ${pkg.repo}"
-          echo "commit:  ${pkg.rev}"
-          '';
-      in
       p.writeShellScript "package-info"
         ''
         case $1 in
 
         ${builtins.concatStringsSep "\n"
             (builtins.map
-               (pkg: "${pkg.pname or pkg.name} ) ${info pkg};;")
+               (pkg: "${pkg.pname or pkg.name} ) ${import ./info.nix pkg};;")
                dependencies
             )
         }
