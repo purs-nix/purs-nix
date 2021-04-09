@@ -67,6 +67,30 @@
         dependencies = [ newtype prelude ];
       };
 
+    datetime =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript/purescript-datetime.git";
+        rev = "e52f1fd50c05dad05709319d86b8b022b7c0485a";
+        dependencies =
+          [ bifunctors
+            control
+            either
+            enums
+            foldable-traversable
+            functions
+            gen
+            integers
+            lists
+            math
+            maybe
+            newtype
+            ordered-collections
+            partial
+            prelude
+            tuples
+          ];
+      };
+
     distributive =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-distributive.git";
@@ -152,6 +176,22 @@
             orders
             prelude
             tuples
+          ];
+      };
+
+    foreign =
+      { version = "6.0.0";
+        repo = "https://github.com/purescript/purescript-foreign.git";
+        rev = "2f5fd0ed66535156703ba7929a96a03dc32f1da6";
+        dependencies =
+          [ either
+            functions
+            identity
+            lists
+            maybe
+            prelude
+            strings
+            transformers
           ];
       };
 
@@ -265,6 +305,19 @@
         dependencies = [ control prelude ];
       };
 
+    js-date =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript-contrib/purescript-js-date.git";
+        rev = "f34f0a14b9d94cb55bb5e3048e757ad12bf7ecff";
+        dependencies =
+          [ datetime
+            effect
+            foreign
+            integers
+            now
+          ];
+      };
+
     js-timers =
       { version = "5.0.1";
         repo = "https://github.com/purescript-contrib/purescript-js-timers.git";
@@ -322,6 +375,13 @@
           ];
       };
 
+    media-types =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript-contrib/purescript-media-types.git";
+        rev = "a49a066f8a7a098ba4a00eb10b44fff616a3f517";
+        dependencies = [ newtype prelude ];
+      };
+
     newtype =
       { version = "4.0.0";
         repo = "https://github.com/purescript/purescript-newtype.git";
@@ -343,6 +403,20 @@
           ];
       };
 
+    now =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript-contrib/purescript-now.git";
+        rev = "aa085b059b7eff3ad335045859820010fba651a4";
+        dependencies = [ datetime effect ];
+      };
+
+    nullable =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript-contrib/purescript-nullable.git";
+        rev = "5941cf0624d4783f5c471fabd17929bb16aba215";
+        dependencies = [ effect functions maybe ];
+      };
+
     numbers =
       { version = "8.0.0";
         repo = "https://github.com/purescript/purescript-numbers.git";
@@ -351,6 +425,25 @@
           [ functions
             math
             maybe
+          ];
+      };
+
+    ordered-collections =
+      { version = "2.0.0";
+        repo = "https://github.com/purescript/purescript-ordered-collections.git";
+        rev = "e834498ade247ac06e4791302d6007a26dd910b4";
+        dependencies =
+          [ arrays
+            foldable-traversable
+            gen
+            lists
+            maybe
+            partial
+            prelude
+            st
+            tailrec
+            tuples
+            unfoldable
           ];
       };
 
@@ -487,6 +580,8 @@
           ];
       };
 
+    task = import ((builtins.fetchGit { rev = "eeaaa4f93178622a2ebb4cfa308d3f592a4d2d9a"; url = "https://github.com/ursi/purescript-task.git"; }) + /package.nix) args;
+
     transformers =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-transformers.git";
@@ -566,5 +661,45 @@
             tuples
             unsafe-coerce
           ];
+      };
+
+    web-dom =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript-web/purescript-web-dom.git";
+        rev = "03dfc2f512e124615ab183ade357e3d54007c79d";
+        dependencies = [ web-events ];
+      };
+
+    web-events =
+      { version = "5.0.0";
+        repo = "https://github.com/purescript-web/purescript-web-events.git";
+        rev = "c8a50893f04f54e2a59be7f885d25caef3589c57";
+        dependencies = [ datetime enums nullable ];
+      };
+
+    web-file =
+      { version = "3.0.0";
+        repo = "https://github.com/purescript-web/purescript-web-file.git";
+        rev = "3e42263b4392d82c0e379b7a481bbee9b38b1308";
+        dependencies = [ foreign media-types web-dom ];
+      };
+
+    web-html =
+      { version = "3.0.1";
+        repo = "https://github.com/purescript-web/purescript-web-html.git";
+        rev = "9e0e3fd78cd5b4e2f956a272247ec0af6808bfd2";
+        dependencies =
+          [ js-date
+            web-dom
+            web-file
+            web-storage
+          ];
+      };
+
+    web-storage =
+      { version = "4.0.0";
+        repo = "https://github.com/purescript-web/purescript-web-storage.git";
+        rev = "22fa56bac204c708e521e746ad4ca2b5810f62c5";
+        dependencies = [ nullable web-events ];
       };
   }
