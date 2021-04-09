@@ -2,6 +2,7 @@
 
   outputs = { nixpkgs, utils, ... }:
     { __functor = _: { system, pkgs ? nixpkgs.legacyPackages.${system}}:
+        rec
         { inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
 
           purs =
@@ -209,76 +210,12 @@
                 else
                   flag + arg;
             in
-            { bundle =
-                { src ? "src"
-                , compiler-output ? "output"
-                , module ? "Main"
-                , output ? "index.js"
-                , main ? module
-                , namespace ? null
-                , source-maps ? false
-                , debug ? false
-                }:
-                let
-                  flags =
-                    builtins.concatStringsSep " "
-                      [ "--module ${module}"
-                        (make-flag "--output " output)
-                        (make-flag "--main " main)
-                        (make-flag "--namespace " namespace)
-                        (make-flag "--source-maps" source-maps)
-                        (make-flag "debug" debug)
-                      ];
-                in
-                { type = "app";
-
-                  program =
-                    toString
-                      (p.writeShellScript "purs-bundle"
-                         ''
-                         if [[ ! -e ${compiler-output} ]]; then
-                           nix run .#compile \
-                             || echo "there is no '${compiler-output}' directory with the compiler output and 'nix run .#compile' failed. Try adding a 'compile' app to your flake and running the command again."
-                         fi
-
-                         ${p.purescript}/bin/purs bundle ${flags} "${compiler-output}/**/*.js"
-                         ''
-                      );
-                };
-
-              compile =
-                { src ? "src"
-                , output ? null
-                , verbose-errors ? false
-                , comments ? false
-                , codegen ? null
-                , no-prefix ? false
-                , json-errors ? false
-                }:
-                let
-                  flags =
-                    builtins.concatStringsSep " "
-                      [ (make-flag "--output " output)
-                        (make-flag "--verbose-errors" verbose-errors)
-                        (make-flag "--comments" comments)
-                        (make-flag "--codegen " codegen)
-                        (make-flag "--no-prefix" no-prefix)
-                        (make-flag "--json-errors" no-prefix)
-                      ];
-                in
-                { type = "app";
-
-                  program =
-                    toString
-                      (p.writeShellScript "purs-compile"
-                         ''${p.purescript}/bin/purs compile ${flags} "${src}/**/*.purs" ${deps-srcs}''
-                      );
-                };
-
-              modules =
+            { modules =
                 l.mapAttrs
                   (_: v: { inherit (v) bundle output; })
                   builds;
+
+              shell = import ./purs-nix-shell.nix { inherit dependencies deps-srcs pkgs; };
             };
         };
     };

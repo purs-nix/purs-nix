@@ -30,7 +30,7 @@ pkgs:
                    )
                );
            phases = [ "unpackPhase" "installPhase" ];
-           passthru = { inherit dependencies; };
+           passthru = { inherit dependencies repo rev; };
            installPhase = "ln -s $src/${src} $out";
          }
          // (if version == null then
