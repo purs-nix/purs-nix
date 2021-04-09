@@ -4,10 +4,10 @@
     utils.defaultSystems
       ({ pkgs, system }: with pkgs;
            let
-             inherit (purs-nix { inherit system; }) purs ps-pkgs;
+             inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
              inherit
                (purs
-                  { deps = with ps-pkgs; [ console effect prelude ];
+                  { dependencies = with ps-pkgs; [ console effect prelude ];
                     src = ./src;
                   }
                )
@@ -33,3 +33,5 @@
       )
       nixpkgs;
 }
+
+
