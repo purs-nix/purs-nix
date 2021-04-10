@@ -54,9 +54,9 @@ pkgs:
       let
         f = self:
           import ./ps-pkgs.nix
-          { ps-pkgs = self;
-            inherit ps-pkgs-ns;
-          };
+            { ps-pkgs = self;
+              inherit ps-pkgs-ns;
+            };
       in
       l.fix
         (self:
@@ -76,7 +76,7 @@ pkgs:
     ps-pkgs-ns =
       let
         f = self:
-            import ./ps-pkgs-ns.nix
+          import ./ps-pkgs-ns.nix
             { inherit ps-pkgs;
               ps-pkgs-ns = self;
             };
