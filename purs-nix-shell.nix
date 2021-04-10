@@ -104,6 +104,8 @@
                          projects's PureScript source code passed as the
                          final argument.
         -------------------------------------------------------------------------
+
+        Anything that is not a valid command with show this text.
         '';
   in
   p.writeShellScriptBin "purs-nix"
