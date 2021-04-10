@@ -25,5 +25,5 @@
 
 - **Module renaming:** Since there is no more global module namespace, you may find that two packages have the same module name and cannot compile together. I think arbitrary module renaming should be possible, so I plan to explore this as a solution. Something like `html-module.rename-module "Html" "HtmlModule.Html"`.
 - **Support testing:** Currently there's no easy way to do a testing workflow.
-- **More commands:** I would like to add, at least, a watching mechanism and something to generating a `bower.json`.
+- **More commands:** In the short term I would like to add a watching mechanism and a wrapper around `purs docs`. In the long term I would like to have a nice API for everything that can currently be done with other tools.
 - **Support Nix stable:** Currently this is designed for flakes users. I would like to be able to have a nice API for people that use Nix stable as well. In the mean time you may have some luck using [flake-compat](https://github.com/edolstra/flake-compat).
