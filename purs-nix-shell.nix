@@ -1,7 +1,7 @@
 { dependencies, deps-srcs, pkgs }:
 { src ? "src", output ? "output", bundle ? {}, compile ? {} }:
   let
-    l = p.lib; p = pkgs;
+    l = p.lib; p = pkgs; u = import ./utils.nix;
     command = "purs-nix";
     compiler-output = output;
 
@@ -63,7 +63,7 @@
 
         ${builtins.concatStringsSep "\n"
             (builtins.map
-               (pkg: "${pkg.pname or pkg.name} ) ${import ./info.nix pkg};;")
+               (pkg: "${pkg.pname or pkg.name} ) ${u.package-info pkg};;")
                dependencies
             )
         }

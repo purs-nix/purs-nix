@@ -11,7 +11,7 @@
             , purescript ? pkgs.purescript
             }:
             let
-              l = p.lib; p = pkgs;
+              l = p.lib; p = pkgs; u = import ./utils.nix;
               inherit (p.stdenv) mkDerivation;
 
               deps-srcs =
@@ -222,7 +222,7 @@
     // utils.defaultSystems
          ({ pkgs, system }:
             let
-              l = p.lib; p = pkgs;
+              l = p.lib; p = pkgs; u = import ./utils.nix;
               inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
             in
             { apps =
@@ -230,7 +230,7 @@
                     l.mapAttrs
                       (n: v:
                          { type = "app";
-                           program = "${p.writeScript "package-info-${v.name}" (import ./info.nix v)}";
+                           program = "${p.writeScript "package-info-${v.name}" (u.package-info v)}";
                          }
                       )
                       ps-pkgs;
@@ -241,7 +241,7 @@
                          l.mapAttrs
                            (n: v:
                              { type = "app";
-                               program = "${p.writeScript "package-info-${v.name}" (import ./info.nix v)}";
+                               program = "${p.writeScript "package-info-${v.name}" (u.package-info v)}";
                              }
                            )
                            pkgs'

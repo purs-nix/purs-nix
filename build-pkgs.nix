@@ -1,6 +1,6 @@
 pkgs:
   let
-    l = p.lib; p = pkgs;
+    l = p.lib; p = pkgs; u = import ./utils.nix;
 
     build =
       { repo
@@ -43,11 +43,7 @@ pkgs:
            passthru = { inherit dependencies repo rev; };
            installPhase = "ln -s $src/${src} $out";
          }
-         // (if version == null then
-               { inherit name; }
-             else
-               { pname = name; inherit version; }
-            )
+         // u.make-name name version
         );
 
     ps-pkgs =
