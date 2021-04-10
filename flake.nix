@@ -254,89 +254,23 @@
 
                   program =
                     let
-                      flake =
-                        l.escapeShellArg
-                          ''
-                          { inputs =
-                              { nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-                                purs-nix.url = "github:ursi/purs-nix";
-                                utils.url = "github:ursi/flake-utils";
-                              };
-
-                            outputs = { nixpkgs, utils, purs-nix, ... }:
-                              utils.defaultSystems
-                                ({ pkgs, system }:
-                                     let
-                                       inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
-                                       inherit
-                                         (purs
-                                            { dependencies =
-                                                with ps-pkgs;
-                                                [ console
-                                                  effect
-                                                  prelude
-                                                ];
-
-                                              src = ./src;
-                                            }
-                                         )
-                                         shell;
-                                     in
-                                     { devShell =
-                                         with pkgs;
-                                         mkShell
-                                           { buildInputs =
-                                               [ nodejs
-                                                 purescript
-                                                 (shell {})
-                                               ];
-                                           };
-                                    }
-                                )
-                                nixpkgs;
-                          }'';
-
-                      gitignore =
-                        l.escapeShellArg
-                          ''
-                          /bower_components/
-                          /node_modules/
-                          /.pulp-cache/
-                          /output/
-                          /generated-docs/
-                          /.psc-package/
-                          /.psc*
-                          /.purs*
-                          /.psa*
-                          /.spago'';
-
-                      main =
-                        l.escapeShellArg
-                          ''
-                          module Main where
-
-                          import Prelude
-
-                          import Effect (Effect)
-                          import Effect.Console (log)
-
-                          main :: Effect Unit
-                          main = log "❄"'';
-
                       write-flake =
-                        p.writeScript "write-flake"
+                        p.writeScript "initialize-project"
                           ''
                           if [[ ! -a .gitignore ]]; then
-                            echo ${gitignore} > .gitignore
+                            cp --no-preserve=mode ${./init/.gitignore} .gitignore
                           fi
 
                           if [[ ! -a flake.nix ]]; then
-                            echo ${flake} > flake.nix
+                            cp --no-preserve=mode ${./init/flake.nix} flake.nix
                           fi
 
                           if [[ ! -a src ]]; then
                             mkdir src
-                            echo ${main} > src/Main.purs
+                          fi
+
+                          if [[ ! -a src/Main.purs ]]; then
+                            cp --no-preserve=mode ${./init/Main.purs} src/Main.purs
                           fi
                           '';
                     in
