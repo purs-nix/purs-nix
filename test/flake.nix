@@ -5,28 +5,37 @@
       ({ pkgs, system }: with pkgs;
            let
              inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
+             inherit (ps-pkgs-ns) ursi;
              inherit
                (purs
-                  { dependencies = with ps-pkgs; [ console effect prelude ];
+                  { dependencies =
+                      with ps-pkgs;
+                      [ console effect
+                        prelude
+                        ursi.elmish
+                        ursi.ffi-options
+                        ursi.html
+                        ursi.task-file
+                        ursi.prelude
+                        ursi.debug
+                        point-free
+                        task
+                      ];
+
                     src = ./src;
                   }
                )
-               bundle
-               compile
-               modules;
+               modules
+               shell;
            in
-           { apps =
-               { bundle = bundle {};
-                 compile = compile {};
-               };
-
-             defaultPackage = modules.Main.bundle {};
+           { defaultPackage = modules.Main.bundle {};
 
              devShell =
                mkShell
                  { buildInputs =
                      [ nodejs
                        purescript
+                       (shell {})
                      ];
                  };
           }

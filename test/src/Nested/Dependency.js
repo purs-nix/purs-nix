@@ -1,1 +1,1 @@
-exports.a = "🍝";
+exports.a = "❄";
