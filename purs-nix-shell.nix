@@ -1,5 +1,11 @@
 { dependencies, deps-srcs, pkgs }:
-{ src ? "src", output ? "output", bundle ? {}, compile ? {} }:
+{ src ? "src"
+, output ? "output"
+, bundle ? {}
+, compile ? {}
+, nodejs ? pkgs.nodejs
+, purescript ? pkgs.purescript
+}:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix;
     command = "purs-nix";
@@ -36,7 +42,7 @@
       in
       ''
       ${command} compile \
-        && ${p.purescript}/bin/purs bundle ${flags} "${compiler-output}/**/*.js"'';
+        && ${purescript}/bin/purs bundle ${flags} "${compiler-output}/**/*.js"'';
 
     compile' =
       { verbose-errors ? false
@@ -56,7 +62,7 @@
               (make-flag "--json-errors" no-prefix)
             ];
       in
-      ''${p.purescript}/bin/purs compile ${flags} "${src}/**/*.purs" ${deps-srcs}'';
+      ''${purescript}/bin/purs compile ${flags} "${src}/**/*.purs" ${deps-srcs}'';
 
     package-info =
       p.writeShellScript "package-info"
@@ -116,11 +122,11 @@
       bundle ) ${bundle' bundle};;
       run )
         ${command} bundle \
-          && ${p.nodejs}/bin/node ${bundle.output or bundle-output-default};;
+          && ${nodejs}/bin/node ${bundle.output or bundle-output-default};;
       package-info ) ${package-info} $2;;
       packages ) ${packages};;
-      output ) ${p.purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
-      srcs ) ${p.purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${deps-srcs};;
+      output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
+      srcs ) ${purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${deps-srcs};;
       * ) echo ${help};;
     esac
     ''

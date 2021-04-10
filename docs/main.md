@@ -35,7 +35,13 @@ and returns a set with the following attributes:
 `shell` takes the following arguments: (Note: they all have defaults so often times you will only need to us `shell {}`)
 
 ```
-{ src ? "src", output ? "output", bundle ? {}, compile ? {} }
+{ src ? "src"
+, output ? "output"
+, bundle ? {}
+, compile ? {}
+, nodejs ? pkgs.nodejs
+, purescript ? pkgs.purescript
+}
 ```
 
 - `src`: A string representing the path of your PureScript source directory.
@@ -62,6 +68,9 @@ and returns a set with the following attributes:
   , json-errors ? false
   }
   ```
+
+- `nodejs`: The Node.js package to use.
+- `purescript`: The PureScript package to use.
 
 ## purs-nix (command)
 Just run `purs-nix` (no argument) to see the documentation for the `purs-nix` command in your project.
