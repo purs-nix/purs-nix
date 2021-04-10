@@ -13,9 +13,11 @@
       else
         flag + arg;
 
+    bundle-output-default = "index.js";
+
     bundle' =
       { module ? "Main"
-      , output ? "index.js"
+      , output ? bundle-output-default
       , main ? module
       , namespace ? null
       , source-maps ? false
@@ -91,8 +93,7 @@
         ------------------------------------------------------------------------
         compile    Compile your project.
         bundle     Compile then bundle your project.
-        run        Compile then run the the output 'purs-nix bundle' would
-                   produce.
+        run        Compile, bundle, then run the bundle with 'node'.
         ------------------------------------------------------------------------
         package-info <name>    Show the info of a specific package.
         packages               Show the info of all the packages in your project.
@@ -113,7 +114,9 @@
     case $1 in
       compile ) ${compile' compile};;
       bundle ) ${bundle' bundle};;
-      run ) ${bundle' (bundle // { output = null; })} | ${p.nodejs}/bin/node;;
+      run )
+        ${command} bundle \
+          && ${p.nodejs}/bin/node ${bundle.output or bundle-output-default};;
       package-info ) ${package-info} $2;;
       packages ) ${packages};;
       output ) ${p.purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
