@@ -426,6 +426,23 @@
           ];
       };
 
+    node-child-process =
+      { version = "7.0.0";
+        repo = "https://github.com/purescript-node/purescript-node-child-process.git";
+        rev = "e16bcd291d93c52f470f72f7dcf46e9936017279";
+        dependencies =
+          [ exceptions
+            foreign
+            foreign-object
+            functions
+            node-fs
+            node-streams
+            nullable
+            posix-types
+            unsafe-coerce
+          ];
+      };
+
     node-fs =
       { version = "6.0.0";
         repo = "https://github.com/purescript-node/purescript-node-fs.git";
