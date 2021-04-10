@@ -272,10 +272,10 @@
                                          (purs
                                             { dependencies =
                                                 with ps-pkgs;
-                                                  [ console
-                                                    effect
-                                                    prelude
-                                                  ];
+                                                [ console
+                                                  effect
+                                                  prelude
+                                                ];
 
                                               src = ./src;
                                             }
