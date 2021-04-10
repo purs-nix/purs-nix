@@ -19,12 +19,14 @@ and returns a set with the following attributes:
 ```
 { dependencies ? []
 , src
+, nodejs ? pkgs.nodejs
 , purescript ? pkgs.purescript
 }
 ```
 
 - `dependencies`: A list of all your project's dependencies. You can get these from `ps-pkgs`/`ps-pkgs-ns`.
 - `src`: A Nix path value pointing to your PureScript source directory.
+- `nodejs`: The Node.js package to use.
 - `purescript`: The **purescript** package to use.
 
 and returns a set with the following attributes:

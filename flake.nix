@@ -8,6 +8,7 @@
           purs =
             { dependencies ? []
             , src
+            , nodejs ? pkgs.nodejs
             , purescript ? pkgs.purescript
             }:
             let
