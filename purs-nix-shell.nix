@@ -35,8 +35,8 @@
             ];
       in
       ''
-      ${command} compile || echo "'${command} compile' failed"
-      ${p.purescript}/bin/purs bundle ${flags} "${compiler-output}/**/*.js"'';
+      ${command} compile \
+        && ${p.purescript}/bin/purs bundle ${flags} "${compiler-output}/**/*.js"'';
 
     compile' =
       { verbose-errors ? false
