@@ -8,7 +8,7 @@
 - Run `nix develop` to enter a Nix shell with the `purs-nix` command added to your path.
 - Run `purs-nix run` to see the output of the default project.
 
-## [Documentation](docs/main.md)
+## [Documentation](docs/README.md)
 
 ## Packages
 
