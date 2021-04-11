@@ -114,6 +114,8 @@
 
         Anything that is not a valid command with show this text.
         '';
+
+    run-output = ".purs-nix-run.js";
   in
   p.writeShellScriptBin "purs-nix"
     ''
@@ -121,8 +123,8 @@
       compile ) ${compile' compile};;
       bundle ) ${bundle' bundle};;
       run )
-        ${command} bundle \
-          && ${nodejs}/bin/node ${bundle.output or bundle-output-default};;
+        ${bundle' (bundle // { output = run-output; })} \
+          && ${nodejs}/bin/node ${run-output};;
       package-info ) ${package-info} $2;;
       packages ) ${packages};;
       output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
