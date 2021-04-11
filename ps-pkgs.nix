@@ -606,7 +606,6 @@
         dependencies = [ maybe prelude ];
       };
 
-
     prelude =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-prelude.git";
@@ -645,6 +644,12 @@
         repo = "https://github.com/purescript/purescript-refs.git";
         rev = "f66d3cdf6a6bf4510e5181b3fac215054d8f1e2e";
         dependencies = [ unsafe-coerce ];
+      };
+
+    return =
+      { repo = "https://github.com/ursi/purescript-return.git";
+        rev = "e2e8417436c532adadb40579a38d6aff254888e6";
+        info = /package.nix;
       };
 
     safe-coerce =
