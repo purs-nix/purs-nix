@@ -1,0 +1,1 @@
+alias lock="nix flake lock --update-input purs-nix && "

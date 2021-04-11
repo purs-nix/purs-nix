@@ -6,5 +6,4 @@ import Effect.Console (log)
 import Dependency (a)
 
 main :: Effect Unit
-main = do
-  log a
+main = log a

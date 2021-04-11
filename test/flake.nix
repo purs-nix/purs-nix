@@ -15,6 +15,7 @@
                       prelude
                     ];
 
+                  test-dependencies = [ ps-pkgs."assert" ];
                   src = ./src;
                 }
              )
