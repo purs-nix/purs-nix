@@ -713,6 +713,12 @@
           ];
       };
 
+    substitute =
+      { repo = "https://github.com/ursi/purescript-substitute.git";
+        rev = "0b43ed1b512a5165af8661eb6aaf9b793f5140dd";
+        info = /package.nix;
+      };
+
     tailrec =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-tailrec.git";
