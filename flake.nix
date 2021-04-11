@@ -133,8 +133,45 @@
                       if namespace == null then ""
                       else "-n ${namespace}"
                       } -o $out'';
+
+                  install =
+                    { name
+                    , version ? null
+                    , command ? name
+                    , auto-flags ? true
+                    }:
+                    let
+                      exe =
+                        let
+                          partial = "node ${bundle {}} $@";
+                        in
+                        pkgs.writeShellScript command
+                          (if auto-flags then
+                             ''
+                             if [[ $1 = --version ]]; then
+                               echo ${if version == null then "none" else version}
+                             else
+                               ${partial}
+                             fi
+                             ''
+                           else
+                             partial
+                          );
+                    in
+                    mkDerivation
+                      ({ phases = [ "installPhase" ];
+                         buildInputs = [ p.makeWrapper nodejs ];
+
+                         installPhase =
+                           ''
+                           mkdir -p $out/bin
+                           makeWrapper ${exe} $out/bin/${command} --set PATH $PATH
+                           '';
+                       }
+                       // u.make-name name version
+                      );
                 in
-                { inherit bundle local-deps name output;
+                { inherit bundle local-deps install name output;
                   src = src';
 
                   bin =
@@ -213,7 +250,7 @@
             in
             { modules =
                 l.mapAttrs
-                  (_: v: { inherit (v) bundle output; })
+                  (_: v: { inherit (v) bundle output install; })
                   builds;
 
               shell = import ./purs-nix-shell.nix { inherit dependencies deps-srcs pkgs; };
