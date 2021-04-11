@@ -27,7 +27,7 @@ and returns a set with the following attributes:
 - `dependencies`: A list of all your project's dependencies. You can get these from `ps-pkgs`/`ps-pkgs-ns`.
 - `src`: A Nix path value pointing to your PureScript source directory.
 - `nodejs`: The Node.js package to use.
-- `purescript`: The **purescript** package to use.
+- `purescript`: The PureScript package to use.
 
 and returns a set with the following attributes:
 - `modules`: A set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).
