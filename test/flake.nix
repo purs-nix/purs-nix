@@ -3,42 +3,35 @@
   outputs = { nixpkgs, utils, purs-nix, ... }:
     utils.defaultSystems
       ({ pkgs, system }: with pkgs;
-           let
-             inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
-             inherit (ps-pkgs-ns) ursi;
-             inherit
-               (purs
-                  { dependencies =
-                      with ps-pkgs;
-                      [ console effect
-                        prelude
-                        ursi.elmish
-                        ursi.ffi-options
-                        ursi.html
-                        ursi.task-file
-                        ursi.prelude
-                        ursi.debug
-                        point-free
-                        task
-                      ];
+         let
+           inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
+           inherit (ps-pkgs-ns) ursi;
+           inherit
+             (purs
+                { dependencies =
+                    with ps-pkgs;
+                    [ console
+                      effect
+                      prelude
+                    ];
 
-                    src = ./src;
-                  }
-               )
-               modules
-               shell;
-           in
-           { defaultPackage = modules.Main.bundle {};
+                  src = ./src;
+                }
+             )
+             modules
+             shell;
+         in
+         { defaultPackage = modules.Main.install { name = "test"; };
 
-             devShell =
-               mkShell
-                 { buildInputs =
-                     [ nodejs
-                       purescript
-                       (shell {})
-                     ];
-                 };
-          }
+           devShell =
+             mkShell
+               { buildInputs =
+                   [ nodejs
+                     purescript
+                     (shell {})
+                   ];
+               };
+         }
       )
       nixpkgs;
 }
