@@ -7,6 +7,7 @@
 
           purs =
             { dependencies ? []
+            , test-dependencies ? []
             , src
             , nodejs ? pkgs.nodejs
             , purescript ? pkgs.purescript
@@ -15,7 +16,7 @@
               l = p.lib; p = pkgs; u = import ./utils.nix;
               inherit (p.stdenv) mkDerivation;
 
-              deps-srcs =
+              get-dep-globs = deps:
                 let
                   trans-deps =
                     let
@@ -28,13 +29,16 @@
                           ds
                         ++ ds;
                     in
-                    l.unique (go dependencies);
+                    l.unique (go deps);
                 in
                 toString
                   (builtins.map
                      (a: ''"${a}/**/*.purs"'')
                      trans-deps
                   );
+
+              deps-srcs = get-dep-globs dependencies;
+              all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
 
               build-single = name: local-deps:
                 let
@@ -262,7 +266,11 @@
                   (_: v: { inherit (v) bundle output install; })
                   builds;
 
-              shell = import ./purs-nix-shell.nix { inherit dependencies deps-srcs pkgs; };
+              shell =
+                import ./purs-nix-shell.nix
+                  { all-dependencies = dependencies ++ test-dependencies;
+                    inherit all-dep-globs deps-srcs pkgs;
+                  };
             };
         };
     }

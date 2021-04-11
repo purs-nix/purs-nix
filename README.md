@@ -26,7 +26,6 @@
 This is an incomplete list of things that are currently planned.
 
 - **FAQ:** I'd like to have an FAQ, but first I see which Qs are FA'd.
-- **Support testing:** Currently there's no easy way to do a testing workflow.
 - **More commands:** In the short term I would like to add a watching mechanism and a wrapper around `purs docs`. In the long term I would like to have a nice API for everything that can currently be done with other tools.
 - **Package replacing:** I'd like to have an easy API for replacing one package with another, so instead of having to use a forked version of the package set, you can add your version of a package in your namespace, and then just replace the official version with yours inside your project. Something like: `replace-package tuple ursi.tuple dependencies`.
 - **Module renaming:** Since there is no more global module namespace, you may find that two packages have the same module name and cannot compile together. I think arbitrary module renaming should be possible, so I plan to explore this as a solution. Something like: `html-module.rename-module "Html" "HtmlModule.Html"`.

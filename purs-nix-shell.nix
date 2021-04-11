@@ -1,8 +1,14 @@
-{ dependencies, deps-srcs, pkgs }:
+{ all-dependencies
+, all-dep-globs
+, deps-srcs
+, pkgs
+}:
 { src ? "src"
 , output ? "output"
 , bundle ? {}
 , compile ? {}
+, test ? "test"
+, test-module ? "Test.Main"
 , nodejs ? pkgs.nodejs
 , purescript ? pkgs.purescript
 }:
@@ -34,6 +40,15 @@
             }
         );
 
+    compile-test = args:
+      u.compile
+        purescript
+        (args
+         // { globs = ''"${src}/**/*.purs" "${test}/**/*.purs" ${all-dep-globs}'';
+              inherit output;
+            }
+        );
+
     package-info =
       p.writeShellScript "package-info"
         ''
@@ -42,7 +57,7 @@
         ${builtins.concatStringsSep "\n"
             (builtins.map
                (pkg: "${pkg.pname or pkg.name} ) ${u.package-info pkg};;")
-               dependencies
+               all-dependencies
             )
         }
 
@@ -56,7 +71,7 @@
         ${builtins.concatStringsSep "\n"
             (builtins.map
                (pkg: "echo ${pkg.name}")
-               dependencies
+               all-dependencies
             )
         }
         '';
@@ -70,6 +85,8 @@
         compile    Compile your project.
         bundle     Compile then bundle your project.
         run        Compile, bundle, then run the bundle with 'node'.
+        test       Compile, bundle your test code, then run the bundle with
+                   'node'.
         ------------------------------------------------------------------------
         package-info <name>    Show the info of a specific package.
         packages               Show the info of all the packages in your project.
@@ -95,6 +112,15 @@
       run )
         ${bundle' (bundle // { output = run-output; })} \
           && ${nodejs}/bin/node ${run-output};;
+      test )
+        ${compile-test compile} && ${
+      bundle'
+        (bundle
+         // { module = test-module;
+              output = run-output;
+            }
+        )
+      } && ${nodejs}/bin/node ${run-output};;
       package-info ) ${package-info} $2;;
       packages ) ${packages};;
       output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;

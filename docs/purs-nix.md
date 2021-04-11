@@ -16,6 +16,7 @@ and returns a set with the following attributes:
 
 ```
 { dependencies ? []
+, test-dependencies ? []
 , src
 , nodejs ? pkgs.nodejs
 , purescript ? pkgs.purescript
@@ -23,6 +24,7 @@ and returns a set with the following attributes:
 ```
 
 - `dependencies`: A list of all your project's dependencies. You can get these from `ps-pkgs`/`ps-pkgs-ns`.
+- `test-dependencies`: A list of all your projects's dependencies that are only needed for testing.
 - `src`: A Nix path value pointing to your PureScript source directory.
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
@@ -39,6 +41,8 @@ and returns a set with the following attributes:
 , output ? "output"
 , bundle ? {}
 , compile ? {}
+, test ? "test"
+, test-module ? "Test.Main"
 , nodejs ? pkgs.nodejs
 , purescript ? pkgs.purescript
 }
@@ -69,6 +73,8 @@ and returns a set with the following attributes:
   }
   ```
 
+- `test`: A string representing the path of your testing code.
+- `test-module`: The name of the module whose `main` function will be run when using `purs-nix test`.
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
 
