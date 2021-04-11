@@ -1,6 +1,6 @@
 { all-dependencies
 , all-dep-globs
-, deps-srcs
+, dep-globs
 , pkgs
 }:
 { src ? "src"
@@ -35,7 +35,7 @@
       u.compile
         purescript
         (args
-         // { globs = ''"${src}/**/*.purs" ${deps-srcs}'';
+         // { globs = ''"${src}/**/*.purs" ${dep-globs}'';
               inherit output;
             }
         );
@@ -124,7 +124,7 @@
       package-info ) ${package-info} $2;;
       packages ) ${packages};;
       output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
-      srcs ) ${purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${deps-srcs};;
+      srcs ) ${purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${dep-globs};;
       * ) echo ${help};;
     esac
     ''

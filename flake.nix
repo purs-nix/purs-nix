@@ -37,7 +37,7 @@
                      trans-deps
                   );
 
-              deps-srcs = get-dep-globs dependencies;
+              dep-globs = get-dep-globs dependencies;
               all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
 
               build-single = name: local-deps:
@@ -47,7 +47,7 @@
                       { name = "built-deps";
                         phases = [ "buildPhase" "installPhase" ];
                         nativeBuildInputs = [ purescript ];
-                        buildPhase ="purs compile ${deps-srcs}";
+                        buildPhase ="purs compile ${dep-globs}";
                         installPhase = "mv output $out";
                       };
 
@@ -111,7 +111,7 @@
                                    trans-deps
                                 );
 
-                            local-deps-srcs =
+                            local-dep-globs =
                               toString
                                 (builtins.map
                                   (a: ''"${a.src}/**/*.purs"'')
@@ -125,7 +125,7 @@
                           ${u.compile
                               purescript
                               (args
-                               // { globs = ''"${src'}/**/*.purs" ${local-deps-srcs} ${deps-srcs}'';
+                               // { globs = ''"${src'}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
                                     output = "output";
                                   }
                               )
@@ -223,7 +223,7 @@
                           (builtins.readFile
                              (p.runCommand "purescript-dependency-graph"
                                 { buildInputs = [ purescript ]; }
-                                "purs graph ${extra} ${deps-srcs} > $out"
+                                "purs graph ${extra} ${dep-globs} > $out"
                              )
                           );
 
@@ -269,7 +269,7 @@
               shell =
                 import ./purs-nix-shell.nix
                   { all-dependencies = dependencies ++ test-dependencies;
-                    inherit all-dep-globs deps-srcs pkgs;
+                    inherit all-dep-globs dep-globs pkgs;
                   };
             };
         };
