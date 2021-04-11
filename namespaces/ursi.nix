@@ -21,15 +21,21 @@
       info = /package.nix;
     };
 
+  prelude =
+    { repo = "https://github.com/ursi/purescript-mason-prelude.git";
+      rev = "186ceb912daf157bb0054fb2264f5bf962e0be1a";
+      info = /package.nix;
+    };
+
   task-file =
     { repo = "https://github.com/ursi/purescript-task-file.git";
       rev = "9926d479af55a7568032a1360c9e0d8790b64bd7";
       info = /package.nix;
     };
 
-  prelude =
-    { repo = "https://github.com/ursi/purescript-mason-prelude.git";
-      rev = "186ceb912daf157bb0054fb2264f5bf962e0be1a";
+  task-node-child-process =
+    { repo = "https://github.com/ursi/purescript-task-node-child-process.git";
+      rev = "01421010ead52e66a827053fd69e13befbc1ba6a";
       info = /package.nix;
     };
 }
