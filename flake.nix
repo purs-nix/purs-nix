@@ -79,7 +79,7 @@
                       (path: _: path-filter path)
                       subsrc;
 
-                  output =
+                  output = args:
                     let
                       trans-deps =
                         let
@@ -120,7 +120,11 @@
 
                           ${u.compile
                               purescript
-                              { globs = ''"${src'}/**/*.purs" ${local-deps-srcs} ${deps-srcs}''; }
+                              (args
+                               // { globs = ''"${src'}/**/*.purs" ${local-deps-srcs} ${deps-srcs}'';
+                                    output = "output";
+                                  }
+                              )
                           }
                           '';
 
@@ -131,7 +135,7 @@
                     p.runCommand "${name}-bundle" {}
                       (u.bundle
                          purescript
-                         { files = output;
+                         { files = output {};
                            module = name;
                            main = if main then name else null;
                            inherit namespace;
@@ -197,8 +201,8 @@
 
                       exe = p.writeShellScript "exe"
                         ''
-                        cp --no-preserve=mode --preserve=timestamps -r ${output}/${name} $1/${name}
-                        ${merge-cache} ${output}/cache-db.json $1/cache-db.json $1/cache-db.json
+                        cp --no-preserve=mode --preserve=timestamps -r ${output {}}/${name} $1/${name}
+                        ${merge-cache} ${output {}}/cache-db.json $1/cache-db.json $1/cache-db.json
                         '';
                     in
                     p.runCommand name
