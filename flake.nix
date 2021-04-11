@@ -97,7 +97,6 @@
                     mkDerivation
                       { inherit name;
                         phases = [ "buildPhase" "installPhase" ];
-                        nativeBuildInputs = [ purescript ];
 
                         buildPhase =
                           let
@@ -118,21 +117,27 @@
                           ''
                           cp --no-preserve=mode --preserve=timestamps -r ${built-deps} output
                           ${augmentations}
-                          purs compile "${src'}/**/*.purs" ${local-deps-srcs} ${deps-srcs}
+
+                          ${u.compile
+                              purescript
+                              { globs = ''"${src'}/**/*.purs" ${local-deps-srcs} ${deps-srcs}''; }
+                          }
                           '';
 
                         installPhase = "mv output $out";
                       };
 
                   bundle = { main ? true, namespace ? null }:
-                    p.runCommand "${name}-bundle"
-                      { buildInputs = [ purescript ]; }
-                      ''purs bundle "${output}/**/*.js" -m ${name} ${
-                      if main then "--main ${name}" else ""
-                      } ${
-                      if namespace == null then ""
-                      else "-n ${namespace}"
-                      } -o $out'';
+                    p.runCommand "${name}-bundle" {}
+                      (u.bundle
+                         purescript
+                         { files = output;
+                           module = name;
+                           main = if main then name else null;
+                           inherit namespace;
+                           output = "$out";
+                         }
+                      );
 
                   install =
                     { name
