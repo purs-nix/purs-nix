@@ -1,6 +1,21 @@
 { ps-pkgs, ps-pkgs-ns }@pkgs:
   with ps-pkgs;
-  { ansi =
+  { aff =
+      { version = "6.0.0";
+        repo = "https://github.com/purescript-contrib/purescript-aff.git";
+        rev = "2ed2263959287810bcc2c4397fead32f202bd84a";
+        dependencies =
+          [ datetime
+            effect
+            exceptions
+            functions
+            parallel
+            transformers
+            unsafe-coerce
+          ];
+      };
+
+    ansi =
       { version = "6.1.0";
         repo = "https://github.com/hdgarrood/purescript-ansi.git";
         rev = "e89e6fede616bd16b001841cf30ac320c95313a6";
@@ -440,6 +455,22 @@
         repo = "https://github.com/purescript-contrib/purescript-media-types.git";
         rev = "a49a066f8a7a098ba4a00eb10b44fff616a3f517";
         dependencies = [ newtype prelude ];
+      };
+
+    minibench =
+      { version = "3.0.0";
+        repo = "https://github.com/purescript/purescript-minibench.git";
+        rev = "c2ddaae02f38de01daa63e1a2f67b382b93f89e0";
+        dependencies =
+          [ console
+            effect
+            integers
+            math
+            numbers
+            partial
+            prelude
+            refs
+          ];
       };
 
     newtype =

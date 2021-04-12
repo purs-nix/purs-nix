@@ -27,6 +27,12 @@
       info = /package.nix;
     };
 
+  simple-json =
+    { repo = "https://github.com/ursi/purescript-simple-json.git";
+      rev = "25878767b0eafb6c9cff831567230c39b7058cd5";
+      info = /package.nix;
+    };
+
   task-file =
     { repo = "https://github.com/ursi/purescript-task-file.git";
       rev = "9926d479af55a7568032a1360c9e0d8790b64bd7";
