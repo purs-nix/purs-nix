@@ -22,7 +22,7 @@
                   trans-deps =
                     let
                       go = ds:
-                        builtins.foldl'
+                        b.foldl'
                           (acc: d:
                              acc ++ go d.dependencies
                           )
@@ -32,11 +32,7 @@
                     in
                     l.unique (go deps);
                 in
-                toString
-                  (builtins.map
-                     (a: ''"${a}/**/*.purs"'')
-                     trans-deps
-                  );
+                b.toString (b.map (a: ''"${a}/**/*.purs"'') trans-deps);
 
               dep-globs = get-dep-globs dependencies;
               all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
@@ -55,23 +51,18 @@
                   src' =
                     let
                       paths =
-                        builtins.filter
-                          (a: path-filter (toString a))
+                        b.filter
+                          (a: path-filter (b.toString a))
                           (l.filesystem.listFilesRecursive src);
 
-                      path-suffix-prefix = (builtins.replaceStrings [ "." ] [ "/" ] name) + ".";
+                      path-suffix-prefix = (b.replaceStrings [ "." ] [ "/" ] name) + ".";
 
                       subsrc =
-                        let
-                          match =
-                            builtins.match
-                              "(.*)/[^/]+$"
-                              path-suffix-prefix;
-                        in
+                        let match = b.match "(.*)/[^/]+$" path-suffix-prefix; in
                         if match == null then
                           src
                         else
-                          src + ("/" + builtins.head match);
+                          src + ("/" + b.head match);
 
                       path-filter = path:
                         let
@@ -80,7 +71,7 @@
                         in
                         l.hasSuffix js path || l.hasSuffix purs path;
                     in
-                    builtins.filterSource
+                    b.filterSource
                       (path: _: path-filter path)
                       subsrc;
 
@@ -89,7 +80,7 @@
                       trans-deps =
                         let
                           go = ds:
-                            builtins.foldl'
+                            b.foldl'
                               (acc: d:
                                  acc ++ go d.local-deps
                               )
@@ -106,15 +97,15 @@
                         buildPhase =
                           let
                             augmentations =
-                              toString
-                                (builtins.map
+                              b.toString
+                                (b.map
                                    (a: "${a.bin} output;")
                                    trans-deps
                                 );
 
                             local-dep-globs =
-                              toString
-                                (builtins.map
+                              b.toString
+                                (b.map
                                   (a: ''"${a.src}/**/*.purs"'')
                                   trans-deps
                                 );
@@ -220,8 +211,8 @@
                   local-graph =
                     let
                       make-graph = extra:
-                        builtins.fromJSON
-                          (builtins.readFile
+                        b.fromJSON
+                          (b.readFile
                              (p.runCommand "purescript-dependency-graph"
                                 { buildInputs = [ purescript ]; }
                                 "purs graph ${extra} ${dep-globs} > $out"
@@ -239,7 +230,7 @@
                     l.mapAttrs
                       (module: v:
                          { depends =
-                             builtins.filter
+                             b.filter
                                (v: partial?${v})
                                v.depends;
                          }
@@ -250,7 +241,7 @@
                   (name: v:
                      build-single
                        name
-                       (builtins.map (v: builds.${v}) v.depends)
+                       (b.map (v: builds.${v}) v.depends)
                   )
                   local-graph;
 

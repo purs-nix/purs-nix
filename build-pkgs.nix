@@ -1,6 +1,6 @@
 pkgs:
   let
-    l = p.lib; p = pkgs; u = import ./utils.nix;
+    b = builtins; l = p.lib; p = pkgs; u = import ./utils.nix;
 
     build =
       { repo
@@ -13,7 +13,7 @@ pkgs:
       }@args:
       let
         git-src =
-          builtins.fetchGit
+          b.fetchGit
             ({ url = repo;
                inherit rev;
              }
@@ -23,7 +23,7 @@ pkgs:
             );
 
         info' =
-          if builtins.isPath info then
+          if b.isPath info then
             import (git-src + info) args
           else
             args;

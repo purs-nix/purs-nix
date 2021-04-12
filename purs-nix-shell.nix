@@ -13,7 +13,7 @@
 , purescript ? pkgs.purescript
 }:
   let
-    l = p.lib; p = pkgs; u = import ./utils.nix;
+    b = builtins; l = p.lib; p = pkgs; u = import ./utils.nix;
     command = "purs-nix";
     compiler-output = output;
 
@@ -54,8 +54,8 @@
         ''
         case $1 in
 
-        ${builtins.concatStringsSep "\n"
-            (builtins.map
+        ${b.concatStringsSep "\n"
+            (b.map
                (pkg: "${pkg.pname or pkg.name} ) ${u.package-info pkg};;")
                all-dependencies
             )
@@ -68,8 +68,8 @@
     packages =
       p.writeShellScript "packages"
         ''
-        ${builtins.concatStringsSep "\n"
-            (builtins.map
+        ${b.concatStringsSep "\n"
+            (b.map
                (pkg: "echo ${pkg.name}")
                all-dependencies
             )
