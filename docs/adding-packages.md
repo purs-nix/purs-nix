@@ -8,6 +8,7 @@ There are two formats for a package description set:
      { version = "6.0.0";
        repo = "https://github.com/purescript/purescript-arrays.git";
        rev = "5b71501b04f96cee4234447b35d62d041317f64b";
+
        dependencies =
          [ bifunctors
            control

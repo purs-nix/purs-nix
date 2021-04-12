@@ -4,6 +4,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript-contrib/purescript-aff.git";
         rev = "2ed2263959287810bcc2c4397fead32f202bd84a";
+
         dependencies =
           [ datetime
             effect
@@ -19,6 +20,7 @@
       { version = "6.1.0";
         repo = "https://github.com/hdgarrood/purescript-ansi.git";
         rev = "e89e6fede616bd16b001841cf30ac320c95313a6";
+
         dependencies =
           [ foldable-traversable
             lists
@@ -30,6 +32,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-arrays.git";
         rev = "5b71501b04f96cee4234447b35d62d041317f64b";
+
         dependencies =
           [ bifunctors
             control
@@ -63,6 +66,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-bifunctors.git";
         rev = "a31d0fc4bbebf19d5e9b21b65493c28b8d3fba62";
+
         dependencies =
           [ const
             either
@@ -76,6 +80,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-catenable-lists.git";
         rev = "41b794c4dbf3dc94ffea4f445cfb06e82cf11e1f";
+
         dependencies =
           [ control
             foldable-traversable
@@ -104,6 +109,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-contravariant.git";
         rev = "ae1a765f7ddbfd96ae1f12e399e46d554d8e3b38";
+
         dependencies =
           [ const
             either
@@ -124,6 +130,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-datetime.git";
         rev = "e52f1fd50c05dad05709319d86b8b022b7c0485a";
+
         dependencies =
           [ bifunctors
             control
@@ -148,6 +155,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-distributive.git";
         rev = "11f3f87ca5720899e1739cedb58dd6227cae6ad5";
+
         dependencies =
           [ identity
             newtype
@@ -168,6 +176,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-either.git";
         rev = "c1a1af35684f10eecaf6ac7d38dbf6bd48af2ced";
+
         dependencies =
           [ control
             invariant
@@ -180,6 +189,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-enums.git";
         rev = "170d959644eb99e0025f4ab2e38f5f132fd85fa4";
+
         dependencies =
           [ control
             either
@@ -198,6 +208,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-exceptions.git";
         rev = "410d0b8813592bda3c25028540eeb2cda312ddc9";
+
         dependencies =
           [ effect
             either
@@ -217,6 +228,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-foldable-traversable.git";
         rev = "f45f03a5b4a568c79ba36a8764edbb0cbee203e6";
+
         dependencies =
           [ bifunctors
             const
@@ -236,6 +248,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-foreign.git";
         rev = "2f5fd0ed66535156703ba7929a96a03dc32f1da6";
+
         dependencies =
           [ either
             functions
@@ -252,6 +265,7 @@
       { version = "3.0.0";
         repo = "https://github.com/purescript/purescript-foreign-object.git";
         rev = "c9a7b7bb8bed1b87c5545c4ebe85a70f86c0e6b1";
+
         dependencies =
           [ arrays
             foldable-traversable
@@ -271,6 +285,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-free.git";
         rev = "da629792e3bc95c6ed19c5c26d7d40a23a887990";
+
         dependencies =
           [ catenable-lists
             control
@@ -300,6 +315,7 @@
       { version = "4.1.0";
         repo = "https://github.com/purescript/purescript-functors.git";
         rev = "0cd232e39e3778bf4c1f28b471961bad3611c127";
+
         dependencies =
           [ bifunctors
             const
@@ -321,6 +337,7 @@
       { version = "3.0.0";
         repo = "https://github.com/purescript/purescript-gen.git";
         rev = "85c369f56545a3de834b7e7475a56bc9193bb4b4";
+
         dependencies =
           [ either
             foldable-traversable
@@ -339,6 +356,7 @@
       { version = "0.5.0";
         repo = "https://github.com/natefaubion/purescript-heterogeneous.git";
         rev = "55f7563d1945785d6648d0f814f163e9b0970b2f";
+
         dependencies =
           [ either
             functors
@@ -353,6 +371,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-identity.git";
         rev = "98b6d327c9572916c1deb617f55c3ee2e28608e6";
+
         dependencies =
           [ control
             invariant
@@ -365,6 +384,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-integers.git";
         rev = "8a783f2d92596c43afca53066ac18eb389d15981";
+
         dependencies =
           [ math
             maybe
@@ -384,6 +404,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript-contrib/purescript-js-date.git";
         rev = "f34f0a14b9d94cb55bb5e3048e757ad12bf7ecff";
+
         dependencies =
           [ datetime
             effect
@@ -404,6 +425,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-lazy.git";
         rev = "2f73f61e7ac1ae1cfe05564112e3313530e673ff";
+
         dependencies =
           [ control
             foldable-traversable
@@ -416,6 +438,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-lists.git";
         rev = "2578dd817ea9950558feca46bbae25e6b79cd13c";
+
         dependencies =
           [ bifunctors
             control
@@ -442,6 +465,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-maybe.git";
         rev = "8e96ca0187208e78e8df6a464c281850e5c9400c";
+
         dependencies =
           [ control
             invariant
@@ -461,6 +485,7 @@
       { version = "3.0.0";
         repo = "https://github.com/purescript/purescript-minibench.git";
         rev = "c2ddaae02f38de01daa63e1a2f67b382b93f89e0";
+
         dependencies =
           [ console
             effect
@@ -484,6 +509,7 @@
       { version = "7.0.0";
         repo = "https://github.com/purescript-node/purescript-node-buffer.git";
         rev = "8ec24154287bf90b7a5d9565a92ea12ea7ab06db";
+
         dependencies =
           [ arraybuffer-types
             effect
@@ -497,6 +523,7 @@
       { version = "7.0.0";
         repo = "https://github.com/purescript-node/purescript-node-child-process.git";
         rev = "e16bcd291d93c52f470f72f7dcf46e9936017279";
+
         dependencies =
           [ exceptions
             foreign
@@ -514,6 +541,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript-node/purescript-node-fs.git";
         rev = "009787abd658fdb206147ef0e00d9a35ec3dab74";
+
         dependencies =
           [ datetime
             effect
@@ -546,6 +574,7 @@
       { version = "8.1.0";
         repo = "https://github.com/purescript-node/purescript-node-process.git";
         rev = "2b745b0b60824fca873482fb33e3b8d6cb1cf219";
+
         dependencies =
           [ effect
             foreign-object
@@ -561,6 +590,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript-node/purescript-node-streams.git";
         rev = "886bb2045685e3b9031687d69ccfed29972147bb";
+
         dependencies =
           [ effect
             either
@@ -574,6 +604,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-nonempty.git";
         rev = "d3e91e3d6e06e5bdcc5b2c21c8e5d0f9b946bb9e";
+
         dependencies =
           [ control
             foldable-traversable
@@ -602,6 +633,7 @@
       { version = "8.0.0";
         repo = "https://github.com/purescript/purescript-numbers.git";
         rev = "f5bbd96cbed58403c4445bd4c73df50fc8d86f46";
+
         dependencies =
           [ functions
             math
@@ -613,6 +645,7 @@
       { version = "2.0.0";
         repo = "https://github.com/purescript/purescript-ordered-collections.git";
         rev = "e834498ade247ac06e4791302d6007a26dd910b4";
+
         dependencies =
           [ arrays
             foldable-traversable
@@ -639,6 +672,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-parallel.git";
         rev = "16b38a2e148639b04ae67e0ce63cc220da8857f7";
+
         dependencies =
           [ control
             effect
@@ -683,6 +717,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-profunctor.git";
         rev = "4551b8e437a00268cc9b687cbe691d75e812e82b";
+
         dependencies =
           [ control
             distributive
@@ -699,6 +734,7 @@
       { version = "3.0.0";
         repo = "https://github.com/purescript/purescript-record.git";
         rev = "091495d61fcaa9d8d8232e7b800f403a3165a38f";
+
         dependencies =
           [ functions
             prelude
@@ -730,6 +766,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-st.git";
         rev = "1028e084b703d1a7a98a8d923c3603a5610e577e";
+
         dependencies =
           [ partial
             prelude
@@ -742,6 +779,7 @@
       { version = "6.0.0";
         repo = "https://github.com/purescript-contrib/purescript-string-parsers.git";
         rev = "8cf080bf0f11b07afb8ae9da5d9da328bf4ba4c2";
+
         dependencies =
           [ arrays
             bifunctors
@@ -760,6 +798,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-strings.git";
         rev = "157e372a23e4becd594d7e7bff6f372a6f63dd82";
+
         dependencies =
           [ arrays
             control
@@ -790,6 +829,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-tailrec.git";
         rev = "494f33bdea4b659c5232efdef4cffeb8a57fc250";
+
         dependencies =
           [ bifunctors
             effect
@@ -812,6 +852,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-transformers.git";
         rev = "846581729493343f5257d62c142ab5d1746b18dc";
+
         dependencies =
           [ control
             distributive
@@ -834,6 +875,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-tuples.git";
         rev = "3fb71a817767f782c3dfbdcaf1f160228ffb78a1";
+
         dependencies =
           [ control
             invariant
@@ -858,6 +900,7 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-unfoldable.git";
         rev = "bbcc2b062b9b7d3d61f123cfb32cc8c7fb811aa6";
+
         dependencies =
           [ foldable-traversable
             maybe
@@ -877,6 +920,7 @@
       { version = "7.0.2";
         repo = "https://github.com/natefaubion/purescript-variant.git";
         rev = "2a2e02e68a02911799bb99bb82e3d9ace182cd47";
+
         dependencies =
           [ enums
             lists
@@ -914,6 +958,7 @@
       { version = "3.0.1";
         repo = "https://github.com/purescript-web/purescript-web-html.git";
         rev = "9e0e3fd78cd5b4e2f956a272247ec0af6808bfd2";
+
         dependencies =
           [ js-date
             web-dom
