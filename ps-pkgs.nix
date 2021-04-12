@@ -57,6 +57,20 @@
           ];
       };
 
+    catenable-lists =
+      { version = "6.0.0";
+        repo = "https://github.com/purescript/purescript-catenable-lists.git";
+        rev = "41b794c4dbf3dc94ffea4f445cfb06e82cf11e1f";
+        dependencies =
+          [ control
+            foldable-traversable
+            maybe
+            prelude
+            tuples
+            unfoldable
+          ];
+      };
+
     console =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-console.git";
@@ -235,6 +249,28 @@
             tuples
             typelevel-prelude
             unfoldable
+          ];
+      };
+
+    free =
+      { version = "6.0.0";
+        repo = "https://github.com/purescript/purescript-free.git";
+        rev = "da629792e3bc95c6ed19c5c26d7d40a23a887990";
+        dependencies =
+          [ catenable-lists
+            control
+            distributive
+            either
+            exists
+            foldable-traversable
+            invariant
+            lazy
+            maybe
+            prelude
+            tailrec
+            transformers
+            tuples
+            unsafe-coerce
           ];
       };
 
