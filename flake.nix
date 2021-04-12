@@ -1,6 +1,7 @@
 { inputs.utils.url = "github:ursi/flake-utils";
 
   outputs = { nixpkgs, utils, ... }:
+    let b = builtins; in
     { __functor = _: { system, pkgs ? nixpkgs.legacyPackages.${system}}:
         rec
         { inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
@@ -273,6 +274,22 @@
                   };
             };
         };
+
+      defaultTemplate =
+        { description = "A basic purs-nix project";
+          path = b.toString ./template;
+        };
+
+      templates.flake =
+        { description = "The flake.nix only - for converting existing projects";
+
+          path =
+            b.toString
+              (b.filterSource
+                 (path: _: b.baseNameOf path == "flake.nix")
+                 ./template
+              );
+        };
     }
     // utils.defaultSystems
          ({ pkgs, system }:
@@ -302,34 +319,6 @@
                            pkgs'
                       )
                       ps-pkgs-ns;
-                };
-
-              defaultApp =
-                { type = "app";
-
-                  program =
-                    let
-                      write-flake =
-                        p.writeScript "initialize-project"
-                          ''
-                          if [[ ! -a .gitignore ]]; then
-                            cp --no-preserve=mode ${./init/.gitignore} .gitignore
-                          fi
-
-                          if [[ ! -a flake.nix ]]; then
-                            cp --no-preserve=mode ${./init/flake.nix} flake.nix
-                          fi
-
-                          if [[ ! -a src ]]; then
-                            mkdir src
-                          fi
-
-                          if [[ ! -a src/Main.purs ]]; then
-                            cp --no-preserve=mode ${./init/Main.purs} src/Main.purs
-                          fi
-                          '';
-                    in
-                      "${write-flake}";
                 };
             }
          )

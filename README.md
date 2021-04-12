@@ -4,7 +4,7 @@
 
 ## Gettings Started
 
-- Run `nix run github:ursi/purs-nix` in a new directory to initialize a new project.
+- Run `nix init -t github:ursi/purs-nix` in a new directory to initialize a new project.
 - Run `nix develop` to enter a Nix shell with the `purs-nix` command added to your path.
 - Run `purs-nix run` to see the output of the default project.
 
