@@ -22,7 +22,8 @@
                   src = ./src;
                 }
              )
-             shell;
+             shell
+             shellHook;
          in
          { devShell =
              with pkgs;
@@ -32,6 +33,9 @@
                      purescript
                      (shell {})
                    ];
+
+                 # temporary workaround for adding bash completion
+                 inherit shellHook;
                };
          }
       )

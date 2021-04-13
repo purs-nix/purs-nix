@@ -263,6 +263,8 @@
                   { all-dependencies = dependencies ++ test-dependencies;
                     inherit all-dep-globs dep-globs pkgs;
                   };
+
+              shellHook = ''''\ncomplete -W "compile bundle run test package-info packages output srcs" purs-nix''\n'';
             };
         };
 
