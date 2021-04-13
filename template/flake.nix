@@ -9,6 +9,7 @@
       ({ pkgs, system }:
          let
            inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
+
            inherit
              (purs
                 { dependencies =
