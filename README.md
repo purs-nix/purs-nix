@@ -1,6 +1,6 @@
 # purs-nix
 
-**purs-nix** is a project which aims to allow you to use the entire PureScript ecosystem with nothing but Nix. It's currently only for use with Nix flakes.
+**purs-nix** is a project which aims to allow you to use the entire PureScript ecosystem with nothing but Nix. It's currently only for use with Nix flakes. For help, you can reach out on the [FP](https://funprog.zulipchat.com/#narrow/stream/214955-PureScript)/[Nix](https://nixcommunity.zulipchat.com/#narrow/stream/285116-PureScript) Zulips.
 
 ## Gettings Started
 
