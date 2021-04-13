@@ -14,13 +14,12 @@
 }:
   let
     b = builtins; l = p.lib; p = pkgs; u = import ./utils.nix;
-    command = "purs-nix";
     compiler-output = output;
 
     bundle' =
       { output ? "index.js", ... }@args:
       ''
-      ${command} compile \
+      purs-nix compile \
         && ${
       u.bundle
         purescript
