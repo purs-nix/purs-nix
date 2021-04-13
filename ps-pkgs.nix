@@ -3,7 +3,7 @@
   { aff =
       { version = "6.0.0";
         repo = "https://github.com/purescript-contrib/purescript-aff.git";
-        rev = "2ed2263959287810bcc2c4397fead32f202bd84a";
+        rev = "d0eb009f2f47cb1f5ba1d8592d90c95e8e7ff75d";
 
         dependencies =
           [ datetime
@@ -202,6 +202,13 @@
             tuples
             unfoldable
           ];
+      };
+
+    event =
+      { version = "1.3.1";
+        repo = "https://github.com/ursi/purescript-event.git";
+        rev = "8332a25a65e1b939de5b778325b8e6a8571a2e7c";
+        info = /package.nix;
       };
 
     exceptions =
@@ -775,6 +782,24 @@
         repo = "https://github.com/purescript/purescript-safe-coerce.git";
         rev = "e719defd227d932da067a1f0d62a60b3d3ff3637";
         dependencies = [ unsafe-coerce ];
+      };
+
+    simple-json =
+      { version = "8.0.0";
+        repo = "https://github.com/justinwoo/purescript-simple-json.git";
+        rev = "38d5825c31627ccfff10e724b08d38b902e815e9";
+
+        dependencies =
+          [ arrays
+            foreign
+            foreign-object
+            exceptions
+            nullable
+            prelude
+            record
+            typelevel-prelude
+            variant
+          ];
       };
 
     st =
