@@ -224,6 +224,21 @@
         dependencies = [ unsafe-coerce ];
       };
 
+    filterable =
+      { version = "4.0.0";
+        repo = "https://github.com/purescript/purescript-filterable.git";
+        rev = "a6495ee2af741e03b077f70fb6bc3d0dbbb45cfb";
+
+        dependencies =
+          [ arrays
+            either
+            foldable-traversable
+            identity
+            lists
+            ordered-collections
+          ];
+      };
+
     foldable-traversable =
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-foldable-traversable.git";
@@ -914,6 +929,19 @@
       { version = "5.0.0";
         repo = "https://github.com/purescript/purescript-unsafe-coerce.git";
         rev = "ee24f0d3b94bf925d9c50fcc2b449579580178c0";
+      };
+
+    unsafe-reference =
+      { version = "4.0.0";
+        repo = "https://github.com/purescript-contrib/purescript-unsafe-reference.git";
+        rev = "d4e11a0f291fe8db9855c8bec89fd50b4e48d043";
+
+        dependencies =
+          [ console
+            effect
+            exceptions
+            prelude
+          ];
       };
 
     variant =
