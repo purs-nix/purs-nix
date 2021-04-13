@@ -1,11 +1,15 @@
-{ inputs.purs-nix.url = "path:..";
+{ inputs =
+    { nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+      purs-nix.url = "path:..";
+      utils.url = "github:ursi/flake-utils";
+    };
 
   outputs = { nixpkgs, utils, purs-nix, ... }:
     utils.defaultSystems
-      ({ pkgs, system }: with pkgs;
+      ({ pkgs, system }:
          let
            inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
-           inherit (ps-pkgs-ns) ursi;
+
            inherit
              (purs
                 { dependencies =
@@ -20,21 +24,24 @@
                 }
              )
              modules
-             shell;
+             shell
+             shellHook;
          in
          { defaultPackage = modules.Main.install { name = "test"; };
 
            devShell =
+             with pkgs;
              mkShell
                { buildInputs =
                    [ nodejs
                      purescript
                      (shell {})
                    ];
+
+                 # temporary workaround for adding bash completion
+                 inherit shellHook;
                };
          }
       )
       nixpkgs;
 }
-
-
