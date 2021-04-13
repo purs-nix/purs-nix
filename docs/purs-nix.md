@@ -80,4 +80,4 @@ and returns a set with the following attributes:
 - `purescript`: The PureScript package to use.
 
 ## purs-nix (command)
-Just run `purs-nix` (no argument) to see the documentation for the `purs-nix` command in your project.
+Run `purs-nix` (no argument) to see the documentation. (or look near the bottom of [this file](/purs-nix-shell.nix))
