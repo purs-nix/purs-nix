@@ -4,7 +4,7 @@
       utils.url = "github:ursi/flake-utils";
     };
 
-  outputs = { nixpkgs, utils, purs-nix, ... }:
+  outputs = { nixpkgs, purs-nix, utils, ... }:
     utils.defaultSystems
       ({ mkShell, pkgs, system }:
          let
