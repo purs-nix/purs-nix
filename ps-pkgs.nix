@@ -456,6 +456,29 @@
           ];
       };
 
+    language-cst-parser =
+      { version = "0.7.1";
+        repo = "https://github.com/natefaubion/purescript-language-cst-parser.git";
+        rev = "0fa3a7a49e63b85895e50676e506a45f2aaffb08";
+
+        dependencies =
+          [ arrays
+            const
+            effect
+            either
+            filterable
+            foldable-traversable
+            free
+            functors
+            maybe
+            numbers
+            strings
+            transformers
+            tuples
+            typelevel-prelude
+          ];
+      };
+
     lists =
       { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-lists.git";
@@ -582,6 +605,19 @@
             prelude
             strings
             unsafe-coerce
+          ];
+      };
+
+    node-fs-aff =
+      { version = "7.0.0";
+        repo = "https://github.com/purescript-node/purescript-node-fs-aff.git";
+        rev = "1da5d326573c3b17c6d4dba3d0e0157e60869f91";
+
+        dependencies =
+          [ aff
+            effect
+            node-fs
+            node-path
           ];
       };
 
