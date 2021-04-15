@@ -6,7 +6,7 @@
 
   outputs = { nixpkgs, utils, purs-nix, ... }:
     utils.defaultSystems
-      ({ pkgs, system }:
+      ({ mkShell, pkgs, system }:
          let
            inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
 
@@ -24,22 +24,19 @@
                 }
              )
              modules
-             shell
-             shellHook;
+             shell;
          in
          { defaultPackage = modules.Main.install { name = "test"; };
 
            devShell =
-             with pkgs;
+             # https://github.com/numtide/devshell
              mkShell
-               { buildInputs =
+               { packages =
+                   with pkgs;
                    [ nodejs
                      purescript
                      (shell {})
                    ];
-
-                 # temporary workaround for adding bash completion
-                 inherit shellHook;
                };
          }
       )
