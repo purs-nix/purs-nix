@@ -102,28 +102,44 @@
         '';
 
     run-output = ".purs-nix-run.js";
+
+    exe =
+      p.writeShellScript "purs-nix"
+        ''
+        case $1 in
+          compile ) ${compile' compile};;
+          bundle ) ${bundle' bundle};;
+          run )
+            ${bundle' (bundle // { output = run-output; })} \
+              && ${nodejs}/bin/node ${run-output};;
+          test )
+            ${compile-test compile} && ${
+          bundle'
+            (bundle
+             // { module = test-module;
+                  output = run-output;
+                }
+            )
+          } && ${nodejs}/bin/node ${run-output};;
+          package-info ) ${package-info} $2;;
+          packages ) ${packages};;
+          output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
+          srcs ) ${purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${dep-globs};;
+          * ) echo ${help};;
+        esac
+        '';
+
+    completion =
+      p.writeText "purs-nix-completion"
+        ''complete -W "compile bundle run test package-info packages output srcs" purs-nix'';
   in
-  p.writeShellScriptBin "purs-nix"
+  p.runCommand "purs-nix" {}
     ''
-    case $1 in
-      compile ) ${compile' compile};;
-      bundle ) ${bundle' bundle};;
-      run )
-        ${bundle' (bundle // { output = run-output; })} \
-          && ${nodejs}/bin/node ${run-output};;
-      test )
-        ${compile-test compile} && ${
-      bundle'
-        (bundle
-         // { module = test-module;
-              output = run-output;
-            }
-        )
-      } && ${nodejs}/bin/node ${run-output};;
-      package-info ) ${package-info} $2;;
-      packages ) ${packages};;
-      output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
-      srcs ) ${purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${dep-globs};;
-      * ) echo ${help};;
-    esac
+    mkdir -p $out/bin
+    cd $_
+    ln -s ${exe} purs-nix
+    cd -
+    mkdir -p $out/share/bash-completion/completions
+    cd $_
+    ln -s ${completion} purs-nix
     ''

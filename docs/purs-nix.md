@@ -32,7 +32,6 @@ and returns a set with the following attributes:
 and returns a set with the following attributes:
 - `modules`: A set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).
 - `shell`: A functions that builds the `purs-nix` command which you can then add to your Nix shell.
-- `shellHook:` Bash completion doesn't get sourced in a standard nix shell, so this is a small bit of bash to add completion to `purs-nix`. It is surrounded by newlines so you can safely use `+` to append it to your own `shellHook`. This is hopefully a temporary solution to the problem.
 
 ### shell
 `shell` takes the following arguments: (Note: they all have defaults so often times you will only need to us `shell {}`)
