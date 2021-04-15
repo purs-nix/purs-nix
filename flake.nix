@@ -1,6 +1,9 @@
-{ inputs.utils.url = "github:ursi/flake-utils";
+{ inputs =
+    { builders.url = "github:ursi/nix-builders";
+      utils.url = "github:ursi/flake-utils";
+    };
 
-  outputs = { nixpkgs, utils, ... }:
+  outputs = { nixpkgs, builders, utils, ... }:
     let b = builtins; in
     { __functor = _: { system, pkgs ? nixpkgs.legacyPackages.${system}}:
         rec
@@ -182,7 +185,7 @@
                   bin =
                     let
                       merge-cache =
-                        (utils.builders system).write-js-script
+                        (builders { inherit pkgs system; }).write-js-script
                           "merge-cache"
                           ''
                           const fs = require(`fs`);
@@ -283,7 +286,7 @@
         };
     }
     // utils.defaultSystems
-         ({ pkgs, system }:
+         ({ pkgs, system, ... }:
             let
               l = p.lib; p = pkgs; u = import ./utils.nix;
               inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
