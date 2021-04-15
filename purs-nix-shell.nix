@@ -88,7 +88,7 @@
                    'node'.
         ------------------------------------------------------------------------
         package-info <name>    Show the info of a specific package.
-        packages               Show the info of all the packages in your project.
+        packages               Show all packages used in your project.
         -------------------------------------------------------------------------
         output <args>    Pass arguments to 'purs' with the glob for your
                          compiled code passed as the final argument.
