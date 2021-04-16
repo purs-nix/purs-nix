@@ -107,7 +107,9 @@
       p.writeShellScript "purs-nix"
         ''
         case $1 in
-          compile ) ${compile' compile};;
+          compile )
+            ${compile' compile}
+            chmod -R u+w ${output};;
           bundle ) ${bundle' bundle};;
           run )
             ${bundle' (bundle // { output = run-output; })} \
