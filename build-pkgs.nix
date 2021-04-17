@@ -7,8 +7,6 @@ pkgs:
       , rev
       , name
       , info ? null
-      , ps-pkgs
-      , ps-pkgs-ns
       , ...
       }@args:
       let
@@ -57,15 +55,7 @@ pkgs:
       l.fix
         (self:
            l.mapAttrs
-             (n: v:
-                build
-                  (v
-                   // { name = n;
-                        ps-pkgs = self;
-                        inherit ps-pkgs-ns;
-                      }
-                  )
-             )
+             (n: v: build (v // { name = n; }))
              (f self)
         );
 
@@ -84,15 +74,7 @@ pkgs:
            l.mapAttrs
              (ns: pkgs':
                l.mapAttrs
-                 (n: v:
-                    build
-                      (v
-                       // { name = "${ns}.${n}";
-                            inherit ps-pkgs;
-                            ps-pkgs-ns = self;
-                          }
-                      )
-                 )
+                 (n: v: build (v // { name = "${ns}.${n}"; }))
                  pkgs'
              )
              (f self)
