@@ -2,6 +2,8 @@
 
 Here is [the wiki](https://nixos.wiki/wiki/Flakes) page if you would rather use that than the instructions here.
 
+If you already have Nix installed and you don't want upgrade the version on your system, you can use [nixf](https://github.com/ursi/nixf). If you use **nixf**, you do not need to follow the instructions below. Keep in mind, for all example that use the `nix` command, you'll need to use the `nixf` command.
+
 ## Non-NixOS
 
 - [Install Nix](https://nixos.org/download.html#nix-quick-install)
