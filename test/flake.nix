@@ -6,7 +6,7 @@
 
   outputs = { nixpkgs, utils, purs-nix, ... }:
     utils.defaultSystems
-      ({ mkShell, pkgs, system }:
+      ({ make-shell, pkgs, system }:
          let
            inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
 
@@ -29,8 +29,8 @@
          { defaultPackage = modules.Main.install { name = "test"; };
 
            devShell =
-             # https://github.com/numtide/devshell
-             mkShell
+             # https://github.com/ursi/nix-make-shell
+             make-shell
                { packages =
                    with pkgs;
                    [ nodejs
