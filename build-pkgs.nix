@@ -22,7 +22,7 @@ pkgs:
 
         info' =
           if b.isPath info then
-            import (git-src + info) args
+            import (git-src + info) { inherit ps-pkgs ps-pkgs-ns; }
           else
             args;
 
