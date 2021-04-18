@@ -109,12 +109,7 @@
                       trans-deps =
                         let
                           go = ds:
-                            b.foldl'
-                              (acc: d:
-                                 acc ++ go d.local-deps
-                              )
-                              []
-                              ds
+                            b.foldl' (acc: d: acc ++ go d.local-deps) [] ds
                             ++ ds;
                         in
                         l.unique (go local-deps);
