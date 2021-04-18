@@ -1,3 +1,3 @@
-module Nested.Dependency where
+module Nested where
 
 foreign import a :: String

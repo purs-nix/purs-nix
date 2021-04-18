@@ -1,6 +1,6 @@
 module Dependency where
 
-import Nested.Dependency as ND
+import Nested as ND
 
 a :: String
 a = ND.a
