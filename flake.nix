@@ -40,6 +40,37 @@
               dep-globs = get-dep-globs dependencies;
               all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
 
+              local-graph =
+                let
+                  make-graph = extra:
+                    b.fromJSON
+                      (b.readFile
+                         (p.runCommand "purescript-dependency-graph"
+                            { buildInputs = [ purescript ]; }
+                            "purs graph ${extra} ${dep-globs} > $out"
+                         )
+                      );
+
+                  deps-graph = make-graph "";
+                  graph = make-graph ''"${src}/**/*.purs"'';
+
+                  partial =
+                    l.filterAttrs
+                      (n: v: !deps-graph?${n})
+                      graph;
+                in
+                l.mapAttrs
+                  (module: v:
+                     { depends =
+                         b.filter
+                           (v: partial?${v})
+                           v.depends;
+
+                       inherit (v) path;
+                     }
+                  )
+                  partial;
+
               build-single = name: local-deps:
                 let
                   built-deps =
@@ -53,29 +84,24 @@
 
                   src' =
                     let
-                      paths =
-                        b.filter
-                          (a: path-filter (b.toString a))
-                          (l.filesystem.listFilesRecursive src);
+                      purs-path =
+                        let match = b.match "/nix/store/[^/]+/(.+)$" local-graph.${name}.path; in
+                        if match != null then
+                          b.head match
+                        else
+                          b.throw "${name}: there should be a match here!";
 
-                      path-suffix-prefix = (b.replaceStrings [ "." ] [ "/" ] name) + ".";
+                      js-path = b.replaceStrings [ ".purs" ] [ ".js" ] purs-path;
 
                       subsrc =
-                        let match = b.match "(.*)/[^/]+$" path-suffix-prefix; in
+                        let match = b.match "/nix/store/[^/]+/(.+)/[^/]+$" local-graph.${name}.path; in
                         if match == null then
                           src
                         else
                           src + ("/" + b.head match);
-
-                      path-filter = path:
-                        let
-                          js = path-suffix-prefix + "js";
-                          purs = path-suffix-prefix + "purs";
-                        in
-                        l.hasSuffix js path || l.hasSuffix purs path;
                     in
                     b.filterSource
-                      (path: _: path-filter path)
+                      (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
                       subsrc;
 
                   output = args:
@@ -210,36 +236,6 @@
                 };
 
               builds =
-                let
-                  local-graph =
-                    let
-                      make-graph = extra:
-                        b.fromJSON
-                          (b.readFile
-                             (p.runCommand "purescript-dependency-graph"
-                                { buildInputs = [ purescript ]; }
-                                "purs graph ${extra} ${dep-globs} > $out"
-                             )
-                          );
-
-                      deps-graph = make-graph "";
-                      graph = make-graph ''"${src}/**/*.purs"'';
-
-                      partial =
-                        l.filterAttrs
-                          (n: v: !deps-graph?${n})
-                          graph;
-                    in
-                    l.mapAttrs
-                      (module: v:
-                         { depends =
-                             b.filter
-                               (v: partial?${v})
-                               v.depends;
-                         }
-                      )
-                      partial;
-                in
                 l.mapAttrs
                   (name: v:
                      build-single
