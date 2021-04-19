@@ -74,32 +74,6 @@
             )
         }
         '';
-    help =
-      l.escapeShellArg
-        ''
-        purs-nix <command>
-
-        Commands:
-        ------------------------------------------------------------------------
-        compile    Compile your project.
-        bundle     Compile then bundle your project.
-        run        Compile, bundle, then run the bundle with 'node'.
-        test       Compile, bundle your test code, then run the bundle with
-                   'node'.
-        ------------------------------------------------------------------------
-        package-info <name>    Show the info of a specific package.
-        packages               Show all packages used in your project.
-        -------------------------------------------------------------------------
-        output <args>    Pass arguments to 'purs' with the glob for your
-                         compiled code passed as the final argument.
-
-        srcs <args>      Pass arguments to 'purs' with the globs for your
-                         projects's PureScript source code passed as the
-                         final argument.
-        -------------------------------------------------------------------------
-
-        Anything that is not a valid command with show this text.
-        '';
 
     run-output = ".purs-nix-run.js";
 
@@ -134,6 +108,34 @@
     completion =
       p.writeText "purs-nix-completion"
         ''complete -W "compile bundle run test package-info packages output srcs" purs-nix'';
+
+    # keep at the bottom to agree with docs/purs-nix.md
+    help =
+      l.escapeShellArg
+        ''
+        purs-nix <command>
+
+        Commands:
+        ------------------------------------------------------------------------
+        compile    Compile your project.
+        bundle     Compile then bundle your project.
+        run        Compile, bundle, then run the bundle with 'node'.
+        test       Compile, bundle your test code, then run the bundle with
+                   'node'.
+        ------------------------------------------------------------------------
+        package-info <name>    Show the info of a specific package.
+        packages               Show all packages used in your project.
+        -------------------------------------------------------------------------
+        output <args>    Pass arguments to 'purs' with the glob for your
+                         compiled code passed as the final argument.
+
+        srcs <args>      Pass arguments to 'purs' with the globs for your
+                         projects's PureScript source code passed as the
+                         final argument.
+        -------------------------------------------------------------------------
+
+        Anything that is not a valid command with show this text.
+        '';
   in
   p.runCommand "purs-nix" {}
     ''
