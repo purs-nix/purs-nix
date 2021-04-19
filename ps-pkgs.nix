@@ -809,7 +809,7 @@
 
     return =
       { repo = "https://github.com/ursi/purescript-return.git";
-        rev = "e2e8417436c532adadb40579a38d6aff254888e6";
+        rev = "5a327ce3c50857b19279a38e2266778b767eed48";
         info = /package.nix;
       };
 
