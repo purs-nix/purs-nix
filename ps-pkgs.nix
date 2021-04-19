@@ -897,7 +897,7 @@
 
     substitute =
       { repo = "https://github.com/ursi/purescript-substitute.git";
-        rev = "0b43ed1b512a5165af8661eb6aaf9b793f5140dd";
+        rev = "478db1f509bce98507fd113170a40b940487bceb";
         info = /package.nix;
       };
 
