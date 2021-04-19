@@ -948,7 +948,7 @@
       };
 
     tuples =
-      { version = "5.0.0";
+      { version = "6.0.0";
         repo = "https://github.com/purescript/purescript-tuples.git";
         rev = "3fb71a817767f782c3dfbdcaf1f160228ffb78a1";
 
