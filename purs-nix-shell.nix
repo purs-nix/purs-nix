@@ -120,7 +120,7 @@
                 l.listToAttrs
                   (b.map
                      (pkg:
-                        let registry-name = "purescript-${pkgs.pursuit.name or pkg.pname or pkg.name}"; in
+                        let registry-name = "purescript-${pkg.pursuit.name or pkg.pname or pkg.name}"; in
                         l.nameValuePair
                           registry-name
                           (if bower-packages-registry?${registry-name} && pkg?version then
