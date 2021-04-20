@@ -41,6 +41,7 @@ and returns a set with the following attributes:
 , output ? "output"
 , bundle ? {}
 , compile ? {}
+, package ? {}
 , test ? "test"
 , test-module ? "Test.Main"
 , nodejs ? pkgs.nodejs
@@ -72,6 +73,26 @@ and returns a set with the following attributes:
   , json-errors ? false
   }
   ```
+
+- `package`: The options that will be used to generate a `bower.json` with `purs-nix bower`.
+
+  ```
+  { dependencies
+  , pursuit
+  }
+  ```
+    - `dependencies`: A list of your project's dependencies.
+	- `pursuit`: A set of all the additional information required to make a `bower.json` in order to publish to Pursuit.
+
+	  ```
+	  { name
+	  , repo
+	  , license
+	  }
+	  ```
+	  - `name`: The name of the package in [the registry](https://github.com/purescript/registry) (without the `purescript-`).
+	  - `repo`: The url of the git repository.
+	  - `license`: One of [these licenses](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix).
 
 - `test`: A string representing the path of your testing code.
 - `test-module`: The name of the module whose `main` function will be run when using `purs-nix test`.

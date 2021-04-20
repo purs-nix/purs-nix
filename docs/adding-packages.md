@@ -38,7 +38,7 @@ The following attributes are required:\
 `repo`, `rev`
 
 The following attributes are optional:\
-`dependencies`, `info`, `ref`, `src`, `version`
+`dependencies`, `info`, `name`, `pursuit`, `ref`, `src`, `version`
 
 ## Using `info`
 If you're using a file in your own repository for your package info, you need to make sure it's a function that uses the `...` syntax. This is to leave ourselves open for passing in new arguments in the future without breaking everything.\
@@ -63,3 +63,6 @@ Here's an example:
       ];
   }
 ```
+
+The arguments that are currently passed are:\
+`ps-pkgs` `ps-pkgs-ns` [`licenses`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix)

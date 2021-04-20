@@ -22,7 +22,10 @@ pkgs:
 
         info' =
           if b.isPath info then
-            import (git-src + info) { inherit ps-pkgs ps-pkgs-ns; }
+            import (git-src + info)
+              { inherit ps-pkgs ps-pkgs-ns;
+                inherit (l) licenses;
+              }
           else
             args;
 
@@ -34,11 +37,18 @@ pkgs:
               or (if args?version then "refs/tags/v" + args.version
                   else null
                  );
+
+        add-optional = attribute:
+          if info'?${attribute} then { ${attribute} = info'.${attribute}; } else {};
       in
       p.stdenv.mkDerivation
         ({ src = git-src;
            phases = [ "unpackPhase" "installPhase" ];
-           passthru = { inherit dependencies repo rev; };
+
+           passthru =
+             { inherit dependencies repo rev; }
+             // add-optional "pursuit";
+
            installPhase = "ln -s $src/${src} $out";
          }
          // u.make-name name version

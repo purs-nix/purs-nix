@@ -7,6 +7,7 @@
 , output ? "output"
 , bundle ? {}
 , compile ? {}
+, package ? {}
 , test ? "test"
 , test-module ? "Test.Main"
 , nodejs ? pkgs.nodejs
@@ -75,6 +76,67 @@
         }
         '';
 
+    bower =
+      let make-error = a: ''echo "You need to define 'package.${a}' in the set you pass to 'shell' to use this command". Make sure to re-enter the Nix shell after you fix this.''; in
+      if !package?pursuit then
+        make-error "pursuit"
+      else if !package.pursuit?name then
+        make-error "pursuit.name"
+      else if !package.pursuit?license then
+        make-error "pursuit.license"
+      else if !package.pursuit?repo then
+        make-error "pursuit.repo"
+      else
+        let
+          bower-packages-registry =
+            b.fromJSON
+              (b.readFile
+                 (b.fetchGit
+                    { url = "https://github.com/purescript/registry.git";
+                      rev = "55bce52392cab4b595ac1f542954cfceeef2d431";
+                    }
+                  + /bower-packages.json
+                 )
+              );
+
+          bower-set =
+            with package;
+            { name = "purescript-${pursuit.name}";
+              license = [ pursuit.license.spdxId ];
+
+              repository =
+                { type = "git";
+                  url = pursuit.repo;
+                };
+
+              ignore =
+                [ "**/.*"
+                  "node_modules"
+                  "bower_components"
+                  output
+                ];
+
+              dependencies =
+                l.listToAttrs
+                  (b.map
+                     (pkg:
+                        let registry-name = "purescript-${pkgs.pursuit.name or pkg.pname or pkg.name}"; in
+                        l.nameValuePair
+                          registry-name
+                          (if bower-packages-registry?${registry-name} && pkg?version then
+                             "^v${pkg.version}"
+                           else
+                             "${pkg.repo}#${
+                             if pkg?version then "v${pkg.version}" else pkg.rev
+                             }"
+                          )
+                     )
+                     (package.dependencies or [])
+                  );
+            };
+        in
+        "echo ${l.escapeShellArg (b.toJSON bower-set)} | ${p.jq}/bin/jq . > bower.json";
+
     run-output = ".purs-nix-run.js";
 
     exe =
@@ -99,6 +161,7 @@
           } && ${nodejs}/bin/node ${run-output};;
           package-info ) ${package-info} $2;;
           packages ) ${packages};;
+          bower ) ${bower};;
           output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
           srcs ) ${purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${dep-globs};;
           * ) echo ${help};;
@@ -107,7 +170,7 @@
 
     completion =
       p.writeText "purs-nix-completion"
-        ''complete -W "compile bundle run test package-info packages output srcs" purs-nix'';
+        ''complete -W "compile bundle run test package-info packages bower output srcs" purs-nix'';
 
     # keep at the bottom to agree with docs/purs-nix.md
     help =
@@ -125,6 +188,8 @@
         ------------------------------------------------------------------------
         package-info <name>    Show the info of a specific package.
         packages               Show all packages used in your project.
+        -------------------------------------------------------------------------
+        bower    Generate a bower.json for publishing to Pursuit.
         -------------------------------------------------------------------------
         output <args>    Pass arguments to 'purs' with the glob for your
                          compiled code passed as the final argument.
