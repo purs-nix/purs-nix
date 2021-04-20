@@ -8,7 +8,8 @@
     utils.defaultSystems
       ({ make-shell, pkgs, system }:
          let
-           inherit (purs-nix { inherit system; }) purs ps-pkgs ps-pkgs-ns;
+           pn = purs-nix { inherit system; };
+           inherit (pn) purs ps-pkgs ps-pkgs-ns;
 
            inherit
              (purs
@@ -35,7 +36,7 @@
                    with pkgs;
                    [ nodejs
                      purescript
-                     (shell {})
+                     (shell { package = import ./package.nix pn; })
                    ];
                };
          }
