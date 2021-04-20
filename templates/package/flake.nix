@@ -10,10 +10,11 @@
          let
            pn = purs-nix { inherit system; };
            inherit (pn) purs;
+           package = import ./package.nix pn;
 
            inherit
              (purs
-                { inherit (import ./package.nix pn) dependencies;
+                { inherit (package) dependencies;
                   src = ./src;
                 }
              )
