@@ -263,18 +263,25 @@
 
       defaultTemplate =
         { description = "A basic purs-nix project";
-          path = b.toString ./template;
+          path = "${./templates/default}";
         };
 
-      templates.flake =
-        { description = "The flake.nix only - for converting existing projects";
+      templates =
+        { flake =
+            { description = "The flake.nix only - for converting existing projects";
 
-          path =
-            b.toString
-              (b.filterSource
-                 (path: _: b.baseNameOf path == "flake.nix")
-                 ./template
-              );
+              path =
+                b.toString
+                  (b.filterSource
+                     (path: _: b.baseNameOf path == "flake.nix")
+                     ./templates/default
+                  );
+            };
+
+          package =
+            { description = "A basic purs-nix package setup";
+              path = "${./templates/package}";
+            };
         };
     }
     // utils.defaultSystems
