@@ -45,9 +45,8 @@
                 let
                   make-graph = extra:
                     l.importJSON
-                      (p.runCommand "purescript-dependency-graph"
-                         { buildInputs = [ purescript ]; }
-                         "purs graph ${extra} ${dep-globs} > $out"
+                      (p.runCommand "purescript-dependency-graph" {}
+                         "${purescript}/bin/purs graph ${extra} ${dep-globs} > $out"
                       );
 
                   deps-graph = make-graph "";
