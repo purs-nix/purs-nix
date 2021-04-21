@@ -44,12 +44,10 @@
               local-graph =
                 let
                   make-graph = extra:
-                    b.fromJSON
-                      (b.readFile
-                         (p.runCommand "purescript-dependency-graph"
-                            { buildInputs = [ purescript ]; }
-                            "purs graph ${extra} ${dep-globs} > $out"
-                         )
+                    l.importJSON
+                      (p.runCommand "purescript-dependency-graph"
+                         { buildInputs = [ purescript ]; }
+                         "purs graph ${extra} ${dep-globs} > $out"
                       );
 
                   deps-graph = make-graph "";
