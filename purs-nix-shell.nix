@@ -90,14 +90,12 @@ with builtins;
       else
         let
           bower-packages-registry =
-            fromJSON
-              (readFile
-                 (fetchGit
-                    { url = "https://github.com/purescript/registry.git";
-                      rev = "55bce52392cab4b595ac1f542954cfceeef2d431";
-                    }
-                  + /bower-packages.json
-                 )
+            l.importJSON
+              (fetchGit
+                 { url = "https://github.com/purescript/registry.git";
+                   rev = "55bce52392cab4b595ac1f542954cfceeef2d431";
+                 }
+               + /bower-packages.json
               );
 
           bower-set =
