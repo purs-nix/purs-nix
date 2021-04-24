@@ -2,6 +2,8 @@
 
 **purs-nix** is a project which aims to allow you to use the entire PureScript ecosystem with nothing but Nix. It's currently only for use with Nix flakes. For help, you can reach out on the [FP](https://funprog.zulipchat.com/#narrow/stream/214955-PureScript)/[Nix](https://nixcommunity.zulipchat.com/#narrow/stream/285116-PureScript) Zulips.
 
+**This project is currently unstable**, but because it's built with flakes, the only thing you'll have to worry about is upgrading. A flake pins all its dependencies so once something works, it should never break.
+
 ## Gettings Started
 
 - [Setup nix](docs/nix.md).
