@@ -1,3 +1,4 @@
+with builtins;
 rec
 { bundle =
     purescript:
@@ -12,7 +13,7 @@ rec
     }:
     let
       flags =
-        builtins.concatStringsSep " "
+        concatStringsSep " "
           [ "--module ${module}"
             (make-flag "--output " output)
             (make-flag "--main " main)
@@ -35,7 +36,7 @@ rec
     }:
     let
       flags =
-        builtins.concatStringsSep " "
+        concatStringsSep " "
           [ (make-flag "--output " output)
             (make-flag "--verbose-errors" verbose-errors)
             (make-flag "--comments" comments)

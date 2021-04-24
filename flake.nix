@@ -4,7 +4,7 @@
     };
 
   outputs = { nixpkgs, builders, utils, ... }:
-    let b = builtins; in
+    with builtins;
     { __functor = _: { system, pkgs ? nixpkgs.legacyPackages.${system}}:
         rec
         { inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
@@ -26,7 +26,7 @@
                   trans-deps =
                     let
                       go = ds:
-                        b.foldl'
+                        foldl'
                           (acc: d:
                              acc ++ go d.dependencies
                           )
@@ -36,7 +36,7 @@
                     in
                     l.unique (go deps);
                 in
-                b.toString (b.map (a: ''"${a}/**/*.purs"'') trans-deps);
+                toString (map (a: ''"${a}/**/*.purs"'') trans-deps);
 
               dep-globs = get-dep-globs dependencies;
               all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
@@ -60,7 +60,7 @@
                 l.mapAttrs
                   (module: v:
                      { depends =
-                         b.filter
+                         filter
                            (v: partial?${v})
                            v.depends;
 
@@ -83,22 +83,22 @@
                   src' =
                     let
                       purs-path =
-                        let match = b.match "/nix/store/[^/]+/(.+)$" local-graph.${name}.path; in
-                        if match != null then
-                          b.head match
+                        let matches = match "/nix/store/[^/]+/(.+)$" local-graph.${name}.path; in
+                        if matches != null then
+                          head matches
                         else
-                          b.throw "${name}: there should be a match here!";
+                          throw "${name}: there should be a match here!";
 
-                      js-path = b.replaceStrings [ ".purs" ] [ ".js" ] purs-path;
+                      js-path = replaceStrings [ ".purs" ] [ ".js" ] purs-path;
 
                       subsrc =
-                        let match = b.match "/nix/store/[^/]+/(.+)/[^/]+$" local-graph.${name}.path; in
-                        if match == null then
+                        let matches = match "/nix/store/[^/]+/(.+)/[^/]+$" local-graph.${name}.path; in
+                        if matches == null then
                           src
                         else
-                          src + ("/" + b.head match);
+                          src + ("/" + head matches);
                     in
-                    b.filterSource
+                    filterSource
                       (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
                       subsrc;
 
@@ -107,7 +107,7 @@
                       trans-deps =
                         let
                           go = ds:
-                            b.foldl' (acc: d: acc ++ go d.local-deps) [] ds
+                            foldl' (acc: d: acc ++ go d.local-deps) [] ds
                             ++ ds;
                         in
                         l.unique (go local-deps);
@@ -119,15 +119,15 @@
                         buildPhase =
                           let
                             augmentations =
-                              b.toString
-                                (b.map
+                              toString
+                                (map
                                    (a: "${a.bin} output;")
                                    trans-deps
                                 );
 
                             local-dep-globs =
-                              b.toString
-                                (b.map
+                              toString
+                                (map
                                   (a: ''"${a.src}/**/*.purs"'')
                                   trans-deps
                                 );
@@ -233,7 +233,7 @@
                   (name: v:
                      build-single
                        name
-                       (b.map (v: builds.${v}) v.depends)
+                       (map (v: builds.${v}) v.depends)
                   )
                   local-graph;
 
@@ -268,9 +268,9 @@
             { description = "The flake.nix only - for converting existing projects";
 
               path =
-                b.toString
-                  (b.filterSource
-                     (path: _: b.baseNameOf path == "flake.nix")
+                toString
+                  (filterSource
+                     (path: _: baseNameOf path == "flake.nix")
                      ./templates/default
                   );
             };

@@ -1,3 +1,4 @@
+with builtins;
 { all-dependencies
 , all-dep-globs
 , dep-globs
@@ -14,7 +15,7 @@
 , purescript ? pkgs.purescript
 }:
   let
-    b = builtins; l = p.lib; p = pkgs; u = import ./utils.nix;
+    l = p.lib; p = pkgs; u = import ./utils.nix;
     compiler-output = output;
 
     bundle' =
@@ -54,8 +55,8 @@
         ''
         case $1 in
 
-        ${b.concatStringsSep "\n"
-            (b.map
+        ${concatStringsSep "\n"
+            (map
                (pkg: "${pkg.pname or pkg.name} ) ${u.package-info pkg};;")
                all-dependencies
             )
@@ -68,8 +69,8 @@
     packages =
       p.writeShellScript "packages"
         ''
-        ${b.concatStringsSep "\n"
-            (b.map
+        ${concatStringsSep "\n"
+            (map
                (pkg: "echo ${pkg.name}")
                all-dependencies
             )
@@ -89,9 +90,9 @@
       else
         let
           bower-packages-registry =
-            b.fromJSON
-              (b.readFile
-                 (b.fetchGit
+            fromJSON
+              (readFile
+                 (fetchGit
                     { url = "https://github.com/purescript/registry.git";
                       rev = "55bce52392cab4b595ac1f542954cfceeef2d431";
                     }
@@ -118,7 +119,7 @@
 
               dependencies =
                 l.listToAttrs
-                  (b.map
+                  (map
                      (pkg:
                         let registry-name = "purescript-${pkg.pursuit.name or pkg.pname or pkg.name}"; in
                         l.nameValuePair
@@ -135,7 +136,7 @@
                   );
             };
         in
-        "echo ${l.escapeShellArg (b.toJSON bower-set)} | ${p.jq}/bin/jq . > bower.json";
+        "echo ${l.escapeShellArg (toJSON bower-set)} | ${p.jq}/bin/jq . > bower.json";
 
     run-output = ".purs-nix-run.js";
 

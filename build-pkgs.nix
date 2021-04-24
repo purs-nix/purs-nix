@@ -1,6 +1,7 @@
+with builtins;
 pkgs:
   let
-    b = builtins; l = p.lib; p = pkgs; u = import ./utils.nix;
+    l = p.lib; p = pkgs; u = import ./utils.nix;
 
     build =
       { repo
@@ -11,7 +12,7 @@ pkgs:
       }@args:
       let
         git-src =
-          b.fetchGit
+          fetchGit
             ({ url = repo;
                inherit rev;
              }
@@ -21,7 +22,7 @@ pkgs:
             );
 
         info' =
-          if b.isPath info then
+          if isPath info then
             import (git-src + info)
               { inherit ps-pkgs ps-pkgs-ns;
                 inherit (l) licenses;
