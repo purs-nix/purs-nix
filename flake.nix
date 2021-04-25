@@ -190,9 +190,11 @@
                     in
                     mkDerivation
                       ({ phases = [ "installPhase" ];
+
                          buildInputs = [ p.makeWrapper nodejs ];
 
                          installPhase =
+                           # The makeWrapper setup allows you to add more runtime dependencies to your executable by overrideing buildInputs
                            ''
                            mkdir -p $out/bin
                            makeWrapper ${exe} $out/bin/${command} --set PATH $PATH
