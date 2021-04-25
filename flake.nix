@@ -222,15 +222,13 @@
                           fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
                           '';
 
-                      exe = p.writeShellScript "exe"
-                        ''
-                        cp --no-preserve=mode --preserve=timestamps -r ${output {}}/${name} $1/${name}
-                        ${merge-cache} ${output {}}/cache-db.json $1/cache-db.json $1/cache-db.json
-                        '';
+                      output' = output {};
                     in
-                    p.runCommand name
-                      { buildInputs = [ p.makeWrapper ]; }
-                      "makeWrapper ${exe} $out --set PATH $PATH";
+                    p.writeShellScript name
+                      ''
+                      cp --no-preserve=mode --preserve=timestamps -r ${output'}/${name} $1/${name}
+                      ${merge-cache} ${output'}/cache-db.json $1/cache-db.json $1/cache-db.json
+                      '';
                 };
 
               builds =
