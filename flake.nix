@@ -5,7 +5,7 @@
 
   outputs = { nixpkgs, builders, utils, ... }:
     with builtins;
-    { __functor = _: { system, pkgs ? nixpkgs.legacyPackages.${system}}:
+    { __functor = _: { system, pkgs ? nixpkgs.legacyPackages.${system} }:
         rec
         { inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
           inherit (pkgs.lib) licenses;
