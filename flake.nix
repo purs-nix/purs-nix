@@ -305,9 +305,9 @@
                       (ns: pkgs':
                          l.mapAttrs
                            (n: v:
-                             { type = "app";
-                               program = "${p.writeScript "package-info-${v.name}" (u.package-info v)}";
-                             }
+                              { type = "app";
+                                program = "${p.writeScript "package-info-${v.name}" (u.package-info v)}";
+                              }
                            )
                            pkgs'
                       )
