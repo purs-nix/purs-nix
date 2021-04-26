@@ -19,9 +19,6 @@
             }:
             let
               l = p.lib; p = pkgs; u = import ./utils.nix;
-              logShow = a: trace (toString a) a;
-              tagged-log = tag: a: trace ("${tag}: ${toString a}") a;
-              tagged-log-path = tag: a: trace ("${tag}: ${a}") a;
               inherit (p.stdenv) mkDerivation;
 
               get-dep-globs = deps:
