@@ -1,6 +1,6 @@
 { inputs =
     { builders.url = "github:ursi/nix-builders";
-      utils.url = "github:ursi/flake-utils";
+      utils.url = "github:ursi/flake-utils/1";
     };
 
   outputs = { nixpkgs, builders, utils, ... }:
@@ -281,8 +281,8 @@
             };
         };
     }
-    // utils.defaultSystems
-         ({ pkgs, system, ... }:
+    // utils.default-systems
+         ({ pkgs, ... }:
             let
               l = p.lib; p = pkgs; u = import ./utils.nix;
               inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
@@ -312,5 +312,5 @@
                 };
             }
          )
-         nixpkgs;
+         { inherit nixpkgs; };
 }
