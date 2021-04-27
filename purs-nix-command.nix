@@ -198,7 +198,7 @@ with builtins;
                          final argument.
         -------------------------------------------------------------------------
 
-        Anything that is not a valid command with show this text.
+        Anything that is not a valid command will show this text.
         '';
   in
   p.runCommand "purs-nix" {}
