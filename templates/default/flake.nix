@@ -30,7 +30,7 @@
                { packages =
                    with pkgs;
                    [ nodejs
-                     purescript
+                     purs-nix.purescript
                      (shell {})
                    ];
                };

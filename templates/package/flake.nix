@@ -27,7 +27,7 @@
                    [ nodejs
                      nodePackages.bower
                      nodePackages.pulp
-                     purescript
+                     purs-nix.purescript
                      (shell {})
                    ];
                };

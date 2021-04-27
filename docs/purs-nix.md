@@ -9,6 +9,7 @@ and returns a set with the following attributes:
 - `ps-pkgs`: The set of all non-namespaced PureScript pacakges.
 - `ps-pkgs-ns`: The set of all namespaced PureScript packages.
 - `purs`: A function for building your project.
+- `purescript`: The PureScript package used for everything by default.
 - `licenses`: This is included for convienence so you can pass the returned set into a [package.nix](adding-packages.md#using-info).
 
 ### purs

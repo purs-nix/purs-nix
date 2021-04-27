@@ -8,6 +8,7 @@
     { __functor = _: { system, pkgs ? nixpkgs.legacyPackages.${system} }:
         rec
         { inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
+          inherit (pkgs) purescript;
           inherit (pkgs.lib) licenses;
 
           purs =
