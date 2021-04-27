@@ -312,21 +312,31 @@
                     l.mapAttrs
                       (n: v:
                          { type = "app";
-                           program = "${p.writeScript "package-info-${v.name}" (u.package-info v)}";
+                           program =
+                             toString
+                               (p.writeScript
+                                  "package-info-${v.name}"
+                                  (u.package-info v)
+                               );
                          }
                       )
                       ps-pkgs;
 
                   package-info-ns =
                     l.mapAttrs
-                      (ns: pkgs':
+                      (ns: ps-pkgs':
                          l.mapAttrs
                            (n: v:
                               { type = "app";
-                                program = "${p.writeScript "package-info-${v.name}" (u.package-info v)}";
+                                program =
+                                  toString
+                                    (p.writeScript
+                                         "package-info-${v.name}"
+                                         (u.package-info v)
+                                    );
                               }
                            )
-                           pkgs'
+                           ps-pkgs'
                       )
                       ps-pkgs-ns;
                 };
