@@ -15,8 +15,8 @@
     let
       make-pkgs = system:
         import nixpkgs
-          { overlays =
-              [ (_: _: { inherit (easy-ps.packages.${system}) purescript; }) ];
+          { overlays = [];
+              # [ (_: _: { inherit (easy-ps.packages.${system}) purescript; }) ];
 
             inherit system;
           };
