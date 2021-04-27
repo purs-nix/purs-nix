@@ -78,7 +78,7 @@ with builtins;
         '';
 
     bower =
-      let make-error = a: ''echo "You need to define 'package.${a}' in the set you pass to 'shell' to use this command". Make sure to re-enter the Nix shell after you fix this.''; in
+      let make-error = a: ''echo "You need to define 'package.${a}' in the set you pass to 'command' to use this command". Make sure to re-enter the Nix shell after you fix this.''; in
       if !package?pursuit then
         make-error "pursuit"
       else if !package.pursuit?name then

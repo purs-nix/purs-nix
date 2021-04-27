@@ -270,8 +270,8 @@
                   (_: v: { inherit (v) bundle output install; })
                   builds;
 
-              shell =
-                import ./purs-nix-shell.nix
+              command =
+                import ./purs-nix-command.nix
                   { all-dependencies = dependencies ++ test-dependencies;
                     inherit all-dep-globs dep-globs pkgs;
                   };

@@ -33,10 +33,10 @@ and returns a set with the following attributes:
 
 and returns a set with the following attributes:
 - <span id="purs-modules">`modules`</span>: A set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).
-- `shell`: A functions that builds the `purs-nix` command which you can then add to your Nix shell.
+- `command`: A functions that builds the `purs-nix` command which you can then add to your Nix shell.
 
-### shell
-`shell` takes the following arguments: (Note: they all have defaults so often times you will only need to us `shell {}`)
+### command
+`command` takes the following arguments: (Note: they all have defaults so often times you will only need to us `command {}`)
 
 ```
 { src ? "src"
@@ -102,4 +102,4 @@ and returns a set with the following attributes:
 - `purescript`: The PureScript package to use.
 
 ## purs-nix (command)
-Run `purs-nix` (no argument) to see the documentation. (or look near the bottom of [this file](/purs-nix-shell.nix))
+Run `purs-nix` (no argument) to see the documentation. (or look near the bottom of [this file](/purs-nix-command.nix))

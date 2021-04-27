@@ -17,7 +17,7 @@
                   src = ./src;
                 }
              )
-             shell;
+             command;
          in
          { devShell =
              # https://github.com/ursi/nix-make-shell
@@ -28,7 +28,7 @@
                      nodePackages.bower
                      nodePackages.pulp
                      purs-nix.purescript
-                     (shell {})
+                     (command {})
                    ];
                };
          }

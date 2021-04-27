@@ -22,7 +22,7 @@
                   src = ./src;
                 }
              )
-             shell;
+             command;
          in
          { devShell =
              # https://github.com/ursi/nix-make-shell
@@ -31,7 +31,7 @@
                    with pkgs;
                    [ nodejs
                      purs-nix.purescript
-                     (shell {})
+                     (command {})
                    ];
                };
          }
