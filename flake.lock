@@ -17,7 +17,9 @@
     },
     "easy-ps": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "utils": "utils"
       },
       "locked": {
@@ -98,22 +100,6 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1619332989,
-        "narHash": "sha256-UpmGEhFiIKDP+UR5t7nSfkSCY4kHo+g1jkdKBNZpYZM=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "ab6943a745059a8c177d7512c23ab7af58e822d1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
         "lastModified": 1619446560,
         "narHash": "sha256-R9iG5d1ORvho5UlyEUsX8Nu1cnCV+YtWEHlWlqftaQo=",
         "owner": "NixOS",
@@ -132,7 +118,7 @@
       "inputs": {
         "builders": "builders",
         "easy-ps": "easy-ps",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "utils": "utils_2"
       }
     },

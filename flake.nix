@@ -1,6 +1,11 @@
 { inputs =
     { builders.url = "github:ursi/nix-builders";
-      easy-ps.url = "github:ursi/easy-purescript-nix/flake";
+
+      easy-ps =
+        { url = "github:ursi/easy-purescript-nix/flake";
+          inputs.nixpkgs.follows = "nixpkgs";
+        };
+
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       utils.url = "github:ursi/flake-utils/1";
     };
