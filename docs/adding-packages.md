@@ -40,7 +40,7 @@ The following attributes are required:\
 The following attributes are optional:\
 `dependencies`, `info`, `name`, `pursuit`, `ref`, `src`, `version`
 
-## Using `info`
+## <span id="using-info">Using `info`</span>
 If you're using a file in your own repository for your package info, you need to make sure it's a function that uses the `...` syntax. This is to leave ourselves open for passing in new arguments in the future without breaking everything.\
 Here's an example:
 ```nix
