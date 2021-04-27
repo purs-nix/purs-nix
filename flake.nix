@@ -1,11 +1,24 @@
 { inputs =
     { builders.url = "github:ursi/nix-builders";
+      easy-ps.url = "github:ursi/easy-purescript-nix/flake";
       utils.url = "github:ursi/flake-utils/1";
     };
 
-  outputs = { nixpkgs, builders, utils, ... }:
+  outputs = { builders, easy-ps, nixpkgs, utils, ... }:
     with builtins;
-    { __functor = _: { system, pkgs ? nixpkgs.legacyPackages.${system} }:
+    let
+      make-pkgs = system:
+        import nixpkgs
+          { overlays =
+              [ (_: _: { inherit (easy-ps.packages.${system}) purescript; }) ];
+
+            inherit system;
+          };
+    in
+    { __functor = _:
+        { system
+        , pkgs ? make-pkgs system
+        }:
         rec
         { inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
           inherit (pkgs) purescript;
@@ -283,10 +296,10 @@
         };
     }
     // utils.default-systems
-         ({ pkgs, ... }:
+         ({ system, ... }:
             let
-              l = p.lib; p = pkgs; u = import ./utils.nix;
-              inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
+              l = p.lib; p = make-pkgs system; u = import ./utils.nix;
+              inherit (import ./build-pkgs.nix p) ps-pkgs ps-pkgs-ns;
             in
             { apps =
                 { package-info =
