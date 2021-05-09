@@ -15,7 +15,7 @@
 
 ## Packages
 
-**purs-nix** does not use the package set located at [purescript/package-sets](https://github.com/purescript/package-sets). We maintain our own package set here in this repository. This results in the following differences:
+**purs-nix** does not use the [the official package set](https://github.com/purescript/package-sets) directly. We maintain our own package set here in this repository. This results in the following differences:
 - **Package namespaces:** We have package namespaces.
 - **No global module namespace**
 - **Single source of truth for package info:** You can define the version and dependencies of your package in its home repository and import it here. Nix is lazy so you will only ever download the information for the packages you need.

@@ -1,6 +1,6 @@
 # Adding Packages
 
-Packages are added by adding a package description set to either [ps-pkgs.nix](/ps-pkgs.nix) or [ps-pkgs-ns.nix](/ps-pkgs-ns.nix).\
+Packages are added by adding a package description set to either [ps-pkgs.nix](/ps-pkgs.nix) or [ps-pkgs-ns.nix](/ps-pkgs-ns.nix), or by adding your package to the [official package set](https://github.com/purescript/package-sets) and [updating the generated](/official-package-set) nix.\
 There are two formats for a package description set:
 1. Include all of the information about the package directly in the set:
    ```
