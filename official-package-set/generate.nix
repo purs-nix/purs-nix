@@ -47,6 +47,7 @@ l.pipe packages
               { version = "${substring 1 (stringLength v.version) v.version}";
                 repo = "${v.repo}";
                 rev = "${repo.rev}";
+
                 dependencies =
                   [ ${foldl'
                         (acc: d: acc + escape-reserved-word true d + " ")
