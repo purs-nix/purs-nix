@@ -24,8 +24,6 @@ let
     else
       str;
 
-  log = a: trace a a;
-
   prev = import ./. null;
 in
 l.pipe packages
