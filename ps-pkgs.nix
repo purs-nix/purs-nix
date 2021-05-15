@@ -36,6 +36,12 @@
            info = /package.nix;
          };
 
+       return =
+         { repo = "https://github.com/ursi/purescript-return.git";
+           rev = "5a327ce3c50857b19279a38e2266778b767eed48";
+           info = /package.nix;
+         };
+
        substitute =
          { repo = "https://github.com/ursi/purescript-substitute.git";
            rev = "478db1f509bce98507fd113170a40b940487bceb";
