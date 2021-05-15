@@ -39,7 +39,7 @@ and returns a set with the following attributes:
 `command` takes the following arguments: (Note: they all have defaults so often times you will only need to us `command {}`)
 
 ```
-{ src ? "src"
+{ srcs ? [ "src" ]
 , output ? "output"
 , bundle ? {}
 , compile ? {}
@@ -51,7 +51,7 @@ and returns a set with the following attributes:
 }
 ```
 
-- `src`: A string representing the path of your PureScript source directory.
+- `srcs`: A list of strings representing the paths of your project's source directories.
 - `output`: The name of the folder that `purs compile` will create.
 - `bundle`: The options that will configure the `purs bundle` command.
 

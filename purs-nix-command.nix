@@ -4,7 +4,8 @@ with builtins;
 , dep-globs
 , pkgs
 }:
-{ src ? "src"
+{ srcs ? [ "src" ]
+, globs ? concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') srcs)
 , output ? "output"
 , bundle ? {}
 , compile ? {}
@@ -36,7 +37,7 @@ with builtins;
       u.compile
         purescript
         (args
-         // { globs = ''"${src}/**/*.purs" ${dep-globs}'';
+         // { globs = ''${globs} ${dep-globs}'';
               inherit output;
             }
         );
@@ -45,7 +46,7 @@ with builtins;
       u.compile
         purescript
         (args
-         // { globs = ''"${src}/**/*.purs" "${test}/**/*.purs" ${all-dep-globs}'';
+         // { globs = ''${globs} "${test}/**/*.purs" ${all-dep-globs}'';
               inherit output;
             }
         );
@@ -160,7 +161,7 @@ with builtins;
           packages ) ${packages};;
           bower ) ${bower};;
           output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
-          srcs ) ${purescript}/bin/purs ''${@:2} "${src}/**/*.purs" ${dep-globs};;
+          srcs ) ${purescript}/bin/purs ''${@:2} ${globs} ${dep-globs};;
           * ) echo ${help};;
         esac
         '';
