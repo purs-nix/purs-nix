@@ -221,9 +221,9 @@ b64 =
   };
 
 barlow-lens =
-  { version = "0.7.0";
+  { version = "0.7.1";
     repo = "https://github.com/sigma-andex/purescript-barlow-lens.git";
-    rev = "6044accf13b63627305c1ef4b3d68aeaa5c8df5b";
+    rev = "68d2c293047077b9752145312611e7ecd1b0b94e";
 
     dependencies =
       [ either foldable-traversable maybe newtype prelude profunctor profunctor-lenses tuples typelevel-prelude 
@@ -1281,9 +1281,9 @@ halogen-select =
   };
 
 halogen-store =
-  { version = "0.1.0";
+  { version = "0.1.1";
     repo = "https://github.com/thomashoneyman/purescript-halogen-store.git";
-    rev = "0dbf5bd80b3c49861030fbafb8d44ddbee7b0992";
+    rev = "6642636dd6cf0808b3675e565ef5c15249f9e8b5";
 
     dependencies =
       [ aff effect foldable-traversable halogen halogen-subscriptions maybe prelude refs transformers unsafe-coerce unsafe-reference 
@@ -2311,9 +2311,9 @@ precise-datetime =
   };
 
 prelude =
-  { version = "5.0.0";
+  { version = "5.0.1";
     repo = "https://github.com/purescript/purescript-prelude.git";
-    rev = "37717776a3693fd5a0a614239f7de1285cba8cdf";
+    rev = "68f8012bc2309d9bf5832cdf7316ad052d586905";
 
     dependencies =
       [ 
@@ -3061,9 +3061,9 @@ st =
   };
 
 string-parsers =
-  { version = "6.0.0";
+  { version = "6.0.1";
     repo = "https://github.com/purescript-contrib/purescript-string-parsers.git";
-    rev = "2183214c40b456af4bbe4860af1184c4a76b2843";
+    rev = "7c3cad8ce7cd4d1036eeafa09af323dc7b8d367c";
 
     dependencies =
       [ arrays bifunctors control either foldable-traversable lists maybe prelude strings tailrec 
