@@ -21,6 +21,12 @@
       info = /package.nix;
     };
 
+  murmur3 =
+    { repo = "https://github.com/ursi/purescript-murmur3.git";
+      rev = "4da7d071ac5791b21fe9064d84e067a34fdc29e3";
+      info = /package.nix;
+    };
+
   prelude =
     { repo = "https://github.com/ursi/purescript-mason-prelude.git";
       rev = "989af29c86e0198bf4ad646862aa16b46c46dd3e";
