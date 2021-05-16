@@ -77,7 +77,7 @@
                       (n: v: !deps-graph?${n})
                       graph;
                 in
-                l.mapAttrs
+                mapAttrs
                   (module: v:
                      { depends =
                          filter
@@ -249,7 +249,7 @@
                 };
 
               builds =
-                l.mapAttrs
+                mapAttrs
                   (name: v:
                      build-single
                        name
@@ -266,7 +266,7 @@
                   flag + arg;
             in
             { modules =
-                l.mapAttrs
+                mapAttrs
                   (_: v: { inherit (v) bundle output install; })
                   builds;
 
@@ -309,7 +309,7 @@
             in
             { apps =
                 { package-info =
-                    l.mapAttrs
+                    mapAttrs
                       (n: v:
                          { type = "app";
                            program =
@@ -323,9 +323,9 @@
                       ps-pkgs;
 
                   package-info-ns =
-                    l.mapAttrs
+                    mapAttrs
                       (ns: ps-pkgs':
-                         l.mapAttrs
+                         mapAttrs
                            (n: v:
                               { type = "app";
                                 program =

@@ -65,7 +65,7 @@ pkgs:
       in
       l.fix
         (self:
-           l.mapAttrs
+           mapAttrs
              (n: v: build (v // { name = n; }))
              (f self)
         );
@@ -82,9 +82,9 @@ pkgs:
       in
       l.fix
         (self:
-           l.mapAttrs
+           mapAttrs
              (ns: pkgs':
-               l.mapAttrs
+               mapAttrs
                  (n: v: build (v // { name = "${ns}.${n}"; }))
                  pkgs'
              )
