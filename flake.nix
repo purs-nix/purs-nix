@@ -1,16 +1,18 @@
 { inputs =
     { builders.url = "github:ursi/nix-builders";
 
-      easy-ps =
-        { url = "github:ursi/easy-purescript-nix/flake";
-          inputs.nixpkgs.follows = "nixpkgs";
-        };
+      # Add back in when the libtinfo bug (purescript#4082) is fixed, probably the next release
+
+      # easy-ps =
+      #   { url = "github:ursi/easy-purescript-nix/flake";
+      #     inputs.nixpkgs.follows = "nixpkgs";
+      #   };
 
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       utils.url = "github:ursi/flake-utils/1";
     };
 
-  outputs = { builders, easy-ps, nixpkgs, utils, ... }:
+  outputs = { builders, /* easy-ps,*/ nixpkgs, utils, ... }:
     with builtins;
     let
       make-pkgs = system:
