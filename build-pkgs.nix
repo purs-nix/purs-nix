@@ -91,4 +91,4 @@ pkgs:
              (f self)
         );
   in
-  { inherit ps-pkgs ps-pkgs-ns; }
+  { inherit build ps-pkgs ps-pkgs-ns; }

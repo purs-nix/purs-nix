@@ -28,7 +28,7 @@
         , pkgs ? make-pkgs system
         }:
         rec
-        { inherit (import ./build-pkgs.nix pkgs) ps-pkgs ps-pkgs-ns;
+        { inherit (import ./build-pkgs.nix pkgs) build ps-pkgs ps-pkgs-ns;
           inherit (pkgs) purescript;
           inherit (pkgs.lib) licenses;
 
