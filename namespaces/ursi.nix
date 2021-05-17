@@ -17,7 +17,7 @@
 
   html =
     { repo = "https://github.com/ursi/purescript-whatwg-html.git";
-      rev = "b020cd05e0dd7b926abbe987c119b7d7fc685f8c";
+      rev = "8a2b9bb79abdb50fed1f74780003b50019e5e748";
       info = /package.nix;
     };
 
