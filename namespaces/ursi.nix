@@ -33,6 +33,12 @@
       info = /package.nix;
     };
 
+  refeq =
+    { repo = "https://github.com/ursi/purescript-refeq.git";
+      rev = "155bbf2aae9235b25643b32860e8d85de3c98b8f";
+      info = /package.nix;
+    };
+
   simple-json =
     { repo = "https://github.com/ursi/purescript-simple-json.git";
       rev = "25878767b0eafb6c9cff831567230c39b7058cd5";
