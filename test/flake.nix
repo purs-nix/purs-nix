@@ -17,6 +17,31 @@
                     [ console
                       effect
                       prelude
+                      (purs-nix.build
+                         { name = "typeable";
+                           repo = "https://github.com/ajnsit/purescript-typeable.git";
+                           rev = "836a3e10da7a85636ef629ae8e927a5429606b56";
+                           ref = "main";
+
+                           dependencies =
+                             with ps-pkgs;
+                             [ arrays
+                               const
+                               control
+                               either
+                               exists
+                               foldable-traversable
+                               identity
+                               leibniz
+                               maybe
+                               newtype
+                               prelude
+                               psci-support
+                               tuples
+                               unsafe-coerce
+                             ];
+                         }
+                      )
                     ];
 
                   test-dependencies = [ ps-pkgs."assert" ];
