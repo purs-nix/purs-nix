@@ -35,7 +35,7 @@
 
   producer =
     { repo = "https://github.com/ursi/purescript-producer.git";
-      rev = "06ed90c2ae8934af63949123c499ec34155e7206";
+      rev = "d1617f030b01539ed55d7e93ce304aff84b828bf";
       info = /package.nix;
     };
 
