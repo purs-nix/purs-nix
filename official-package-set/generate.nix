@@ -27,7 +27,7 @@ let
   prev = import ./. null;
 in
 l.pipe packages
-  [ (mapAttrsToList (n: v: { inherit n v; }))
+  [ (l.mapAttrsToList (n: v: { inherit n v; }))
     (foldl'
        (acc: { n, v }:
           let
