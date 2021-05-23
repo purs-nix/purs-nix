@@ -33,7 +33,7 @@ l.pipe packages
           let
             repo =
               # don't fetch versions we already have
-              if v.version == "v" + prev.${n}.version then
+              if prev?${n} && v.version == "v" + prev.${n}.version then
                 v // { inherit (prev.${n}) rev; }
               else
                 fetchGit
