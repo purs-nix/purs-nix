@@ -792,7 +792,7 @@ dynamic-buffer =
 
 easy-ffi =
   { version = "2.1.2";
-    repo = "https://github.com/pelotom/purescript-easy-ffi";
+    repo = "https://github.com/pelotom/purescript-easy-ffi.git";
     rev = "b5a51386755ea6761e03619f6e84ec5b524af613";
 
     dependencies =
@@ -1132,7 +1132,7 @@ geometry-plane =
 
 github-actions-toolkit =
   { version = "0.3.0";
-    repo = "https://github.com/purescript-contrib/purescript-github-actions-toolkit";
+    repo = "https://github.com/purescript-contrib/purescript-github-actions-toolkit.git";
     rev = "d58b231bfe36246a0918ef7ff08fd9c63e695a5e";
 
     dependencies =
@@ -1142,7 +1142,7 @@ github-actions-toolkit =
 
 gl-matrix =
   { version = "2.0.1";
-    repo = "https://github.com/dirkz/purescript-gl-matrix";
+    repo = "https://github.com/dirkz/purescript-gl-matrix.git";
     rev = "7748b5652905437f14cd62a526a8fa25709e9e7a";
 
     dependencies =
@@ -1237,6 +1237,16 @@ halogen-bootstrap4 =
 
     dependencies =
       [ halogen 
+      ];
+  };
+
+halogen-css =
+  { version = "9.0.0";
+    repo = "https://github.com/purescript-halogen/purescript-halogen-css.git";
+    rev = "e3b90ee69262d0f80f9511338da7079aa6154e51";
+
+    dependencies =
+      [ css halogen 
       ];
   };
 
@@ -1642,7 +1652,7 @@ math =
 
 matrices =
   { version = "5.0.1";
-    repo = "https://github.com/kritzcreek/purescript-matrices.git";
+    repo = "https://github.com/kRITZCREEK/purescript-matrices.git";
     rev = "7e6e2a09cde41413d369acb8c3ffca8c33571691";
 
     dependencies =
@@ -1722,7 +1732,7 @@ minibench =
 
 mmorph =
   { version = "6.0.0";
-    repo = "https://github.com/thimoteus/purescript-mmorph.git";
+    repo = "https://github.com/Thimoteus/purescript-mmorph.git";
     rev = "ebe16afbfa16dd600f3379ccedc7529417402393";
 
     dependencies =
@@ -2082,7 +2092,7 @@ options =
 
 options-extra =
   { version = "0.2.0";
-    repo = "https://github.com/PureFunctor/purescript-options-extra";
+    repo = "https://github.com/PureFunctor/purescript-options-extra.git";
     rev = "182ad34695fc2f58a630c119a34dc287d6d90815";
 
     dependencies =
@@ -2251,9 +2261,9 @@ phoenix =
   };
 
 pipes =
-  { version = "7.0.0";
-    repo = "https://github.com/felixSchl/purescript-pipes.git";
-    rev = "174d3f19666f6c4e432c8efe926ddd895779f07e";
+  { version = "7.0.1";
+    repo = "https://github.com/felixschl/purescript-pipes.git";
+    rev = "37591aa116347173d1917ef95dac5629ccf140b7";
 
     dependencies =
       [ aff lists mmorph prelude tailrec transformers tuples 
@@ -2342,7 +2352,7 @@ prettier-printer =
 
 pretty-logs =
   { version = "0.1.0";
-    repo = "https://github.com/PureFunctor/purescript-pretty-logs";
+    repo = "https://github.com/PureFunctor/purescript-pretty-logs.git";
     rev = "fe9ca0e15f0c55d685bc074d5afb16a347fe2297";
 
     dependencies =
@@ -2932,7 +2942,7 @@ simple-ulid =
 
 sized-matrices =
   { version = "1.0.0";
-    repo = "https://github.com/csicar/purescript-sized-matrices";
+    repo = "https://github.com/csicar/purescript-sized-matrices.git";
     rev = "4c322071b569a0dfba913f943dd3c2e9ae5c0f25";
 
     dependencies =
@@ -3011,9 +3021,9 @@ sparse-polynomials =
   };
 
 spec =
-  { version = "5.0.0";
+  { version = "5.0.1";
     repo = "https://github.com/purescript-spec/purescript-spec.git";
-    rev = "2b949ba26ff3d5b4d8753e7e96ece5b5e848a261";
+    rev = "2cfa11573dbb695c117efce0a8f76a3daba12e87";
 
     dependencies =
       [ aff ansi avar console exceptions foldable-traversable fork now pipes prelude strings transformers 
@@ -3302,7 +3312,7 @@ typelevel =
 
 typelevel-lists =
   { version = "2.0.1";
-    repo = "https://github.com/PureFunctor/purescript-typelevel-lists";
+    repo = "https://github.com/PureFunctor/purescript-typelevel-lists.git";
     rev = "09ccf9373e63d25bf2e64f7ef4a5e701db7e94fd";
 
     dependencies =
@@ -3327,6 +3337,16 @@ typelevel-prelude =
 
     dependencies =
       [ prelude type-equality 
+      ];
+  };
+
+uint =
+  { version = "6.0.0";
+    repo = "https://github.com/zaquest/purescript-uint.git";
+    rev = "e8b80c76980b30527871ffeaa738daf59accb86a";
+
+    dependencies =
+      [ effect enums gen math maybe prelude psci-support quickcheck quickcheck-laws 
       ];
   };
 
@@ -3502,7 +3522,7 @@ vectorfield =
 
 veither =
   { version = "1.0.4";
-    repo = "https://github.com/jordanmartinez/purescript-veither.git";
+    repo = "https://github.com/JordanMartinez/purescript-veither.git";
     rev = "0f5c31fccb938bede21617368c00ed32e63ed38e";
 
     dependencies =
@@ -3522,7 +3542,7 @@ versions =
 
 vexceptt =
   { version = "1.0.0";
-    repo = "https://github.com/jordanmartinez/purescript-vexceptt.git";
+    repo = "https://github.com/JordanMartinez/purescript-vexceptt.git";
     rev = "f1bb8a9cffc48d4ca8872e9024ff8293c6cdb6a2";
 
     dependencies =
