@@ -258,14 +258,6 @@
                        (map (v: builds.${v}) v.depends)
                   )
                   local-graph;
-
-              make-flag = flag: arg:
-                if arg == null || arg == false then
-                  ""
-                else if arg == true then
-                  flag
-                else
-                  flag + arg;
             in
             { modules =
                 mapAttrs
