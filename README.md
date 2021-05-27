@@ -15,9 +15,9 @@
 
 ## Packages
 
-**purs-nix** does not use the [the official package set](https://github.com/purescript/package-sets) directly. We maintain our own package set here in this repository. This results in the following differences:
+**purs-nix** has it's own package set, which is an extension of the [the official package set](https://github.com/purescript/package-sets) with the following differences:
 - **Package namespaces:** We have package namespaces.
-- **No global module namespace**
+- **No global module namespace:** All packages are not required to compile with each other.
 - **Single source of truth for package info:** You can define the version and dependencies of your package in its home repository and import it here. Nix is lazy so you will only ever download the information for the packages you need.
 - **Easy modification:** Using a modified version of the package set is as easy as forking it and changing the input of your flake (`"github:ursi/purs-nix"` -> `"github:<your-username>/purs-nix"`). If you put in a PR to add your package, using your fork of the package set is just as easy as using the official one, so you don't have to wait for the PR to be accepted to use your normal workflow.
 - **Get package info:** Since package info can be imported from a foreign repository, we need a way to view the info of a package easily.
