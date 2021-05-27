@@ -820,6 +820,16 @@ either =
       ];
   };
 
+elasticsearch =
+  { version = "0.1.0";
+    repo = "https://github.com/ConnorDillon/purescript-elasticsearch.git";
+    rev = "38d3a01ae012ff1849fb5c40535bb6dbab1a3e11";
+
+    dependencies =
+      [ aff aff-promise argonaut ps-pkgs."assert" console effect foreign-object literals maybe prelude psci-support typelevel-prelude unsafe-coerce untagged-union 
+      ];
+  };
+
 elmish =
   { version = "0.5.1";
     repo = "https://github.com/collegevine/purescript-elmish.git";
@@ -1187,6 +1197,16 @@ grain-virtualized =
 
     dependencies =
       [ grain 
+      ];
+  };
+
+graphql-client =
+  { version = "4.0.12";
+    repo = "https://github.com/OxfordAbstracts/purescript-graphql-client.git";
+    rev = "65e47808c71676813e14ef4beab22b1181263e8a";
+
+    dependencies =
+      [ aff aff-promise affjax argonaut-codecs argonaut-core arrays bifunctors control datetime effect either enums exceptions foldable-traversable foreign foreign-generic foreign-object functions halogen-subscriptions heterogeneous http-methods integers lists maybe media-types newtype node-buffer node-fs nullable numbers ordered-collections parsing prelude profunctor profunctor-lenses psci-support quickcheck record spec spec-discovery string-parsers strings strings-extra transformers tuples typelevel-prelude unicode 
       ];
   };
 
