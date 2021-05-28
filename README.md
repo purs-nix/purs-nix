@@ -1,14 +1,21 @@
 # purs-nix
 
-**purs-nix** is a project which aims to allow you to use the entire PureScript ecosystem with nothing but Nix. It's currently only for use with Nix flakes. For help, you can reach out on the [FP](https://funprog.zulipchat.com/#narrow/stream/214955-PureScript)/[Nix](https://nixcommunity.zulipchat.com/#narrow/stream/285116-PureScript) Zulips.
+**purs-nix** is a project which aims to allow you to use the entire PureScript ecosystem with nothing but Nix. It has been designed to take full advantage of Nix flakes but works with Nix stable as well. For help, you can reach out on the [FP](https://funprog.zulipchat.com/#narrow/stream/214955-PureScript)/[Nix](https://nixcommunity.zulipchat.com/#narrow/stream/285116-PureScript) Zulips.
 
-**This project is currently unstable**, but because it's built with flakes, the only thing you'll have to worry about is upgrading. A flake pins all its dependencies so once something works, it should never break.
+**This project is currently unstable**, however, it is built to be 100% pure, so your projects should never break out from under you.
 
-## Gettings Started
+## Gettings Started (flakes)
 
 - [Setup nix](docs/nix.md).
 - Run `nix flake init -t github:ursi/purs-nix` in a new directory to initialize a new project.
 - Run `nix develop` to enter a Nix shell with the `purs-nix` command added to your `PATH`.
+- Run `purs-nix run` to see the output of the default project.
+
+## Getting Started (Nix stable)
+
+- [Install Nix](https://nixos.org/download.html#nix-quick-install)
+- Copy the template from [templates/default](templates/default), and then replace `flake.nix` with [templates/default.nix](templates/default.nix).
+- Run `nix-shell` to enter a Nix shell with the `purs-nix` command added to your `PATH`.
 - Run `purs-nix run` to see the output of the default project.
 
 ## [Documentation](docs/README.md)
@@ -32,4 +39,3 @@ This is an incomplete list of things that are currently planned.
 - **More commands:** In the short term I would like to add a watching mechanism and a wrapper around `purs docs`. In the long term I would like to have a nice API for everything that can currently be done with other tools. (Note: You can already generate documentation pretty easily: `purs-nix srcs docs`)
 - **Package replacing:** I'd like to have an easy API for replacing one package with another, so instead of having to use a forked version of the package set, you can add your version of a package in your namespace, and then just replace the official version with yours inside your project. Something like: `replace-package tuple ursi.tuple dependencies`.
 - **Module renaming:** Since there is no more global module namespace, you may find that two packages have the same module name and cannot compile together. I think arbitrary module renaming should be possible, so I plan to explore this as a solution. Something like: `html-module.rename-module "Html" "HtmlModule.Html"`. I'd also like to add opt-in module name prefixing for indirect dependencies, to guarantee they never collide.
-- **Support Nix stable:** Currently this is designed for flakes users. I would like to be able to have a nice API for people that use Nix stable as well. In the mean time you may have some luck using [flake-compat](https://github.com/edolstra/flake-compat).
