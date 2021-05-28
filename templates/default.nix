@@ -6,6 +6,7 @@ let
   pkgs = import
     (fetchGit
        { url = "https://github.com/NixOS/nixpkgs";
+         ref = "nixpkgs-unstable";
          # rev = "";
        }
     )
