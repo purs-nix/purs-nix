@@ -13,9 +13,9 @@ rec
 
   pkgs = system:
     import
-      (fetchGit
-         { url = "https://github.com/NixOS/nixpkgs.git";
-           rev = "32f7980afb5e33f1e078a51e715b9f102f396a69";
+      (fetchTarball
+         { url = "https://github.com/NixOS/nixpkgs/archive/32f7980afb5e33f1e078a51e715b9f102f396a69.tar.gz";
+           sha256 = "02k9xnkrcmkr21b8pycmf1rbbnzh2x5i2wj9wmlghijfvpjqdn27";
          }
       )
       { inherit system; };
