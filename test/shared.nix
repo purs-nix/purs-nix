@@ -37,7 +37,7 @@
              ];
 
            test-dependencies = [ ps-pkgs."assert" ];
-           src = ./src;
+           srcs = [ ./src ./src2 ];
          }
       )
       modules
@@ -52,7 +52,11 @@
             with pkgs;
             [ nodejs
               purs-nix.purescript
-              (command { package = import ./package.nix purs-nix; })
+              (command
+                 { package = import ./package.nix purs-nix;
+                   srcs = [ "src" "src2" ];
+                 }
+              )
             ];
         };
   }

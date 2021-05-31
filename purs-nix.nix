@@ -10,7 +10,7 @@ with builtins;
     purs =
       { dependencies ? []
       , test-dependencies ? []
-      , src
+      , srcs
       , nodejs ? pkgs.nodejs
       , purescript ? pkgs.purescript
       }:
@@ -38,6 +38,9 @@ with builtins;
         dep-globs = get-dep-globs dependencies;
         all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
 
+        make-srcs-str = a:
+          concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') a);
+
         local-graph =
           let
             make-graph = extra:
@@ -47,7 +50,7 @@ with builtins;
                 );
 
             deps-graph = make-graph "";
-            graph = make-graph ''"${src}/**/*.purs"'';
+            graph = make-graph (make-srcs-str srcs);
 
             partial =
               l.filterAttrs
@@ -77,7 +80,7 @@ with builtins;
                   installPhase = "mv output $out";
                 };
 
-            src' =
+            src =
               let
                 purs-path =
                   let matches = match "/nix/store/[^/]+/(.+)$" local-graph.${name}.path; in
@@ -89,11 +92,20 @@ with builtins;
                 js-path = replaceStrings [ ".purs" ] [ ".js" ] purs-path;
 
                 subsrc =
-                  let matches = match "/nix/store/[^/]+/(.+)/[^/]+$" local-graph.${name}.path; in
+                  let
+                    graph-path = local-graph.${name}.path;
+                    matches = match "/nix/store/[^/]+/(.+)/[^/]+$" graph-path;
+
+                    src' =
+                      l.findFirst
+                        (path: l.hasPrefix "${path}" graph-path)
+                        (throw "should always find a match")
+                        srcs;
+                  in
                   if matches == null then
-                    src
+                    src'
                   else
-                    src + ("/" + head matches);
+                    src' + ("/" + head matches);
               in
               filterSource
                 (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
@@ -136,7 +148,7 @@ with builtins;
                     ${u.compile
                         purescript
                         (args
-                         // { globs = ''"${src'}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
+                         // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
                               output = "output";
                             }
                         )
@@ -197,8 +209,7 @@ with builtins;
                  // u.make-name name version
                 );
           in
-          { inherit bundle local-deps install name output;
-            src = src';
+          { inherit bundle local-deps install name output src;
 
             bin =
               let

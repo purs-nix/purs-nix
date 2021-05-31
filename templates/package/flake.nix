@@ -14,7 +14,7 @@
            inherit
              (purs
                 { inherit (package) dependencies;
-                  src = ./src;
+                  srcs = [ ./src ];
                 }
              )
              command;
