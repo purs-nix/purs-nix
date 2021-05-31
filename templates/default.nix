@@ -33,7 +33,7 @@ let
              prelude
            ];
 
-         src = ./src;
+         srcs = [ ./src ];
        }
     )
     command;

@@ -19,7 +19,7 @@
                       prelude
                     ];
 
-                  src = ./src;
+                  srcs = [ ./src ];
                 }
              )
              command;
