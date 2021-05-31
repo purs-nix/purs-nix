@@ -3,7 +3,9 @@
 The flake for this repository is used inside your project's flake to set up your PureScript environment and/or to compile/bundle your PureScript code in a Nix derivation. The `outputs` of the flake has a `__functor` attribute, so it can be used as a function. It takes the following arguments:
 
 ```
-{ system, pkgs ? make-pkgs system}
+{ system
+, pkgs ? (import ./inputs.nix).pkgs system
+}
 ```
 and returns a set with the following attributes:
 - `build`: A function for creating ad hoc PureScript packages. It's argument is a [package description set](adding-packages.md) with the `name` attribute required.
