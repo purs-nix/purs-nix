@@ -221,9 +221,9 @@ b64 =
   };
 
 barlow-lens =
-  { version = "0.7.1";
+  { version = "0.7.2";
     repo = "https://github.com/sigma-andex/purescript-barlow-lens.git";
-    rev = "68d2c293047077b9752145312611e7ecd1b0b94e";
+    rev = "b78c9ff13f8f2f6092e44ecbafe663234619cae6";
 
     dependencies =
       [ either foldable-traversable maybe newtype prelude profunctor profunctor-lenses tuples typelevel-prelude 
@@ -1057,6 +1057,16 @@ formatters =
 
     dependencies =
       [ datetime fixed-points lists numbers parsing prelude transformers 
+      ];
+  };
+
+framer-motion =
+  { version = "0.1.0";
+    repo = "https://github.com/i-am-the-slime/purescript-framer-motion.git";
+    rev = "d86da3b7450646621bb42cea316ec8c2b0c54326";
+
+    dependencies =
+      [ aff aff-promise arrays console effect foreign foreign-object heterogeneous literals maybe nullable prelude psci-support react-basic react-basic-dom react-basic-hooks record tuples two-or-more typelevel-prelude unsafe-coerce untagged-union web-dom web-events web-uievents 
       ];
   };
 
@@ -3297,6 +3307,16 @@ turf =
 
     dependencies =
       [ argonaut-codecs argonaut-core foreign-object quickcheck 
+      ];
+  };
+
+two-or-more =
+  { version = "0.3.0";
+    repo = "https://github.com/i-am-the-slime/purescript-two-or-more.git";
+    rev = "10855d7eadeb25e4cc7cdfb586148828c14be0c8";
+
+    dependencies =
+      [ arrays console effect foldable-traversable maybe partial prelude psci-support tuples 
       ];
   };
 
