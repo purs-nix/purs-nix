@@ -1,16 +1,7 @@
 with builtins;
 let
   l = p.lib; p = pkgs;
-
-  pkgs =
-    import
-      (fetchGit
-         { url = "https://github.com/NixOS/nixpkgs";
-           rev = "32f7980afb5e33f1e078a51e715b9f102f396a69";
-         }
-      )
-      {};
-
+  pkgs = (import ../inputs.nix).pkgs currentSystem;
   package-set-repo = fetchGit "https://github.com/purescript/package-sets";
   packages = l.importJSON (package-set-repo + /packages.json);
 
