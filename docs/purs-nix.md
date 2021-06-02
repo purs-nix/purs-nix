@@ -22,7 +22,7 @@ and returns a set with the following attributes:
 ```
 { dependencies ? []
 , test-dependencies ? []
-, srcs
+, srcs ? null
 , nodejs ? pkgs.nodejs
 , purescript ? pkgs.purescript
 }
@@ -30,7 +30,7 @@ and returns a set with the following attributes:
 
 - `dependencies`: A list of all your project's dependencies. You can get these from `ps-pkgs`/`ps-pkgs-ns`.
 - `test-dependencies`: A list of all your projects's dependencies that are only needed for testing.
-- `srcs`: A list Nix path values pointing to your PureScript source directory.
+- `srcs`: A list Nix path values pointing to your PureScript source directory. This is not required if you're only using the Nix shell.
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
 

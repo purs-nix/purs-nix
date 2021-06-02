@@ -10,14 +10,7 @@
          let
            inherit (purs-nix) ps-pkgs ps-pkgs-ns purs;
            package = import ./package.nix purs-nix;
-
-           inherit
-             (purs
-                { inherit (package) dependencies;
-                  srcs = [ ./src ];
-                }
-             )
-             command;
+           inherit (purs { inherit (package) dependencies; }) command;
          in
          { devShell =
              # https://github.com/ursi/nix-make-shell

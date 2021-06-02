@@ -11,6 +11,13 @@ with builtins;
       { dependencies ? []
       , test-dependencies ? []
       , srcs
+        ? throw
+            ''
+            In order to build derivations from your PureScript code, you must supply a 'srcs' argument to 'purs'
+
+            See:
+            https://github.com/ursi/purs-nix/blob/master/docs/purs-nix.md#purs
+            ''
       , nodejs ? pkgs.nodejs
       , purescript ? pkgs.purescript
       }:

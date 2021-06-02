@@ -18,8 +18,6 @@
                       effect
                       prelude
                     ];
-
-                  srcs = [ ./src ];
                 }
              )
              command;

@@ -32,8 +32,6 @@ let
              effect
              prelude
            ];
-
-         srcs = [ ./src ];
        }
     )
     command;
