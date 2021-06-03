@@ -29,7 +29,7 @@
 
   prelude =
     { repo = "https://github.com/ursi/purescript-mason-prelude.git";
-      rev = "d447a79e8b44e509cb2cd96e3ce62a5024d1dda2";
+      rev = "f0fcf0c5daf747351095640bd5902d3fa200c545";
       info = /package.nix;
     };
 
