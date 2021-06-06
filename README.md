@@ -14,7 +14,7 @@
 ## Getting Started (Nix stable)
 
 - [Install Nix](https://nixos.org/download.html#nix-quick-install)
-- Copy the template from [templates/default](templates/default), and then replace `flake.nix` with [templates/default.nix](templates/default.nix).
+- Copy the template from [templates/default](templates/default), and then replace `flake.nix` with [templates/shell.nix](templates/shell.nix).
 - Run `nix-shell` to enter a Nix shell with the `purs-nix` command added to your `PATH`.
 - Run `purs-nix run` to see the output of the default project.
 
