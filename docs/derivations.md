@@ -1,4 +1,4 @@
-# Derivations
+# Creating Derivations
 
 You can use **purs-nix** to make a derivations for your PureScript bundle, your compiler output, and to make executables. They all use incremental compiling, so you don't have you recompile your entire project every time you make a small change.
 
