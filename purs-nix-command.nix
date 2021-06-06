@@ -159,11 +159,11 @@ with builtins;
             )
           } && ${nodejs}/bin/node ${run-output};;
           docs ) purs-nix srcs docs;;
-          package-info ) ${package-info} $2;;
+          package-info ) ${package-info} "$2";;
           packages ) ${packages};;
           bower ) ${bower};;
-          output ) ${purescript}/bin/purs ''${@:2} "${compiler-output}/**/*.js";;
-          srcs ) ${purescript}/bin/purs ''${@:2} ${globs} ${dep-globs};;
+          output ) ${purescript}/bin/purs "''${@:2}" "${compiler-output}/**/*.js";;
+          srcs ) ${purescript}/bin/purs "''${@:2}" ${globs} ${dep-globs};;
           * ) echo ${help};;
         esac
         '';
