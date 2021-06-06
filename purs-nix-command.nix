@@ -13,6 +13,7 @@ with builtins;
 , package ? {}
 , test ? "test"
 , test-module ? "Test.Main"
+, name ? "purs-nix"
 , nodejs ? pkgs.nodejs
 , purescript ? purescript'
 }:
@@ -23,7 +24,7 @@ with builtins;
     bundle' =
       { output ? "index.js", ... }@args:
       ''
-      purs-nix compile \
+      ${name} compile \
         && ${
       u.bundle
         purescript
@@ -141,7 +142,7 @@ with builtins;
     run-output = ".purs-nix-run.js";
 
     exe =
-      p.writeShellScript "purs-nix"
+      p.writeShellScript name
         ''
         case $1 in
           compile ) ${compile' compile} && chmod -R u+w ${output};;
@@ -158,7 +159,7 @@ with builtins;
                 }
             )
           } && ${nodejs}/bin/node ${run-output};;
-          docs ) purs-nix srcs docs;;
+          docs ) ${name} srcs docs;;
           package-info ) ${package-info} "$2";;
           packages ) ${packages};;
           bower ) ${bower};;
@@ -184,13 +185,13 @@ with builtins;
           ];
       in
       p.writeText "purs-nix-completion"
-        ''complete -W "${toString commands}" purs-nix'';
+        ''complete -W "${toString commands}" ${name}'';
 
     # keep at the bottom to agree with docs/purs-nix.md
     help =
       l.escapeShellArg
         ''
-        purs-nix <command>
+        ${name} <command>
 
         Commands:
         ------------------------------------------------------------------------
@@ -219,13 +220,13 @@ with builtins;
         Anything that is not a valid command will show this text.
         '';
   in
-  p.runCommand "purs-nix" {}
+  p.runCommand name {}
     ''
     mkdir -p $out/bin
     cd $_
-    ln -s ${exe} purs-nix
+    ln -s ${exe} ${name}
     cd -
     mkdir -p $out/share/bash-completion/completions
     cd $_
-    ln -s ${completion} purs-nix
+    ln -s ${completion} ${name}
     ''

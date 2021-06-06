@@ -53,7 +53,8 @@
               purs-nix.purescript
               purs-nix.purescript-language-server
               (command
-                 { package = import ./package.nix purs-nix;
+                 { name = "purs-nix-test";
+                   package = import ./package.nix purs-nix;
                    srcs = [ "src" "src2" ];
                  }
               )

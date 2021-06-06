@@ -50,6 +50,7 @@ and returns a set with the following attributes:
 , package ? {}
 , test ? "test"
 , test-module ? "Test.Main"
+, name ? "purs-nix"
 , nodejs ? pkgs.nodejs
 , purescript ? easy-purescript-nix.purescript
 }
@@ -102,6 +103,7 @@ and returns a set with the following attributes:
 
 - `test`: A string representing the path of your testing code.
 - `test-module`: The name of the module whose `main` function will be run when using `purs-nix test`.
+- `name:` The name of the command. Use this if you need to create commands with different configurations.
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
 
