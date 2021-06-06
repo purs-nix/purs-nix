@@ -52,7 +52,7 @@
         "utils": "utils"
       },
       "locked": {
-        "narHash": "sha256-RqAgFpcoUPZVDUoZyvym4XgQ8nwYxtTXhF2XD7g2quQ=",
+        "narHash": "sha256-iGIDZiAIArN9qAm60yCO355QH7vweWDUlEtssL7I/T8=",
         "path": "..",
         "type": "path"
       },

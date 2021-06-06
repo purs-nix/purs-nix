@@ -20,8 +20,8 @@
                    [ nodejs
                      nodePackages.bower
                      nodePackages.pulp
-                     # nodePackages.purescript-language-server
                      purs-nix.purescript
+                     # purs-nix.purescript-language-server
                      (command {})
                    ];
                };

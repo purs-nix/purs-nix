@@ -2,12 +2,19 @@ with builtins;
 system:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix;
-    inherit (import ./inputs.nix system) builders easy-ps pkgs;
+
+    inherit (import ./inputs.nix system)
+      builders
+      easy-ps
+      pkgs
+      purescript-language-server;
+
     purescript' = easy-ps.purescript;
   in
   { inherit (import ./build-pkgs.nix pkgs) build ps-pkgs ps-pkgs-ns;
     inherit (pkgs.lib) licenses;
     purescript = purescript';
+    inherit purescript-language-server;
 
     purs =
       { dependencies ? []

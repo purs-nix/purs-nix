@@ -13,6 +13,7 @@ and returns a set with the following attributes:
 - `ps-pkgs-ns`: The set of all namespaced PureScript packages.
 - `purs`: A function for building your project.
 - `purescript`: The PureScript package used for everything by default.
+- `purescript-language-server`: A build of purescript-language-server that detects `flake.nix`/`shell.nix` files as an indication of the workspace root being a PureScript project.
 - `licenses`: This is included for convienence so you can pass the returned set into a [package.nix](adding-packages.md#using-info).
 
 ### purs

@@ -28,8 +28,8 @@
                { packages =
                    with pkgs;
                    [ nodejs
-                     # nodePackages.purescript-language-server
                      purs-nix.purescript
+                     # purs-nix.purescript-language-server
                      (command {})
                    ];
                };

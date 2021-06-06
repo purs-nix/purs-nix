@@ -27,4 +27,14 @@ system:
            }
         )
         { inherit system; };
+
+    purescript-language-server =
+      import
+        (fetchGit
+           { url = "https://github.com/ursi/purescript-language-server.git";
+             ref = "purs-nix";
+             rev = "8a6c20402bab013c3510ab262aebc151059c2a2e";
+           }
+        )
+        { inherit system; };
   }
