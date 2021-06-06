@@ -169,8 +169,22 @@ with builtins;
         '';
 
     completion =
+      let
+        commands =
+          [ "compile"
+            "bundle"
+            "run"
+            "test"
+            "docs"
+            "package-info"
+            "packages"
+            "bower"
+            "output"
+            "srcs"
+          ];
+      in
       p.writeText "purs-nix-completion"
-        ''complete -W "compile bundle run test docs package-info packages bower output srcs" purs-nix'';
+        ''complete -W "${toString commands}" purs-nix'';
 
     # keep at the bottom to agree with docs/purs-nix.md
     help =
