@@ -24,7 +24,7 @@ and returns a set with the following attributes:
 , test-dependencies ? []
 , srcs ? null
 , nodejs ? pkgs.nodejs
-, purescript ? pkgs.purescript
+, purescript ? easy-purescript-nix.purescript
 }
 ```
 
@@ -50,7 +50,7 @@ and returns a set with the following attributes:
 , test ? "test"
 , test-module ? "Test.Main"
 , nodejs ? pkgs.nodejs
-, purescript ? pkgs.purescript
+, purescript ? easy-purescript-nix.purescript
 }
 ```
 

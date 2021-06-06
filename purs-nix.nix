@@ -2,11 +2,12 @@ with builtins;
 system:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix;
-    inherit (import ./inputs.nix system) builders pkgs;
+    inherit (import ./inputs.nix system) builders easy-ps pkgs;
+    purescript' = easy-ps.purescript;
   in
   { inherit (import ./build-pkgs.nix pkgs) build ps-pkgs ps-pkgs-ns;
-    inherit (pkgs) purescript;
     inherit (pkgs.lib) licenses;
+    purescript = purescript';
 
     purs =
       { dependencies ? []
@@ -20,7 +21,7 @@ system:
             https://github.com/ursi/purs-nix/blob/master/docs/purs-nix.md#purs
             ''
       , nodejs ? pkgs.nodejs
-      , purescript ? pkgs.purescript
+      , purescript ? purescript'
       }:
       let
         inherit (p.stdenv) mkDerivation;
@@ -261,6 +262,7 @@ system:
           import ./purs-nix-command.nix
             { all-dependencies = dependencies ++ test-dependencies;
               inherit all-dep-globs dep-globs pkgs;
+              purescript' = purescript;
             };
       };
   }

@@ -3,6 +3,7 @@ with builtins;
 , all-dep-globs
 , dep-globs
 , pkgs
+, purescript'
 }:
 { srcs ? [ "src" ]
 , globs ? concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') srcs)
@@ -13,7 +14,7 @@ with builtins;
 , test ? "test"
 , test-module ? "Test.Main"
 , nodejs ? pkgs.nodejs
-, purescript ? pkgs.purescript
+, purescript ? purescript'
 }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix;
