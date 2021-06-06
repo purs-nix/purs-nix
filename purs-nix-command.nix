@@ -158,6 +158,7 @@ with builtins;
                 }
             )
           } && ${nodejs}/bin/node ${run-output};;
+          docs ) purs-nix srcs docs;;
           package-info ) ${package-info} $2;;
           packages ) ${packages};;
           bower ) ${bower};;
@@ -169,7 +170,7 @@ with builtins;
 
     completion =
       p.writeText "purs-nix-completion"
-        ''complete -W "compile bundle run test package-info packages bower output srcs" purs-nix'';
+        ''complete -W "compile bundle run test docs package-info packages bower output srcs" purs-nix'';
 
     # keep at the bottom to agree with docs/purs-nix.md
     help =
@@ -184,6 +185,9 @@ with builtins;
         run        Compile, bundle, then run the bundle with 'node'.
         test       Compile, bundle your test code, then run the bundle with
                    'node'.
+
+        docs       Generate HTML documentation for all the modules in your
+                   project.
         ------------------------------------------------------------------------
         package-info <name>    Show the info of a specific package.
         packages               Show all packages used in your project.
