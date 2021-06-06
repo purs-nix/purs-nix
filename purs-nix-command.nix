@@ -24,16 +24,17 @@ with builtins;
     bundle' =
       { output ? "index.js", ... }@args:
       ''
-      ${name} compile \
-        && ${
-      u.bundle
-        purescript
-        (args
-         // { files = compiler-output;
-              inherit output;
-            }
-        )
-      }'';
+      ${name} compile
+
+      ${u.bundle
+          purescript
+          (args
+           // { files = compiler-output;
+                inherit output;
+              }
+          )
+      }
+      '';
 
     compile' = args:
       u.compile
@@ -144,21 +145,32 @@ with builtins;
     exe =
       p.writeShellScript name
         ''
+        set -e
+
         case $1 in
-          compile ) ${compile' compile} && chmod -R u+w ${output};;
+          compile )
+            ${compile' compile}
+            chmod -R u+w ${output};;
+
           bundle ) ${bundle' bundle};;
+
           run )
-            ${bundle' (bundle // { output = run-output; })} \
-              && ${nodejs}/bin/node ${run-output};;
+            ${bundle' (bundle // { output = run-output; })}
+            ${nodejs}/bin/node ${run-output};;
+
           test )
-            ${compile-test compile} && ${
-          bundle'
-            (bundle
-             // { module = test-module;
-                  output = run-output;
-                }
-            )
-          } && ${nodejs}/bin/node ${run-output};;
+            ${compile-test compile}
+
+            ${bundle'
+                (bundle
+                 // { module = test-module;
+                      output = run-output;
+                    }
+                )
+            }
+
+            ${nodejs}/bin/node ${run-output};;
+
           docs ) ${name} srcs docs;;
           package-info ) ${package-info} "$2";;
           packages ) ${packages};;
