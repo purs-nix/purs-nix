@@ -1,8 +1,9 @@
 with builtins;
-{ builders
-, pkgs
-, system
-}:
+system:
+  let
+    l = p.lib; p = pkgs; u = import ./utils.nix;
+    inherit (import ./inputs.nix system) builders pkgs;
+  in
   { inherit (import ./build-pkgs.nix pkgs) build ps-pkgs ps-pkgs-ns;
     inherit (pkgs) purescript;
     inherit (pkgs.lib) licenses;
@@ -22,7 +23,6 @@ with builtins;
       , purescript ? pkgs.purescript
       }:
       let
-        l = p.lib; p = pkgs; u = import ./utils.nix;
         inherit (p.stdenv) mkDerivation;
 
         get-dep-globs = deps:

@@ -7,10 +7,7 @@
         { system
         , pkgs ? inputs.pkgs system
         }:
-        import ./purs-nix.nix
-          { builders = inputs.builders system;
-            inherit pkgs system;
-          };
+        import ./purs-nix.nix system;
 
       defaultTemplate =
         { description = "A basic purs-nix project";
