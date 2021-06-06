@@ -12,8 +12,8 @@
                (purs-nix.build
                   { name = "typeable";
                     repo = "https://github.com/ajnsit/purescript-typeable.git";
-                    rev = "836a3e10da7a85636ef629ae8e927a5429606b56";
                     ref = "main";
+                    rev = "836a3e10da7a85636ef629ae8e927a5429606b56";
 
                     dependencies =
                       with ps-pkgs;
@@ -46,7 +46,6 @@
   { defaultPackage = modules.Main.install { name = "test"; };
 
     devShell =
-      # https://github.com/ursi/nix-make-shell
       make-shell
         { packages =
             with pkgs;
