@@ -3311,9 +3311,9 @@ turf =
   };
 
 two-or-more =
-  { version = "0.3.0";
+  { version = "0.4.0";
     repo = "https://github.com/i-am-the-slime/purescript-two-or-more.git";
-    rev = "10855d7eadeb25e4cc7cdfb586148828c14be0c8";
+    rev = "018b386d96daa6612fdcf6c0875ff271fa6b8146";
 
     dependencies =
       [ arrays console effect foldable-traversable maybe partial prelude psci-support tuples 
