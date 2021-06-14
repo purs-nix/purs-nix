@@ -221,12 +221,12 @@ b64 =
   };
 
 barlow-lens =
-  { version = "0.7.2";
+  { version = "0.8.0";
     repo = "https://github.com/sigma-andex/purescript-barlow-lens.git";
-    rev = "b78c9ff13f8f2f6092e44ecbafe663234619cae6";
+    rev = "fed6344419218c164ea5c88d03671939de6c4d82";
 
     dependencies =
-      [ either foldable-traversable maybe newtype prelude profunctor profunctor-lenses tuples typelevel-prelude 
+      [ either foldable-traversable lists maybe newtype prelude profunctor profunctor-lenses tuples typelevel-prelude 
       ];
   };
 
@@ -1721,9 +1721,9 @@ media-types =
   };
 
 metadata =
-  { version = "0.14.0";
+  { version = "0.14.2";
     repo = "https://github.com/spacchetti/purescript-metadata.git";
-    rev = "7d7c7667bf2eefac0860b067d67448a5af935252";
+    rev = "ee87513080c523742140f5e536971d0333f77106";
 
     dependencies =
       [ 
@@ -3070,6 +3070,16 @@ spec-discovery =
       ];
   };
 
+spec-mocha =
+  { version = "4.0.0";
+    repo = "https://github.com/purescript-spec/purescript-spec-mocha.git";
+    rev = "1511b8cf82a96d076f789123240f8f48bd6b22ff";
+
+    dependencies =
+      [ console exceptions foldable-traversable spec 
+      ];
+  };
+
 spec-quickcheck =
   { version = "4.0.0";
     repo = "https://github.com/purescript-spec/purescript-spec-quickcheck.git";
@@ -3311,9 +3321,9 @@ turf =
   };
 
 two-or-more =
-  { version = "0.4.0";
+  { version = "1.0.0";
     repo = "https://github.com/i-am-the-slime/purescript-two-or-more.git";
-    rev = "018b386d96daa6612fdcf6c0875ff271fa6b8146";
+    rev = "2068aa61d8c38a0b96a5cff1ad82a1e2209c64e0";
 
     dependencies =
       [ arrays console effect foldable-traversable maybe partial prelude psci-support tuples 
