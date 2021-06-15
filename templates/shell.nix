@@ -39,9 +39,12 @@ in
 pkgs.mkShell
  { buildInputs =
      with pkgs;
-     [ nodejs
+     [ # entr
+       nodejs
        purs-nix.purescript
        # purs-nix.purescript-language-server
        (command {})
      ];
+
+   # shellHook = ''alias watch="find src | entr -s 'echo bundling; purs-nix bundle'"'';
  }
