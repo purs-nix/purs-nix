@@ -2110,6 +2110,16 @@ open-pairing =
       ];
   };
 
+option =
+  { version = "9.0.0";
+    repo = "https://github.com/joneshf/purescript-option.git";
+    rev = "8506cbf1fd5d5465a9dc990dfe6f2960ae51c1ab";
+
+    dependencies =
+      [ argonaut-codecs argonaut-core codec codec-argonaut either foreign foreign-object lists maybe prelude profunctor record simple-json transformers tuples type-equality unsafe-coerce 
+      ];
+  };
+
 options =
   { version = "6.0.0";
     repo = "https://github.com/purescript-contrib/purescript-options.git";
@@ -2780,6 +2790,16 @@ result =
       ];
   };
 
+return =
+  { version = "0.1.2";
+    repo = "https://github.com/ursi/purescript-return.git";
+    rev = "5a327ce3c50857b19279a38e2266778b767eed48";
+
+    dependencies =
+      [ foldable-traversable point-free prelude 
+      ];
+  };
+
 ring-modules =
   { version = "5.0.1";
     repo = "https://github.com/f-o-a-m/purescript-ring-modules.git";
@@ -3157,6 +3177,16 @@ subcategory =
 
     dependencies =
       [ prelude profunctor record typelevel-prelude 
+      ];
+  };
+
+substitute =
+  { version = "0.2.3";
+    repo = "https://github.com/ursi/purescript-substitute.git";
+    rev = "adddf76f8f44a82b264df47e0dea5b3ce892c102";
+
+    dependencies =
+      [ foldable-traversable foreign-object maybe prelude return strings 
       ];
   };
 
