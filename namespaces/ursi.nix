@@ -6,7 +6,7 @@
 
   elmish =
     { repo = "https://github.com/ursi/purescript-elmish.git";
-      rev = "68b96b57bcb545949f6f9a6181b4a6c42806e11e";
+      rev = "2e900975bb4bb22d9e2be9055ef69de5ef888823";
       info = /package.nix;
     };
 
