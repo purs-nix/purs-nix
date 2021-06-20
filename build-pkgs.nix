@@ -50,7 +50,7 @@ pkgs:
              { inherit dependencies repo rev; }
              // add-optional "pursuit";
 
-           installPhase = "ln -s $src/${src} $out";
+           installPhase = args.install or "ln -s $src/${src} $out";
          }
          // u.make-name name version
         );
