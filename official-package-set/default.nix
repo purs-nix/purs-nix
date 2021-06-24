@@ -710,6 +710,16 @@ decimals =
       ];
   };
 
+dexie =
+  { version = "0.1.0";
+    repo = "https://github.com/mushishi78/purescript-dexie.git";
+    rev = "ed5b5bfbd3e161d5ee5b16a32dbbf51c24842a6a";
+
+    dependencies =
+      [ aff control effect either exceptions foreign foreign-object maybe nullable prelude psci-support transformers tuples 
+      ];
+  };
+
 distributive =
   { version = "5.0.0";
     repo = "https://github.com/purescript/purescript-distributive.git";
@@ -1031,9 +1041,9 @@ fork =
   };
 
 form-urlencoded =
-  { version = "6.0.1";
+  { version = "6.0.2";
     repo = "https://github.com/purescript-contrib/purescript-form-urlencoded.git";
-    rev = "04b77eaf66c2676f5570f0ac35ebdc427f107ca7";
+    rev = "860b2c4bf0a848322d2077faaefbeb98762cb8d6";
 
     dependencies =
       [ foldable-traversable js-uri maybe newtype prelude strings tuples 
@@ -1371,9 +1381,9 @@ halogen-vdom =
   };
 
 heterogeneous =
-  { version = "0.5.0";
+  { version = "0.5.1";
     repo = "https://github.com/natefaubion/purescript-heterogeneous.git";
-    rev = "55f7563d1945785d6648d0f814f163e9b0970b2f";
+    rev = "550445cf7932e158395423fc087cdc05bab41c40";
 
     dependencies =
       [ either functors prelude record tuples variant 
@@ -2201,9 +2211,9 @@ parallel =
   };
 
 parsing =
-  { version = "6.0.1";
+  { version = "6.0.2";
     repo = "https://github.com/purescript-contrib/purescript-parsing.git";
-    rev = "fee4889661e56d5d05bf36bbc7830cc7621298a4";
+    rev = "d085e3740560d4dcdd710775e4181129be378b89";
 
     dependencies =
       [ arrays either foldable-traversable identity integers lists maybe prelude strings transformers unicode 
@@ -2351,9 +2361,9 @@ precise =
   };
 
 precise-datetime =
-  { version = "6.0.0";
+  { version = "6.0.1";
     repo = "https://github.com/awakesecurity/purescript-precise-datetime.git";
-    rev = "0fbe8d607b051417d5dab4da4ff9adffd3e4ac13";
+    rev = "ad5a1ba746ce78ce833602e4094f54fbb1d9ba30";
 
     dependencies =
       [ arrays console datetime decimals either enums foldable-traversable formatters integers js-date lists maybe newtype numbers prelude strings tuples unicode 
@@ -2671,12 +2681,12 @@ react-queue =
   };
 
 react-testing-library =
-  { version = "3.0.0";
+  { version = "3.1.4";
     repo = "https://github.com/i-am-the-slime/purescript-react-testing-library.git";
-    rev = "c292a8d276a28214030baac6e656965fc475bc99";
+    rev = "4b6d6bb474a566c24a6157b92dc08cf92d4a1408";
 
     dependencies =
-      [ aff-promise console effect foreign foreign-object prelude react-basic-dom react-basic-hooks remotedata run spec 
+      [ aff aff-promise arrays avar bifunctors control datetime effect either exceptions foldable-traversable foreign foreign-object functions identity integers lists maybe newtype nullable partial prelude react-basic react-basic-dom react-basic-hooks record remotedata run spec strings transformers tuples typelevel-prelude unsafe-coerce variant web-dom web-events web-html 
       ];
   };
 
@@ -2791,9 +2801,9 @@ result =
   };
 
 return =
-  { version = "0.1.2";
+  { version = "0.1.3";
     repo = "https://github.com/ursi/purescript-return.git";
-    rev = "5a327ce3c50857b19279a38e2266778b767eed48";
+    rev = "e0b2666405340f9ab1cc60ffd7288c9544965acf";
 
     dependencies =
       [ foldable-traversable point-free prelude 
@@ -2821,9 +2831,9 @@ routing =
   };
 
 routing-duplex =
-  { version = "0.5.0";
+  { version = "0.5.1";
     repo = "https://github.com/natefaubion/purescript-routing-duplex.git";
-    rev = "34963d57ec67004a0683aaf3002929affdc3962d";
+    rev = "4f59293135f993e396fc01ceb7a6ecda3afb0089";
 
     dependencies =
       [ arrays control either js-uri lazy numbers prelude profunctor record strings typelevel-prelude 
@@ -3581,9 +3591,9 @@ validation =
   };
 
 variant =
-  { version = "7.0.2";
+  { version = "7.0.3";
     repo = "https://github.com/natefaubion/purescript-variant.git";
-    rev = "2a2e02e68a02911799bb99bb82e3d9ace182cd47";
+    rev = "3f12411ede5edd342d25340c1babce9ae81d6793";
 
     dependencies =
       [ enums lists maybe partial prelude record tuples unsafe-coerce 
@@ -3601,12 +3611,12 @@ vectorfield =
   };
 
 veither =
-  { version = "1.0.4";
+  { version = "1.0.5";
     repo = "https://github.com/JordanMartinez/purescript-veither.git";
-    rev = "0f5c31fccb938bede21617368c00ed32e63ed38e";
+    rev = "415044af91e5e8f49fd35d7304d180c9857a19c8";
 
     dependencies =
-      [ control enums invariant maybe psci-support quickcheck transformers variant 
+      [ aff arrays console control effect either enums foldable-traversable invariant lists maybe newtype partial prelude quickcheck quickcheck-laws record spec tuples unsafe-coerce variant 
       ];
   };
 
@@ -3621,12 +3631,12 @@ versions =
   };
 
 vexceptt =
-  { version = "1.0.0";
+  { version = "1.0.2";
     repo = "https://github.com/JordanMartinez/purescript-vexceptt.git";
-    rev = "f1bb8a9cffc48d4ca8872e9024ff8293c6cdb6a2";
+    rev = "1d368db7b684d4f3973983baa42fe7cc75cb95ec";
 
     dependencies =
-      [ transformers unsafe-coerce veither 
+      [ aff effect newtype prelude spec tailrec transformers tuples unsafe-coerce variant veither 
       ];
   };
 
@@ -3731,9 +3741,9 @@ web-html =
   };
 
 web-promise =
-  { version = "2.0.1";
+  { version = "2.1.0";
     repo = "https://github.com/purescript-web/purescript-web-promise.git";
-    rev = "485ddf0473d999f881c59b982a63d48590096582";
+    rev = "26ceb2ee7d1046fea40697380b66b2c6313489b0";
 
     dependencies =
       [ effect exceptions foldable-traversable functions maybe prelude 
