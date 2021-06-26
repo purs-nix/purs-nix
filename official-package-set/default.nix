@@ -530,6 +530,16 @@ cirru-parser =
       ];
   };
 
+classnames =
+  { version = "1.0.0";
+    repo = "https://github.com/dewey92/purescript-classnames.git";
+    rev = "28b397e1189397947e98d81e685852a94d8c0611";
+
+    dependencies =
+      [ maybe prelude record strings tuples 
+      ];
+  };
+
 clipboardy =
   { version = "1.0.3";
     repo = "https://github.com/hrajchert/purescript-clipboardy.git";
@@ -2300,6 +2310,16 @@ pathy =
       ];
   };
 
+payload =
+  { version = "0.4.0";
+    repo = "https://github.com/hoodunit/purescript-payload.git";
+    rev = "1daa80d9ec3a998f56607ec304d7dcf647190154";
+
+    dependencies =
+      [ aff affjax arrays bifunctors console datetime effect either exceptions foldable-traversable foreign foreign-object http-methods integers js-date lists maybe media-types newtype node-buffer node-fs node-fs-aff node-http node-path node-streams node-url nullable ordered-collections prelude record refs simple-json strings stringutils test-unit transformers tuples type-equality typelevel-prelude unfoldable unsafe-coerce 
+      ];
+  };
+
 phoenix =
   { version = "4.0.0";
     repo = "https://github.com/brandonhamilton/purescript-phoenix.git";
@@ -3807,6 +3827,16 @@ web-uievents =
 
     dependencies =
       [ web-html 
+      ];
+  };
+
+web-url =
+  { version = "1.0.2";
+    repo = "https://github.com/mjepronk/purescript-web-url.git";
+    rev = "9d687d4832f6c10a1c531826cd2a830fd3efe5f7";
+
+    dependencies =
+      [ maybe partial prelude psci-support spec tuples 
       ];
   };
 
