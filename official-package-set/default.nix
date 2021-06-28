@@ -721,9 +721,9 @@ decimals =
   };
 
 dexie =
-  { version = "0.1.0";
+  { version = "0.1.2";
     repo = "https://github.com/mushishi78/purescript-dexie.git";
-    rev = "ed5b5bfbd3e161d5ee5b16a32dbbf51c24842a6a";
+    rev = "2148d70c6713c4059e9fd39b9061fcaa7c24cd3b";
 
     dependencies =
       [ aff control effect either exceptions foreign foreign-object maybe nullable prelude psci-support transformers tuples 

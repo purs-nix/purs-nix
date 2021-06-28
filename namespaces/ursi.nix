@@ -6,7 +6,7 @@
 
   elmish =
     { repo = "https://github.com/ursi/purescript-elmish.git";
-      rev = "956029697ca3f88e713f2fe3cb8011a42fac967d";
+      rev = "61bc2ecf760a6f6b8cd05ad45c7da1c9e524d818";
       info = /package.nix;
     };
 
@@ -17,7 +17,7 @@
 
   html =
     { repo = "https://github.com/ursi/purescript-whatwg-html.git";
-      rev = "9696d38b7a269d800da82aad6d176b6c3a537514";
+      rev = "27ff0f79ac39f42d718a0806f0b1b79b8a7534d0";
       info = /package.nix;
     };
 
