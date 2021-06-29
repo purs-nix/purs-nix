@@ -34,11 +34,11 @@ There are two formats for a package description set:
      }
    ```
 
-The following attributes are required:\
+The following attributes are required:
 - `repo`
 - `rev`
 
-The following attributes are optional:\
+The following attributes are optional:
 - `dependencies`
 - `info`
 - `name`
@@ -53,6 +53,7 @@ If you're using a file in your own repository for your package info, you need to
 Here's an example:
 ```nix
 { ps-pkgs, ... }:
+  with ps-pkgs;
   { version = "6.0.0";
 
     dependencies =
