@@ -11,19 +11,21 @@ pkgs:
       , ...
       }@args:
       let
-        git-src =
-          fetchGit
-            ({ url = repo;
-               inherit rev;
-             }
-             // (if ref == null then {}
-                 else { inherit ref; }
+        pkg-src =
+          args.path
+          or (fetchGit
+                ({ url = repo;
+                   inherit rev;
+                 }
+                 // (if ref == null then {}
+                     else { inherit ref; }
+                    )
                 )
-            );
+             );
 
         info' =
           if isPath info then
-            import (git-src + info)
+            import (pkg-src + info)
               { inherit ps-pkgs ps-pkgs-ns;
                 inherit (l) licenses;
               }
@@ -43,7 +45,7 @@ pkgs:
           if info'?${attribute} then { ${attribute} = info'.${attribute}; } else {};
       in
       p.stdenv.mkDerivation
-        ({ src = git-src;
+        ({ src = pkg-src;
            phases = [ "unpackPhase" "installPhase" ];
 
            passthru =
