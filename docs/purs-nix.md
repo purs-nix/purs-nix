@@ -8,7 +8,7 @@ The flake for this repository is used inside your project's flake to set up your
 }
 ```
 and returns a set with the following attributes:
-- `build`: A function for creating ad hoc PureScript packages. It's argument is a [package description set](adding-packages.md) with the `name` attribute required. Also, a `path` argument can be given in order to temporarily test out local changes.
+- `build`: A function for creating ad hoc PureScript packages. It's argument is a [package description set](adding-packages.md) with the `name` attribute required.
 - `ps-pkgs`: The set of all non-namespaced PureScript pacakges.
 - `ps-pkgs-ns`: The set of all namespaced PureScript packages.
 - `purs`: A function for building your project.

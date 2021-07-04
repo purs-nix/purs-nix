@@ -45,8 +45,21 @@ system:
                     []
                     ds
                   ++ ds;
+
               in
-              l.unique (go deps);
+              l.pipe (go deps)
+                [ (foldl'
+                     (acc: d:
+                        if acc?${d.name} && d._local then
+                          acc
+                        else
+                          acc // { ${d.name} = d; }
+                     )
+                     {}
+                  )
+
+                  attrValues
+                ];
           in
           toString (map (a: ''"${a}/**/*.purs"'') trans-deps);
 
