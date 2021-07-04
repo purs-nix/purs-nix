@@ -47,24 +47,9 @@
         "type": "github"
       }
     },
-    "purs-nix": {
-      "inputs": {
-        "utils": "utils"
-      },
-      "locked": {
-        "narHash": "sha256-0MeWjIsOtPKqLW2Wakh+b8xY1aX5b79F3d/sjjSqDnk=",
-        "path": "..",
-        "type": "path"
-      },
-      "original": {
-        "path": "..",
-        "type": "path"
-      }
-    },
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
-        "purs-nix": "purs-nix",
         "utils": "utils_2"
       }
     },
