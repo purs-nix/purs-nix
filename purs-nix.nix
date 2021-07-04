@@ -37,17 +37,17 @@ system:
           let
             trans-deps =
               let
-                go = ds:
+                flatten = ds:
                   foldl'
                     (acc: d:
-                       acc ++ go d.dependencies
+                       acc ++ flatten d.dependencies
                     )
                     []
                     ds
                   ++ ds;
 
               in
-              l.pipe (go deps)
+              l.pipe (flatten deps)
                 [ (foldl'
                      (acc: d:
                         if acc?${d.name} && d._local then

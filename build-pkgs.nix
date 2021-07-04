@@ -16,11 +16,11 @@ pkgs:
                   else null
                  );
 
-        make-package = { _local ? false }: pkg-src:
+        make-package = { _local ? false }: src:
           let
             info' =
               if isPath info then
-                import (pkg-src + info)
+                import (src + info)
                   { inherit ps-pkgs ps-pkgs-ns;
                     inherit (l) licenses;
                   }
@@ -28,14 +28,14 @@ pkgs:
                 args;
 
             dependencies = info'.dependencies or [];
-            src = info'.src or "src";
+            src' = info'.src or "src";
             version = info'.version or null;
 
             add-optional = attribute:
               if info'?${attribute} then { ${attribute} = info'.${attribute}; } else {};
           in
           p.stdenv.mkDerivation
-            ({ src = pkg-src;
+            ({ inherit src;
                phases = [ "unpackPhase" "installPhase" ];
 
                passthru =
@@ -44,7 +44,7 @@ pkgs:
                  }
                  // add-optional "pursuit";
 
-               installPhase = args.install or "ln -s $src/${src} $out";
+               installPhase = args.install or "ln -s $src/${src'} $out";
              }
              // u.make-name name version
             );
