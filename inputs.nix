@@ -14,7 +14,7 @@ system:
       import
         (fetchGit
            { url = "https://github.com/justinwoo/easy-purescript-nix.git";
-             rev = "47bdc016c7d56e987ca1aca690b1d6c9816a8584";
+             rev = "bbef4245cd6810ea84e97a47c801947bfec9fadc";
            }
         )
         { inherit pkgs; };
