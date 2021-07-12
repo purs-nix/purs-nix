@@ -921,9 +921,9 @@ exceptions =
   };
 
 exists =
-  { version = "5.0.0";
+  { version = "5.1.0";
     repo = "https://github.com/purescript/purescript-exists.git";
-    rev = "435ca7199d101a88c56fa9590532d3d4815f3d9b";
+    rev = "c34820f8b2d15be29abdd5097c3d636f5df8f28c";
 
     dependencies =
       [ unsafe-coerce 
@@ -997,6 +997,26 @@ fixed-precision =
 
     dependencies =
       [ bigints integers math maybe strings 
+      ];
+  };
+
+flame =
+  { version = "1.1.0";
+    repo = "https://github.com/easafe/purescript-flame.git";
+    rev = "9e0704600c5911fca646815ef82bd428a7c89263";
+
+    dependencies =
+      [ aff argonaut-codecs argonaut-core argonaut-generic arrays bifunctors console effect either exceptions foldable-traversable foreign foreign-object functions maybe newtype nullable partial prelude psci-support random refs strings test-unit tuples typelevel-prelude unsafe-coerce web-dom web-events web-html web-uievents 
+      ];
+  };
+
+float32 =
+  { version = "1.0.0";
+    repo = "https://github.com/purescript-contrib/purescript-float32.git";
+    rev = "02748809d05bf456334641a9fac8ae99e771f1d6";
+
+    dependencies =
+      [ gen maybe prelude 
       ];
   };
 
@@ -1231,9 +1251,9 @@ grain-virtualized =
   };
 
 graphql-client =
-  { version = "4.0.12";
+  { version = "4.0.13";
     repo = "https://github.com/OxfordAbstracts/purescript-graphql-client.git";
-    rev = "65e47808c71676813e14ef4beab22b1181263e8a";
+    rev = "04ddb8587d89d4938691d3f3fce21815ca499c75";
 
     dependencies =
       [ aff aff-promise affjax argonaut-codecs argonaut-core arrays bifunctors control datetime effect either enums exceptions foldable-traversable foreign foreign-generic foreign-object functions halogen-subscriptions heterogeneous http-methods integers lists maybe media-types newtype node-buffer node-fs nullable numbers ordered-collections parsing prelude profunctor profunctor-lenses psci-support quickcheck record spec spec-discovery string-parsers strings strings-extra transformers tuples typelevel-prelude unicode 
@@ -2201,9 +2221,9 @@ orders =
   };
 
 pairs =
-  { version = "7.0.0";
+  { version = "8.0.0";
     repo = "https://github.com/sharkdp/purescript-pairs.git";
-    rev = "8c220e4f51c33ef04291cab60af69729f768f8ea";
+    rev = "97ae3cce9b0e00ff9473fff2779fcbcb4d7bc597";
 
     dependencies =
       [ console distributive foldable-traversable quickcheck 
@@ -3451,12 +3471,12 @@ typelevel-prelude =
   };
 
 uint =
-  { version = "6.0.0";
-    repo = "https://github.com/zaquest/purescript-uint.git";
-    rev = "e8b80c76980b30527871ffeaa738daf59accb86a";
+  { version = "6.0.3";
+    repo = "https://github.com/purescript-contrib/purescript-uint.git";
+    rev = "17fda2aff989ad7fa9f29171bf4c1196ca9ed504";
 
     dependencies =
-      [ effect enums gen math maybe prelude psci-support quickcheck quickcheck-laws 
+      [ effect enums gen math maybe prelude 
       ];
   };
 
