@@ -140,10 +140,30 @@ argonaut-traversals =
       ];
   };
 
+arraybuffer =
+  { version = "11.0.1";
+    repo = "https://github.com/purescript-contrib/purescript-arraybuffer.git";
+    rev = "23eaac80d0f20f6de35b25374daf52b4ec75cc2c";
+
+    dependencies =
+      [ arraybuffer-types arrays effect float32 functions gen maybe nullable prelude tailrec uint unfoldable 
+      ];
+  };
+
+arraybuffer-builder =
+  { version = "2.1.0";
+    repo = "https://github.com/jamesdbrock/purescript-arraybuffer-builder.git";
+    rev = "24a01a6d3e30cc22a540aa970145b0409e8e0fb2";
+
+    dependencies =
+      [ arraybuffer arraybuffer-types effect float32 maybe prelude transformers uint 
+      ];
+  };
+
 arraybuffer-types =
-  { version = "3.0.0";
+  { version = "3.0.1";
     repo = "https://github.com/purescript-contrib/purescript-arraybuffer-types.git";
-    rev = "c15bd045c847a401531aab32c3e60ce94f2c5227";
+    rev = "b6c85c071bb600377e028f3d89042e2c7948dc9a";
 
     dependencies =
       [ 
@@ -251,9 +271,9 @@ bifunctors =
   };
 
 bigints =
-  { version = "5.0.0";
+  { version = "6.0.0";
     repo = "https://github.com/sharkdp/purescript-bigints.git";
-    rev = "54863140def3f25d131b1a4994a4fa91ef51f017";
+    rev = "d5151e04db7e18641fbb2b5892f4198b1cab5907";
 
     dependencies =
       [ integers maybe strings 
@@ -1251,9 +1271,9 @@ grain-virtualized =
   };
 
 graphql-client =
-  { version = "4.0.13";
+  { version = "4.0.16";
     repo = "https://github.com/OxfordAbstracts/purescript-graphql-client.git";
-    rev = "04ddb8587d89d4938691d3f3fce21815ca499c75";
+    rev = "67641733fb14956e09f36da863b173015b7f9e64";
 
     dependencies =
       [ aff aff-promise affjax argonaut-codecs argonaut-core arrays bifunctors control datetime effect either enums exceptions foldable-traversable foreign foreign-generic foreign-object functions halogen-subscriptions heterogeneous http-methods integers lists maybe media-types newtype node-buffer node-fs nullable numbers ordered-collections parsing prelude profunctor profunctor-lenses psci-support quickcheck record spec spec-discovery string-parsers strings strings-extra transformers tuples typelevel-prelude unicode 
@@ -1391,9 +1411,9 @@ halogen-subscriptions =
   };
 
 halogen-svg-elems =
-  { version = "3.0.0";
+  { version = "4.0.0";
     repo = "https://github.com/JordanMartinez/purescript-halogen-svg-elems.git";
-    rev = "82f3bc721541243a776e81357122cab563ac885d";
+    rev = "0efa80f414b11230dc30966e4b573b467bfa16d1";
 
     dependencies =
       [ halogen 
@@ -1761,9 +1781,9 @@ media-types =
   };
 
 metadata =
-  { version = "0.14.2";
+  { version = "0.14.3";
     repo = "https://github.com/spacchetti/purescript-metadata.git";
-    rev = "ee87513080c523742140f5e536971d0333f77106";
+    rev = "84e521cea497da2e6a6f57de725c8acfb7e7b24d";
 
     dependencies =
       [ 
@@ -1931,9 +1951,9 @@ node-buffer =
   };
 
 node-child-process =
-  { version = "7.0.0";
+  { version = "7.1.0";
     repo = "https://github.com/purescript-node/purescript-node-child-process.git";
-    rev = "e16bcd291d93c52f470f72f7dcf46e9936017279";
+    rev = "5c4e560eceead04efc1d5a3ec1f6de91bb1d512e";
 
     dependencies =
       [ exceptions foreign foreign-object functions node-fs node-streams nullable posix-types unsafe-coerce 
@@ -2247,6 +2267,16 @@ parsing =
 
     dependencies =
       [ arrays either foldable-traversable identity integers lists maybe prelude strings transformers unicode 
+      ];
+  };
+
+parsing-dataview =
+  { version = "2.0.1";
+    repo = "https://github.com/jamesdbrock/purescript-parsing-dataview.git";
+    rev = "be2996e505379c4902786b42ce564032c6298724";
+
+    dependencies =
+      [ arraybuffer arraybuffer-types effect float32 maybe parsing prelude transformers tuples uint 
       ];
   };
 
