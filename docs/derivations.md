@@ -2,7 +2,7 @@
 
 You can use **purs-nix** to make a derivations for your PureScript bundle, your compiler output, and to make executables. They all use incremental compiling, so you don't have you recompile your entire project every time you make a small change.
 
-You access these derivations via the [modules](./purs-nix.md#purs-modules) set, using the name of your module as the attribute.\
+You access these derivations via the [modules](./purs-nix.md#purs-modules) attribute set, using the name of your module as the attribute.\
 
 There are three different attributes for each module.
 

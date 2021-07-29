@@ -7,14 +7,14 @@ The flake for this repository is used inside your project's flake to set up your
 , pkgs ? (import ./inputs.nix).pkgs system
 }
 ```
-and returns a set with the following attributes:
-- `build`: A function for creating ad hoc PureScript packages. It's argument is a [package description set](adding-packages.md) with the `name` attribute required.
-- `ps-pkgs`: The set of all non-namespaced PureScript pacakges.
-- `ps-pkgs-ns`: The set of all namespaced PureScript packages.
+and returns an attribute set with the following attributes:
+- `build`: A function for creating ad hoc PureScript packages. It's argument is a [package description attributes set](adding-packages.md) with the `name` attribute required.
+- `ps-pkgs`: The attribute set of all non-namespaced PureScript pacakges.
+- `ps-pkgs-ns`: The attribute set of all namespaced PureScript packages.
 - `purs`: A function for building your project.
 - `purescript`: The PureScript package used for everything by default.
 - `purescript-language-server`: A build of purescript-language-server that detects `flake.nix`/`shell.nix` files as an indication of the workspace root being a PureScript project.
-- `licenses`: This is included for convienence so you can pass the returned set into a [package.nix](adding-packages.md#using-info).
+- `licenses`: This is included for convenience so you can pass the returned attribute set into a [package.nix](adding-packages.md#using-info).
 
 ### purs
 
@@ -35,8 +35,8 @@ and returns a set with the following attributes:
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
 
-and returns a set with the following attributes:
-- <span id="purs-modules">`modules`</span>: A set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).
+and returns an attribute set with the following attributes:
+- <span id="purs-modules">`modules`</span>: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).
 - `command`: A functions that builds the `purs-nix` command which you can then add to your Nix shell.
 
 ### command
@@ -89,7 +89,7 @@ and returns a set with the following attributes:
   }
   ```
     - `dependencies`: A list of your project's dependencies.
-	- `pursuit`: A set of all the additional information required to make a `bower.json` in order to publish to Pursuit.
+	- `pursuit`: An attribute set of all the additional information required to make a `bower.json` in order to publish to Pursuit.
 
 	  ```
 	  { name
