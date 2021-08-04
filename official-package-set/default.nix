@@ -1430,6 +1430,16 @@ halogen-vdom =
       ];
   };
 
+heckin =
+  { version = "2.0.0";
+    repo = "https://github.com/maxdeviant/purescript-heckin.git";
+    rev = "07cb4adc84d9d04b95457db81c9d4551029fdca1";
+
+    dependencies =
+      [ arrays foldable-traversable maybe prelude strings transformers tuples unicode 
+      ];
+  };
+
 heterogeneous =
   { version = "0.5.1";
     repo = "https://github.com/natefaubion/purescript-heterogeneous.git";
@@ -2110,6 +2120,16 @@ now =
       ];
   };
 
+npm-package-json =
+  { version = "2.0.0";
+    repo = "https://github.com/maxdeviant/purescript-npm-package-json.git";
+    rev = "e35325d9cc2ee491fbb891388b8be820c79c0b9c";
+
+    dependencies =
+      [ argonaut control either foreign-object maybe ordered-collections prelude 
+      ];
+  };
+
 nullable =
   { version = "5.0.0";
     repo = "https://github.com/purescript-contrib/purescript-nullable.git";
@@ -2507,6 +2527,16 @@ promises =
 
     dependencies =
       [ console datetime exceptions functions prelude transformers 
+      ];
+  };
+
+protobuf =
+  { version = "2.1.1";
+    repo = "https://github.com/xc-jp/purescript-protobuf.git";
+    rev = "0ae06894ae8c8dac914aa570aa6e10aa773a76c1";
+
+    dependencies =
+      [ arraybuffer arraybuffer-builder arraybuffer-types arrays control effect either enums float32 foldable-traversable longs maybe newtype parsing parsing-dataview partial prelude quickcheck record strings tailrec text-encoding transformers tuples uint 
       ];
   };
 
