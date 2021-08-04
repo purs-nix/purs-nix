@@ -31,7 +31,7 @@ and returns an attribute set with the following attributes:
 
 - `dependencies`: A list of all your project's dependencies. You can get these from `ps-pkgs`/`ps-pkgs-ns`.
 - `test-dependencies`: A list of all your projects's dependencies that are only needed for testing.
-- `srcs`: A list Nix path values pointing to your PureScript source directory. This is not required if you're only using the Nix shell.
+- `srcs`: A list of Nix path values pointing to your PureScript source directories. This is not required if you're only using the Nix shell.
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
 
@@ -103,7 +103,7 @@ and returns an attribute set with the following attributes:
 
 - `test`: A string representing the path of your testing code.
 - `test-module`: The name of the module whose `main` function will be run when using `purs-nix test`.
-- `name:` The name of the command. Use this if you need to create commands with different configurations.
+- `name`: The name of the command. Use this if you need to create commands with different configurations.
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
 
