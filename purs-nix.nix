@@ -110,8 +110,10 @@ system:
 
             src =
               let
+                graph-path = local-graph.${name}.path;
+
                 purs-path =
-                  let matches = match "/nix/store/[^/]+/(.+)$" local-graph.${name}.path; in
+                  let matches = match "/nix/store/[^/]+/(.+)$" graph-path; in
                   if matches != null then
                     head matches
                   else
@@ -121,7 +123,6 @@ system:
 
                 subsrc =
                   let
-                    graph-path = local-graph.${name}.path;
                     matches = match "(/nix/store/[^/]+/.+)/[^/]+$" graph-path;
 
                     src' =
