@@ -122,7 +122,7 @@ system:
                 subsrc =
                   let
                     graph-path = local-graph.${name}.path;
-                    matches = match "/nix/store/[^/]+/(.+)/[^/]+$" graph-path;
+                    matches = match "(/nix/store/[^/]+/.+)/[^/]+$" graph-path;
 
                     src' =
                       l.findFirst
@@ -130,10 +130,7 @@ system:
                         (throw "should always find a match")
                         srcs;
                   in
-                  if matches == null then
-                    src'
-                  else
-                    src' + ("/" + head matches);
+                  if matches == null then src' else head matches;
               in
               filterSource
                 (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
