@@ -10,28 +10,24 @@
                effect
                prelude
                (purs-nix.build
-                  { name = "typeable";
-                    repo = "https://github.com/ajnsit/purescript-typeable.git";
-                    ref = "main";
-                    rev = "836a3e10da7a85636ef629ae8e927a5429606b56";
+                  { name = "node-glob-basic";
+                    version = "1.2.0";
+                    repo = "https://github.com/natefaubion/purescript-node-glob-basic.git";
+                    rev = "22b374b30537a945310fb8049f5bce1b51a7a669";
 
                     dependencies =
                       with ps-pkgs;
-                      [ arrays
-                        const
-                        control
-                        either
-                        exists
-                        foldable-traversable
-                        identity
-                        leibniz
-                        maybe
-                        newtype
-                        prelude
-                        psci-support
-                        tuples
-                        unsafe-coerce
-                      ];
+                        [ aff
+                          console
+                          effect
+                          lists
+                          maybe
+                          node-fs-aff
+                          node-path
+                          node-process
+                          ordered-collections
+                          strings
+                        ];
                   }
                )
              ];
