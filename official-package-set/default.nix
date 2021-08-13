@@ -190,6 +190,16 @@ arrays-zipper =
       ];
   };
 
+ask =
+  { version = "1.0.0";
+    repo = "https://github.com/Mateiadrielrafael/purescript-ask.git";
+    rev = "536e8f5855222c580d198f9742e6de012bd1a4c7";
+
+    dependencies =
+      [ unsafe-coerce 
+      ];
+  };
+
 "assert" =
   { version = "5.0.0";
     repo = "https://github.com/purescript/purescript-assert.git";
@@ -861,9 +871,9 @@ either =
   };
 
 elasticsearch =
-  { version = "0.1.0";
+  { version = "0.1.1";
     repo = "https://github.com/ConnorDillon/purescript-elasticsearch.git";
-    rev = "38d3a01ae012ff1849fb5c40535bb6dbab1a3e11";
+    rev = "e2822b8e230615518608f3c4f37c2a61918fce4f";
 
     dependencies =
       [ aff aff-promise argonaut ps-pkgs."assert" console effect foreign-object literals maybe prelude psci-support typelevel-prelude unsafe-coerce untagged-union 
@@ -2580,6 +2590,16 @@ psci-support =
       ];
   };
 
+quantities =
+  { version = "11.0.0";
+    repo = "https://github.com/sharkdp/purescript-quantities.git";
+    rev = "897803d59cad55268c5d651fcbbc21ebc93a8a02";
+
+    dependencies =
+      [ decimals either foldable-traversable lists math maybe newtype nonempty numbers pairs prelude tuples 
+      ];
+  };
+
 queue =
   { version = "8.0.2";
     repo = "https://github.com/athanclark/purescript-queue.git";
@@ -2960,6 +2980,16 @@ run =
       ];
   };
 
+run-external-state =
+  { version = "1.0.0";
+    repo = "https://github.com/Mateiadrielrafael/purescript-run-external-state.git";
+    rev = "7c411a82202eb41223e4ca1b0cd40cc3f7b29b53";
+
+    dependencies =
+      [ effect maybe prelude profunctor-lenses refs run tuples typelevel-prelude 
+      ];
+  };
+
 safe-coerce =
   { version = "1.0.0";
     repo = "https://github.com/purescript/purescript-safe-coerce.git";
@@ -3237,6 +3267,16 @@ st =
 
     dependencies =
       [ partial prelude tailrec unsafe-coerce 
+      ];
+  };
+
+strictlypositiveint =
+  { version = "1.0.1";
+    repo = "https://github.com/jamieyung/purescript-strictlypositiveint.git";
+    rev = "feb38c7d0d8c50eeda4c263daf40817b9f9e374d";
+
+    dependencies =
+      [ prelude 
       ];
   };
 
@@ -3530,6 +3570,16 @@ typelevel-prelude =
       ];
   };
 
+typelevel-rows =
+  { version = "0.1.0";
+    repo = "https://github.com/jordanmartinez/purescript-typelevel-rows.git";
+    rev = "2277c6ba93ed11a12af492ec0bdd90f75f042eec";
+
+    dependencies =
+      [ prelude 
+      ];
+  };
+
 uint =
   { version = "6.0.3";
     repo = "https://github.com/purescript-contrib/purescript-uint.git";
@@ -3537,6 +3587,16 @@ uint =
 
     dependencies =
       [ effect enums gen math maybe prelude 
+      ];
+  };
+
+ulid =
+  { version = "2.0.0";
+    repo = "https://github.com/maxdeviant/purescript-ulid.git";
+    rev = "754af18072fd520d939f5c7aa500bc135fbc002d";
+
+    dependencies =
+      [ effect functions maybe nullable prelude 
       ];
   };
 
@@ -3977,6 +4037,16 @@ zeta-extra =
 
     dependencies =
       [ js-timers web-html zeta 
+      ];
+  };
+
+zipperarray =
+  { version = "1.1.0";
+    repo = "https://github.com/jamieyung/purescript-zipperarray.git";
+    rev = "e48d7e4fb1657a77034217ff14ff75d3ccfb87f5";
+
+    dependencies =
+      [ arrays maybe naturals prelude strictlypositiveint 
       ];
   };
 

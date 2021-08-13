@@ -1,33 +1,95 @@
 { ps-pkgs, ps-pkgs-ns }@pkgs:
   with ps-pkgs;
-  (import ./official-package-set ps-pkgs)
+  { argparse-basic =
+      { version = "1.0.0";
+        repo = "https://github.com/natefaubion/purescript-argparse-basic.git";
+        rev = "cad9bd94a84ccf50c53be2f21ab5941a0a9ffeb9";
+
+        dependencies =
+          [ arrays
+            const
+            effect
+            either
+            filterable
+            foldable-traversable
+            free
+            functors
+            maybe
+            numbers
+            strings
+            transformers
+            tuples
+            typelevel-prelude
+          ];
+      };
+
+    node-glob-basic =
+      { version = "1.2.0";
+        repo = "https://github.com/natefaubion/purescript-node-glob-basic.git";
+        rev = "22b374b30537a945310fb8049f5bce1b51a7a669";
+
+        dependencies =
+          [ aff
+            console
+            effect
+            lists
+            maybe
+            node-fs-aff
+            node-path
+            node-process
+            ordered-collections
+            strings
+          ];
+      };
+
+    node-workerbees =
+      { version = "0.1.2";
+        repo = "https://github.com/natefaubion/purescript-node-workerbees.git";
+        rev = "5ab52953b64f05b97e8605755708e483c3c44722";
+
+        dependencies =
+          [ aff
+            argonaut-core
+            arraybuffer-types
+            avar
+            effect
+            either
+            exceptions
+            maybe
+            newtype
+            parallel
+            variant
+          ];
+      };
+
+    purescript-language-cst-parser =
+      { version = "0.9.0";
+        repo = "https://github.com/natefaubion/purescript-language-cst-parser.git";
+        rev = "0b2410c25f638dcf00089c206d9e4af65f5845d0";
+
+        dependencies =
+          [ arrays
+            const
+            effect
+            either
+            foldable-traversable
+            free
+            functors
+            maybe
+            numbers
+            ordered-collections
+            strings
+            transformers
+            tuples
+            typelevel-prelude
+          ];
+      };
+  }
+  // (import ./official-package-set ps-pkgs)
   // { event =
          { repo = "https://github.com/ursi/purescript-event.git";
            rev = "8332a25a65e1b939de5b778325b8e6a8571a2e7c";
            info = /package.nix;
-         };
-
-       language-cst-parser =
-         { version = "0.7.1";
-           repo = "https://github.com/natefaubion/purescript-language-cst-parser.git";
-           rev = "0fa3a7a49e63b85895e50676e506a45f2aaffb08";
-
-           dependencies =
-             [ arrays
-               const
-               effect
-               either
-               filterable
-               foldable-traversable
-               free
-               functors
-               maybe
-               numbers
-               strings
-               transformers
-               tuples
-               typelevel-prelude
-             ];
          };
 
        point-free =
