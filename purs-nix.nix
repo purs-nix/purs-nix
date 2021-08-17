@@ -200,7 +200,7 @@ system:
               { name
               , version ? null
               , command ? name
-              , auto-flags ? true
+              , auto-flags ? false
               }:
               let
                 exe =

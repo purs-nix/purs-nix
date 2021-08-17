@@ -38,7 +38,7 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
 { name
 , version ? null
 , command ? name
-, auto-flags ? true
+, auto-flags ? false
 }
 ```
 - `name`: The `pname`/`name` of the derivation.
