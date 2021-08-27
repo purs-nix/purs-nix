@@ -21,19 +21,19 @@ with builtins;
     l = p.lib; p = pkgs; u = import ./utils.nix;
     compiler-output = output;
 
-    bundle' =
-      { output ? "index.js", ... }@args:
+    bundle' = { output ? "index.js", ... }@args:
+      u.bundle
+        purescript
+        (args
+         // { files = compiler-output;
+              inherit output;
+            }
+        );
+
+    compile-and-bundle = args:
       ''
       ${name} compile
-
-      ${u.bundle
-          purescript
-          (args
-           // { files = compiler-output;
-                inherit output;
-              }
-          )
-      }
+      ${bundle' args}
       '';
 
     compile' = args:
@@ -152,10 +152,10 @@ with builtins;
             ${compile' compile}
             chmod -R u+w ${output};;
 
-          bundle ) ${bundle' bundle};;
+          bundle ) ${compile-and-bundle bundle};;
 
           run )
-            ${bundle' (bundle // { output = run-output; })}
+            ${compile-and-bundle (bundle // { output = run-output; })}
             ${nodejs}/bin/node ${run-output};;
 
           test )
