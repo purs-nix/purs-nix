@@ -541,9 +541,9 @@ checked-exceptions =
   };
 
 cheerio =
-  { version = "0.2.3";
+  { version = "0.2.4";
     repo = "https://github.com/icyrockcom/purescript-cheerio.git";
-    rev = "b7895186caa6f3a6b16fdf915bdbb5dc44a66495";
+    rev = "c1f4f1068dbd83516bf3eb7c3bbe6e5159b15c45";
 
     dependencies =
       [ console effect functions prelude test-unit 
@@ -751,9 +751,9 @@ decimals =
   };
 
 dexie =
-  { version = "0.1.2";
+  { version = "0.3.0";
     repo = "https://github.com/mushishi78/purescript-dexie.git";
-    rev = "2148d70c6713c4059e9fd39b9061fcaa7c24cd3b";
+    rev = "104bbecda91e8986d9f6d1ea346fee7b48cf8fca";
 
     dependencies =
       [ aff control effect either exceptions foreign foreign-object maybe nullable prelude psci-support transformers tuples 
@@ -771,9 +771,9 @@ distributive =
   };
 
 dodo-printer =
-  { version = "2.0.0";
+  { version = "2.1.0";
     repo = "https://github.com/natefaubion/purescript-dodo-printer.git";
-    rev = "81264c9815251fc94ca74122cbafd732011edf7b";
+    rev = "540dba0442abe686c0b211868d6f423e5df81b69";
 
     dependencies =
       [ aff ansi avar console effect foldable-traversable lists maybe minibench node-child-process node-fs-aff node-process psci-support strings 
@@ -987,6 +987,16 @@ express =
 
     dependencies =
       [ aff arrays effect either exceptions foreign foreign-generic foreign-object functions maybe node-http prelude psci-support strings test-unit transformers unsafe-coerce 
+      ];
+  };
+
+fast-vect =
+  { version = "0.2.0";
+    repo = "https://github.com/sigma-andex/purescript-fast-vect.git";
+    rev = "c686c2a6acac329468617c7f558b646173b9df3a";
+
+    dependencies =
+      [ arrays maybe partial prelude tuples 
       ];
   };
 
@@ -1281,9 +1291,9 @@ grain-virtualized =
   };
 
 graphql-client =
-  { version = "4.0.16";
+  { version = "4.0.18";
     repo = "https://github.com/OxfordAbstracts/purescript-graphql-client.git";
-    rev = "67641733fb14956e09f36da863b173015b7f9e64";
+    rev = "0602f8486da97e98f6a6852a208bcd2879b6cac0";
 
     dependencies =
       [ aff aff-promise affjax argonaut-codecs argonaut-core arrays bifunctors control datetime effect either enums exceptions foldable-traversable foreign foreign-generic foreign-object functions halogen-subscriptions heterogeneous http-methods integers lists maybe media-types newtype node-buffer node-fs nullable numbers ordered-collections parsing prelude profunctor profunctor-lenses psci-support quickcheck record spec spec-discovery string-parsers strings strings-extra transformers tuples typelevel-prelude unicode 
@@ -1321,9 +1331,9 @@ group =
   };
 
 halogen =
-  { version = "6.1.2";
+  { version = "6.1.3";
     repo = "https://github.com/purescript-halogen/purescript-halogen.git";
-    rev = "34dddd902497a8c5f485684644243f472ff4871a";
+    rev = "79b86b70ab0848a3551e1dac1d854036ad23d833";
 
     dependencies =
       [ aff avar console const dom-indexed effect foreign fork free freeap halogen-subscriptions halogen-vdom media-types nullable ordered-collections parallel profunctor transformers unsafe-coerce unsafe-reference web-file web-uievents 
@@ -1391,12 +1401,12 @@ halogen-select =
   };
 
 halogen-store =
-  { version = "0.1.1";
+  { version = "0.2.0";
     repo = "https://github.com/thomashoneyman/purescript-halogen-store.git";
-    rev = "6642636dd6cf0808b3675e565ef5c15249f9e8b5";
+    rev = "e262a17eb06a705b9207b598663b64a71714f428";
 
     dependencies =
-      [ aff effect foldable-traversable halogen halogen-subscriptions maybe prelude refs transformers unsafe-coerce unsafe-reference 
+      [ aff effect foldable-traversable halogen halogen-hooks halogen-subscriptions maybe prelude refs transformers unsafe-coerce unsafe-reference 
       ];
   };
 
@@ -2270,6 +2280,16 @@ orders =
       ];
   };
 
+owoify =
+  { version = "1.1.2";
+    repo = "https://github.com/deadshot465/purescript-owoify.git";
+    rev = "ae5e14260977f9b158dcb926d5a7a1b9f09eda66";
+
+    dependencies =
+      [ arrays bifunctors console effect either foldable-traversable integers lists maybe prelude psci-support random strings transformers tuples unfoldable 
+      ];
+  };
+
 pairs =
   { version = "8.0.0";
     repo = "https://github.com/sharkdp/purescript-pairs.git";
@@ -2397,6 +2417,16 @@ payload =
 
     dependencies =
       [ aff affjax arrays bifunctors console datetime effect either exceptions foldable-traversable foreign foreign-object http-methods integers js-date lists maybe media-types newtype node-buffer node-fs node-fs-aff node-http node-path node-streams node-url nullable ordered-collections prelude record refs simple-json strings stringutils test-unit transformers tuples type-equality typelevel-prelude unfoldable unsafe-coerce 
+      ];
+  };
+
+phaser =
+  { version = "0.0.1";
+    repo = "https://github.com/lfarroco/purescript-phaser.git";
+    rev = "0bf31acc146e170ce2849e2de251e6227bd2a561";
+
+    dependencies =
+      [ aff effect functions prelude 
       ];
   };
 
@@ -3461,9 +3491,9 @@ toppokki =
   };
 
 transformers =
-  { version = "5.1.0";
+  { version = "5.2.0";
     repo = "https://github.com/purescript/purescript-transformers.git";
-    rev = "6ddf2b6312762afd92c41d6379e711e516856d03";
+    rev = "1e5d4193b38c613c97ea1ebdb721c6b94cd8c50a";
 
     dependencies =
       [ control distributive effect either exceptions foldable-traversable identity lazy maybe newtype prelude tailrec tuples unfoldable 
@@ -3537,6 +3567,16 @@ typelevel =
 
     dependencies =
       [ partial prelude tuples typelevel-prelude unsafe-coerce 
+      ];
+  };
+
+typelevel-arithmetic =
+  { version = "0.1.0";
+    repo = "https://github.com/sigma-andex/purescript-typelevel-arithmetic.git";
+    rev = "d30ffc89b9a23c06680271fcf605206a8c370fd3";
+
+    dependencies =
+      [ prelude tuples 
       ];
   };
 
@@ -3661,9 +3701,9 @@ unicode =
   };
 
 unordered-collections =
-  { version = "2.1.0";
+  { version = "2.1.1";
     repo = "https://github.com/fehrenbach/purescript-unordered-collections.git";
-    rev = "e71612c6cf19cdadf3c43c6cbc374da6644c2deb";
+    rev = "e1f1f5d8f5d6eb29eeec384cbcd48e78912a631a";
 
     dependencies =
       [ arrays enums functions integers lists prelude record tuples typelevel-prelude 
@@ -3991,12 +4031,12 @@ web-xhr =
   };
 
 which =
-  { version = "0.1.0";
+  { version = "1.0.0";
     repo = "https://github.com/maxdeviant/purescript-which.git";
-    rev = "652f5477f908dbeb1e7de4cfbddd4970ab8a29ee";
+    rev = "c367e2657a4f8d7acf5c5ae0726a0973de7b1663";
 
     dependencies =
-      [ arrays console effect nullable psci-support 
+      [ arrays effect foreign maybe nullable options prelude 
       ];
   };
 
