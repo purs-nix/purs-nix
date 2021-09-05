@@ -991,12 +991,12 @@ express =
   };
 
 fast-vect =
-  { version = "0.2.0";
+  { version = "0.3.1";
     repo = "https://github.com/sigma-andex/purescript-fast-vect.git";
-    rev = "c686c2a6acac329468617c7f558b646173b9df3a";
+    rev = "8d7da03876a01adef52652563d5d6775c5e664f2";
 
     dependencies =
-      [ arrays maybe partial prelude tuples 
+      [ arrays maybe partial prelude tuples typelevel-arithmetic 
       ];
   };
 
@@ -2421,12 +2421,12 @@ payload =
   };
 
 phaser =
-  { version = "0.0.1";
+  { version = "0.2.0";
     repo = "https://github.com/lfarroco/purescript-phaser.git";
-    rev = "0bf31acc146e170ce2849e2de251e6227bd2a561";
+    rev = "3908379313823aa818bb9abc99071c9503742b61";
 
     dependencies =
-      [ aff effect functions prelude 
+      [ aff effect nullable prelude psci-support 
       ];
   };
 
