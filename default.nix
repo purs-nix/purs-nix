@@ -1,3 +1,1 @@
-with builtins;
-{ pkgs ? (import ./inputs.nix currentSystem).pkgs }:
-  import ./purs-nix.nix currentSystem
+{ system ? builtins.currentSystem }: import ./purs-nix.nix system
