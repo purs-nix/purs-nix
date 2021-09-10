@@ -36,5 +36,6 @@
 This is an incomplete list of things that are currently planned.
 
 - **FAQ/How To's:** I'd like to have an FAQ, but first I see which Qs are FA'd.
+- **Packaging foreign dependencies:** Being able to add dependencies that rely on npm packages without needing to use npm yourself would be a huge QoL upgrade.
 - **Package replacing:** I'd like to have an easy API for replacing one package with another, so instead of having to use a forked version of the package set, you can add your version of a package in your namespace, and then just replace the official version with yours inside your project. Something like: `replace-package tuple ursi.tuple dependencies`.
 - **Module renaming:** Since there is no more global module namespace, you may find that two packages have the same module name and cannot compile together. I think arbitrary module renaming should be possible, so I plan to explore this as a solution. Something like: `html-module.rename-module "Html" "HtmlModule.Html"`. I'd also like to add opt-in module name prefixing for indirect dependencies, to guarantee they never collide.
