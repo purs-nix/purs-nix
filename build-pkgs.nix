@@ -1,7 +1,7 @@
 with builtins;
-pkgs:
+{ pkgs, utils }:
   let
-    l = p.lib; p = pkgs; u = import ./utils.nix;
+    l = p.lib; p = pkgs; u = utils;
 
     build =
       { repo

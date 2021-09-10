@@ -4,6 +4,7 @@ with builtins;
 , dep-globs
 , pkgs
 , purescript'
+, utils
 }:
 { srcs ? [ "src" ]
 , globs ? concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') srcs)
@@ -18,7 +19,7 @@ with builtins;
 , purescript ? purescript'
 }:
   let
-    l = p.lib; p = pkgs; u = import ./utils.nix;
+    l = p.lib; p = pkgs; u = utils;
     compiler-output = output;
 
     bundle' = { output ? "index.js", ... }@args:

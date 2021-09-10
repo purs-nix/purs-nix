@@ -1,7 +1,7 @@
 with builtins;
 system:
   let
-    l = p.lib; p = pkgs; u = import ./utils.nix;
+    l = p.lib; p = pkgs; u = import ./utils.nix system;
 
     inherit (import ./inputs.nix system)
       builders
@@ -11,7 +11,9 @@ system:
 
     purescript' = easy-ps.purescript;
   in
-  { inherit (import ./build-pkgs.nix pkgs) build ps-pkgs ps-pkgs-ns;
+  { inherit (import ./build-pkgs.nix { inherit pkgs; utils = u; })
+      build ps-pkgs ps-pkgs-ns;
+
     inherit (pkgs.lib) licenses;
     purescript = purescript';
     inherit purescript-language-server;
@@ -123,15 +125,17 @@ system:
 
                 subsrc =
                   let
-                    matches = match "(/nix/store/[^/]+/.+)/[^/]+$" graph-path;
-
                     src' =
                       l.findFirst
                         (path: l.hasPrefix "${path}" graph-path)
                         (throw "should always find a match")
                         srcs;
+
+                    relative-path = u.subtract-string graph-path "${src'}";
+                    matches = match "(.+)/[^/]+$" relative-path;
                   in
-                  if matches == null then src' else head matches;
+                  if matches == null then src'
+                  else src' + head matches;
               in
               filterSource
                 (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
@@ -281,6 +285,7 @@ system:
             { all-dependencies = dependencies ++ test-dependencies;
               inherit all-dep-globs dep-globs pkgs;
               purescript' = purescript;
+              utils = u;
             };
       };
   }
