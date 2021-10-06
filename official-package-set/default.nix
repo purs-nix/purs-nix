@@ -261,9 +261,9 @@ barlow-lens =
   };
 
 basic-auth =
-  { version = "2.0.0";
+  { version = "2.1.0";
     repo = "https://github.com/oreshinya/purescript-basic-auth.git";
-    rev = "947be521a965f5dab18530299b10a4f6293266e5";
+    rev = "a0e04b18bcc3bc814aedb586cc4256b828f219fa";
 
     dependencies =
       [ crypto node-http 
@@ -490,6 +490,16 @@ canvas =
       ];
   };
 
+canvas-action =
+  { version = "7.0.0";
+    repo = "https://github.com/artemisSystem/purescript-canvas-action.git";
+    rev = "ef06b4fcb453d276abe57bd63c37e394edfc9ada";
+
+    dependencies =
+      [ aff arrays canvas colors effect either exceptions foldable-traversable math maybe numbers polymorphic-vectors prelude refs run transformers tuples type-equality typelevel-prelude unsafe-coerce web-dom web-events web-html 
+      ];
+  };
+
 cartesian =
   { version = "1.0.4";
     repo = "https://github.com/Ebmtranceboy/purescript-cartesian.git";
@@ -691,12 +701,12 @@ coroutines =
   };
 
 crypto =
-  { version = "3.0.0";
+  { version = "4.0.0";
     repo = "https://github.com/oreshinya/purescript-crypto.git";
-    rev = "64536c7d42bb78601a2747f5d327eddfba716263";
+    rev = "e6d0f50765181b5fe824eda62b1819e551878d91";
 
     dependencies =
-      [ node-buffer 
+      [ aff node-buffer nullable 
       ];
   };
 
@@ -827,6 +837,16 @@ drawing =
 
     dependencies =
       [ canvas colors integers lists math prelude 
+      ];
+  };
+
+droplet =
+  { version = "0.2.0";
+    repo = "https://github.com/easafe/purescript-droplet.git";
+    rev = "ac3879b59e103627a95a5082219f75cc4e2dcca1";
+
+    dependencies =
+      [ aff arrays bifunctors bigints datetime debug effect either enums exceptions foldable-traversable foreign foreign-object integers maybe newtype nullable partial prelude profunctor psci-support record strings test-unit transformers tuples type-equality typelevel-prelude unsafe-coerce 
       ];
   };
 
@@ -1041,9 +1061,9 @@ fixed-precision =
   };
 
 flame =
-  { version = "1.1.0";
+  { version = "1.1.1";
     repo = "https://github.com/easafe/purescript-flame.git";
-    rev = "9e0704600c5911fca646815ef82bd428a7c89263";
+    rev = "075c60738adec00089c4965dbbcbf6697ffb6974";
 
     dependencies =
       [ aff argonaut-codecs argonaut-core argonaut-generic arrays bifunctors console effect either exceptions foldable-traversable foreign foreign-object functions maybe newtype nullable partial prelude psci-support random refs strings test-unit tuples typelevel-prelude unsafe-coerce web-dom web-events web-html web-uievents 
@@ -1320,6 +1340,16 @@ graphs =
       ];
   };
 
+grid-reactors =
+  { version = "0.0.1";
+    repo = "https://github.com/Eugleo/purescript-grid-reactors.git";
+    rev = "1e208a8e4377bcbffe3c04873ab94e22f732416d";
+
+    dependencies =
+      [ aff arrays canvas-action colors console effect exceptions foldable-traversable free halogen halogen-hooks halogen-subscriptions heterogeneous integers maybe partial prelude psci-support random st tailrec transformers tuples web-events web-html web-uievents 
+      ];
+  };
+
 group =
   { version = "4.1.1";
     repo = "https://github.com/morganthomas/purescript-group.git";
@@ -1431,9 +1461,9 @@ halogen-subscriptions =
   };
 
 halogen-svg-elems =
-  { version = "4.0.0";
+  { version = "5.0.0";
     repo = "https://github.com/JordanMartinez/purescript-halogen-svg-elems.git";
-    rev = "0efa80f414b11230dc30966e4b573b467bfa16d1";
+    rev = "12c47bc8cd49f87326ae0c22eb966d2546e92ae4";
 
     dependencies =
       [ halogen 
@@ -1581,9 +1611,9 @@ integers =
   };
 
 interpolate =
-  { version = "2.0.1";
+  { version = "3.0.1";
     repo = "https://github.com/jordanmartinez/purescript-interpolate.git";
-    rev = "6fb77b0a45cacb025f71ccd07757db6486435234";
+    rev = "a9bc999a9c95e9e4b4621a10aa3580bf38759ae6";
 
     dependencies =
       [ prelude 
@@ -2571,9 +2601,9 @@ promises =
   };
 
 protobuf =
-  { version = "2.1.1";
+  { version = "2.1.2";
     repo = "https://github.com/xc-jp/purescript-protobuf.git";
-    rev = "0ae06894ae8c8dac914aa570aa6e10aa773a76c1";
+    rev = "0162d661e45f99d0d0c150158577f21b4ccd8ea2";
 
     dependencies =
       [ arraybuffer arraybuffer-builder arraybuffer-types arrays control effect either enums float32 foldable-traversable longs maybe newtype parsing parsing-dataview partial prelude quickcheck record strings tailrec text-encoding transformers tuples uint 
@@ -3141,9 +3171,9 @@ simple-json =
   };
 
 simple-jwt =
-  { version = "3.0.0";
+  { version = "3.1.0";
     repo = "https://github.com/oreshinya/purescript-simple-jwt.git";
-    rev = "a0f2433e7cff438a41b96593a66fda146392d9b2";
+    rev = "92b2f24b2f5982494262475bc6072c5ca41aee1e";
 
     dependencies =
       [ crypto simple-json strings 
@@ -3811,9 +3841,9 @@ vectorfield =
   };
 
 veither =
-  { version = "1.0.5";
+  { version = "1.0.6";
     repo = "https://github.com/JordanMartinez/purescript-veither.git";
-    rev = "415044af91e5e8f49fd35d7304d180c9857a19c8";
+    rev = "24b516ce716fa936c5f624fa8dc9fed084a39a6f";
 
     dependencies =
       [ aff arrays console control effect either enums foldable-traversable invariant lists maybe newtype partial prelude quickcheck quickcheck-laws record spec tuples unsafe-coerce variant 
