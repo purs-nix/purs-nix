@@ -35,8 +35,10 @@
     // utils.lib.eachDefaultSystem
          (system:
             let
-              l = p.lib; p = inputs.pkgs system; u = import ./utils.nix;
-              inherit (import ./build-pkgs.nix p) ps-pkgs ps-pkgs-ns;
+              l = p.lib; p = (inputs system).pkgs;
+              u = import ./utils.nix system;
+              build-pkgs = import ./build-pkgs.nix { pkgs = p; utils = u; };
+              inherit (build-pkgs) ps-pkgs ps-pkgs-ns;
             in
             { apps =
                 { package-info =
