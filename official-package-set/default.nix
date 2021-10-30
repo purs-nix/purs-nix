@@ -770,6 +770,16 @@ dexie =
       ];
   };
 
+dissect =
+  { version = "0.1.0";
+    repo = "https://github.com/PureFunctor/purescript-dissect.git";
+    rev = "d53407774afc993bac1a5ac6a13d41d1565cc8c4";
+
+    dependencies =
+      [ bifunctors either functors partial prelude tailrec tuples typelevel-prelude unsafe-coerce 
+      ];
+  };
+
 distributive =
   { version = "5.0.0";
     repo = "https://github.com/purescript/purescript-distributive.git";
@@ -3767,6 +3777,16 @@ unsafe-reference =
 
     dependencies =
       [ prelude 
+      ];
+  };
+
+untagged-to-tagged =
+  { version = "0.1.3";
+    repo = "https://github.com/sigma-andex/purescript-untagged-to-tagged.git";
+    rev = "dd454e5331312a6410c514328e25ca0ab34e4961";
+
+    dependencies =
+      [ either newtype prelude untagged-union 
       ];
   };
 
