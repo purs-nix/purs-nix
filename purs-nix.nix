@@ -1,12 +1,11 @@
 with builtins;
-system:
+{ pkgs, system }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix system;
 
     inherit (import ./inputs.nix system)
       builders
       easy-ps
-      pkgs
       purescript-language-server;
 
     purescript' = easy-ps.purescript;
