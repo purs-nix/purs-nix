@@ -85,7 +85,7 @@
           ];
       };
   }
-  // (import ./official-package-set ps-pkgs)
+  // import ./official-package-set ps-pkgs
   // { event =
          { repo = "https://github.com/ursi/purescript-event.git";
            rev = "8332a25a65e1b939de5b778325b8e6a8571a2e7c";
