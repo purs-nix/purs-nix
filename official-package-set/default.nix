@@ -1161,9 +1161,9 @@ format =
   };
 
 formatters =
-  { version = "5.0.1";
+  { version = "6.0.0";
     repo = "https://github.com/purescript-contrib/purescript-formatters.git";
-    rev = "8b438ae3d805eb04c7fd8fd530cf8f5c2a31e93f";
+    rev = "b2e65b2bccd09a3c17a396f07e13e5cdca90e4e4";
 
     dependencies =
       [ datetime fixed-points lists numbers parsing prelude transformers 
@@ -1321,9 +1321,9 @@ grain-virtualized =
   };
 
 graphql-client =
-  { version = "4.0.18";
+  { version = "7.0.0";
     repo = "https://github.com/OxfordAbstracts/purescript-graphql-client.git";
-    rev = "0602f8486da97e98f6a6852a208bcd2879b6cac0";
+    rev = "bda92769c306f579f2cfa406b1f1a81d1bf76254";
 
     dependencies =
       [ aff aff-promise affjax argonaut-codecs argonaut-core arrays bifunctors control datetime effect either enums exceptions foldable-traversable foreign foreign-generic foreign-object functions halogen-subscriptions heterogeneous http-methods integers lists maybe media-types newtype node-buffer node-fs nullable numbers ordered-collections parsing prelude profunctor profunctor-lenses psci-support quickcheck record spec spec-discovery string-parsers strings strings-extra transformers tuples typelevel-prelude unicode 
@@ -2351,9 +2351,9 @@ parallel =
   };
 
 parsing =
-  { version = "6.0.2";
+  { version = "7.0.0";
     repo = "https://github.com/purescript-contrib/purescript-parsing.git";
-    rev = "d085e3740560d4dcdd710775e4181129be378b89";
+    rev = "970a539694b071161888eebdb8a18a34a7cb4e78";
 
     dependencies =
       [ arrays either foldable-traversable identity integers lists maybe prelude strings transformers unicode 
@@ -2380,16 +2380,6 @@ parsing-expect =
       ];
   };
 
-parsing-hexadecimal =
-  { version = "0.0.2";
-    repo = "https://github.com/markfarrell/purescript-parsing-hexadecimal.git";
-    rev = "cd072b43efb4800b8b8ddc59ad601ff8464e16ce";
-
-    dependencies =
-      [ console effect parsing parsing-expect prelude psci-support 
-      ];
-  };
-
 parsing-repetition =
   { version = "0.0.6";
     repo = "https://github.com/markfarrell/purescript-parsing-repetition.git";
@@ -2407,16 +2397,6 @@ parsing-replace =
 
     dependencies =
       [ parsing 
-      ];
-  };
-
-parsing-uuid =
-  { version = "0.0.3";
-    repo = "https://github.com/markfarrell/purescript-parsing-uuid.git";
-    rev = "91bc6f407025d9eb6aa3fc4455bcdee32cad8cf2";
-
-    dependencies =
-      [ console effect parsing parsing-expect parsing-hexadecimal parsing-repetition prelude psci-support 
       ];
   };
 
