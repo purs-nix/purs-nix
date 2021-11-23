@@ -31,12 +31,12 @@ aff =
   };
 
 aff-bus =
-  { version = "5.0.0";
+  { version = "5.0.1";
     repo = "https://github.com/purescript-contrib/purescript-aff-bus.git";
-    rev = "a3122bcacffff9365ebec8c13bc5ed2810a7818e";
+    rev = "b4641844fafd25ab9d1ae1eceb4e9a4fcdec3a27";
 
     dependencies =
-      [ avar effect prelude 
+      [ aff avar console effect either exceptions foldable-traversable lists prelude refs tailrec transformers tuples 
       ];
   };
 
@@ -141,9 +141,9 @@ argonaut-traversals =
   };
 
 arraybuffer =
-  { version = "11.0.1";
+  { version = "12.0.0";
     repo = "https://github.com/purescript-contrib/purescript-arraybuffer.git";
-    rev = "23eaac80d0f20f6de35b25374daf52b4ec75cc2c";
+    rev = "3fb33d1568959fb44c822024e0d958b1a49ac189";
 
     dependencies =
       [ arraybuffer-types arrays effect float32 functions gen maybe nullable prelude tailrec uint unfoldable 
@@ -911,12 +911,12 @@ elasticsearch =
   };
 
 elmish =
-  { version = "0.5.1";
+  { version = "0.5.6";
     repo = "https://github.com/collegevine/purescript-elmish.git";
-    rev = "888c71fd7ab02ca3532c1d7e39372cd45d920f13";
+    rev = "f5931a70c154ea11964cb238f76015560281dd28";
 
     dependencies =
-      [ aff argonaut-core console debug either foreign-object functions maybe prelude record tuples typelevel-prelude web-html 
+      [ aff argonaut-core arrays bifunctors console debug effect either foldable-traversable foreign foreign-object functions integers js-date maybe nullable partial prelude refs strings typelevel-prelude unsafe-coerce web-dom web-html 
       ];
   };
 
@@ -926,7 +926,7 @@ elmish-html =
     rev = "7b4eac9c217efaef2fcab9711e22732e7151acfc";
 
     dependencies =
-      [ elmish foreign-object 
+      [ elmish foreign-object record 
       ];
   };
 
@@ -1181,9 +1181,9 @@ framer-motion =
   };
 
 free =
-  { version = "6.0.1";
+  { version = "6.2.0";
     repo = "https://github.com/purescript/purescript-free.git";
-    rev = "3c90f01172329052d9af6ef3114c951f752221e3";
+    rev = "c185c0b2144ddfb2bc3ac2b345df32e33221b21d";
 
     dependencies =
       [ catenable-lists control distributive either exists foldable-traversable invariant lazy maybe prelude tailrec transformers tuples unsafe-coerce 
@@ -1251,9 +1251,9 @@ gen =
   };
 
 geometry-plane =
-  { version = "1.0.1";
+  { version = "1.0.2";
     repo = "https://github.com/Ebmtranceboy/purescript-geometry-plane.git";
-    rev = "2595eba865444886e52d370b986a959e4c0e3463";
+    rev = "b682cecc75d1ed696d94815d52e69f6bbe07a025";
 
     dependencies =
       [ console effect psci-support sparse-polynomials 
@@ -1271,9 +1271,9 @@ github-actions-toolkit =
   };
 
 gl-matrix =
-  { version = "2.0.1";
+  { version = "2.1.0";
     repo = "https://github.com/dirkz/purescript-gl-matrix.git";
-    rev = "7748b5652905437f14cd62a526a8fa25709e9e7a";
+    rev = "2dd0da84d885c8cdb9eb11f21300d5408220f945";
 
     dependencies =
       [ arrays effect foldable-traversable functions math partial prelude psci-support 
@@ -1351,12 +1351,12 @@ graphs =
   };
 
 grid-reactors =
-  { version = "0.0.1";
+  { version = "3.0.0";
     repo = "https://github.com/Eugleo/purescript-grid-reactors.git";
-    rev = "1e208a8e4377bcbffe3c04873ab94e22f732416d";
+    rev = "30bb8eb27d209c67315f457cc29cd35011331bd4";
 
     dependencies =
-      [ aff arrays canvas-action colors console effect exceptions foldable-traversable free halogen halogen-hooks halogen-subscriptions heterogeneous integers maybe partial prelude psci-support random st tailrec transformers tuples web-events web-html web-uievents 
+      [ arrays canvas-action colors effect exceptions foldable-traversable free halogen halogen-hooks halogen-subscriptions integers maybe partial prelude psci-support st tailrec transformers tuples web-events web-html web-uievents 
       ];
   };
 
@@ -1401,9 +1401,9 @@ halogen-css =
   };
 
 halogen-formless =
-  { version = "2.0.1";
+  { version = "2.2.0";
     repo = "https://github.com/thomashoneyman/purescript-halogen-formless.git";
-    rev = "516b170ebf78294b207960e99f8a7f3a556aa88f";
+    rev = "657225e2961963bac7c3dcf6c6447218a2811065";
 
     dependencies =
       [ halogen heterogeneous profunctor-lenses variant 
@@ -1441,9 +1441,9 @@ halogen-select =
   };
 
 halogen-store =
-  { version = "0.2.0";
+  { version = "0.2.1";
     repo = "https://github.com/thomashoneyman/purescript-halogen-store.git";
-    rev = "e262a17eb06a705b9207b598663b64a71714f428";
+    rev = "d6a3bd6af1ef97ff08547a1b94fb662ecffd137d";
 
     dependencies =
       [ aff effect foldable-traversable halogen halogen-hooks halogen-subscriptions maybe prelude refs transformers unsafe-coerce unsafe-reference 
@@ -1491,9 +1491,9 @@ halogen-vdom =
   };
 
 heckin =
-  { version = "2.0.0";
+  { version = "2.0.1";
     repo = "https://github.com/maxdeviant/purescript-heckin.git";
-    rev = "07cb4adc84d9d04b95457db81c9d4551029fdca1";
+    rev = "555af5c56c4097dec84e16ea73faed164d7de408";
 
     dependencies =
       [ arrays foldable-traversable maybe prelude strings transformers tuples unicode 
@@ -1851,9 +1851,9 @@ media-types =
   };
 
 metadata =
-  { version = "0.14.3";
+  { version = "0.14.5";
     repo = "https://github.com/spacchetti/purescript-metadata.git";
-    rev = "84e521cea497da2e6a6f57de725c8acfb7e7b24d";
+    rev = "eb0523fb217cb6d36779c0c740c2118d11616dc2";
 
     dependencies =
       [ 
@@ -1871,9 +1871,9 @@ midi =
   };
 
 milkis =
-  { version = "7.4.0";
+  { version = "7.5.0";
     repo = "https://github.com/justinwoo/purescript-milkis.git";
-    rev = "d84a56fbd8dd5227e7d9ebc3f7e9f8875b90efb6";
+    rev = "9d1d7eec0add72c54e3d991e594a7a454e24ae31";
 
     dependencies =
       [ aff-promise arraybuffer-types foreign-object prelude typelevel-prelude 
@@ -2051,9 +2051,9 @@ node-fs-aff =
   };
 
 node-he =
-  { version = "0.2.0";
+  { version = "0.3.0";
     repo = "https://github.com/justinwoo/purescript-node-he.git";
-    rev = "cde8bab1e741fa8ba169874bb7205e7c93b4f6df";
+    rev = "6b91b06e3dde1bf36089295c9cdd5194ab82c18b";
 
     dependencies =
       [ 
@@ -2121,9 +2121,9 @@ node-readline =
   };
 
 node-sqlite3 =
-  { version = "6.0.0";
+  { version = "7.0.0";
     repo = "https://github.com/justinwoo/purescript-node-sqlite3.git";
-    rev = "3f30c1b4c4bbe76ade0541afda19092b8afce403";
+    rev = "1a97b071dc82eb8833fb72482aa84729a2023e53";
 
     dependencies =
       [ aff foreign 
@@ -2161,9 +2161,9 @@ nodemailer =
   };
 
 nonempty =
-  { version = "6.0.0";
+  { version = "6.1.0";
     repo = "https://github.com/purescript/purescript-nonempty.git";
-    rev = "d3e91e3d6e06e5bdcc5b2c21c8e5d0f9b946bb9e";
+    rev = "7696eaf915da5333173bca7d779a51f91a525b83";
 
     dependencies =
       [ control foldable-traversable maybe prelude tuples unfoldable 
@@ -2291,9 +2291,9 @@ optparse =
   };
 
 ordered-collections =
-  { version = "2.0.1";
+  { version = "2.0.2";
     repo = "https://github.com/purescript/purescript-ordered-collections.git";
-    rev = "0e2bc89b3b29442dbaf5a23570aa2785449c6b9f";
+    rev = "1929b706b07e251995b6be51baa7995c61eb4d83";
 
     dependencies =
       [ arrays foldable-traversable gen lists maybe partial prelude st tailrec tuples unfoldable 
@@ -2351,9 +2351,9 @@ parallel =
   };
 
 parsing =
-  { version = "7.0.0";
+  { version = "7.0.1";
     repo = "https://github.com/purescript-contrib/purescript-parsing.git";
-    rev = "970a539694b071161888eebdb8a18a34a7cb4e78";
+    rev = "1ae48e7b75e934343579b1e5ba7606ea054e6362";
 
     dependencies =
       [ arrays either foldable-traversable identity integers lists maybe prelude strings transformers unicode 
@@ -2441,12 +2441,12 @@ payload =
   };
 
 phaser =
-  { version = "0.2.0";
+  { version = "0.4.0";
     repo = "https://github.com/lfarroco/purescript-phaser.git";
-    rev = "3908379313823aa818bb9abc99071c9503742b61";
+    rev = "f54fef4cbc5c08398ea37eb223086e1f2469b814";
 
     dependencies =
-      [ aff effect nullable prelude psci-support 
+      [ aff effect option prelude psci-support 
       ];
   };
 
@@ -3421,12 +3421,12 @@ sunde =
   };
 
 supply =
-  { version = "0.1.0";
+  { version = "0.2.0";
     repo = "https://github.com/ajnsit/purescript-supply.git";
-    rev = "d995ed7b0ae0eb1759230635e15ec7f5fd820594";
+    rev = "be1bd323ea7fcda72ec8daf4ca45172c7b1e916a";
 
     dependencies =
-      [ console effect lazy newtype refs tuples 
+      [ console control effect lazy prelude refs tuples 
       ];
   };
 
@@ -3601,9 +3601,9 @@ typelevel-arithmetic =
   };
 
 typelevel-lists =
-  { version = "2.0.1";
+  { version = "2.1.0";
     repo = "https://github.com/PureFunctor/purescript-typelevel-lists.git";
-    rev = "09ccf9373e63d25bf2e64f7ef4a5e701db7e94fd";
+    rev = "435206ebb9979db27e36e49329eae7ee5e3d7530";
 
     dependencies =
       [ prelude tuples typelevel-peano typelevel-prelude unsafe-coerce 
@@ -3711,9 +3711,9 @@ unfoldable =
   };
 
 unicode =
-  { version = "5.0.0";
+  { version = "5.0.1";
     repo = "https://github.com/purescript-contrib/purescript-unicode.git";
-    rev = "8e360802e31d080dec7f3ddf4d3329c56773490f";
+    rev = "2b66dcdb2ea533c7bc864574e860012c57ace2aa";
 
     dependencies =
       [ foldable-traversable maybe strings 
@@ -3721,9 +3721,9 @@ unicode =
   };
 
 unordered-collections =
-  { version = "2.1.1";
+  { version = "2.1.4";
     repo = "https://github.com/fehrenbach/purescript-unordered-collections.git";
-    rev = "e1f1f5d8f5d6eb29eeec384cbcd48e78912a631a";
+    rev = "1be289188cef093520098e318ec910cf3ea5b40d";
 
     dependencies =
       [ arrays enums functions integers lists prelude record tuples typelevel-prelude 
@@ -3961,9 +3961,9 @@ web-file =
   };
 
 web-html =
-  { version = "3.1.0";
+  { version = "3.2.0";
     repo = "https://github.com/purescript-web/purescript-web-html.git";
-    rev = "9e657a0632f7f6514c3d5d2eb4b7dbbfe0d97185";
+    rev = "3a249b966ee72c19874b4a2ec6db4059087500e4";
 
     dependencies =
       [ js-date web-dom web-file web-storage 
