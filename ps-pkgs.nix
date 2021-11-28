@@ -94,7 +94,7 @@
 
        point-free =
          { repo = "https://github.com/ursi/purescript-point-free.git";
-           rev = "703a87be330e762d66148e9baa3c1b9f5c6f148f";
+           rev = "e4291b1c982312c9dd13e33fdd428817d08548cd";
            info = /package.nix;
          };
 

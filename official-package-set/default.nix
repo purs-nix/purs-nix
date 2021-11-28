@@ -2361,9 +2361,9 @@ parsing =
   };
 
 parsing-dataview =
-  { version = "2.0.1";
+  { version = "2.1.0";
     repo = "https://github.com/jamesdbrock/purescript-parsing-dataview.git";
-    rev = "be2996e505379c4902786b42ce564032c6298724";
+    rev = "e29558a1599ea27bb88278def56409f182e59474";
 
     dependencies =
       [ arraybuffer arraybuffer-types effect float32 maybe parsing prelude transformers tuples uint 
@@ -2971,9 +2971,9 @@ result =
   };
 
 return =
-  { version = "0.1.3";
+  { version = "0.1.4";
     repo = "https://github.com/ursi/purescript-return.git";
-    rev = "e0b2666405340f9ab1cc60ffd7288c9544965acf";
+    rev = "e839ebb8490b47a7af8b8f89f4dc9efa0b16b600";
 
     dependencies =
       [ foldable-traversable point-free prelude 
