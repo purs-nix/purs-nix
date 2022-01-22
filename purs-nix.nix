@@ -83,11 +83,11 @@ with builtins;
 
             partial =
               l.filterAttrs
-                (n: v: !deps-graph?${n})
+                (n: _: !deps-graph?${n})
                 graph;
           in
           mapAttrs
-            (module: v:
+            (_: v:
                { depends =
                    filter
                      (v: partial?${v})

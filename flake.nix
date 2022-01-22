@@ -39,7 +39,7 @@
          utils.default-systems
          ({ deadnix, make-shell, system, ... }:
             let
-              l = p.lib; p = (inputs system).pkgs;
+              p = (inputs system).pkgs;
               u = import ./utils.nix system;
               build-pkgs = import ./build-pkgs.nix { pkgs = p; utils = u; };
               inherit (build-pkgs) ps-pkgs ps-pkgs-ns;
@@ -47,7 +47,7 @@
             { apps =
                 { package-info =
                     mapAttrs
-                      (n: v:
+                      (_: v:
                          { type = "app";
                            program =
                              toString
@@ -61,9 +61,9 @@
 
                   package-info-ns =
                     mapAttrs
-                      (ns: ps-pkgs':
+                      (_: ps-pkgs':
                          mapAttrs
-                           (n: v:
+                           (_: v:
                               { type = "app";
                                 program =
                                   toString

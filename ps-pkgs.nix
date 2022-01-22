@@ -1,4 +1,4 @@
-{ ps-pkgs, ps-pkgs-ns }@pkgs:
+{ ps-pkgs, ps-pkgs-ns }:
   with ps-pkgs;
   { argparse-basic =
       { version = "1.0.0";
