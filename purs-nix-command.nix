@@ -33,18 +33,23 @@ with builtins;
 
     compile-and-bundle = args:
       ''
-      ${name} compile
+      ${compile'}
       ${bundle' args}
       '';
 
-    compile' = args:
-      u.compile
-        purescript
-        (args
-         // { globs = ''${globs} ${dep-globs}'';
-              inherit output;
-            }
-        );
+
+    compile' =
+      ''
+      ${u.compile
+          purescript
+            (compile
+             // { globs = ''${globs} ${dep-globs}'';
+                  inherit output;
+                }
+            )
+      }
+      chmod -R u+w ${output}
+      '';
 
     compile-test = args:
       u.compile
@@ -150,10 +155,12 @@ with builtins;
 
         case $1 in
           compile )
-            ${compile' compile}
-            chmod -R u+w ${output};;
+            ${compile'}
+            echo "Compilation complete";;
 
-          bundle ) ${compile-and-bundle bundle};;
+          bundle )
+            ${compile-and-bundle bundle}
+            echo "Bundling complete";;
 
           run )
             ${compile-and-bundle (bundle // { output = run-output; })}
