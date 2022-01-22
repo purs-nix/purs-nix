@@ -8,7 +8,7 @@
     utils.default-systems
       ({ make-shell, pkgs, purs-nix, ... }:
          let
-           inherit (purs-nix) ps-pkgs ps-pkgs-ns purs;
+           inherit (purs-nix) ps-pkgs purs;
 
            inherit
              (purs

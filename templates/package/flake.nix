@@ -8,7 +8,7 @@
     utils.default-systems
       ({ make-shell, purs-nix, pkgs, ... }:
          let
-           inherit (purs-nix) ps-pkgs ps-pkgs-ns purs;
+           inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix;
            inherit (purs { inherit (package) dependencies; }) command;
          in
