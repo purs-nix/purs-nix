@@ -1,11 +1,11 @@
 { inputs =
     { nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       purs-nix.url = "github:ursi/purs-nix";
-      utils.url = "github:ursi/flake-utils/3";
+      utils.url = "github:ursi/flake-utils/5";
     };
 
   outputs = { utils, ... }@inputs:
-    utils.default-systems
+    utils.for-default-systems
       ({ make-shell, pkgs, purs-nix, ... }:
          let
            inherit (purs-nix) ps-pkgs purs;
