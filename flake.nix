@@ -1,6 +1,9 @@
-{ inputs.utils.url = "github:numtide/flake-utils";
+{ inputs =
+    { deadnix.url = "github:astro/deadnix";
+      utils.url = "github:ursi/flake-utils/5";
+    };
 
-  outputs = { utils, ... }:
+  outputs = { utils, ... }@flake-inputs:
     with builtins;
     let inputs = import ./inputs.nix; in
     { __functor = _:
@@ -32,8 +35,9 @@
             };
         };
     }
-    // utils.lib.eachDefaultSystem
-         (system:
+    // utils.for-systems-with-pkgs
+         utils.default-systems
+         ({ deadnix, make-shell, system, ... }:
             let
               l = p.lib; p = (inputs system).pkgs;
               u = import ./utils.nix system;
@@ -73,6 +77,14 @@
                       )
                       ps-pkgs-ns;
                 };
+
+              devShell =
+                make-shell
+                  { packages = [ deadnix ];
+                    aliases.lint = ''find -name "*.nix" | xargs deadnix'';
+                  };
             }
-         );
+         )
+         (system: (inputs system).pkgs)
+         flake-inputs;
 }
