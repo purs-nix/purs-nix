@@ -1,7 +1,8 @@
 { inputs =
-    { nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    { make-shell.url = "github:ursi/nix-make-shell/1";
+      nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       purs-nix.url = "github:ursi/purs-nix";
-      utils.url = "github:ursi/flake-utils/5";
+      utils.url = "github:ursi/flake-utils/6";
     };
 
   outputs = { utils, ... }@inputs:
@@ -13,7 +14,6 @@
            inherit (purs { inherit (package) dependencies; }) command;
          in
          { devShell =
-             # https://github.com/ursi/nix-make-shell
              make-shell
                { packages =
                    with pkgs;
