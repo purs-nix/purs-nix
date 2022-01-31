@@ -80,6 +80,16 @@ affjax =
       ];
   };
 
+amazons =
+  { version = "1.0.1";
+    repo = "https://github.com/Forensor/purescript-amazons.git";
+    rev = "5abacdd8398baac866ad50fedc3f948e7b3567a2";
+
+    dependencies =
+      [ aff arrays effect foldable-traversable integers maybe numbers prelude psci-support quickcheck spec strings tuples versions 
+      ];
+  };
+
 ansi =
   { version = "6.1.0";
     repo = "https://github.com/hdgarrood/purescript-ansi.git";
@@ -690,6 +700,16 @@ control =
       ];
   };
 
+convertable-options =
+  { version = "1.0.0";
+    repo = "https://github.com/natefaubion/purescript-convertable-options.git";
+    rev = "58728f24d9a5f28e359b4e7940b347c80cb56c6a";
+
+    dependencies =
+      [ console effect maybe record 
+      ];
+  };
+
 coroutines =
   { version = "6.0.0";
     repo = "https://github.com/purescript-contrib/purescript-coroutines.git";
@@ -920,6 +940,26 @@ elmish =
       ];
   };
 
+elmish-enzyme =
+  { version = "0.0.1";
+    repo = "https://github.com/collegevine/purescript-elmish-enzyme.git";
+    rev = "5e3215b742c71cab4b0621653e0a208e55997478";
+
+    dependencies =
+      [ aff arrays console debug effect elmish exceptions foldable-traversable foreign functions prelude psci-support transformers 
+      ];
+  };
+
+elmish-hooks =
+  { version = "0.2.0";
+    repo = "https://github.com/collegevine/purescript-elmish-hooks.git";
+    rev = "a73885535bea6ac5e90394765d61a28bb84200b0";
+
+    dependencies =
+      [ aff console debug effect elmish prelude psci-support tuples 
+      ];
+  };
+
 elmish-html =
   { version = "0.3.1";
     repo = "https://github.com/collegevine/purescript-elmish-html.git";
@@ -1001,9 +1041,9 @@ exitcodes =
   };
 
 expect-inferred =
-  { version = "2.0.0";
+  { version = "3.0.0";
     repo = "https://github.com/justinwoo/purescript-expect-inferred.git";
-    rev = "e43dafbc2f8d25113d5d74121fe4f6cd8a328407";
+    rev = "f43fda03d49647e6c598fceee684168a76cc76eb";
 
     dependencies =
       [ prelude typelevel-prelude 
@@ -1471,9 +1511,9 @@ halogen-subscriptions =
   };
 
 halogen-svg-elems =
-  { version = "5.0.0";
+  { version = "5.0.1";
     repo = "https://github.com/JordanMartinez/purescript-halogen-svg-elems.git";
-    rev = "12c47bc8cd49f87326ae0c22eb966d2546e92ae4";
+    rev = "c710b9d50cd5952368cfa064c74ded12300cb66c";
 
     dependencies =
       [ halogen 
@@ -1980,6 +2020,16 @@ mysql =
       ];
   };
 
+nano-id =
+  { version = "1.0.0";
+    repo = "https://github.com/eikooc/nano-id.git";
+    rev = "458a4c22875894ce59ecb99fdd3116e605ad4120";
+
+    dependencies =
+      [ aff console effect lists maybe prelude psci-support random spec strings stringutils 
+      ];
+  };
+
 naturals =
   { version = "3.0.0";
     repo = "https://github.com/LiamGoodacre/purescript-naturals.git";
@@ -2031,9 +2081,9 @@ node-child-process =
   };
 
 node-fs =
-  { version = "6.1.0";
+  { version = "6.2.0";
     repo = "https://github.com/purescript-node/purescript-node-fs.git";
-    rev = "09a2b71a3a86f0cd19c46f4b6c40310cc1648909";
+    rev = "3cb63cc55a02e506fe07d3940a50d6f0eb6ca2f2";
 
     dependencies =
       [ datetime effect either enums exceptions functions integers js-date maybe node-buffer node-path node-streams nullable partial prelude strings unsafe-coerce 
@@ -2351,9 +2401,9 @@ parallel =
   };
 
 parsing =
-  { version = "7.0.1";
+  { version = "8.2.0";
     repo = "https://github.com/purescript-contrib/purescript-parsing.git";
-    rev = "1ae48e7b75e934343579b1e5ba7606ea054e6362";
+    rev = "843a41b3a5ab9885927df476f3908d4555da3108";
 
     dependencies =
       [ arrays either foldable-traversable identity integers lists maybe prelude strings transformers unicode 
@@ -2471,9 +2521,9 @@ pipes =
   };
 
 point-free =
-  { version = "0.1.3";
+  { version = "1.0.0";
     repo = "https://github.com/ursi/purescript-point-free.git";
-    rev = "4ebf719da1733f6252c469c7fcff8053d2933b7c";
+    rev = "e4291b1c982312c9dd13e33fdd428817d08548cd";
 
     dependencies =
       [ prelude 
@@ -2801,12 +2851,12 @@ react-basic-emotion =
   };
 
 react-basic-hooks =
-  { version = "7.0.0";
+  { version = "7.0.1";
     repo = "https://github.com/spicydonuts/purescript-react-basic-hooks.git";
-    rev = "0bdbb2e82965fd46d8d7d88011162e14eac0506c";
+    rev = "732ab86a4f99457882beb66469d6b73d408c6236";
 
     dependencies =
-      [ aff aff-promise console datetime effect either indexed-monad maybe newtype prelude psci-support react-basic type-equality unsafe-coerce unsafe-reference web-html 
+      [ aff aff-promise bifunctors console control datetime effect either exceptions foldable-traversable functions indexed-monad integers maybe newtype now nullable ordered-collections prelude psci-support react-basic refs tuples type-equality unsafe-coerce unsafe-reference web-html 
       ];
   };
 
@@ -3037,6 +3087,16 @@ run-external-state =
 
     dependencies =
       [ effect maybe prelude profunctor-lenses refs run tuples typelevel-prelude 
+      ];
+  };
+
+rxps =
+  { version = "1.8.0";
+    repo = "https://github.com/waynevanson/purescript-rxps.git";
+    rev = "f61c32bc8aa701d142e95db3289e33fddfc80b3f";
+
+    dependencies =
+      [ arrays control control effect exceptions foldable-traversable foldable-traversable foreign-object functions identity identity partial partial prelude psci-support strings strings test-unit transformers transformers tuples tuples web-events web-events 
       ];
   };
 
@@ -3681,12 +3741,12 @@ undefined =
   };
 
 undefined-is-not-a-problem =
-  { version = "0.2.0";
+  { version = "0.2.1";
     repo = "https://github.com/paluh/purescript-undefined-is-not-a-problem.git";
-    rev = "6c0156cf6b5f1b4abe81091cb5db4630220959b7";
+    rev = "47cd169543e9f84108a6143444babb7e0d4555bf";
 
     dependencies =
-      [ ps-pkgs."assert" console effect foreign prelude psci-support random typelevel-prelude unsafe-coerce variant 
+      [ ps-pkgs."assert" effect either foreign maybe prelude psci-support random tuples unsafe-coerce 
       ];
   };
 
@@ -3997,6 +4057,16 @@ web-socket =
 
     dependencies =
       [ arraybuffer-types web-file 
+      ];
+  };
+
+web-speech =
+  { version = "0.2.0";
+    repo = "https://github.com/dirkz/purescript-web-speech.git";
+    rev = "8c8bd1d77cc6cf6a2809d74b11e67f971be84910";
+
+    dependencies =
+      [ aff effect functions integers maybe nullable prelude psci-support unsafe-coerce web-events web-html 
       ];
   };
 
