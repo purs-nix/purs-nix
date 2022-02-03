@@ -1,6 +1,7 @@
 { inputs =
     { deadnix.url = "github:astro/deadnix";
-      utils.url = "github:ursi/flake-utils/5";
+      make-shell.url = "github:ursi/nix-make-shell/1";
+      utils.url = "github:ursi/flake-utils/7";
     };
 
   outputs = { utils, ... }@flake-inputs:
@@ -35,13 +36,15 @@
             };
         };
     }
-    // utils.for-systems-with-pkgs
-         utils.default-systems
-         ({ deadnix, make-shell, system, ... }:
+    // utils.make-flake
+         { inputs = flake-inputs;
+           make-pkgs = (system: (inputs system).pkgs);
+         }
+         ({ deadnix, make-shell, pkgs, system, ... }:
             let
-              p = (inputs system).pkgs;
+              p = pkgs;
               u = import ./utils.nix system;
-              build-pkgs = import ./build-pkgs.nix { pkgs = p; utils = u; };
+              build-pkgs = import ./build-pkgs.nix { inherit pkgs; utils = u; };
               inherit (build-pkgs) ps-pkgs ps-pkgs-ns;
             in
             { apps =
@@ -84,7 +87,5 @@
                     aliases.lint = ''find -name "*.nix" | xargs deadnix'';
                   };
             }
-         )
-         (system: (inputs system).pkgs)
-         flake-inputs;
+         );
 }

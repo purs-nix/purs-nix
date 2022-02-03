@@ -117,6 +117,7 @@
     "root": {
       "inputs": {
         "deadnix": "deadnix",
+        "make-shell": "make-shell",
         "utils": "utils_2"
       }
     },
@@ -137,20 +138,19 @@
     },
     "utils_2": {
       "inputs": {
-        "flake-utils": "flake-utils",
-        "make-shell": "make-shell"
+        "flake-utils": "flake-utils"
       },
       "locked": {
-        "lastModified": 1642742772,
-        "narHash": "sha256-l86OlS6u6auLcAfGW37/5e7VuGvMuBIYz0tgEDfZupQ=",
+        "lastModified": 1643907755,
+        "narHash": "sha256-J4Cmvx95WFC8DEz0JnHmbO5swy0+kyf5K002CI1S3Ps=",
         "owner": "ursi",
         "repo": "flake-utils",
-        "rev": "67a22e9cd2b99620337a87b86673972e19e49cd2",
+        "rev": "9964d89c8feb4050916ba50269d6d7bbb113bd2e",
         "type": "github"
       },
       "original": {
         "owner": "ursi",
-        "ref": "5",
+        "ref": "7",
         "repo": "flake-utils",
         "type": "github"
       }
