@@ -2,11 +2,11 @@
     { make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       # purs-nix.url = "path:../..";
-      utils.url = "github:ursi/flake-utils/6";
+      utils.url = "github:ursi/flake-utils/7";
     };
 
   outputs = { utils, ... }@inputs:
-    utils.for-default-systems
+    utils.make-flake { inherit inputs; }
       ({ make-shell, pkgs, /*purs-nix ,*/ system, ... }:
          let
            # unforunately flake inputs can't be from parent directories,
@@ -49,6 +49,5 @@
                output = output {};
              };
          }
-      )
-      inputs;
+      );
 }
