@@ -44,7 +44,7 @@ with builtins;
                  }
                  // add-optional "pursuit";
 
-               installPhase = args.install or "ln -s $src/${src'} $out";
+               installPhase = args.app or "ln -s $src/${src'} $out";
              }
              // u.make-name name version
             );

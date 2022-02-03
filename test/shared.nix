@@ -39,7 +39,7 @@
       modules
       command;
   in
-  { defaultPackage = modules.Main.install { name = "test"; };
+  { defaultPackage = modules.Main.app { name = "test"; };
 
     devShell =
       make-shell

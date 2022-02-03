@@ -32,7 +32,7 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
 
 `modules.Module.bundle {}` is a derivation containing the bundled code from the module `Module`.
 
-### install
+### app
 
 ```
 { name
@@ -46,4 +46,4 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
 - `command`: The name of the executable.
 - `auto-flags`: Automatically add certain flags to the executable. Currently the only flag that's added is `--version`.
 
-`modules.Module.install { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Module`.
+`modules.Module.app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Module`.

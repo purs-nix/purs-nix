@@ -199,7 +199,7 @@ with builtins;
                    }
                 );
 
-            install =
+            app =
               { name
               , version ? null
               , command ? name
@@ -238,7 +238,7 @@ with builtins;
                  // u.make-name name version
                 );
           in
-          { inherit bundle local-deps install name output src;
+          { inherit bundle local-deps app name output src;
 
             bin =
               let
@@ -276,7 +276,7 @@ with builtins;
       in
       { modules =
           mapAttrs
-            (_: v: { inherit (v) bundle output install; })
+            (_: v: { inherit (v) bundle output app; })
             builds;
 
         command =
