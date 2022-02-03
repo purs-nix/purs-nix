@@ -340,6 +340,16 @@ bower-json =
       ];
   };
 
+boxes =
+  { version = "2.1.0";
+    repo = "https://github.com/cdepillabout/purescript-boxes.git";
+    rev = "bdb9b9b1aa9924d2f725adb2c1eb3c0c9ab41d45";
+
+    dependencies =
+      [ arrays foldable-traversable maybe newtype prelude profunctor psci-support strings stringutils tuples 
+      ];
+  };
+
 bucketchain =
   { version = "0.4.0";
     repo = "https://github.com/Bucketchain/purescript-bucketchain.git";
@@ -1000,6 +1010,16 @@ enums =
       ];
   };
 
+envparse =
+  { version = "1.0.1";
+    repo = "https://github.com/srghma/purescript-envparse.git";
+    rev = "f1ebc3fd73b19b05243537aa2bb8f7c8b930f2d0";
+
+    dependencies =
+      [ ansi arrays bifunctors boxes console control effect either exceptions exists foldable-traversable foreign-object integers lists maybe newtype node-process ordered-collections prelude psci-support strings transformers tuples 
+      ];
+  };
+
 errors =
   { version = "4.1.0";
     repo = "https://github.com/passy/purescript-errors.git";
@@ -1371,9 +1391,9 @@ graphql-client =
   };
 
 graphqlclient =
-  { version = "1.2.0";
+  { version = "1.2.1";
     repo = "https://github.com/purescript-graphqlclient/purescript-graphqlclient.git";
-    rev = "3857b764d1f3af059d9c55a2180ff958ac2a84eb";
+    rev = "d9617083d5ca1de6842590a88e90e8e3c4534285";
 
     dependencies =
       [ aff affjax argonaut-codecs argonaut-core argonaut-generic arrays bifunctors control datetime effect either foldable-traversable foreign-object http-methods integers lists maybe newtype prelude psci-support record strings transformers tuples 
@@ -1581,12 +1601,12 @@ http-methods =
   };
 
 httpure =
-  { version = "0.12.0";
+  { version = "0.14.0";
     repo = "https://github.com/cprussin/purescript-httpure.git";
-    rev = "05eda8af6045bfdf648e3f5e27a8cfe8c23b338a";
+    rev = "3bffc0e2ade5d0ed7c0b8cb81eabdc969d62637e";
 
     dependencies =
-      [ aff arrays bifunctors console effect either foldable-traversable foreign js-uri maybe newtype node-buffer node-fs node-http node-streams nullable options ordered-collections prelude refs strings tuples type-equality 
+      [ aff arrays bifunctors console effect either foldable-traversable foreign-object js-uri maybe newtype node-buffer node-fs node-http node-streams options ordered-collections prelude psci-support refs strings tuples type-equality 
       ];
   };
 
@@ -1597,16 +1617,6 @@ httpure-contrib-biscotti =
 
     dependencies =
       [ aff argonaut biscotti-cookie biscotti-session effect either httpure maybe profunctor-lenses psci-support test-unit tuples type-equality 
-      ];
-  };
-
-httpure-middleware =
-  { version = "4.0.1";
-    repo = "https://github.com/joneshf/purescript-httpure-middleware.git";
-    rev = "447760d9228e8cda0a5984fecfa2de7d9ebb6279";
-
-    dependencies =
-      [ ansi arrays console effect foreign-object formatters httpure integers maybe now options parallel prelude strings 
       ];
   };
 
