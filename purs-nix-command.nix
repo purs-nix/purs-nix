@@ -2,8 +2,9 @@ with builtins;
 { all-dependencies
 , all-dep-globs
 , dep-globs
+, nodejs
 , pkgs
-, purescript'
+, purescript
 , utils
 }:
 { srcs ? [ "src" ]
@@ -15,8 +16,6 @@ with builtins;
 , test ? "test"
 , test-module ? "Test.Main"
 , name ? "purs-nix"
-, nodejs ? pkgs.nodejs
-, purescript ? purescript'
 }:
   let
     l = p.lib; p = pkgs; u = utils;

@@ -282,8 +282,7 @@ with builtins;
         command =
           import ./purs-nix-command.nix
             { all-dependencies = dependencies ++ test-dependencies;
-              inherit all-dep-globs dep-globs pkgs;
-              purescript' = purescript;
+              inherit all-dep-globs dep-globs nodejs pkgs purescript;
               utils = u;
             };
       };
