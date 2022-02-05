@@ -1,7 +1,7 @@
 { inputs =
     { deadnix.url = "github:astro/deadnix";
       make-shell.url = "github:ursi/nix-make-shell/1";
-      utils.url = "github:ursi/flake-utils/7";
+      utils.url = "github:ursi/flake-utils/8";
     };
 
   outputs = { utils, ... }@flake-inputs:
@@ -36,7 +36,7 @@
             };
         };
     }
-    // utils.make-flake
+    // utils.apply-systems
          { inputs = flake-inputs;
            make-pkgs = (system: (inputs system).pkgs);
          }
