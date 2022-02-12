@@ -8,7 +8,7 @@
   outputs = { get-flake, utils, ... }@inputs:
     utils.apply-systems
       { inputs = inputs // { purs-nix = get-flake ../../.; }; }
-      ({ make-shell, pkgs, purs-nix, system, ... }:
+      ({ make-shell, pkgs, purs-nix, ... }:
          let
            inherit (purs-nix) ps-pkgs purs;
 
