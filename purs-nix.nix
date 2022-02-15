@@ -73,10 +73,13 @@ with builtins;
         local-graph =
           let
             make-graph = extra:
-              l.importJSON
-                (p.runCommand "purescript-dependency-graph" {}
-                   "${purescript}/bin/purs graph ${extra} ${dep-globs} > $out"
-                );
+              l.pipe "${purescript}/bin/purs graph ${extra} ${dep-globs} > $out"
+                [ (p.runCommand "purescript-dependency-graph" {})
+                  readFile
+                  # is this safe?
+                  unsafeDiscardStringContext
+                  fromJSON
+                ];
 
             deps-graph = make-graph "";
             graph = make-graph (make-srcs-str srcs);
