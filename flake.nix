@@ -1,14 +1,27 @@
 { inputs =
-    { deadnix.url = "github:astro/deadnix";
+    { builders.url = "github:ursi/nix-builders";
+      deadnix.url = "github:astro/deadnix";
+
+      easy-ps =
+        { flake = false;
+          url = "github:justinwoo/easy-purescript-nix";
+        };
+
       make-shell.url = "github:ursi/nix-make-shell/1";
+      nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+      purescript-language-server =
+        { flake = false;
+          url = "github:ursi/purescript-language-server/purs-nix";
+        };
+
       utils.url = "github:ursi/flake-utils/8";
     };
 
-  outputs = { utils, ... }@flake-inputs:
+  outputs = { nixpkgs, utils, ... }@inputs:
     with builtins;
-    let inputs = import ./inputs.nix; in
     { __functor = _:
-        { pkgs ? (inputs system).pkgs
+        { pkgs ? nixpkgs.legacyPackages.${system}
         , system
         }:
         import ./purs-nix.nix { inherit pkgs system; };
@@ -36,10 +49,7 @@
             };
         };
     }
-    // utils.apply-systems
-         { inputs = flake-inputs;
-           make-pkgs = (system: (inputs system).pkgs);
-         }
+    // utils.apply-systems { inherit inputs; }
          ({ deadnix, make-shell, pkgs, system, ... }:
             let
               p = pkgs;

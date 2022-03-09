@@ -1,5 +1,20 @@
 {
   "nodes": {
+    "builders": {
+      "locked": {
+        "lastModified": 1646266317,
+        "narHash": "sha256-sO7lFbuhK2t13elpWgNB+Nyo40qQOUnX4FwJ+3Ao9ZE=",
+        "owner": "ursi",
+        "repo": "nix-builders",
+        "rev": "72e9cc5487b07d152e3f5f6ed0654bbc7086e6b4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ursi",
+        "repo": "nix-builders",
+        "type": "github"
+      }
+    },
     "deadnix": {
       "inputs": {
         "mozillapkgs": "mozillapkgs",
@@ -18,6 +33,22 @@
       "original": {
         "owner": "astro",
         "repo": "deadnix",
+        "type": "github"
+      }
+    },
+    "easy-ps": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1646209831,
+        "narHash": "sha256-or8Z6aMWdrqcmFA0hhjjb6FIiW14C0ruwXAqy+zYZ8g=",
+        "owner": "justinwoo",
+        "repo": "easy-purescript-nix",
+        "rev": "aa72388ca0fb72ed64467f59a121db1f104897db",
+        "type": "github"
+      },
+      "original": {
+        "owner": "justinwoo",
+        "repo": "easy-purescript-nix",
         "type": "github"
       }
     },
@@ -114,10 +145,47 @@
         "type": "indirect"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1646506091,
+        "narHash": "sha256-sWNAJE2m+HOh1jtXlHcnhxsj6/sXrHgbqVNcVRlveK4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3e644bd62489b516292c816f70bf0052c693b3c7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "purescript-language-server": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1623009397,
+        "narHash": "sha256-7gHA3ny5NmABAaEByUeyCji8j2knw+AAPw+PCnPkyBE=",
+        "owner": "ursi",
+        "repo": "purescript-language-server",
+        "rev": "8a6c20402bab013c3510ab262aebc151059c2a2e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ursi",
+        "ref": "purs-nix",
+        "repo": "purescript-language-server",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "builders": "builders",
         "deadnix": "deadnix",
+        "easy-ps": "easy-ps",
         "make-shell": "make-shell",
+        "nixpkgs": "nixpkgs_3",
+        "purescript-language-server": "purescript-language-server",
         "utils": "utils_2"
       }
     },
