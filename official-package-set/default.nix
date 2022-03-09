@@ -511,9 +511,9 @@ canvas =
   };
 
 canvas-action =
-  { version = "7.0.0";
+  { version = "8.0.0";
     repo = "https://github.com/artemisSystem/purescript-canvas-action.git";
-    rev = "ef06b4fcb453d276abe57bd63c37e394edfc9ada";
+    rev = "6168d69761be5f2c3fce79126ffdd7a25621c985";
 
     dependencies =
       [ aff arrays canvas colors effect either exceptions foldable-traversable math maybe numbers polymorphic-vectors prelude refs run transformers tuples type-equality typelevel-prelude unsafe-coerce web-dom web-events web-html 
@@ -1461,12 +1461,12 @@ halogen-css =
   };
 
 halogen-formless =
-  { version = "2.2.0";
+  { version = "3.0.0";
     repo = "https://github.com/thomashoneyman/purescript-halogen-formless.git";
-    rev = "657225e2961963bac7c3dcf6c6447218a2811065";
+    rev = "8b3a2f4d273a49db34aee82815f71331e247d2e0";
 
     dependencies =
-      [ halogen heterogeneous profunctor-lenses variant 
+      [ convertable-options effect either foldable-traversable foreign-object halogen heterogeneous maybe prelude record safe-coerce type-equality unsafe-coerce unsafe-reference variant web-events web-uievents 
       ];
   };
 
@@ -1487,6 +1487,16 @@ halogen-hooks-extra =
 
     dependencies =
       [ halogen-hooks 
+      ];
+  };
+
+halogen-router =
+  { version = "0.1.0";
+    repo = "https://github.com/katsujukou/purescript-halogen-router.git";
+    rev = "83e78242e291ade52db1294abe086a40744425ee";
+
+    dependencies =
+      [ aff effect either foreign halogen halogen-hooks halogen-store halogen-subscriptions maybe prelude routing routing-duplex safe-coerce transformers tuples 
       ];
   };
 
@@ -1531,9 +1541,9 @@ halogen-subscriptions =
   };
 
 halogen-svg-elems =
-  { version = "5.0.1";
+  { version = "5.0.3";
     repo = "https://github.com/JordanMartinez/purescript-halogen-svg-elems.git";
-    rev = "c710b9d50cd5952368cfa064c74ded12300cb66c";
+    rev = "362b401bcc600ea7c24538c8663529355bbf2b30";
 
     dependencies =
       [ halogen 
@@ -1901,9 +1911,9 @@ media-types =
   };
 
 metadata =
-  { version = "0.14.5";
-    repo = "https://github.com/spacchetti/purescript-metadata.git";
-    rev = "eb0523fb217cb6d36779c0c740c2118d11616dc2";
+  { version = "0.14.7";
+    repo = "https://github.com/purescript/purescript-metadata.git";
+    rev = "9b46583e3ef4e72223189131beb934df576f6efd";
 
     dependencies =
       [ 
@@ -3591,12 +3601,12 @@ transformers =
   };
 
 tree-rose =
-  { version = "2.0.0";
+  { version = "4.0.2";
     repo = "https://github.com/jordanmartinez/purescript-tree-rose.git";
-    rev = "8530d6cfc14b6ad654c6607e0926db619ff48131";
+    rev = "92cfa2f617dc4b3549375b8289b36e4c0aca7288";
 
     dependencies =
-      [ free lists prelude 
+      [ control foldable-traversable free lists maybe prelude tailrec 
       ];
   };
 
@@ -3891,9 +3901,9 @@ validation =
   };
 
 variant =
-  { version = "7.0.3";
+  { version = "7.1.0";
     repo = "https://github.com/natefaubion/purescript-variant.git";
-    rev = "3f12411ede5edd342d25340c1babce9ae81d6793";
+    rev = "131d7fb43861ee10825e1c96bd98c4b3358dcc62";
 
     dependencies =
       [ enums lists maybe partial prelude record tuples unsafe-coerce 
