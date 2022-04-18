@@ -310,26 +310,6 @@ bip39 =
       ];
   };
 
-biscotti-cookie =
-  { version = "0.3.0";
-    repo = "https://github.com/drewolson/purescript-biscotti-cookie.git";
-    rev = "26f394655c43aa1e1bb40b83ff7307cde9e133db";
-
-    dependencies =
-      [ datetime effect either foldable-traversable formatters gen newtype now prelude profunctor-lenses psci-support quickcheck record string-parsers strings test-unit 
-      ];
-  };
-
-biscotti-session =
-  { version = "0.2.0";
-    repo = "https://github.com/drewolson/purescript-biscotti-session.git";
-    rev = "c61112ba13968ff3334618fadb46850766185dd9";
-
-    dependencies =
-      [ aff argonaut biscotti-cookie effect newtype ordered-collections prelude profunctor-lenses psci-support refs test-unit uuid 
-      ];
-  };
-
 bower-json =
   { version = "3.0.0";
     repo = "https://github.com/klntsky/purescript-bower-json.git";
@@ -632,7 +612,7 @@ codec-argonaut =
 
 colors =
   { version = "6.0.0";
-    repo = "https://github.com/sharkdp/purescript-colors.git";
+    repo = "https://github.com/purescript-contrib/purescript-colors.git";
     rev = "328e61f371aadfafb496834ac048fe36e33240cd";
 
     dependencies =
@@ -981,9 +961,9 @@ elmish-html =
   };
 
 email-validate =
-  { version = "6.0.0";
+  { version = "7.0.0";
     repo = "https://github.com/cdepillabout/purescript-email-validate.git";
-    rev = "d6686d982222885ff954a4d7165931eace0c6d03";
+    rev = "fba8ff54ad352bfd790a1ea34823524ab23754ff";
 
     dependencies =
       [ aff string-parsers transformers 
@@ -1190,6 +1170,16 @@ foreign-object =
       ];
   };
 
+foreign-readwrite =
+  { version = "1.0.2";
+    repo = "https://github.com/artemisSystem/purescript-foreign-readwrite.git";
+    rev = "15f48900f11d67ddc634167fd4a2586a1f56d989";
+
+    dependencies =
+      [ foldable-traversable foreign foreign-object identity lists maybe prelude record safe-coerce transformers 
+      ];
+  };
+
 fork =
   { version = "5.0.0";
     repo = "https://github.com/purescript-contrib/purescript-fork.git";
@@ -1380,16 +1370,6 @@ grain-virtualized =
       ];
   };
 
-graphql-client =
-  { version = "7.0.0";
-    repo = "https://github.com/OxfordAbstracts/purescript-graphql-client.git";
-    rev = "bda92769c306f579f2cfa406b1f1a81d1bf76254";
-
-    dependencies =
-      [ aff aff-promise affjax argonaut-codecs argonaut-core arrays bifunctors control datetime effect either enums exceptions foldable-traversable foreign foreign-generic foreign-object functions halogen-subscriptions heterogeneous http-methods integers lists maybe media-types newtype node-buffer node-fs nullable numbers ordered-collections parsing prelude profunctor profunctor-lenses psci-support quickcheck record spec spec-discovery string-parsers strings strings-extra transformers tuples typelevel-prelude unicode 
-      ];
-  };
-
 graphqlclient =
   { version = "1.2.1";
     repo = "https://github.com/purescript-graphqlclient/purescript-graphqlclient.git";
@@ -1511,12 +1491,12 @@ halogen-select =
   };
 
 halogen-store =
-  { version = "0.2.1";
+  { version = "0.4.1";
     repo = "https://github.com/thomashoneyman/purescript-halogen-store.git";
-    rev = "d6a3bd6af1ef97ff08547a1b94fb662ecffd137d";
+    rev = "79e2800cef8865cd266567b55cb74645324c197f";
 
     dependencies =
-      [ aff effect foldable-traversable halogen halogen-hooks halogen-subscriptions maybe prelude refs transformers unsafe-coerce unsafe-reference 
+      [ aff distributive effect foldable-traversable fork halogen halogen-hooks halogen-subscriptions maybe prelude refs tailrec transformers tuples unsafe-coerce unsafe-reference 
       ];
   };
 
@@ -1612,21 +1592,11 @@ http-methods =
 
 httpure =
   { version = "0.14.0";
-    repo = "https://github.com/cprussin/purescript-httpure.git";
+    repo = "https://github.com/citizennet/purescript-httpure.git";
     rev = "3bffc0e2ade5d0ed7c0b8cb81eabdc969d62637e";
 
     dependencies =
       [ aff arrays bifunctors console effect either foldable-traversable foreign-object js-uri maybe newtype node-buffer node-fs node-http node-streams options ordered-collections prelude psci-support refs strings tuples type-equality 
-      ];
-  };
-
-httpure-contrib-biscotti =
-  { version = "0.2.0";
-    repo = "https://github.com/drewolson/purescript-httpure-contrib-biscotti.git";
-    rev = "aa67ba3008cff95691c71a669ada03989e20891d";
-
-    dependencies =
-      [ aff argonaut biscotti-cookie biscotti-session effect either httpure maybe profunctor-lenses psci-support test-unit tuples type-equality 
       ];
   };
 
@@ -1921,12 +1891,12 @@ metadata =
   };
 
 midi =
-  { version = "3.0.0";
+  { version = "3.1.0";
     repo = "https://github.com/newlandsvalley/purescript-midi.git";
-    rev = "f7397ce3381366e7f517f2883b0ea21b47995034";
+    rev = "c0c3c4473974ff57a43450416085216f6ec67a9f";
 
     dependencies =
-      [ effect integers lists prelude signal string-parsers 
+      [ arrays control effect either foldable-traversable integers lists maybe ordered-collections prelude signal string-parsers strings tuples unfoldable 
       ];
   };
 
@@ -2421,12 +2391,12 @@ parallel =
   };
 
 parsing =
-  { version = "8.2.0";
+  { version = "8.4.0";
     repo = "https://github.com/purescript-contrib/purescript-parsing.git";
-    rev = "843a41b3a5ab9885927df476f3908d4555da3108";
+    rev = "23b882e14c2ca1e22b6663f26c3b6d7ba74aac73";
 
     dependencies =
-      [ arrays either foldable-traversable identity integers lists maybe prelude strings transformers unicode 
+      [ arrays either foldable-traversable identity integers lists maybe prelude record strings transformers unicode 
       ];
   };
 
@@ -3311,12 +3281,12 @@ sodium =
   };
 
 soundfonts =
-  { version = "3.2.0";
+  { version = "3.3.0";
     repo = "https://github.com/newlandsvalley/purescript-soundfonts.git";
-    rev = "fc1436b0a1248729e38a3bbe15a954e6b636a2d4";
+    rev = "943aca8976b88aad850e3ff924f990f79e63a179";
 
     dependencies =
-      [ affjax argonaut-core b64 console effect http-methods midi parallel prelude 
+      [ aff affjax argonaut-core arraybuffer-types arrays b64 bifunctors console effect either exceptions foldable-traversable foreign-object http-methods integers lists maybe midi ordered-collections parallel partial prelude strings transformers tuples 
       ];
   };
 
@@ -3411,9 +3381,9 @@ strictlypositiveint =
   };
 
 string-parsers =
-  { version = "6.0.1";
+  { version = "7.0.0";
     repo = "https://github.com/purescript-contrib/purescript-string-parsers.git";
-    rev = "7c3cad8ce7cd4d1036eeafa09af323dc7b8d367c";
+    rev = "d22de2eb8a9ffb7aea66ec9643780fb80d3d3e8f";
 
     dependencies =
       [ arrays bifunctors control either foldable-traversable lists maybe prelude strings tailrec 
@@ -3797,6 +3767,16 @@ unicode =
 
     dependencies =
       [ foldable-traversable maybe strings 
+      ];
+  };
+
+unlift =
+  { version = "1.0.1";
+    repo = "https://github.com/tweag/purescript-unlift.git";
+    rev = "36446df6df933bac1dd4ce3c0aad572a5516e2d2";
+
+    dependencies =
+      [ aff effect either freet identity lists maybe monad-control prelude st transformers tuples 
       ];
   };
 
