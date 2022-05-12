@@ -1,15 +1,16 @@
 { inputs =
     { get-flake.url = "github:ursi/get-flake";
-      make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-      utils.url = "github:ursi/flake-utils/8";
+      utils.url = "github:numtide/flake-utils";
     };
 
-  outputs = { get-flake, utils, ... }@inputs:
-    utils.apply-systems
-      { inputs = inputs // { purs-nix = get-flake ../../.; }; }
-      ({ make-shell, pkgs, purs-nix, ... }:
+  outputs = { get-flake, nixpkgs, utils, ... }@inputs:
+    utils.lib.eachDefaultSystem
+      (system:
          let
+           l = p.lib; p = nixpkgs.legacyPackages.${system};
+           purs-nix = (get-flake ../../.) { inherit system; };
+
            inherit (purs-nix) ps-pkgs purs;
 
            inherit
@@ -30,9 +31,9 @@
          { defaultPackage = modules.Main.app { name = "hello"; };
 
            devShell =
-             make-shell
-               { packages =
-                   with pkgs;
+             p.mkShell
+               { buildInputs =
+                   with p;
                    [ nodejs
                      purs-nix.purescript
                      purs-nix.purescript-language-server

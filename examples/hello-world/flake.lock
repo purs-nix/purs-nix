@@ -1,20 +1,5 @@
 {
   "nodes": {
-    "flake-utils": {
-      "locked": {
-        "lastModified": 1618217525,
-        "narHash": "sha256-WGrhVczjXTiswQaoxQ+0PTfbLNeOQM6M36zvLn78AYg=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "c6169a2772643c4a93a0b5ac1c61e296cba68544",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "get-flake": {
       "locked": {
         "lastModified": 1644686428,
@@ -27,22 +12,6 @@
       "original": {
         "owner": "ursi",
         "repo": "get-flake",
-        "type": "github"
-      }
-    },
-    "make-shell": {
-      "locked": {
-        "lastModified": 1634940815,
-        "narHash": "sha256-P69OmveboXzS+es1vQGS4bt+ckwbeIExqxfGLjGuJqA=",
-        "owner": "ursi",
-        "repo": "nix-make-shell",
-        "rev": "8add91681170924e4d0591b22f294aee3f5516f9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ursi",
-        "ref": "1",
-        "repo": "nix-make-shell",
         "type": "github"
       }
     },
@@ -65,26 +34,21 @@
     "root": {
       "inputs": {
         "get-flake": "get-flake",
-        "make-shell": "make-shell",
         "nixpkgs": "nixpkgs",
         "utils": "utils"
       }
     },
     "utils": {
-      "inputs": {
-        "flake-utils": "flake-utils"
-      },
       "locked": {
-        "lastModified": 1644029741,
-        "narHash": "sha256-Kfip3zjNQ/40xJWH296MDEFKBBPnEPupjUvjdqhKNYg=",
-        "owner": "ursi",
+        "lastModified": 1649676176,
+        "narHash": "sha256-OWKJratjt2RW151VUlJPRALb7OU2S5s+f0vLj4o1bHM=",
+        "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "6102802ae96c56af1d2d9fc297029f515f49e332",
+        "rev": "a4b154ebbdc88c8498a5c7b01589addc9e9cb678",
         "type": "github"
       },
       "original": {
-        "owner": "ursi",
-        "ref": "8",
+        "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
       }
