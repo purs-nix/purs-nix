@@ -154,7 +154,7 @@ with builtins;
                   l.unique (go local-deps);
               in
               mkDerivation
-                { inherit name;
+                { name = "${name}-compiled";
                   phases = [ "buildPhase" "installPhase" ];
 
                   buildPhase =
