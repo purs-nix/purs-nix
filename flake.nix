@@ -24,7 +24,7 @@
         { pkgs ? nixpkgs.legacyPackages.${system}
         , system
         }:
-        import ./purs-nix.nix { inherit pkgs system; };
+        import ./purs-nix.nix (import ./deps.nix { inherit inputs system; });
 
       defaultTemplate =
         { description = "A basic purs-nix project";

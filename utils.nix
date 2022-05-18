@@ -1,6 +1,5 @@
 with builtins;
-system:
-  let l = (import ./inputs.nix system).pkgs.lib; in
+l:
   rec
   { bundle =
       purescript:

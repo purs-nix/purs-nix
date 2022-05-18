@@ -4,7 +4,7 @@ The flake for this repository is used inside your project's flake to set up your
 
 ```
 { system
-, pkgs ? (import ./inputs.nix).pkgs system
+, pkgs ? nixpkgs.legacyPackages.${system}
 }
 ```
 and returns an attribute set with the following attributes:

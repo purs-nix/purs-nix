@@ -1,5 +1,5 @@
-let inputs = import ./inputs.nix; in
-{ pkgs ? (inputs system).pkgs
-, system ? builtins.currentSystem
+let make-deps = import ./deps.nix; in
+{ system ? builtins.currentSystem
+, deps ? {}
 }:
-  import ./purs-nix.nix { inherit pkgs system; }
+  import ./purs-nix.nix (make-deps { inherit system; } // deps)
