@@ -13,6 +13,7 @@ with builtins;
   { inherit (import ./build-pkgs.nix { inherit pkgs; utils = u; })
       build ps-pkgs ps-pkgs-ns;
 
+    inherit (pkgs) esbuild;
     inherit (pkgs.lib) licenses;
     purescript = purescript';
     inherit purescript-language-server;
@@ -190,14 +191,12 @@ with builtins;
                   installPhase = "mv output $out";
                 };
 
-            bundle = { main ? true, namespace ? null }:
+            bundle = { esbuild ? {}, main ? true }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
                    purescript
-                   { files = output {};
-                     module = name;
-                     main = if main then name else null;
-                     inherit namespace;
+                   { entry-point = output {} + "/${name}/index.js";
+                     inherit esbuild main;
                      output = "$out";
                    }
                 );

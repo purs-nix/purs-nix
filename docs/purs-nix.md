@@ -56,15 +56,13 @@ and returns an attribute set with the following attributes:
 
 - `srcs`: A list of strings representing the paths of your project's source directories.
 - `output`: The name of the folder that `purs compile` will create.
-- `bundle`: The options that will configure the `purs bundle` command.
+- `bundle`: The options that will configure the `purs-nix bundle` command.
 
   ```
-  { module ? "Main"
+  { esbuild ? {} # additional esbuild flags
+  , main ? true # import and call `main()`
+  , module ? "Main"
   , output ? "index.js"
-  , main ? module
-  , namespace ? null
-  , source-maps ? false
-  , debug ? false
   }
   ```
 

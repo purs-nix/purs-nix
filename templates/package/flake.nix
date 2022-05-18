@@ -20,6 +20,7 @@
                    [ nodejs
                      nodePackages.bower
                      nodePackages.pulp
+                     purs-nix.esbuild
                      purs-nix.purescript
                      # purs-nix.purescript-language-server
                      (command {})

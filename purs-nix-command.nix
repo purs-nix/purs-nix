@@ -21,14 +21,17 @@ with builtins;
     l = p.lib; p = pkgs; u = utils;
     compiler-output = output;
 
-    bundle' = { output ? "index.js", ... }@args:
+    bundle' =
+      { esbuild ? {}
+      , main ? true
+      , module ? "Main"
+      , output ? "index.js"
+      }:
       u.bundle
         purescript
-        (args
-         // { files = compiler-output;
-              inherit output;
-            }
-        );
+        { entry-point = "./${compiler-output}/${module}/index.js";
+          inherit esbuild main output;
+        };
 
     compile-and-bundle = args:
       ''
