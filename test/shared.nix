@@ -46,6 +46,7 @@
         { packages =
             with pkgs;
             [ nodejs
+              purs-nix.esbuild
               purs-nix.purescript
               purs-nix.purescript-language-server
               (command
