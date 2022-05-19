@@ -4,11 +4,11 @@
       utils.url = "github:numtide/flake-utils";
     };
 
-  outputs = { get-flake, nixpkgs, utils, ... }@inputs:
+  outputs = { get-flake, nixpkgs, utils, ... }:
     utils.lib.eachDefaultSystem
       (system:
          let
-           l = p.lib; p = nixpkgs.legacyPackages.${system};
+           p = nixpkgs.legacyPackages.${system};
            purs-nix = (get-flake ../../.) { inherit system; };
 
            inherit (purs-nix) ps-pkgs purs;

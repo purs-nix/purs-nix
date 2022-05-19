@@ -9,7 +9,7 @@
     utils.apply-systems
       { inputs = inputs // { purs-nix = get-flake ../.; };
       }
-      ({ make-shell, pkgs, purs-nix, system, ... }:
+      ({ make-shell, pkgs, purs-nix, ... }:
          import ./shared.nix { inherit make-shell pkgs purs-nix; }
       );
 }
