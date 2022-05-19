@@ -1,6 +1,6 @@
 { debug =
     { repo = "https://github.com/ursi/purescript-debuggest.git";
-      rev = "eeca2daa8b5232f54e14ef6d9d4cc8ffc80f3c93";
+      rev = "56b27bd20c78188d8e28826b8610f96c54889996";
       info = /package.nix;
     };
 
