@@ -1,13 +1,14 @@
 with builtins;
 deps:
   let
-    l = p.lib; p = pkgs; u = import ./utils.nix l;
+    l = p.lib; p = pkgs; u = import ./utils.nix p;
     inherit (deps) builders easy-ps pkgs purescript-language-server;
     purescript' = easy-ps.purescript;
   in
   { inherit (import ./build-pkgs.nix { inherit pkgs; utils = u; })
       build ps-pkgs ps-pkgs-ns;
 
+    inherit (pkgs) esbuild;
     inherit (pkgs.lib) licenses;
     purescript = purescript';
     inherit purescript-language-server;
@@ -185,14 +186,12 @@ deps:
                   installPhase = "mv output $out";
                 };
 
-            bundle = { main ? true, namespace ? null }:
+            bundle = { esbuild ? {}, main ? true }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
                    purescript
-                   { files = output {};
-                     module = name;
-                     main = if main then name else null;
-                     inherit namespace;
+                   { entry-point = output {} + "/${name}/index.js";
+                     inherit esbuild main;
                      output = "$out";
                    }
                 );

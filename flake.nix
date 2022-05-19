@@ -53,7 +53,7 @@
          ({ deadnix, make-shell, pkgs, system, ... }:
             let
               p = pkgs;
-              u = import ./utils.nix p.lib;
+              u = import ./utils.nix p;
               build-pkgs = import ./build-pkgs.nix { inherit pkgs; utils = u; };
               inherit (build-pkgs) ps-pkgs ps-pkgs-ns;
             in

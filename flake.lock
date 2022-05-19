@@ -39,11 +39,11 @@
     "easy-ps": {
       "flake": false,
       "locked": {
-        "lastModified": 1646209831,
-        "narHash": "sha256-or8Z6aMWdrqcmFA0hhjjb6FIiW14C0ruwXAqy+zYZ8g=",
+        "lastModified": 1651400038,
+        "narHash": "sha256-bwbpXSTD8Hf7tlCXfZuLfo2QivvX1ZDJ1PijXXRTo3Q=",
         "owner": "justinwoo",
         "repo": "easy-purescript-nix",
-        "rev": "aa72388ca0fb72ed64467f59a121db1f104897db",
+        "rev": "0ad5775c1e80cdd952527db2da969982e39ff592",
         "type": "github"
       },
       "original": {

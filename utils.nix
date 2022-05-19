@@ -1,29 +1,42 @@
 with builtins;
-l:
+p:
+  let l = p.lib; in
   rec
   { bundle =
       purescript:
-      { files ? null
-      , globs ? ''"${files}/**/*.js"''
-      , module ? "Main"
+      { entry-point
+      , esbuild ? {}
       , output ? null
-      , main ? module
-      , namespace ? null
-      , source-maps ? false
-      , debug ? false
+      , main ? true
       }:
       let
+        esbuild' =
+          { format = "esm";
+            log-level = "warning";
+          }
+          // esbuild
+          // { bundle = true;
+               outfile = output;
+             };
+
         flags =
-          concatStringsSep " "
-            [ "--module ${module}"
-              (make-flag "--output " output)
-              (make-flag "--main " main)
-              (make-flag "--namespace " namespace)
-              (make-flag "--source-maps" source-maps)
-              (make-flag "debug" debug)
-            ];
+          toString
+            (l.mapAttrsToList
+               (n: v:
+                  if isBool v then
+                    if v then "--${n}" else ""
+                  else
+                    "--${n}=${toString v}"
+               )
+               esbuild'
+            );
+
+        build = "${p.esbuild}/bin/esbuild ${flags}";
       in
-      ''${purescript}/bin/purs bundle ${flags} ${globs}'';
+      if main
+      then ''echo 'import { main } from "${entry-point}"; main()' | ${build}''
+      else ''${build} ${entry-point}'';
+
 
     compile =
       purescript:
