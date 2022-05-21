@@ -9,10 +9,10 @@ The flake for this repository is used inside your project's flake to set up your
 ```
 and returns an attribute set with the following attributes:
 - `build`: A function for creating ad hoc PureScript packages. It's argument is a [package description attributes set](adding-packages.md) with the `name` attribute required.
+- `esbuild`/`purescript`: The esbuild/PureScript packages used for everything by default.
 - `ps-pkgs`: The attribute set of all non-namespaced PureScript pacakges.
 - `ps-pkgs-ns`: The attribute set of all namespaced PureScript packages.
 - `purs`: A function for building your project.
-- `purescript`: The PureScript package used for everything by default.
 - `purescript-language-server`: A build of purescript-language-server that detects `flake.nix`/`shell.nix` files as an indication of the workspace root being a PureScript project.
 - `licenses`: This is included for convenience so you can pass the returned attribute set into a [package.nix](adding-packages.md#using-info).
 
