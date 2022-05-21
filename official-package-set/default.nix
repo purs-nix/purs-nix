@@ -50,6 +50,16 @@ aff-promise =
       ];
   };
 
+aff-retry =
+  { version = "2.0.0";
+    repo = "https://github.com/Unisay/purescript-aff-retry.git";
+    rev = "d35856c35b3a471563f93c9da7dd19548552c8e9";
+
+    dependencies =
+      [ aff arrays datetime effect either exceptions integers maybe newtype numbers prelude random transformers 
+      ];
+  };
+
 affjax =
   { version = "13.0.0";
     repo = "https://github.com/purescript-contrib/purescript-affjax.git";
@@ -2057,6 +2067,16 @@ result =
 
     dependencies =
       [ either foldable-traversable prelude 
+      ];
+  };
+
+return =
+  { version = "0.2.0";
+    repo = "https://github.com/ursi/purescript-return.git";
+    rev = "de6a6931507b82efd0180f9b945945ef202bc78a";
+
+    dependencies =
+      [ foldable-traversable point-free prelude 
       ];
   };
 
