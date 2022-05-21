@@ -23,6 +23,36 @@
           ];
       };
 
+    event =
+      { version = "1.6.6";
+        repo = "https://github.com/mikesol/purescript-event.git";
+        rev = "1ce0eed386b898cc925ad14dd2b15e1b9737dd93";
+
+        dependencies =
+          [ arrays
+            control
+            datetime
+            effect
+            either
+            filterable
+            foldable-traversable
+            js-timers
+            maybe
+            monoid-extras
+            newtype
+            now
+            ordered-collections
+            prelude
+            profunctor
+            record
+            refs
+            st
+            tuples
+            unsafe-coerce
+            unsafe-reference
+         ];
+      };
+
     node-glob-basic =
       { version = "1.2.0";
         repo = "https://github.com/natefaubion/purescript-node-glob-basic.git";
@@ -86,31 +116,7 @@
       };
   }
   // import ./official-package-set ps-pkgs
-  // { event =
-         { repo = "https://github.com/ursi/purescript-event.git";
-           rev = "8332a25a65e1b939de5b778325b8e6a8571a2e7c";
-           info = /package.nix;
-         };
-
-       point-free =
-         { repo = "https://github.com/ursi/purescript-point-free.git";
-           rev = "e4291b1c982312c9dd13e33fdd428817d08548cd";
-           info = /package.nix;
-         };
-
-       return =
-         { repo = "https://github.com/ursi/purescript-return.git";
-           rev = "e839ebb8490b47a7af8b8f89f4dc9efa0b16b600";
-           info = /package.nix;
-         };
-
-       substitute =
-         { repo = "https://github.com/ursi/purescript-substitute.git";
-           rev = "a511c162d8efc7221b63551bde196d52ff59e4ea";
-           info = /package.nix;
-         };
-
-       task =
+  // { task =
          { repo = "https://github.com/ursi/purescript-task.git";
            rev = "ffd9c147261ba5cbf2c49e7250595815f7879503";
            info = /package.nix;
