@@ -13,39 +13,34 @@
            # making sure the example always uses the current version
            purs-nix = (get-flake ../../.) { inherit system; };
 
-           inherit (purs-nix) ps-pkgs purs;
+           ps =
+             purs-nix.purs
+               { dependencies =
+                   with purs-nix.ps-pkgs;
+                   [ console
+                     effect
+                     prelude
+                   ];
 
-           inherit
-             (purs
-                { dependencies =
-                    with ps-pkgs;
-                    [ console
-                      effect
-                      prelude
-                    ];
-
-                  srcs = [ ./src ];
-                }
-             )
-             command
-             modules;
+                 srcs = [ ./src ];
+               };
          in
-         { defaultPackage = modules.Main.app { name = "hello"; };
+         { defaultPackage = ps.modules.Main.app { name = "hello"; };
 
            devShell =
              p.mkShell
                { buildInputs =
                    with p;
                    [ nodejs
+                     (ps.command {})
                      purs-nix.esbuild
                      purs-nix.purescript
                      purs-nix.purescript-language-server
-                     (command {})
                    ];
                };
 
            packages =
-             with modules.Main;
+             with ps.modules.Main;
              { bundle = bundle {};
                output = output {};
              };
