@@ -22,28 +22,24 @@ let
       {};
   # ----------------------------------------------------
 
-  inherit (purs-nix) ps-pkgs purs;
-
-  inherit
-    (purs
-       { dependencies =
-           with ps-pkgs;
-           [ console
-             effect
-             prelude
-           ];
-       }
-    )
-    command;
+  ps =
+    purs
+      { dependencies =
+          with ps-pkgs;
+          [ console
+            effect
+            prelude
+          ];
+      };
 in
 pkgs.mkShell
  { buildInputs =
      with pkgs;
      [ # entr
        nodejs
+       (ps.command {})
        purs-nix.purescript
        # purs-nix.purescript-language-server
-       (command {})
      ];
 
    # shellHook = ''alias watch="find src | entr -s 'echo bundling; purs-nix bundle'"'';

@@ -9,9 +9,8 @@
     utils.apply-systems { inherit inputs; }
       ({ make-shell, purs-nix, pkgs, ... }:
          let
-           inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix;
-           inherit (purs { inherit (package) dependencies; }) command;
+           ps = purs-nix.purs { inherit (package) dependencies; };
          in
          { devShell =
              make-shell
@@ -20,9 +19,9 @@
                    [ nodejs
                      nodePackages.bower
                      nodePackages.pulp
+                     (ps.command {})
                      purs-nix.purescript
                      # purs-nix.purescript-language-server
-                     (command {})
                    ];
                };
          }
