@@ -3,7 +3,6 @@ p:
   let l = p.lib; in
   rec
   { bundle =
-      purescript:
       { entry-point
       , esbuild ? {}
       , output ? null

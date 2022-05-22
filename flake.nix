@@ -50,7 +50,7 @@
         };
     }
     // utils.apply-systems { inherit inputs; }
-         ({ deadnix, make-shell, pkgs, system, ... }:
+         ({ deadnix, make-shell, pkgs, ... }:
             let
               p = pkgs;
               u = import ./utils.nix p;

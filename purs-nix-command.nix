@@ -28,7 +28,6 @@ with builtins;
       , output ? "index.js"
       }:
       u.bundle
-        purescript
         { entry-point = "./${compiler-output}/${module}/index.js";
           inherit esbuild main output;
         };

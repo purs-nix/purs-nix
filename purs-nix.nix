@@ -189,7 +189,6 @@ deps:
             bundle = { esbuild ? {}, main ? true }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
-                   purescript
                    { entry-point = output {} + "/${name}/index.js";
                      inherit esbuild main;
                      output = "$out";
