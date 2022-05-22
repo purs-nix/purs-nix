@@ -9,6 +9,8 @@
       (system:
          let
            p = nixpkgs.legacyPackages.${system};
+
+           # making sure the example always uses the current version
            purs-nix = (get-flake ../../.) { inherit system; };
 
            inherit (purs-nix) ps-pkgs purs;
