@@ -59,7 +59,11 @@ and returns an attribute set with the following attributes:
 - `bundle`: The options that will configure the `purs-nix bundle` command.
 
   ```
-  { esbuild ? {} # additional esbuild flags
+  { esbuild # additional esbuild flags
+    ? { format ? "esm"
+      , log-level ? "warning"
+      , outfile ? "main.js"
+      }
   , main ? true # import and call `main()`
   , module ? "Main"
   }

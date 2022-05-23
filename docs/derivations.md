@@ -21,14 +21,17 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
 ### bundle
 
 ```
-{ main ? true
-, namespace ? null
+{ esbuild # additional esbuild flags
+  ? { format ? "esm"
+    , log-level ? "warning"
+    , outfile ? "main.js"
+    }
+, main ? true
 }
 
 ```
 
 - `main`: whether or not to automatically execute the main function of the module you're bundling.
-- `namespace`: The name of the JavaScript object that contains your PureScript code in the bundle.
 
 `modules.Module.bundle {}` is a derivation containing the bundled code from the module `Module`.
 
