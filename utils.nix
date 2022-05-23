@@ -5,18 +5,16 @@ p:
   { bundle =
       { entry-point
       , esbuild ? {}
-      , output ? null
       , main ? true
       }:
       let
         esbuild' =
           { format = "esm";
             log-level = "warning";
+            outfile = "index.js";
           }
           // esbuild
-          // { bundle = true;
-               outfile = output;
-             };
+          // { bundle = true; };
 
         flags =
           toString

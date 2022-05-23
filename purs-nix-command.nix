@@ -25,11 +25,10 @@ with builtins;
       { esbuild ? {}
       , main ? true
       , module ? "Main"
-      , output ? "index.js"
       }:
       u.bundle
         { entry-point = "./${compiler-output}/${module}/index.js";
-          inherit esbuild main output;
+          inherit esbuild main;
         };
 
     compile-and-bundle = args:
@@ -163,7 +162,7 @@ with builtins;
             echo "Bundling complete";;
 
           run )
-            ${compile-and-bundle (bundle // { output = run-output; })}
+            ${compile-and-bundle (bundle // { esbuild.outfile = run-output; })}
             ${nodejs}/bin/node ${run-output};;
 
           test )
@@ -171,8 +170,8 @@ with builtins;
 
             ${bundle'
                 (bundle
-                 // { module = test-module;
-                      output = run-output;
+                 // { esbuild.outfile = run-output;
+                      module = test-module;
                     }
                 )
             }

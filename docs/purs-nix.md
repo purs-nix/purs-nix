@@ -62,7 +62,6 @@ and returns an attribute set with the following attributes:
   { esbuild ? {} # additional esbuild flags
   , main ? true # import and call `main()`
   , module ? "Main"
-  , output ? "index.js"
   }
   ```
 
