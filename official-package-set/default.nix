@@ -1050,6 +1050,16 @@ httpure =
       ];
   };
 
+httpurple =
+  { version = "1.0.0";
+    repo = "https://github.com/sigma-andex/purescript-httpurple.git";
+    rev = "29f1048ccc31f29cd57a774b81d2670ebf6e3ab9";
+
+    dependencies =
+      [ aff arrays bifunctors console control effect either foldable-traversable foreign-object js-uri justifill maybe newtype node-buffer node-fs node-http node-net node-process node-streams options ordered-collections posix-types prelude profunctor record refs routing-duplex strings tuples type-equality typelevel-prelude 
+      ];
+  };
+
 identity =
   { version = "6.0.0";
     repo = "https://github.com/purescript/purescript-identity.git";
@@ -1151,9 +1161,9 @@ js-uri =
   };
 
 justifill =
-  { version = "0.3.1";
+  { version = "0.5.0";
     repo = "https://github.com/i-am-the-slime/purescript-justifill.git";
-    rev = "880942d9853724fb6d31ad6f6f856af9249e0a7f";
+    rev = "c72e57594dfd22ebaa37db4169525cc001bc51c4";
 
     dependencies =
       [ maybe prelude record typelevel-prelude 
@@ -2340,6 +2350,16 @@ stringutils =
       ];
   };
 
+substitute =
+  { version = "0.2.3";
+    repo = "https://github.com/ursi/purescript-substitute.git";
+    rev = "adddf76f8f44a82b264df47e0dea5b3ce892c102";
+
+    dependencies =
+      [ foldable-traversable foreign-object maybe prelude return strings 
+      ];
+  };
+
 supply =
   { version = "0.2.0";
     repo = "https://github.com/ajnsit/purescript-supply.git";
@@ -2511,9 +2531,9 @@ uint =
   };
 
 uncurried-transformers =
-  { version = "1.0.0";
+  { version = "1.1.0";
     repo = "https://github.com/PureFunctor/purescript-uncurried-transformers.git";
-    rev = "bfbbdbe1157f59ccc612f5820bc54b57546423e7";
+    rev = "0ecd8458ea68c8d615aa3bc0a603592e49137fca";
 
     dependencies =
       [ control effect either functions identity prelude safe-coerce tailrec transformers tuples 
@@ -2801,9 +2821,9 @@ web-uievents =
   };
 
 web-workers =
-  { version = "1.0.0";
+  { version = "1.1.0";
     repo = "https://github.com/gbagan/purescript-web-workers.git";
-    rev = "50ec17f699b709082f84801c0fbba39ce2445fff";
+    rev = "1b23a4b14b1da365d25a0a9416a955b7faf22cc8";
 
     dependencies =
       [ effect foreign maybe prelude unsafe-coerce web-events 
@@ -2837,6 +2857,16 @@ yoga-json =
 
     dependencies =
       [ arrays bifunctors console control effect either exceptions foldable-traversable foreign foreign-object identity lists maybe nonempty nullable partial prelude record transformers typelevel-prelude variant 
+      ];
+  };
+
+yoga-postgres =
+  { version = "6.0.0";
+    repo = "https://github.com/rowtype-yoga/purescript-yoga-postgres.git";
+    rev = "d4dadf10b13abb85ff50a6b444aca901f4abb2f1";
+
+    dependencies =
+      [ aff arrays datetime effect either enums foldable-traversable foreign integers maybe nullable prelude transformers unsafe-coerce 
       ];
   };
 
