@@ -11,7 +11,7 @@ p:
         esbuild' =
           { format = "esm";
             log-level = "warning";
-            outfile = "index.js";
+            outfile = "main.js";
           }
           // esbuild
           // { bundle = true; };
