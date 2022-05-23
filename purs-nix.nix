@@ -190,8 +190,8 @@ deps:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
                    { entry-point = output {} + "/${name}/index.js";
-                     inherit esbuild main;
-                     output = "$out";
+                     esbuild = esbuild // { outfile = "$out"; };
+                     inherit main;
                    }
                 );
 
