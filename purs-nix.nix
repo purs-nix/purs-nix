@@ -3,7 +3,7 @@ deps:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix l;
     inherit (deps) builders easy-ps pkgs purescript-language-server;
-    purescript' = easy-ps.purescript;
+    purescript' = easy-ps.purs-0_14_9;
   in
   { inherit (import ./build-pkgs.nix { inherit pkgs; utils = u; })
       build ps-pkgs ps-pkgs-ns;
