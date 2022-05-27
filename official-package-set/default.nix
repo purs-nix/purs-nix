@@ -661,12 +661,12 @@ expect-inferred =
   };
 
 fast-vect =
-  { version = "0.6.0";
+  { version = "0.7.0";
     repo = "https://github.com/sigma-andex/purescript-fast-vect.git";
-    rev = "9aa4eb51687c11041939dd8f0ba0080860928a9b";
+    rev = "f48937f8615c1a648789a4e36b6389d05cad922e";
 
     dependencies =
-      [ arrays foldable-traversable maybe partial prelude 
+      [ arrays filterable foldable-traversable lists maybe ordered-collections prelude profunctor tuples unfoldable 
       ];
   };
 
@@ -687,6 +687,16 @@ fixed-points =
 
     dependencies =
       [ exists newtype prelude transformers 
+      ];
+  };
+
+fixed-precision =
+  { version = "5.0.0";
+    repo = "https://github.com/lumihq/purescript-fixed-precision.git";
+    rev = "63781fda654ffaecbb1dfac5fa7112f14f860081";
+
+    dependencies =
+      [ arrays bigints control integers maybe numbers partial prelude strings 
       ];
   };
 
@@ -1051,9 +1061,9 @@ httpure =
   };
 
 httpurple =
-  { version = "1.0.0";
+  { version = "1.1.0";
     repo = "https://github.com/sigma-andex/purescript-httpurple.git";
-    rev = "29f1048ccc31f29cd57a774b81d2670ebf6e3ab9";
+    rev = "4d1e13f334484466314f398c9201b149a501363c";
 
     dependencies =
       [ aff arrays bifunctors console control effect either foldable-traversable foreign-object js-uri justifill maybe newtype node-buffer node-fs node-http node-net node-process node-streams options ordered-collections posix-types prelude profunctor record refs routing-duplex strings tuples type-equality typelevel-prelude 
@@ -1221,9 +1231,9 @@ leibniz =
   };
 
 linalg =
-  { version = "4.0.0";
+  { version = "5.1.0";
     repo = "https://github.com/gbagan/purescript-linalg.git";
-    rev = "bcf6135f370935ca94c101fe04f80a2604451764";
+    rev = "8dc62a79b62fd05a07f5f3ee77ce6f1211615487";
 
     dependencies =
       [ arrays foldable-traversable functions maybe prelude tuples 
@@ -1540,6 +1550,16 @@ node-streams =
       ];
   };
 
+node-streams-aff =
+  { version = "1.1.0";
+    repo = "https://github.com/jamesdbrock/purescript-node-streams-aff.git";
+    rev = "41602ad6d74e2843771793580c32e92b33816ab4";
+
+    dependencies =
+      [ aff arrays effect either exceptions maybe node-buffer node-streams prelude st tuples 
+      ];
+  };
+
 node-url =
   { version = "6.0.0";
     repo = "https://github.com/purescript-node/purescript-node-url.git";
@@ -1840,6 +1860,16 @@ profunctor-lenses =
       ];
   };
 
+protobuf =
+  { version = "3.0.0";
+    repo = "https://github.com/xc-jp/purescript-protobuf.git";
+    rev = "dfe611f9a221ce31542e78f64ff270a3fb548e61";
+
+    dependencies =
+      [ arraybuffer arraybuffer-builder arraybuffer-types arrays control effect either enums exceptions float32 foldable-traversable functions int64 maybe newtype parsing parsing-dataview prelude record strings tailrec transformers tuples uint web-encoding 
+      ];
+  };
+
 ps-cst =
   { version = "1.2.0";
     repo = "https://github.com/purescript-codegen/purescript-ps-cst.git";
@@ -1987,6 +2017,16 @@ react-basic =
 
     dependencies =
       [ effect prelude record 
+      ];
+  };
+
+react-basic-dom =
+  { version = "5.0.0";
+    repo = "https://github.com/lumihq/purescript-react-basic-dom.git";
+    rev = "7a6d554655db7206b5ed8cb21bbf8b79974764c1";
+
+    dependencies =
+      [ effect foldable-traversable foreign-object maybe nullable prelude react-basic unsafe-coerce web-dom web-events web-file web-html 
       ];
   };
 
