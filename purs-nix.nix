@@ -26,6 +26,7 @@ deps:
             ''
       , nodejs ? pkgs.nodejs
       , purescript ? purescript'
+      , foreign ? null
       }:
       let
         inherit (p.stdenv) mkDerivation;
@@ -191,7 +192,49 @@ deps:
                     }
                     '';
 
-                  installPhase = "mv output $out";
+                  installPhase =
+                    let
+                      foreign-stuff =
+                        let
+                          foreign-stuff' =
+                            foldl'
+                              (acc: dep:
+                                 if dep?foreign
+                                 then acc // dep.foreign
+                                 else acc
+                              )
+                              {}
+                              (trans-deps ++ dependencies)
+                            // (if isNull foreign then {} else foreign);
+                        in
+                        l.concatStringsSep "\n"
+                          (l.mapAttrsToList
+                             (module: { derivation, paths }:
+                                let
+                                  purs-nix-js =
+                                    l.pipe paths
+                                      [ (l.mapAttrsToList
+                                           (n: v:
+                                              ''
+                                              export * as ${n} from "${derivation}${toString v}";
+                                              ''
+                                           )
+                                        )
+
+                                        (l.concatStringsSep "\n")
+                                        (p.writeText "purs-nix.js")
+                                      ];
+                                in
+                                "cp ${purs-nix-js} ${module}/purs-nix.js"
+                             )
+                             foreign-stuff'
+                          );
+                    in
+                    ''
+                    mv output $out
+                    cd $out
+                    ${foreign-stuff}
+                    '';
                 };
 
             bundle = { esbuild ? {}, main ? true }:

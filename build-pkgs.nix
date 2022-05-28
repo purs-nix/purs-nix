@@ -42,7 +42,8 @@ with builtins;
                  { inherit _local dependencies repo rev;
                    local = make-package { _local = true; };
                  }
-                 // add-optional "pursuit";
+                 // add-optional "pursuit"
+                 // add-optional "foreign";
 
                installPhase = args.app or "ln -s $src/${src'} $out";
              }
