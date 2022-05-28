@@ -4,8 +4,8 @@ with builtins;
     l = p.lib; p = pkgs; u = utils;
 
     build =
-      { repo
-      , rev
+      { repo ? null
+      , rev ? null
       , name
       , info ? null
       , ...

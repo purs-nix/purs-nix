@@ -34,7 +34,7 @@ There are two formats for package description attributes sets:
      }
    ```
 
-The following attributes are required:
+The following attributes are required (unless [.local](./overriding-packages.md) is used):
 - `repo`
 - `rev`
 

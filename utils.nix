@@ -76,8 +76,13 @@ p:
       ''
       echo "name:    ${pkg.pname or pkg.name}"
       echo "version: ${pkg.version or "none"}"
-      echo "repo:    ${pkg.repo}"
-      echo "commit:  ${pkg.rev}"
+      ${if !isNull pkg.repo then
+          ''
+          echo "repo:    ${pkg.repo}"
+          echo "commit:  ${pkg.rev}"''
+        else
+          ""
+      }
       echo "source:  ${pkg}"
       '';
 
