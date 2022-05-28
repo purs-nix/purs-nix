@@ -69,13 +69,16 @@ deps:
         local-graph =
           let
             make-graph = extra:
-              l.pipe "${purescript}/bin/purs graph ${extra} ${dep-globs} > $out"
-                [ (p.runCommand "purescript-dependency-graph" {})
-                  readFile
-                  # is this safe?
-                  unsafeDiscardStringContext
-                  fromJSON
-                ];
+              if extra + dep-globs != "" then
+                l.pipe "${purescript}/bin/purs graph ${extra} ${dep-globs} > $out"
+                  [ (p.runCommand "purescript-dependency-graph" {})
+                    readFile
+                    # is this safe?
+                    unsafeDiscardStringContext
+                    fromJSON
+                  ]
+              else
+                {};
 
             deps-graph = make-graph "";
             graph = make-graph (make-srcs-str srcs);
@@ -104,7 +107,12 @@ deps:
                 { name = "built-deps";
                   phases = [ "buildPhase" "installPhase" ];
                   nativeBuildInputs = [ purescript ];
-                  buildPhase ="purs compile ${dep-globs}";
+
+                  buildPhase =
+                    if dep-globs != ""
+                    then "purs compile ${dep-globs}"
+                    else "mkdir output";
+
                   installPhase = "mv output $out";
                 };
 
