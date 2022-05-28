@@ -199,36 +199,68 @@ deps:
                           foreign-stuff' =
                             foldl'
                               (acc: dep:
-                                 if dep?foreign
-                                 then acc // dep.foreign
-                                 else acc
+                                 if dep?foreign then
+                                   l.foldl
+                                     (acc': { name, value }:
+                                        if value?derivation then
+                                          l.recursiveUpdate
+                                            acc'
+                                            { derivation.${name} = value; }
+                                        else if value?node_modules then
+                                          l.recursiveUpdate
+                                            acc'
+                                            { node.${name} = value; }
+                                        else
+                                          acc'
+                                     )
+                                     acc
+                                     (l.mapAttrsToList l.nameValuePair dep.foreign)
+                                 else
+                                   acc
                               )
-                              {}
+                              { derivation = {};
+                                node = {};
+                              }
                               (trans-deps ++ dependencies)
                             // (if isNull foreign then {} else foreign);
-                        in
-                        l.concatStringsSep "\n"
-                          (l.mapAttrsToList
-                             (module: { derivation, paths }:
-                                let
-                                  purs-nix-js =
-                                    l.pipe paths
-                                      [ (l.mapAttrsToList
-                                           (n: v:
-                                              ''
-                                              export * as ${n} from "${derivation}${toString v}";
-                                              ''
-                                           )
-                                        )
 
-                                        (l.concatStringsSep "\n")
-                                        (p.writeText "purs-nix.js")
-                                      ];
-                                in
-                                "cp ${purs-nix-js} ${module}/purs-nix.js"
-                             )
-                             foreign-stuff'
-                          );
+                          foreign-derivation =
+                            l.concatStringsSep "\n"
+                              (l.mapAttrsToList
+                                 (module: { derivation, paths }:
+                                    let
+                                      purs-nix-js =
+                                        l.pipe paths
+                                          [ (l.mapAttrsToList
+                                               (n: v:
+                                                  ''
+                                                  export * as ${n} from "${derivation}${toString v}";
+                                                  ''
+                                               )
+                                            )
+
+                                            (l.concatStringsSep "\n")
+                                            (p.writeText "purs-nix.js")
+                                          ];
+                                    in
+                                    "cp ${purs-nix-js} ${module}/purs-nix.js"
+                                 )
+                                 foreign-stuff'.derivation
+                              );
+
+                          foreign-node =
+                            l.concatStringsSep "\n"
+                              (l.mapAttrsToList
+                                 (module: { node_modules }:
+                                    "ln -s ${node_modules} ${module}"
+                                 )
+                                 foreign-stuff'.node
+                              );
+                        in
+                        ''
+                        ${foreign-derivation}
+                        ${foreign-node}
+                        '';
                     in
                     ''
                     mv output $out
