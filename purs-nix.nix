@@ -31,35 +31,34 @@ deps:
       let
         inherit (p.stdenv) mkDerivation;
 
-        get-dep-globs = deps:
+        get-all-deps = deps:
           let
-            trans-deps =
-              let
-                flatten = ds:
-                  foldl'
-                    (acc: d:
-                       acc ++ flatten d.dependencies
-                    )
-                    []
-                    ds
-                  ++ ds;
+            flatten = ds:
+              foldl'
+                (acc: d:
+                   acc ++ flatten d.dependencies
+                )
+                []
+                ds
+              ++ ds;
 
-              in
-              l.pipe (flatten deps)
-                [ (foldl'
-                     (acc: d:
-                        if acc?${d.name} && d._local then
-                          acc
-                        else
-                          acc // { ${d.name} = d; }
-                     )
-                     {}
-                  )
-
-                  attrValues
-                ];
           in
-          toString (map (a: ''"${a}/**/*.purs"'') trans-deps);
+          l.pipe (flatten deps)
+            [ (foldl'
+                 (acc: d:
+                    if acc?${d.name} && d._local then
+                      acc
+                    else
+                      acc // { ${d.name} = d; }
+                 )
+                 {}
+              )
+
+              attrValues
+            ];
+
+        get-dep-globs = deps:
+          toString (map (a: ''"${a}/**/*.purs"'') (get-all-deps deps));
 
         dep-globs = get-dep-globs dependencies;
         all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
@@ -100,6 +99,78 @@ deps:
                }
             )
             partial;
+
+        foreign-stuff = deps: prefix:
+          let
+            foreign-stuff' =
+              let
+                split-foreign = init: foreign':
+                  l.foldl
+                    (acc': { name, value }:
+                       if value?derivation then
+                         l.recursiveUpdate
+                           acc'
+                           { derivation.${name} = value; }
+                       else if value?node_modules then
+                         l.recursiveUpdate
+                           acc'
+                           { node.${name} = value; }
+                       else
+                         acc'
+                    )
+                    init
+                    (l.mapAttrsToList l.nameValuePair foreign');
+              in
+              foldl'
+                (acc: dep:
+                   if dep?foreign then
+                       split-foreign acc dep.foreign
+                   else
+                     acc
+                )
+                (split-foreign
+                   { derivation = {}; node = {}; }
+                   (if isNull foreign then {} else foreign)
+                )
+                deps;
+
+            foreign-derivation =
+              l.concatStringsSep "\n"
+                (l.mapAttrsToList
+                   (module: { derivation, paths }:
+                      let
+                        purs-nix-js =
+                          l.pipe paths
+                            [ (l.mapAttrsToList
+                                 (n: v:
+                                    ''
+                                    export * as ${n} from "${derivation}${toString v}";
+                                    ''
+                                 )
+                              )
+
+                              (l.concatStringsSep "\n")
+                              (p.writeText "purs-nix.js")
+                            ];
+                      in
+                      "cp ${purs-nix-js} ${prefix}/${module}/purs-nix.js"
+                   )
+                   foreign-stuff'.derivation
+                );
+
+            foreign-node =
+              l.concatStringsSep "\n"
+                (l.mapAttrsToList
+                   (module: { node_modules }:
+                      "ln -fs ${node_modules} ${prefix}/${module}"
+                   )
+                   foreign-stuff'.node
+                );
+          in
+          ''
+          ${foreign-derivation}
+          ${foreign-node}
+          '';
 
         build-single = name: local-deps:
           let
@@ -193,79 +264,10 @@ deps:
                     '';
 
                   installPhase =
-                    let
-                      foreign-stuff =
-                        let
-                          foreign-stuff' =
-                            foldl'
-                              (acc: dep:
-                                 if dep?foreign then
-                                   l.foldl
-                                     (acc': { name, value }:
-                                        if value?derivation then
-                                          l.recursiveUpdate
-                                            acc'
-                                            { derivation.${name} = value; }
-                                        else if value?node_modules then
-                                          l.recursiveUpdate
-                                            acc'
-                                            { node.${name} = value; }
-                                        else
-                                          acc'
-                                     )
-                                     acc
-                                     (l.mapAttrsToList l.nameValuePair dep.foreign)
-                                 else
-                                   acc
-                              )
-                              { derivation = {};
-                                node = {};
-                              }
-                              (trans-deps ++ dependencies)
-                            // (if isNull foreign then {} else foreign);
-
-                          foreign-derivation =
-                            l.concatStringsSep "\n"
-                              (l.mapAttrsToList
-                                 (module: { derivation, paths }:
-                                    let
-                                      purs-nix-js =
-                                        l.pipe paths
-                                          [ (l.mapAttrsToList
-                                               (n: v:
-                                                  ''
-                                                  export * as ${n} from "${derivation}${toString v}";
-                                                  ''
-                                               )
-                                            )
-
-                                            (l.concatStringsSep "\n")
-                                            (p.writeText "purs-nix.js")
-                                          ];
-                                    in
-                                    "cp ${purs-nix-js} ${module}/purs-nix.js"
-                                 )
-                                 foreign-stuff'.derivation
-                              );
-
-                          foreign-node =
-                            l.concatStringsSep "\n"
-                              (l.mapAttrsToList
-                                 (module: { node_modules }:
-                                    "ln -s ${node_modules} ${module}"
-                                 )
-                                 foreign-stuff'.node
-                              );
-                        in
-                        ''
-                        ${foreign-derivation}
-                        ${foreign-node}
-                        '';
-                    in
                     ''
                     mv output $out
                     cd $out
-                    ${foreign-stuff}
+                    ${foreign-stuff (trans-deps ++ dependencies) "."}
                     '';
                 };
 
@@ -363,6 +365,7 @@ deps:
             { all-dependencies = dependencies ++ test-dependencies;
               inherit all-dep-globs dep-globs nodejs pkgs purescript;
               utils = u;
+              foreign = foreign-stuff (get-all-deps dependencies);
             };
       };
   }

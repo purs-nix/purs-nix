@@ -6,6 +6,7 @@ with builtins;
 , pkgs
 , purescript
 , utils
+, foreign
 }:
 { srcs ? [ "src" ]
 , globs ? concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') srcs)
@@ -48,6 +49,7 @@ with builtins;
             )
       }
       chmod -R u+w ${output}
+      ${foreign output}
       '';
 
     compile-test = args:
