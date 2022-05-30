@@ -5,10 +5,11 @@ with builtins;
 , nodejs
 , pkgs
 , purescript
+, repl-globs
 , utils
 }:
 { srcs ? [ "src" ]
-, globs ? concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') srcs)
+, globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
 , output ? "output"
 , bundle ? {}
 , compile ? {}
@@ -178,6 +179,7 @@ with builtins;
 
             ${nodejs}/bin/node ${run-output};;
 
+          repl ) ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
           docs ) ${name} srcs docs;;
           package-info ) ${package-info} "$2";;
           packages ) ${packages};;
@@ -195,6 +197,7 @@ with builtins;
             "bundle"
             "run"
             "test"
+            "repl"
             "docs"
             "package-info"
             "packages"
@@ -220,6 +223,7 @@ with builtins;
         test       Compile, bundle your test code, then run the bundle with
                    'node'.
 
+        repl       Enter the REPL
         docs       Generate HTML documentation for all the modules in your
                    project.
         ------------------------------------------------------------------------

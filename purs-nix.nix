@@ -4,10 +4,9 @@ deps:
     l = p.lib; p = pkgs; u = import ./utils.nix p;
     inherit (deps) builders easy-ps pkgs purescript-language-server;
     purescript' = easy-ps.purescript;
+    ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
-  { inherit (import ./build-pkgs.nix { inherit pkgs; utils = u; })
-      build ps-pkgs ps-pkgs-ns;
-
+  { inherit (ps-package-stuff) build ps-pkgs ps-pkgs-ns;
     inherit (pkgs) esbuild;
     inherit (pkgs.lib) licenses;
     purescript = purescript';
@@ -287,6 +286,14 @@ deps:
           import ./purs-nix-command.nix
             { all-dependencies = dependencies ++ test-dependencies;
               inherit all-dep-globs dep-globs nodejs pkgs purescript;
+
+              repl-globs =
+                get-dep-globs
+                  (dependencies
+                   ++ test-dependencies
+                   ++ [ ps-package-stuff.ps-pkgs.psci-support ]
+                  );
+
               utils = u;
             };
       };

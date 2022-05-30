@@ -47,7 +47,7 @@ p:
       }:
       let
         flags =
-          concatStringsSep " "
+          toString
             [ (make-flag "--output " output)
               (make-flag "--verbose-errors" verbose-errors)
               (make-flag "--comments" comments)
@@ -57,6 +57,21 @@ p:
             ];
       in
       ''${purescript}/bin/purs compile ${flags} ${globs}'';
+
+    repl =
+      purescript:
+      { globs
+      , node-path ? null
+      , node-opts ? null
+      }:
+      let
+        flags =
+          toString
+            [ (make-flag "--node-path " node-path)
+              (make-flag "--node-opts " node-opts)
+            ];
+      in
+      ''${purescript}/bin/purs repl ${flags} ${globs}'';
 
     make-flag = flag: arg:
       if arg == null || arg == false then
