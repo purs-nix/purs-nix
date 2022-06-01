@@ -1,7 +1,7 @@
 { inputs =
     { make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-      purs-nix.url = "github:ursi/purs-nix";
+      purs-nix.url = "github:ursi/purs-nix/ps-0.14";
       utils.url = "github:ursi/flake-utils/8";
     };
 
