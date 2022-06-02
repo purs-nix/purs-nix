@@ -1,5 +1,8 @@
 { inputs =
-    { get-flake.url = "github:ursi/get-flake";
+    { # use a `purs-nix` input instead of `get-flake` in your own projects
+      # this is just a way to make sure this flake always uses the current version
+      # of purs-nix
+      get-flake.url = "github:ursi/get-flake";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       utils.url = "github:numtide/flake-utils";
     };
@@ -10,7 +13,7 @@
          let
            p = nixpkgs.legacyPackages.${system};
 
-           # making sure the example always uses the current version
+                    # inputs.purs-nix | is what you would use in a normal project
            purs-nix = (get-flake ../../.) { inherit system; };
 
            ps =
