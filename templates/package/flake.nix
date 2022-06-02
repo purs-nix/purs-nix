@@ -1,19 +1,27 @@
 { inputs =
-    { make-shell.url = "github:ursi/nix-make-shell/1";
-      nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    { nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       purs-nix.url = "github:ursi/purs-nix/ps-0.14";
-      utils.url = "github:ursi/flake-utils/8";
+      utils.url = "github:numtide/flake-utils";
     };
 
-  outputs = { utils, ... }@inputs:
-    utils.apply-systems { inherit inputs; }
-      ({ make-shell, purs-nix, pkgs, ... }:
+  outputs = { nixpkgs, utils, ... }@inputs:
+    utils.lib.eachDefaultSystem
+      (system:
          let
+           pkgs = nixpkgs.legacyPackages.${system};
+           purs-nix = inputs.purs-nix { inherit system; };
            package = import ./package.nix purs-nix;
-           ps = purs-nix.purs { inherit (package) dependencies; };
+
+           ps =
+             purs-nix.purs
+               { inherit (package) dependencies;
+                 srcs = [ ./src ];
+               };
          in
-         { devShell =
-             make-shell
+         { packages.default = ps.modules.Main.bundle {};
+
+           devShell =
+             pkgs.mkShell
                { packages =
                    with pkgs;
                    [ nodejs
