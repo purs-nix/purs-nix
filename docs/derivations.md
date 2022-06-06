@@ -4,6 +4,8 @@ You can use **purs-nix** to make a derivations for your PureScript bundle, your 
 
 You access these derivations via the [modules](./purs-nix.md#purs-modules) attribute set, using the name of your module as the attribute.
 
+NOTE: If the module name contains a `.`, it will require quotation marks around its name (e.g. `modules."Foo.Bar.Main".bundle`)
+
 There are three different attributes for each module.
 
 ### output
