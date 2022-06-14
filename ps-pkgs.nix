@@ -114,6 +114,41 @@
             typelevel-prelude
           ];
       };
+
+    purescript-react-basic-hooks =
+      { repo = "https://github.com/spicydonuts/purescript-react-basic-hooks";
+        version = "8.0.0";
+        rev = "50575f50a68dc8b756b378674dea5c568b8c109d";
+
+        dependencies =
+          [ aff
+            aff-promise
+            bifunctors
+            console
+            control
+            datetime
+            effect
+            either
+            exceptions
+            foldable-traversable
+            functions
+            indexed-monad
+            integers
+            maybe
+            newtype
+            now
+            nullable
+            ordered-collections
+            prelude
+            react-basic
+            refs
+            tuples
+            type-equality
+            unsafe-coerce
+            unsafe-reference
+            web-html
+          ];
+      };
   }
   // import ./official-package-set ps-pkgs
   // { task =
