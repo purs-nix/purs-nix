@@ -1,33 +1,28 @@
 { make-shell, purs-nix, pkgs, ... }:
   let
-    inherit (purs-nix) ps-pkgs;
+    inherit (purs-nix) build ps-pkgs;
 
     ps =
       purs-nix.purs
         { dependencies =
+            let
+              repo = "https://github.com/ursi/purs-nix-test-packages.git";
+              rev = "25b3125cf4cac00feb6d8ba3b24c5f27271d42ff";
+            in
             with ps-pkgs;
             [ console
-              effect
-              prelude
-              (purs-nix.build
-                 { name = "node-glob-basic";
-                   version = "1.2.0";
-                   repo = "https://github.com/natefaubion/purescript-node-glob-basic.git";
-                   rev = "22b374b30537a945310fb8049f5bce1b51a7a669";
 
-                   dependencies =
-                     with ps-pkgs;
-                       [ aff
-                         console
-                         effect
-                         lists
-                         maybe
-                         node-fs-aff
-                         node-path
-                         node-process
-                         ordered-collections
-                         strings
-                       ];
+              (build
+                 { name = "effect";
+                   inherit repo rev;
+                   info = /effect/package.nix;
+                 }
+              )
+
+              (build
+                 { name = "prelude";
+                   inherit repo rev;
+                   info = /prelude/package.nix;
                  }
               )
             ];

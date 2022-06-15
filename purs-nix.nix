@@ -13,9 +13,7 @@ deps:
     inherit purescript-language-server;
 
     purs =
-      { dependencies ? []
-      , test-dependencies ? []
-      , srcs
+      { srcs
         ? throw
             ''
             In order to build derivations from your PureScript code, you must supply a 'srcs' argument to 'purs'
@@ -25,42 +23,56 @@ deps:
             ''
       , nodejs ? pkgs.nodejs
       , purescript ? purescript'
-      }:
+      , ...
+      }@args:
       let
         inherit (p.stdenv) mkDerivation;
 
-        get-dep-globs = deps:
+        create-closure = deps:
           let
-            trans-deps =
-              let
-                flatten = ds:
-                  foldl'
-                    (acc: d:
-                       acc ++ flatten d.dependencies
-                    )
-                    []
-                    ds
-                  ++ ds;
+            f = direct:
+              foldl'
+                (acc: dep:
+                   let name = dep.pname or dep.name; in
+                   if l.hasInfix "." name then
+                     let path = l.splitString "." name; in
+                     if direct || !l.hasAttrByPath path acc.ps-pkgs-ns then
+                       f false
+                         (l.recursiveUpdate
+                            acc
+                            { ps-pkgs-ns.${head path}.${head (tail path)} = dep; }
+                         )
+                         dep.dependencies
+                     else acc
+                   else if direct || !acc.ps-pkgs?${name} then
+                     f false
+                       (l.recursiveUpdate acc { ps-pkgs.${name} = dep; })
+                       dep.dependencies
+                   else
+                     acc
+                );
 
-              in
-              l.pipe (flatten deps)
-                [ (foldl'
-                     (acc: d:
-                        if acc?${d.name} && d._local then
-                          acc
-                        else
-                          acc // { ${d.name} = d; }
-                     )
-                     {}
-                  )
-
-                  attrValues
-                ];
+            inherit (f true { ps-pkgs = {};  ps-pkgs-ns = {}; } deps)
+              ps-pkgs ps-pkgs-ns;
           in
-          toString (map (a: ''"${a}/**/*.purs"'') trans-deps);
+          attrValues ps-pkgs
+          ++ concatMap attrValues (attrValues ps-pkgs-ns);
 
-        dep-globs = get-dep-globs dependencies;
-        all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
+        dependencies =
+          if args?dependencies
+          then create-closure args.dependencies
+          else [];
+
+        all-dependencies =
+          if args?test-dependencies
+          then create-closure (dependencies ++ args.test-dependencies)
+          else dependencies;
+
+        make-dep-globs = deps:
+          toString (map (a: ''"${a}/**/*.purs"'') deps);
+
+        dep-globs = make-dep-globs dependencies;
+        all-dep-globs = make-dep-globs all-dependencies;
 
         make-srcs-str = a:
           concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') a);
@@ -284,15 +296,12 @@ deps:
 
         command =
           import ./purs-nix-command.nix
-            { all-dependencies = dependencies ++ test-dependencies;
+            { inherit all-dependencies;
               inherit all-dep-globs dep-globs nodejs pkgs purescript;
 
               repl-globs =
-                get-dep-globs
-                  (dependencies
-                   ++ test-dependencies
-                   ++ [ ps-package-stuff.ps-pkgs.psci-support ]
-                  );
+                make-dep-globs
+                  (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
 
               utils = u;
             };
