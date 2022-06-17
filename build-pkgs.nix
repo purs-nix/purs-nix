@@ -39,10 +39,15 @@ with builtins;
                phases = [ "unpackPhase" "installPhase" ];
 
                passthru =
-                 { inherit _local dependencies repo rev;
+                 { inherit _local;
                    local = make-package { _local = true; };
-                 }
-                 // add-optional "pursuit";
+
+                   purs-nix-info =
+                     { inherit dependencies name ref repo rev version;
+                       src = src';
+                     }
+                     // add-optional "pursuit";
+                 };
 
                installPhase = args.app or "ln -s $src/${src'} $out";
              }

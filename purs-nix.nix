@@ -33,7 +33,7 @@ deps:
             f = direct:
               foldl'
                 (acc: dep:
-                   let name = dep.pname or dep.name; in
+                   let name = dep.purs-nix-info.name; in
                    if l.hasInfix "." name then
                      let path = l.splitString "." name; in
                      if direct || !l.hasAttrByPath path acc.ps-pkgs-ns then
@@ -42,12 +42,12 @@ deps:
                             acc
                             { ps-pkgs-ns.${head path}.${head (tail path)} = dep; }
                          )
-                         dep.dependencies
+                         dep.purs-nix-info.dependencies
                      else acc
                    else if direct || !acc.ps-pkgs?${name} then
                      f false
                        (l.recursiveUpdate acc { ps-pkgs.${name} = dep; })
-                       dep.dependencies
+                       dep.purs-nix-info.dependencies
                    else
                      acc
                 );

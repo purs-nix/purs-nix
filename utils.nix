@@ -91,10 +91,11 @@ p:
       ''
       echo "name:    ${pkg.pname or pkg.name}"
       echo "version: ${pkg.version or "none"}"
-      ${if !isNull pkg.repo then
+      ${let info = pkg.purs-nix-info; in
+        if !isNull info.repo then
           ''
-          echo "repo:    ${pkg.repo}"
-          echo "commit:  ${pkg.rev}"''
+          echo "repo:    ${info.repo}"
+          echo "commit:  ${info.rev}"''
         else
           ""
       }

@@ -129,14 +129,19 @@ with builtins;
                 l.listToAttrs
                   (map
                      (pkg:
-                        let registry-name = "purescript-${pkg.pursuit.name or pkg.pname or pkg.name}"; in
+                        let
+                          info = pkg.purs-nix-info;
+                          registry-name = "purescript-${info.pursuit.name or info.name}";
+                        in
                         l.nameValuePair
                           registry-name
-                          (if bower-packages-registry?${registry-name} && pkg?version then
-                             "^v${pkg.version}"
+                          (if bower-packages-registry?${registry-name} && info?version then
+                             "^v${info.version}"
                            else
-                             "${pkg.repo}#${
-                             if pkg?version then "v${pkg.version}" else pkg.rev
+                             "${info.repo}#${
+                             if info?version
+                             then "v${info.version}"
+                             else info.rev
                              }"
                           )
                      )
