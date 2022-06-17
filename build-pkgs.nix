@@ -4,65 +4,89 @@ with builtins;
     l = p.lib; p = pkgs; u = utils;
 
     build =
-      { repo ? null
-      , rev ? null
-      , name
-      , info ? null
+      { name
       , ...
       }@args:
       let
-        ref = args.ref
-              or (if args?version then "refs/tags/v" + args.version
+        legacy =
+          l.warnIf (args?repo)
+            ''
+            You are using a deprecated API to specify your package.
+            see: https://github.com/ursi/purs-nix/blob/ps-0.15/docs/adding-packages.md
+            ''
+            args?repo;
+
+        ref =
+          let
+            get-ref = a: b:
+              a.ref
+              or (if b?version then "refs/tags/v" + b.version
                   else null
                  );
-
-        make-package = { _local ? false }: src:
-          let
-            info' =
-              if isPath info then
-                import (src + info)
-                  { inherit ps-pkgs ps-pkgs-ns;
-                    inherit (l) licenses;
-                  }
-              else
-                args;
-
-            dependencies = info'.dependencies or [];
-            src' = info'.src or "src";
-            version = info'.version or null;
-
-            add-optional = attribute:
-              if info'?${attribute} then { ${attribute} = info'.${attribute}; } else {};
           in
-          p.stdenv.mkDerivation
-            ({ inherit src;
-               phases = [ "unpackPhase" "installPhase" ];
+          if legacy
+          then get-ref args args
+          else get-ref args.src args.info;
 
-               passthru =
-                 { inherit _local;
-                   local = make-package { _local = true; };
+        src =
+          let
+            fetch-git = repo: rev:
+              fetchGit
+                ({ url = repo;
+                   inherit rev;
+                 }
+                 // (if isNull ref then {} else { inherit ref; })
+                );
+          in
+          if legacy then
+            fetch-git args.repo args.rev
+          else
+            let src' = args.src; in
+            if src'?repo
+            then fetch-git src'.repo src'.rev
+            else src'.path or src';
 
-                   purs-nix-info =
-                     { inherit dependencies name ref repo rev version;
-                       src = src';
-                     }
-                     // add-optional "pursuit";
-                 };
+        info =
+          let info' = args.info or null; in
+          if isPath info' then
+            import (src + info')
+              { inherit ps-pkgs ps-pkgs-ns;
+                inherit (l) licenses;
+              }
+          else if legacy then
+            args
+          else
+            args.info;
 
-               installPhase = args.install or "ln -s $src/${src'} $out";
-             }
-             // u.make-name name version
-            );
+        dependencies = info.dependencies or [];
+        ps-src = info.src or "src";
+        version = info.version or null;
+
+        add-optional = attribute:
+          if info?${attribute} then { ${attribute} = info.${attribute}; } else {};
       in
-      make-package {}
-        (fetchGit
-           ({ url = repo;
-              inherit rev;
-            }
-            // (if ref == null then {}
-                else { inherit ref; }
-               )
-           )
+      p.stdenv.mkDerivation
+        ({ inherit src;
+           phases = [ "unpackPhase" "installPhase" ];
+
+           passthru =
+             { purs-nix-info =
+                 { inherit dependencies name version;
+                   src = ps-src;
+                 }
+                 // (if legacy then
+                       { inherit (args) repo rev; }
+                     else if args.src?repo then
+                       { inherit (args.src) repo rev; }
+                     else
+                       {}
+                    )
+                 // add-optional "pursuit";
+             };
+
+           installPhase = args.install or "ln -s $src/${ps-src} $out";
+         }
+         // u.make-name name version
         );
 
     ps-pkgs =

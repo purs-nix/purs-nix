@@ -62,11 +62,28 @@
         "type": "github"
       }
     },
+    "purs-nix-test-packages": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1655138680,
+        "narHash": "sha256-14cOdFp1ewPAabmBuvuu9vPI/lX30N60tXvrojHR8CI=",
+        "owner": "ursi",
+        "repo": "purs-nix-test-packages",
+        "rev": "25b3125cf4cac00feb6d8ba3b24c5f27271d42ff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ursi",
+        "repo": "purs-nix-test-packages",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "get-flake": "get-flake",
         "make-shell": "make-shell",
         "nixpkgs": "nixpkgs",
+        "purs-nix-test-packages": "purs-nix-test-packages",
         "utils": "utils"
       }
     },

@@ -1,4 +1,4 @@
-{ make-shell, purs-nix, pkgs, ... }:
+{ make-shell, pkgs, purs-nix, purs-nix-test-packages, ... }:
   let
     inherit (purs-nix) build ps-pkgs;
 
@@ -14,14 +14,14 @@
 
               (build
                  { name = "effect";
-                   inherit repo rev;
+                   src = purs-nix-test-packages;
                    info = /effect/package.nix;
                  }
               )
 
               (build
                  { name = "prelude";
-                   inherit repo rev;
+                   src = { inherit repo rev; };
                    info = /prelude/package.nix;
                  }
               )
