@@ -17,35 +17,11 @@
       ({ make-shell, pkgs, purs-nix, ... }:
          let
            inherit (purs-nix) build ps-pkgs;
+           package = import ./package.nix purs-nix-test-packages purs-nix;
 
            ps =
              purs-nix.purs
-               { dependencies =
-                   let inherit (purs-nix.ps-pkgs-ns) ursi; in
-                   with ps-pkgs;
-                   [ console
-                     ursi.is-even
-
-                     (build
-                        { name = "effect";
-                          src.path = purs-nix-test-packages;
-                          info = /effect/package.nix;
-                        }
-                     )
-
-                     (build
-                        { name = "prelude";
-
-                          src.git =
-                            { repo = "https://github.com/ursi/purs-nix-test-packages.git";
-                              rev = "25b3125cf4cac00feb6d8ba3b24c5f27271d42ff";
-                            };
-
-                          info = /prelude/package.nix;
-                        }
-                     )
-                   ];
-
+               { inherit (package) dependencies;
                  test-dependencies = [ ps-pkgs."assert" ];
                  srcs = [ ./src ./src2 ];
                };
@@ -60,7 +36,7 @@
 
                      (ps.command
                         { name = "purs-nix-test";
-                          package = import ./package.nix purs-nix;
+                          inherit package;
                           srcs = [ "src" "src2" ];
                         }
                      )
