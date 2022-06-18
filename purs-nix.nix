@@ -37,16 +37,31 @@ deps:
                    if l.hasInfix "." name then
                      let path = l.splitString "." name; in
                      if direct || !l.hasAttrByPath path acc.ps-pkgs-ns then
+                       let
+                         namespace = head path;
+                         name' = head (tail path);
+                       in
                        f false
-                         (l.recursiveUpdate
-                            acc
-                            { ps-pkgs-ns.${head path}.${head (tail path)} = dep; }
+                         (acc
+                          // { ps-pkgs-ns =
+                                 acc.ps-pkgs-ns
+                                 // { ${namespace} =
+                                        acc.ps-pkgs-ns.${namespace} or {}
+                                        // { ${name'} = dep; };
+                                    };
+                             }
                          )
                          dep.purs-nix-info.dependencies
-                     else acc
+                     else
+                       acc
                    else if direct || !acc.ps-pkgs?${name} then
                      f false
-                       (l.recursiveUpdate acc { ps-pkgs.${name} = dep; })
+                       (acc
+                        // { ps-pkgs =
+                               acc.ps-pkgs
+                               // { ${name} = dep; };
+                           }
+                       )
                        dep.purs-nix-info.dependencies
                    else
                      acc

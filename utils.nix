@@ -88,16 +88,16 @@ p:
         { pname = name; inherit version; };
 
     package-info = pkg:
+      let info = pkg.purs-nix-info; in
       ''
-      echo "name:    ${pkg.pname or pkg.name}"
-      echo "version: ${pkg.version or "none"}"
-      ${let info = pkg.purs-nix-info; in
-        if !isNull info.repo then
+      echo "name:    ${info.name}"
+      echo "version: ${info.version or "none"}"
+      ${if info?repo then
           ''
           echo "repo:    ${info.repo}"
           echo "commit:  ${info.rev}"''
         else
-          ""
+          ''echo "path:    ${pkg.src}"''
       }
       echo "source:  ${pkg}"
       '';

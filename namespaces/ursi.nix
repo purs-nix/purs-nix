@@ -21,6 +21,15 @@
       info = /package.nix;
     };
 
+  is-even =
+    { src =
+        { repo = "https://github.com/ursi/purs-nix-test-packages.git";
+          rev = "7e50388792dfa720e52b23219021f3c350e6bb30";
+        };
+
+      info = /is-even/package.nix;
+    };
+
   murmur3 =
     { repo = "https://github.com/ursi/purescript-murmur3.git";
       rev = "4da7d071ac5791b21fe9064d84e067a34fdc29e3";

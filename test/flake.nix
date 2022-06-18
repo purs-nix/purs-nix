@@ -21,10 +21,10 @@
            ps =
              purs-nix.purs
                { dependencies =
-                   let
-                   in
+                   let inherit (purs-nix.ps-pkgs-ns) ursi; in
                    with ps-pkgs;
                    [ console
+                     ursi.is-even
 
                      (build
                         { name = "effect";
