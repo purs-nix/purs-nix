@@ -28,7 +28,7 @@
 
                      (build
                         { name = "effect";
-                          src = purs-nix-test-packages;
+                          src.path = purs-nix-test-packages;
                           info = /effect/package.nix;
                         }
                      )
@@ -36,7 +36,7 @@
                      (build
                         { name = "prelude";
 
-                          src =
+                          src.git =
                             { repo = "https://github.com/ursi/purs-nix-test-packages.git";
                               rev = "25b3125cf4cac00feb6d8ba3b24c5f27271d42ff";
                             };

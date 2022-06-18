@@ -22,7 +22,7 @@
     };
 
   is-even =
-    { src =
+    { src.git =
         { repo = "https://github.com/ursi/purs-nix-test-packages.git";
           rev = "7e50388792dfa720e52b23219021f3c350e6bb30";
         };

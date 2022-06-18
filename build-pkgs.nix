@@ -42,9 +42,12 @@ with builtins;
             fetch-git args
           else
             let src' = args.src; in
-            if src'?repo
-            then fetch-git src'
-            else src'.path or src';
+            if src'?git then
+              fetch-git src'.git
+            else if src'?path then
+              src'.path
+            else
+              abort "'src' has no 'git' or 'path' attribute";
 
         info =
           let info' = args.info or null; in
@@ -76,8 +79,8 @@ with builtins;
                  }
                  // (if legacy then
                        { inherit (args) repo rev; }
-                     else if args.src?repo then
-                       { inherit (args.src) repo rev; }
+                     else if args.src?git then
+                       { inherit (args.src.git) repo rev; }
                      else
                        {}
                     )
