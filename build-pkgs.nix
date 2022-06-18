@@ -30,7 +30,7 @@ with builtins;
 
         src =
           let
-            fetch-git = repo: rev:
+            fetch-git = { repo, rev, ... }:
               fetchGit
                 ({ url = repo;
                    inherit rev;
@@ -39,11 +39,11 @@ with builtins;
                 );
           in
           if legacy then
-            fetch-git args.repo args.rev
+            fetch-git args
           else
             let src' = args.src; in
             if src'?repo
-            then fetch-git src'.repo src'.rev
+            then fetch-git src'
             else src'.path or src';
 
         info =
