@@ -11,7 +11,7 @@ with builtins;
         legacy =
           l.warnIf (args?repo)
             ''
-            You are using a deprecated API to specify your package.
+            Package: "${name}" is being specified with a deprecated API.
             see: https://github.com/ursi/purs-nix/blob/ps-0.15/docs/adding-packages.md
             ''
             args?repo;
