@@ -45,7 +45,7 @@ The following attributes are optional:
 - `pursuit`
 - `ref`
 - `src` (default: `"src"`)
-- `app` (default: `"ln -s $src/${src} $out"`)
+- `install` (default: `"ln -s $src/${src} $out"`)
 - `version`
 
 ## <span id="using-info">Using `info`</span>
