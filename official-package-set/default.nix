@@ -581,9 +581,9 @@ effect =
   };
 
 either =
-  { version = "6.0.0";
+  { version = "6.1.0";
     repo = "https://github.com/purescript/purescript-either.git";
-    rev = "5fbe43cb88e3784c8625c938cadcf61506edb3f4";
+    rev = "2a84a9cfce9fc33dfbaf9f6f8ec31588c9340aea";
 
     dependencies =
       [ control invariant maybe prelude 
@@ -990,6 +990,16 @@ halogen-subscriptions =
       ];
   };
 
+halogen-svg-elems =
+  { version = "6.0.0";
+    repo = "https://github.com/JordanMartinez/purescript-halogen-svg-elems.git";
+    rev = "372b4f909d00f6695c1bcc23bcf4479ba486a8a1";
+
+    dependencies =
+      [ halogen 
+      ];
+  };
+
 halogen-vdom =
   { version = "8.0.0";
     repo = "https://github.com/purescript-halogen/purescript-halogen-vdom.git";
@@ -1061,12 +1071,12 @@ httpure =
   };
 
 httpurple =
-  { version = "1.1.0";
+  { version = "1.2.1";
     repo = "https://github.com/sigma-andex/purescript-httpurple.git";
-    rev = "4d1e13f334484466314f398c9201b149a501363c";
+    rev = "c8fe1ac5f374c3d0c878e00127656fae8d5ecffa";
 
     dependencies =
-      [ aff arrays bifunctors console control effect either foldable-traversable foreign-object js-uri justifill maybe newtype node-buffer node-fs node-http node-net node-process node-streams options ordered-collections posix-types prelude profunctor record refs routing-duplex strings tuples type-equality typelevel-prelude 
+      [ aff arrays bifunctors console control effect either foldable-traversable foreign-object js-uri justifill maybe newtype node-buffer node-fs node-http node-net node-process node-streams options ordered-collections posix-types prelude profunctor record refs routing-duplex strings transformers tuples type-equality typelevel-prelude 
       ];
   };
 
@@ -1091,9 +1101,9 @@ indexed-monad =
   };
 
 int64 =
-  { version = "1.0.0";
+  { version = "2.0.0";
     repo = "https://github.com/purescript-contrib/purescript-int64.git";
-    rev = "0d560a852e9fb420a921ac4832e11a23df26b639";
+    rev = "a038f961b2068d9f317d572354c0a2becde5cf22";
 
     dependencies =
       [ effect foreign functions integers maybe nullable prelude quickcheck 
@@ -1420,6 +1430,16 @@ motsunabe =
       ];
   };
 
+nano-id =
+  { version = "1.1.0";
+    repo = "https://github.com/eikooc/nano-id.git";
+    rev = "5b8c932b1fa48983a2000123f25894b2425c9b40";
+
+    dependencies =
+      [ aff effect lists maybe prelude random spec strings stringutils 
+      ];
+  };
+
 naturals =
   { version = "3.0.0";
     repo = "https://github.com/LiamGoodacre/purescript-naturals.git";
@@ -1457,6 +1477,16 @@ node-buffer =
 
     dependencies =
       [ arraybuffer-types effect maybe st unsafe-coerce 
+      ];
+  };
+
+node-buffer-blob =
+  { version = "1.0.0";
+    repo = "https://github.com/purescript-node/purescript-node-buffer-blob.git";
+    rev = "a2c6109fd5d7f73bd84b7827d4e31e959c61f009";
+
+    dependencies =
+      [ aff-promise arraybuffer-types arrays console effect maybe media-types newtype node-buffer nullable prelude web-streams 
       ];
   };
 
@@ -1551,9 +1581,9 @@ node-streams =
   };
 
 node-streams-aff =
-  { version = "1.1.0";
+  { version = "2.0.0";
     repo = "https://github.com/jamesdbrock/purescript-node-streams-aff.git";
-    rev = "41602ad6d74e2843771793580c32e92b33816ab4";
+    rev = "3834b56c5fdb503e1501ab9431e624d3af3afe4d";
 
     dependencies =
       [ aff arrays effect either exceptions maybe node-buffer node-streams prelude st tuples 
@@ -1660,6 +1690,16 @@ options =
       ];
   };
 
+optparse =
+  { version = "5.0.0";
+    repo = "https://github.com/f-o-a-m/purescript-optparse.git";
+    rev = "dbc4c385e6c436eed4299ae2c0bb2cc278cf2410";
+
+    dependencies =
+      [ aff arrays bifunctors console control effect either enums exists exitcodes foldable-traversable free gen integers lazy lists maybe newtype node-buffer node-process node-streams nonempty numbers open-memoize partial prelude quickcheck strings tailrec transformers tuples 
+      ];
+  };
+
 ordered-collections =
   { version = "3.0.0";
     repo = "https://github.com/purescript/purescript-ordered-collections.git";
@@ -1711,9 +1751,9 @@ parallel =
   };
 
 parsing =
-  { version = "9.0.0";
+  { version = "9.1.0";
     repo = "https://github.com/purescript-contrib/purescript-parsing.git";
-    rev = "b5a017e633a87d3a25cd6f390f7f865cd7396a3f";
+    rev = "44ef16b7cfb7cedc3d518c00ef10c6cb73ff4fc8";
 
     dependencies =
       [ arrays either foldable-traversable identity integers lists maybe nullable prelude strings transformers unicode 
@@ -1757,6 +1797,16 @@ pha =
 
     dependencies =
       [ aff arrays bifunctors datetime effect foldable-traversable free integers maybe prelude profunctor-lenses refs tailrec transformers tuples unsafe-coerce unsafe-reference web-dom web-events web-html web-pointerevents web-uievents 
+      ];
+  };
+
+phaser =
+  { version = "0.6.0";
+    repo = "https://github.com/lfarroco/purescript-phaser.git";
+    rev = "e07ea8ed50decc5e6c021ad673523a732698e208";
+
+    dependencies =
+      [ canvas console effect maybe nullable options prelude web-html 
       ];
   };
 
@@ -1861,9 +1911,9 @@ profunctor-lenses =
   };
 
 protobuf =
-  { version = "3.0.0";
+  { version = "4.0.0";
     repo = "https://github.com/xc-jp/purescript-protobuf.git";
-    rev = "dfe611f9a221ce31542e78f64ff270a3fb548e61";
+    rev = "4d401e33e02980f2086d1e17ae9ba20262cbbc5e";
 
     dependencies =
       [ arraybuffer arraybuffer-builder arraybuffer-types arrays control effect either enums exceptions float32 foldable-traversable functions int64 maybe newtype parsing parsing-dataview prelude record strings tailrec transformers tuples uint web-encoding 
@@ -2261,9 +2311,9 @@ slug =
   };
 
 soundfonts =
-  { version = "4.0.1";
+  { version = "4.1.0";
     repo = "https://github.com/newlandsvalley/purescript-soundfonts.git";
-    rev = "573c646950f3170b60749f0ece66d5ee039a4476";
+    rev = "7d8c3526ac956547bf79525bbbf733694004e192";
 
     dependencies =
       [ aff affjax affjax-web argonaut-core arraybuffer-types arrays b64 bifunctors console effect either exceptions foldable-traversable foreign-object http-methods integers lists maybe midi ordered-collections parallel partial prelude strings transformers tuples 
@@ -2891,12 +2941,12 @@ yoga-fetch =
   };
 
 yoga-json =
-  { version = "1.0.0";
+  { version = "2.0.0";
     repo = "https://github.com/rowtype-yoga/purescript-yoga-json.git";
-    rev = "6289e56a6cfa15d26333c1539da97399da8cedb6";
+    rev = "f5dec0e6dbf933667f5dfb71f99047a44a0e7657";
 
     dependencies =
-      [ arrays bifunctors console control effect either exceptions foldable-traversable foreign foreign-object identity lists maybe nonempty nullable partial prelude record transformers typelevel-prelude variant 
+      [ arrays bifunctors control effect either exceptions foldable-traversable foreign foreign-object identity lists maybe nullable partial prelude record transformers typelevel-prelude variant 
       ];
   };
 
