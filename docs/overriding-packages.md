@@ -1,2 +1,21 @@
 # Overriding Packages
-All PureScript packages have a `local` attribute which is a function that takes a path to an alternative source for building the package, e.g. `ps-pkgs.prelude.local /path/to/prelude`.
+To override a package the package set, simply add a package with the same name to your dependencies.
+
+```
+let
+  prelude-override =
+    purs-nix.build
+      { name = "prelude";
+        src.path = /home/me/my-prelude;
+        info = /package.nix;
+      };
+in
+purs-nix.purs
+  { dependencies =
+      with purs-nix.ps-pkgs;
+      [ console
+        effect
+        prelude-override
+      ];
+  }
+```
