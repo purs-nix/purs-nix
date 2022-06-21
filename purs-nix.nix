@@ -52,11 +52,13 @@ deps:
                      acc
                 );
 
-            inherit (f true { ps-pkgs = {};  ps-pkgs-ns = {}; } deps)
-              ps-pkgs ps-pkgs-ns;
+            package-sets =
+              f true
+                { ps-pkgs = {};  ps-pkgs-ns = {}; }
+                (sort (a: b: a.purs-nix-info.name < b.purs-nix-info.name) deps);
           in
-          attrValues ps-pkgs
-          ++ concatMap attrValues (attrValues ps-pkgs-ns);
+          attrValues package-sets.ps-pkgs
+          ++ concatMap attrValues (attrValues package-sets.ps-pkgs-ns);
 
         dependencies =
           if args?dependencies
