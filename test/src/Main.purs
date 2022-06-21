@@ -6,9 +6,16 @@ import Effect (Effect)
 import Effect as Effect
 import Effect.Console (log)
 import Dependency (a)
+import IsEven (isEven)
+
+logEven :: Int -> Effect Unit
+logEven n =
+  log $ show n <> " " <> (if isEven n then "is" else "isn't") <> " even"
 
 main :: Effect Unit
 main = do
   log Prelude.override
   log Effect.override
+  logEven 2
+  logEven 3
   log a
