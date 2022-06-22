@@ -89,7 +89,7 @@ Here's an example:
 ```
 
 The arguments that are currently passed are:\
-`ps-pkgs` `ps-pkgs-ns` [`licenses`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix)
+`build` `ps-pkgs` `ps-pkgs-ns` [`licenses`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix)
 
 ## <code id="build">build</code>
 purs-nix exports a `build` function that can be used to add packages to your project from arbitrary sources. It takes an argument in mostly the same form as described above, but with a few differences.
