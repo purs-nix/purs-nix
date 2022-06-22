@@ -106,7 +106,7 @@
 
     cardano-transaction-lib =
       { repo = "https://github.com/Plutonomicon/cardano-transaction-lib.git";
-        rev = "dca94220c8041b82a0eb97c4e2dde783f130beef";
+        rev = "6d47a100781379b54debc801b4f13a21ea182c23";
 
         dependencies =
           [ aeson
