@@ -96,7 +96,8 @@ with builtins;
                  // add-optional "pursuit";
              };
 
-           installPhase = args.install or "ln -s $src/${ps-src} $out";
+           installPhase =
+             (if legacy then args else info).install or "ln -s $src/${ps-src} $out";
          }
          // u.make-name name version
         );
