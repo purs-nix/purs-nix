@@ -56,7 +56,7 @@
 
            make-test = description: info: test:
              ''
-             echo TEST: ${description}
+             echo TEST: ${l.escapeShellArg description}
              ${info}
              ${test "$(${info})"}
              echo
