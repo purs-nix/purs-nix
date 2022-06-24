@@ -113,7 +113,6 @@
                    ❄"
 
                    [[ $output == $target ]] || exit
-
                    '';
                };
 
