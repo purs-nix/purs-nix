@@ -53,7 +53,7 @@ p:
               (make-flag "--comments" comments)
               (make-flag "--codegen " codegen)
               (make-flag "--no-prefix" no-prefix)
-              (make-flag "--json-errors" no-prefix)
+              (make-flag "--json-errors" json-errors)
             ];
       in
       ''${purescript}/bin/purs compile ${flags} ${globs}'';

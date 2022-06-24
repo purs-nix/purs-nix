@@ -1,4 +1,4 @@
-{ ps-pkgs, ps-pkgs-ns }:
+{ ps-pkgs, ... }:
   with ps-pkgs;
   { argparse-basic =
       { src.git =
