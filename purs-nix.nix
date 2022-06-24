@@ -240,7 +240,7 @@ deps:
               let
                 exe =
                   let
-                    partial = "node ${bundle {}} $@";
+                    partial = "node ${bundle { esbuild.platform = "node"; }} $@";
                   in
                   pkgs.writeShellScript command
                     (if auto-flags then
