@@ -9,10 +9,10 @@ p:
       }:
       let
         esbuild' =
-          { format = "esm";
-            log-level = "warning";
+          { log-level = "warning";
             outfile = "main.js";
           }
+          // (if esbuild?platform then {} else { format = "esm"; })
           // esbuild
           // { bundle = true; };
 
