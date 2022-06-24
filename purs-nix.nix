@@ -130,15 +130,14 @@ deps:
 
         build-single = name: local-deps:
           let
-            built-deps =
+            built-deps = args:
               mkDerivation
                 { name = "built-deps";
                   phases = [ "buildPhase" "installPhase" ];
-                  nativeBuildInputs = [ purescript ];
 
                   buildPhase =
                     if dep-globs != ""
-                    then "purs compile ${dep-globs}"
+                    then u.compile purescript (args // { globs = dep-globs; })
                     else "mkdir output";
 
                   installPhase = "mv output $out";
@@ -194,7 +193,7 @@ deps:
                       augmentations =
                         toString
                           (map
-                             (a: "${a.bin} output;")
+                             (a: "${a.bin args} output;")
                              trans-deps
                           );
 
@@ -206,7 +205,7 @@ deps:
                           );
                     in
                     ''
-                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps} output
+                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps args} output
                     ${augmentations}
 
                     ${u.compile
@@ -272,7 +271,7 @@ deps:
           in
           { inherit bundle local-deps app name output src;
 
-            bin =
+            bin = args:
               let
                 merge-cache =
                   builders.write-js-script
@@ -288,7 +287,7 @@ deps:
                     fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
                     '';
 
-                output' = output {};
+                output' = output args;
               in
               p.writeShellScript name
                 ''

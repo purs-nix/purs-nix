@@ -12,6 +12,7 @@ logEven :: Int -> Effect Unit
 logEven n =
   log $ show n <> " " <> (if isEven n then "is" else "isn't") <> " even"
 
+-- a comment for testing purposes
 main :: Effect Unit
 main = do
   log Prelude.override

@@ -59,7 +59,28 @@
            checks =
              mapAttrs
                (n: v: p.runCommand n {} "${v}\ntouch $out")
-               { "custom node package" =
+               { "compiler flags" =
+                   let
+                     output =
+                       ps.modules.Main.output
+                         { codegen = "corefn,js";
+                           comments = true;
+                           no-prefix = true;
+                         };
+                   in
+                   ''
+                   # codegen
+                   ls ${output}/Main/corefn.json || exit
+
+                   # comments
+                   [[ $(grep "// a comment for testing purposes" ${output}/Main/index.js) ]] \
+                   || exit
+
+                   # no-prefix
+                   [[ -z $(head -n 1 ${output}/Main/index.js | grep //) ]] || exit
+                   '';
+
+               "custom node package" =
                    let
                      bin = make-script-custom { inherit nodejs; } "Node";
                      nodejs = p.nodejs-14_x;
@@ -94,7 +115,6 @@
                    [[ $output == $target ]] || exit
 
                    '';
-
                };
 
            devShells.default =
