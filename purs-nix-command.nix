@@ -168,7 +168,17 @@ with builtins;
             echo "Bundling complete";;
 
           run )
-            ${compile-and-bundle (bundle // { esbuild.outfile = run-output; })}
+            ${compile-and-bundle
+                (bundle
+                 // { esbuild =
+                        { outfile = run-output;
+                          platform = "node";
+                        };
+
+                      main = true;
+                    }
+                )
+            }
             ${nodejs}/bin/node ${run-output};;
 
           test )
@@ -176,7 +186,12 @@ with builtins;
 
             ${bundle'
                 (bundle
-                 // { esbuild.outfile = run-output;
+                 // { esbuild =
+                        { outfile = run-output;
+                          platform = "node";
+                        };
+
+                      main = true;
                       module = test-module;
                     }
                 )
