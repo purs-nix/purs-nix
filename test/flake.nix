@@ -28,7 +28,7 @@
          in
          { packages.default = ps.modules.Main.app { name = "test"; };
 
-           devShell =
+           devShells.default =
              make-shell
                { packages =
                    with pkgs;

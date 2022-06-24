@@ -91,7 +91,7 @@
                       ps-pkgs-ns;
                 };
 
-              devShell =
+              devShells.default =
                 make-shell
                   { packages = [ deadnix ];
                     aliases.lint = ''find -name "*.nix" | xargs deadnix'';
