@@ -3,9 +3,7 @@
 **purs-nix** is a nix library used to set up your PureScript environment and/or to compile/bundle your PureScript code in a Nix derivation. The `outputs` of the flake has a `__functor` attribute, so it can be used as a function. It takes the following arguments:
 
 ```
-{ system
-, pkgs ? nixpkgs.legacyPackages.${system}
-}
+{ system }
 ```
 and returns an attribute set with the following attributes:
 - `build`: A function for creating ad hoc PureScript packages. See: [build](adding-packages.md#build).

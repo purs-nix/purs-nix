@@ -18,12 +18,9 @@
       utils.url = "github:ursi/flake-utils/8";
     };
 
-  outputs = { nixpkgs, utils, ... }@inputs:
+  outputs = { utils, ... }@inputs:
     with builtins;
-    { __functor = _:
-        { pkgs ? nixpkgs.legacyPackages.${system}
-        , system
-        }:
+    { __functor = _: { system }:
         import ./purs-nix.nix (import ./deps.nix { inherit inputs system; });
 
       defaultTemplate =
