@@ -8,5 +8,4 @@
 /.purs*
 /.psa*
 /.spago
-bower.json
 index.js
