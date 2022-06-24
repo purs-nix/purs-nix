@@ -4,6 +4,7 @@ purs-nix-test-packages:
       let inherit (ps-pkgs-ns) ursi; in
       with ps-pkgs;
       [ console
+        node-process
         ursi.is-even
 
         (build
