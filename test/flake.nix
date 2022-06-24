@@ -1,20 +1,22 @@
 { inputs =
     { get-flake.url = "github:ursi/get-flake";
-      make-shell.url = "github:ursi/nix-make-shell/1";
-      nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
       purs-nix-test-packages =
         { flake = false;
           url = "github:ursi/purs-nix-test-packages";
         };
-
-      utils.url = "github:ursi/flake-utils/8";
     };
 
-  outputs = { get-flake, purs-nix-test-packages, utils, ... }@inputs:
+  outputs = { get-flake, purs-nix-test-packages, ... }@inputs:
     with builtins;
-    utils.apply-systems
-      { inputs = inputs // { purs-nix = get-flake ../.; };
+    let purs-nix = get-flake ../.; in
+    purs-nix.inputs.utils.apply-systems
+      { inputs =
+          inputs
+          // { inherit purs-nix;
+               inherit (purs-nix.inputs) make-shell nixpkgs;
+             };
+
         systems = [ "x86_64-linux" ];
       }
       ({ make-shell, pkgs, purs-nix, ... }:

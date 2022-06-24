@@ -1,20 +1,5 @@
 {
   "nodes": {
-    "flake-utils": {
-      "locked": {
-        "lastModified": 1618217525,
-        "narHash": "sha256-WGrhVczjXTiswQaoxQ+0PTfbLNeOQM6M36zvLn78AYg=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "c6169a2772643c4a93a0b5ac1c61e296cba68544",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "get-flake": {
       "locked": {
         "lastModified": 1644686428,
@@ -27,38 +12,6 @@
       "original": {
         "owner": "ursi",
         "repo": "get-flake",
-        "type": "github"
-      }
-    },
-    "make-shell": {
-      "locked": {
-        "lastModified": 1634940815,
-        "narHash": "sha256-P69OmveboXzS+es1vQGS4bt+ckwbeIExqxfGLjGuJqA=",
-        "owner": "ursi",
-        "repo": "nix-make-shell",
-        "rev": "8add91681170924e4d0591b22f294aee3f5516f9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ursi",
-        "ref": "1",
-        "repo": "nix-make-shell",
-        "type": "github"
-      }
-    },
-    "nixpkgs": {
-      "locked": {
-        "lastModified": 1618306168,
-        "narHash": "sha256-/IOtgzdEaiEqRVn6OhpekuYhRHfCm299Bqts5QqQVko=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "4c87cb87a2db6b9eb43541c1cf83f2a2f725fa25",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -81,29 +34,7 @@
     "root": {
       "inputs": {
         "get-flake": "get-flake",
-        "make-shell": "make-shell",
-        "nixpkgs": "nixpkgs",
-        "purs-nix-test-packages": "purs-nix-test-packages",
-        "utils": "utils"
-      }
-    },
-    "utils": {
-      "inputs": {
-        "flake-utils": "flake-utils"
-      },
-      "locked": {
-        "lastModified": 1644029741,
-        "narHash": "sha256-Kfip3zjNQ/40xJWH296MDEFKBBPnEPupjUvjdqhKNYg=",
-        "owner": "ursi",
-        "repo": "flake-utils",
-        "rev": "6102802ae96c56af1d2d9fc297029f515f49e332",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ursi",
-        "ref": "8",
-        "repo": "flake-utils",
-        "type": "github"
+        "purs-nix-test-packages": "purs-nix-test-packages"
       }
     }
   },
