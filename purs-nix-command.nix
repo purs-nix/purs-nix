@@ -200,7 +200,11 @@ with builtins;
             ${nodejs}/bin/node ${run-output};;
 
           repl ) ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
-          docs ) ${purescript}/bin/purs docs "''${@:2}" ${globs} ${dep-globs};;
+
+          docs ) ${purescript}/bin/purs docs \
+            --compile-output ${output} \
+            "''${@:2}" ${globs} ${dep-globs};;
+
           package-info ) ${package-info} "$2";;
           packages ) ${packages};;
           bower ) ${bower};;
