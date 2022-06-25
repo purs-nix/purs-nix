@@ -38,17 +38,6 @@
 
            ps = ps-custom {};
 
-           make-app = module: name:
-             { type = "app";
-
-               program =
-                 (p.writeScript name
-                    ''
-                    ${ps.modules.${module}.app { inherit name; }}/bin/${name};
-                    ''
-                 ).outPath;
-             };
-
            make-script-custom = args: module:
              "${(ps-custom args).modules.${module}.app { name = "a"; }}/bin/a";
 
@@ -61,8 +50,22 @@
              ${test "$(${info})"}
              echo
              '';
+
+           package-tests = import ./packages.nix ({ inherit l p; } // purs-nix);
          in
-         { apps.default = make-app "Main" "test";
+         { apps.default =
+             { type = "app";
+
+               program =
+                 let
+                   path =
+                     package-tests."compiled packages bucket 1"
+                     + /cache-db.json;
+                 in
+                 (p.writeScript "inspect-packages"
+                    "${p.jq}/bin/jq . ${path} | less"
+                 ).outPath;
+             };
 
            checks =
              mapAttrs
@@ -310,7 +313,8 @@
                                 ''
                             );
                       };
-                  };
+                  }
+                  // package-tests;
 
            devShells.default =
              make-shell
