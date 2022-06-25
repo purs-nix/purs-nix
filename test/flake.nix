@@ -259,7 +259,7 @@
                   { "purs-nix command defaults" =
                       { args.compile.codegen = "docs,js";
 
-                        test = command:
+                        test = _:
                           make-test "main.js exists"
                             "ls main.js"
                             (_: "") +
