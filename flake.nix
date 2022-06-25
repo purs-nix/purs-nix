@@ -23,13 +23,13 @@
     { __functor = _: { system }:
         import ./purs-nix.nix (import ./deps.nix { inherit inputs system; });
 
-      defaultTemplate =
-        { description = "A basic purs-nix project";
-          path = "${./templates/default}";
-        };
-
       templates =
-        { flake =
+        { default =
+            { description = "A basic purs-nix project";
+              path = "${./templates/default}";
+            };
+
+          flake =
             { description = "The flake.nix only - for converting existing projects";
 
               path =
