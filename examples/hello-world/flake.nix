@@ -28,9 +28,14 @@
                  srcs = [ ./src ];
                };
          in
-         { defaultPackage = ps.modules.Main.app { name = "hello"; };
+         { packages =
+             with ps.modules.Main;
+             { default = ps.modules.Main.app { name = "hello"; };
+               bundle = bundle {};
+               output = output {};
+             };
 
-           devShell =
+           devShells.default =
              p.mkShell
                { buildInputs =
                    with p;
@@ -41,12 +46,6 @@
                      purs-nix.purescript-language-server
                    ];
                };
-
-           packages =
-             with ps.modules.Main;
-             { bundle = bundle {};
-               output = output {};
-             };
          }
       );
 }
