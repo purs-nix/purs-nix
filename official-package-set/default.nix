@@ -810,6 +810,21 @@ deku =
       };
   };
 
+deno =
+  { src.git =
+      { repo = "https://github.com/njaremko/purescript-deno.git";
+        rev = "87bfe517d9ad0fc846979e0dee32e6932377d8f6";
+      };
+
+    info =
+      { version = "0.0.5";
+
+        dependencies =
+          [ aff aff-promise argonaut arraybuffer-types console effect either functions maybe ordered-collections prelude strings tuples unsafe-coerce web-streams 
+          ];
+      };
+  };
+
 dissect =
   { src.git =
       { repo = "https://github.com/PureFunctor/purescript-dissect.git";
@@ -1406,6 +1421,21 @@ generate-values =
 
         dependencies =
           [ arrays control effect enums foldable-traversable gen identity integers lcg lists maybe newtype numbers partial prelude tailrec transformers tuples 
+          ];
+      };
+  };
+
+generic-router =
+  { src.git =
+      { repo = "https://github.com/njaremko/purescript-generic-router.git";
+        rev = "e12d6674c94484a73ccd52335a2a0ec7fea44887";
+      };
+
+    info =
+      { version = "0.0.1";
+
+        dependencies =
+          [ arrays ps-pkgs."assert" effect foldable-traversable lists maybe ordered-collections prelude record strings tuples 
           ];
       };
   };

@@ -29,38 +29,9 @@
       };
 
     event =
-      { src.git =
-          { repo = "https://github.com/mikesol/purescript-event.git";
-            rev = "1ce0eed386b898cc925ad14dd2b15e1b9737dd93";
-          };
-
-        info =
-          { version = "1.6.6";
-
-            dependencies =
-              [ arrays
-                control
-                datetime
-                effect
-                either
-                filterable
-                foldable-traversable
-                js-timers
-                maybe
-                monoid-extras
-                newtype
-                now
-                ordered-collections
-                prelude
-                profunctor
-                record
-                refs
-                st
-                tuples
-                unsafe-coerce
-                unsafe-reference
-             ];
-          };
+      let info = hyrule.purs-nix-info; in
+      { src.git = { inherit (info) repo rev; };
+        info = { inherit (info) version dependencies; };
       };
 
     node-glob-basic =
