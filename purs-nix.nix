@@ -136,10 +136,10 @@ deps:
                 split-foreign = init: foreign':
                   l.foldl
                     (acc': { name, value }:
-                       if value?derivation then
+                       if value?src then
                          l.recursiveUpdate
                            acc'
-                           { derivation.${name} = value; }
+                           { src.${name} = value; }
                        else if value?node_modules then
                          l.recursiveUpdate
                            acc'
@@ -159,7 +159,7 @@ deps:
                      acc
                 )
                 (split-foreign
-                   { derivation = {}; node = {}; }
+                   { src = {}; node = {}; }
                    (if isNull foreign then {} else foreign)
                 )
                 deps;
@@ -167,14 +167,14 @@ deps:
             foreign-derivation =
               l.concatStringsSep "\n"
                 (l.mapAttrsToList
-                   (module: { derivation, paths }:
+                   (module: { src, paths }:
                       let
                         purs-nix-js =
                           l.pipe paths
                             [ (l.mapAttrsToList
                                  (n: v:
                                     ''
-                                    export * as ${n} from "${derivation}${toString v}";
+                                    export * as ${n} from "${src}${toString v}";
                                     ''
                                  )
                               )
@@ -185,7 +185,7 @@ deps:
                       in
                       "cp ${purs-nix-js} ${prefix}/${module}/purs-nix.js"
                    )
-                   foreign-stuff'.derivation
+                   foreign-stuff'.src
                 );
 
             foreign-node =
