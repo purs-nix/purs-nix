@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "purescript-console": "^v6.0.0",
+    "purescript-effect": "^voverride-test",
+    "purescript-node-process": "^v10.0.0",
+    "purescript-prelude": "^voverride-test",
+    "purescript-ursi.is-even": "https://github.com/ursi/purs-nix-test-packages.git#v1.0.0"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "compiled"
+  ],
+  "license": [
+    "BSD-3-Clause"
+  ],
+  "name": "purescript-test",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ursi/purs-nix.git"
+  }
+}

@@ -1,1 +1,1 @@
-{ ps-pkgs, ps-pkgs-ns }: { ursi = import namespaces/ursi.nix; }
+_: { ursi = import namespaces/ursi.nix; }

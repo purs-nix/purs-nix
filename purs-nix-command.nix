@@ -5,11 +5,12 @@ with builtins;
 , nodejs
 , pkgs
 , purescript
+, repl-globs
 , utils
 , foreign
 }:
 { srcs ? [ "src" ]
-, globs ? concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') srcs)
+, globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
 , output ? "output"
 , bundle ? {}
 , compile ? {}
@@ -130,14 +131,19 @@ with builtins;
                 l.listToAttrs
                   (map
                      (pkg:
-                        let registry-name = "purescript-${pkg.pursuit.name or pkg.pname or pkg.name}"; in
+                        let
+                          info = pkg.purs-nix-info;
+                          registry-name = "purescript-${info.pursuit.name or info.name}";
+                        in
                         l.nameValuePair
                           registry-name
-                          (if bower-packages-registry?${registry-name} && pkg?version then
-                             "^v${pkg.version}"
+                          (if bower-packages-registry?${registry-name} && info?version then
+                             "^v${info.version}"
                            else
-                             "${pkg.repo}#${
-                             if pkg?version then "v${pkg.version}" else pkg.rev
+                             "${info.repo}#${
+                             if info?version
+                             then "v${info.version}"
+                             else info.rev
                              }"
                           )
                      )
@@ -164,7 +170,17 @@ with builtins;
             echo "Bundling complete";;
 
           run )
-            ${compile-and-bundle (bundle // { esbuild.outfile = run-output; })}
+            ${compile-and-bundle
+                (bundle
+                 // { esbuild =
+                        { outfile = run-output;
+                          platform = "node";
+                        };
+
+                      main = true;
+                    }
+                )
+            }
             ${nodejs}/bin/node ${run-output};;
 
           test )
@@ -172,7 +188,12 @@ with builtins;
 
             ${bundle'
                 (bundle
-                 // { esbuild.outfile = run-output;
+                 // { esbuild =
+                        { outfile = run-output;
+                          platform = "node";
+                        };
+
+                      main = true;
                       module = test-module;
                     }
                 )
@@ -180,12 +201,17 @@ with builtins;
 
             ${nodejs}/bin/node ${run-output};;
 
-          docs ) ${name} srcs docs;;
+          repl ) ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
+
+          docs ) ${purescript}/bin/purs docs \
+            --compile-output ${output} \
+            "''${@:2}" ${globs} ${dep-globs};;
+
           package-info ) ${package-info} "$2";;
           packages ) ${packages};;
           bower ) ${bower};;
           output ) ${purescript}/bin/purs "''${@:2}" "${compiler-output}/**/*.js";;
-          srcs ) ${purescript}/bin/purs "''${@:2}" ${globs} ${dep-globs};;
+          srcs ) echo ${globs} ${dep-globs};;
           * ) echo ${help};;
         esac
         '';
@@ -197,6 +223,7 @@ with builtins;
             "bundle"
             "run"
             "test"
+            "repl"
             "docs"
             "package-info"
             "packages"
@@ -216,26 +243,22 @@ with builtins;
 
         Commands:
         ------------------------------------------------------------------------
-        compile    Compile your project.
-        bundle     Compile then bundle your project.
-        run        Compile, bundle, then run the bundle with 'node'.
-        test       Compile, bundle your test code, then run the bundle with
-                   'node'.
+        compile        Compile your project.
+        bundle         Compile then bundle your project.
+        run            Compile, bundle, then run the bundle with 'node'.
+        test           Compile, bundle your test code, then run the bundle with
+                       'node'.
 
-        docs       Generate HTML documentation for all the modules in your
-                   project.
+        repl           Enter the REPL
+        docs <args>    Generate HTML documentation for all the modules in your
+                       project.
         ------------------------------------------------------------------------
         package-info <name>    Show the info of a specific package.
         packages               Show all packages used in your project.
         -------------------------------------------------------------------------
         bower    Generate a bower.json for publishing to Pursuit.
         -------------------------------------------------------------------------
-        output <args>    Pass arguments to 'purs' with the glob for your
-                         compiled code passed as the final argument.
-
-        srcs <args>      Pass arguments to 'purs' with the globs for your
-                         projects's PureScript source code passed as the
-                         final argument.
+        srcs    Echo all PureScript globs for your project.
         -------------------------------------------------------------------------
 
         Anything that is not a valid command will show this text.

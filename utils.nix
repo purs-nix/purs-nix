@@ -9,10 +9,10 @@ p:
       }:
       let
         esbuild' =
-          { format = "esm";
-            log-level = "warning";
+          { log-level = "warning";
             outfile = "main.js";
           }
+          // (if esbuild?platform then {} else { format = "esm"; })
           // esbuild
           // { bundle = true; };
 
@@ -47,16 +47,31 @@ p:
       }:
       let
         flags =
-          concatStringsSep " "
+          toString
             [ (make-flag "--output " output)
               (make-flag "--verbose-errors" verbose-errors)
               (make-flag "--comments" comments)
               (make-flag "--codegen " codegen)
               (make-flag "--no-prefix" no-prefix)
-              (make-flag "--json-errors" no-prefix)
+              (make-flag "--json-errors" json-errors)
             ];
       in
       ''${purescript}/bin/purs compile ${flags} ${globs}'';
+
+    repl =
+      purescript:
+      { globs
+      , node-path ? null
+      , node-opts ? null
+      }:
+      let
+        flags =
+          toString
+            [ (make-flag "--node-path " node-path)
+              (make-flag "--node-opts " node-opts)
+            ];
+      in
+      ''${purescript}/bin/purs repl ${flags} ${globs}'';
 
     make-flag = flag: arg:
       if arg == null || arg == false then
@@ -73,15 +88,16 @@ p:
         { pname = name; inherit version; };
 
     package-info = pkg:
+      let info = pkg.purs-nix-info; in
       ''
-      echo "name:    ${pkg.pname or pkg.name}"
-      echo "version: ${pkg.version or "none"}"
-      ${if !isNull pkg.repo then
+      echo "name:    ${info.name}"
+      echo "version: ${if isNull info.version then "none" else info.version}"
+      ${if info?repo then
           ''
-          echo "repo:    ${pkg.repo}"
-          echo "commit:  ${pkg.rev}"''
+          echo "repo:    ${info.repo}"
+          echo "commit:  ${info.rev}"''
         else
-          ""
+          ''echo "path:    ${pkg.src}"''
       }
       echo "source:  ${pkg}"
       '';
