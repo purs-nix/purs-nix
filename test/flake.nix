@@ -311,7 +311,11 @@
                                 [[ -e ${outfile} ]]
                                 [[ ! ${i} == "main();" ]]
                                 ''
-                            );
+                            ) +
+
+                          make-test ''"output" does not exist''
+                            "ls"
+                            (_: "[[ ! -e output ]]");
                       };
                   }
                   // package-tests;
