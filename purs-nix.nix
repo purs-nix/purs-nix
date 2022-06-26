@@ -182,8 +182,14 @@ deps:
                               (l.concatStringsSep "\n")
                               (p.writeText "purs-nix.js")
                             ];
+                        module-path = "${prefix}/${module}";
                       in
-                      "cp ${purs-nix-js} ${prefix}/${module}/purs-nix.js"
+                      ''
+                      if [[ -e ${module-path} ]]; then
+                        cp ${purs-nix-js} ${module-path}/purs-nix.js
+                      fi
+                      ''
+
                    )
                    foreign-stuff'.src
                 );

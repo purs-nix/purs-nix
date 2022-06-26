@@ -31,6 +31,15 @@
                ({ inherit (package) dependencies;
                   test-dependencies = [ ps-pkgs."assert" ];
                   srcs = [ ./src ./src2 ];
+
+                  foreign.Nested =
+                    { src = ./foreign-js;
+
+                      paths =
+                        { foreign1 = /foreign1.js;
+                          foreign2 = /foreign2.js;
+                        };
+                    };
                 }
                 // (if isNull nodejs then {} else { inherit nodejs; })
                 // (if isNull purescript then {} else { inherit purescript; })
@@ -119,6 +128,8 @@
                          effect override
                          2 is even
                          3 isn't even
+                         foreign1
+                         foreign2
                          ❄"
 
                          [[ ${i} == $target ]]

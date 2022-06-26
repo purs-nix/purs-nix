@@ -7,6 +7,7 @@ import Effect as Effect
 import Effect.Console (log)
 import Dependency (a)
 import IsEven (isEven)
+import Nested (foreign1, foreign2)
 
 logEven :: Int -> Effect Unit
 logEven n =
@@ -19,4 +20,6 @@ main = do
   log Effect.override
   logEven 2
   logEven 3
+  foreign1
+  foreign2
   log a
