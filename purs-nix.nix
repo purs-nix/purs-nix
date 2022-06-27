@@ -198,7 +198,12 @@ deps:
               l.concatStringsSep "\n"
                 (l.mapAttrsToList
                    (module: { node_modules }:
-                      "ln -fs ${node_modules} ${prefix}/${module}"
+                      let module-path = "${prefix}/${module}"; in
+                      ''
+                      if [[ -e ${module-path} ]]; then
+                        ln -fs ${node_modules} ${module-path}
+                      fi
+                      ''
                    )
                    foreign-stuff'.node
                 );
