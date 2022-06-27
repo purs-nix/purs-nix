@@ -112,12 +112,9 @@
                      (i: "[[ -z ${i} ]]");
 
                  "custom node package" =
-                   let
-                     bin = make-script-custom { inherit nodejs; } "Node";
-                     nodejs = p.nodejs-14_x;
-                   in
+                   let nodejs = p.nodejs-14_x; in
                    make-test "node version"
-                     bin
+                     (make-script-custom { inherit nodejs; } "Node")
                      (i: "[[ ${i} == v${nodejs.version} ]]");
 
                  "custom purescript package" =
@@ -152,12 +149,13 @@
                   (n: { args ? {}, test }:
                      let
                        name = "test";
+                       default-srcs = [ "src" "src2" ];
 
                        command =
                          ps.command
                            (l.recursiveUpdate
                               { inherit name package;
-                                srcs = [ "src" "src2" ];
+                                srcs = default-srcs;
                                 bundle.esbuild.legal-comments = "none";
                               }
                               args
@@ -171,7 +169,15 @@
                          src =
                            filterSource
                            (path: type:
-                              type == "directory"
+                              (type == "directory"
+                               && any
+                                    (s: !isNull (match ".*/${s}" path)
+                                        || l.hasInfix "/${s}/" path
+                                    )
+                                    (args.srcs or default-srcs
+                                     ++ [ (args.test or "test") ]
+                                    )
+                              )
                               || l.hasSuffix ".purs" path
                               || l.hasSuffix ".js" path
                            )
@@ -179,6 +185,7 @@
 
                          installPhase = "touch $out";
                          doCheck = true;
+
                          checkPhase =
                            make-test "purs-nix package-info prelude"
                              "${command} package-info prelude"
@@ -208,50 +215,50 @@
                            make-test "purs-nix packages"
                              "${command} packages"
                              (i: ''
-                                 packages="arraybuffer-types-3.0.2
-                                 arrays-7.0.0
-                                 assert-6.0.0
-                                 bifunctors-6.0.0
-                                 console-6.0.0
-                                 const-6.0.0
-                                 contravariant-6.0.0
-                                 control-6.0.0
-                                 distributive-6.0.0
-                                 effect-override-test
-                                 either-6.1.0
-                                 exceptions-6.0.0
-                                 exists-6.0.0
-                                 foldable-traversable-6.0.0
-                                 foreign-object-4.0.0
-                                 functions-6.0.0
-                                 functors-5.0.0
-                                 gen-4.0.0
-                                 identity-6.0.0
-                                 invariant-6.0.0
-                                 lazy-6.0.0
-                                 lists-7.0.0
-                                 maybe-6.0.0
-                                 newtype-5.0.0
-                                 node-buffer-8.0.0
-                                 node-process-10.0.0
-                                 node-streams-7.0.0
-                                 nonempty-7.0.0
-                                 nullable-6.0.0
-                                 orders-6.0.0
-                                 partial-4.0.0
-                                 posix-types-6.0.0
-                                 prelude-override-test
-                                 profunctor-6.0.0
-                                 refs-6.0.0
-                                 safe-coerce-2.0.0
-                                 st-6.0.0
-                                 tailrec-6.0.0
-                                 tuples-7.0.0
-                                 type-equality-4.0.1
-                                 typelevel-prelude-7.0.0
-                                 unfoldable-6.0.0
-                                 unsafe-coerce-6.0.0
-                                 ursi.is-even-1.0.0"
+                                 packages="arraybuffer-types: 3.0.2
+                                 arrays: 7.0.0
+                                 assert: 6.0.0
+                                 bifunctors: 6.0.0
+                                 console: 6.0.0
+                                 const: 6.0.0
+                                 contravariant: 6.0.0
+                                 control: 6.0.0
+                                 distributive: 6.0.0
+                                 effect: override-test
+                                 either: 6.1.0
+                                 exceptions: 6.0.0
+                                 exists: 6.0.0
+                                 foldable-traversable: 6.0.0
+                                 foreign-object: 4.0.0
+                                 functions: 6.0.0
+                                 functors: 5.0.0
+                                 gen: 4.0.0
+                                 identity: 6.0.0
+                                 invariant: 6.0.0
+                                 lazy: 6.0.0
+                                 lists: 7.0.0
+                                 maybe: 6.0.0
+                                 newtype: 5.0.0
+                                 node-buffer: 8.0.0
+                                 node-process: 10.0.0
+                                 node-streams: 7.0.0
+                                 nonempty: 7.0.0
+                                 nullable: 6.0.0
+                                 orders: 6.0.0
+                                 partial: 4.0.0
+                                 posix-types: 6.0.0
+                                 prelude: override-test
+                                 profunctor: 6.0.0
+                                 refs: 6.0.0
+                                 safe-coerce: 2.0.0
+                                 st: 6.0.0
+                                 tailrec: 6.0.0
+                                 tuples: 7.0.0
+                                 type-equality: 4.0.1
+                                 typelevel-prelude: 7.0.0
+                                 unfoldable: 6.0.0
+                                 unsafe-coerce: 6.0.0
+                                 ursi.is-even: 1.0.0"
 
                                  [[ ${i} == $packages ]]
                                  ''
@@ -289,8 +296,8 @@
 
                         test = _:
                           make-test "main.js exists"
-                            "ls main.js"
-                            (_: "") +
+                            ""
+                            (_: "ls main.js") +
 
                           make-test "main function is called"
                             "tail -n 1 main.js"
@@ -322,8 +329,8 @@
                             (_: "${command} run") +
 
                           make-test "custom-named output exists"
-                            "ls ${outfile}"
-                            (_: "") +
+                            ""
+                            (_: "ls ${outfile}") +
 
                           make-test "bower.json is what we expect"
                             "diff bower.json ${./bower.json}"
@@ -354,11 +361,6 @@
                      (ps.command
                         { inherit package;
                           srcs = [ "src" "src2" ];
-                          test-module = "Test.Test";
-                          test = "test-dir";
-                          compile.codegen = "docs,js";
-                          bundle.main = false;
-                          output = "cool-output";
                         }
                      )
 

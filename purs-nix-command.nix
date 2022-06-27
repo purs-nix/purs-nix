@@ -69,7 +69,7 @@ with builtins;
 
         ${concatStringsSep "\n"
             (map
-               (pkg: "${pkg.pname or pkg.name} ) ${u.package-info pkg};;")
+               (pkg: "${pkg.purs-nix-info.name} ) ${u.package-info pkg};;")
                all-dependencies
             )
         }
@@ -83,7 +83,12 @@ with builtins;
         ''
         ${concatStringsSep "\n"
             (map
-               (pkg: "echo ${pkg.name}")
+               (pkg:
+                  let info = pkg.purs-nix-info; in
+                  if isNull info.version
+                  then "echo ${info.name}"
+                  else "echo ${info.name}: ${info.version}"
+               )
                all-dependencies
             )
         }
