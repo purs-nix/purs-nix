@@ -92,12 +92,9 @@
                      (i: "[[ -z ${i} ]]");
 
                  "custom node package" =
-                   let
-                     bin = make-script-custom { inherit nodejs; } "Node";
-                     nodejs = p.nodejs-14_x;
-                   in
+                   let nodejs = p.nodejs-14_x; in
                    make-test "node version"
-                     bin
+                     (make-script-custom { inherit nodejs; } "Node")
                      (i: "[[ ${i} == v${nodejs.version} ]]");
 
                  "custom purescript package" =
@@ -154,6 +151,7 @@
 
                          installPhase = "touch $out";
                          doCheck = true;
+
                          checkPhase =
                            make-test "purs-nix package-info prelude"
                              "${command} package-info prelude"
@@ -264,8 +262,8 @@
 
                         test = _:
                           make-test "main.js exists"
-                            "ls main.js"
-                            (_: "") +
+                            ""
+                            (_: "ls main.js") +
 
                           make-test "main function is called"
                             "tail -n 1 main.js"
@@ -297,8 +295,8 @@
                             (_: "${command} run") +
 
                           make-test "custom-named output exists"
-                            "ls ${outfile}"
-                            (_: "") +
+                            ""
+                            (_: "ls ${outfile}") +
 
                           make-test "bower.json is what we expect"
                             "diff bower.json ${./bower.json}"
