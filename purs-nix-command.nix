@@ -67,7 +67,7 @@ with builtins;
 
         ${concatStringsSep "\n"
             (map
-               (pkg: "${pkg.pname or pkg.name} ) ${u.package-info pkg};;")
+               (pkg: "${pkg.purs-nix-info.name} ) ${u.package-info pkg};;")
                all-dependencies
             )
         }
