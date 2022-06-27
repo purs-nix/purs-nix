@@ -181,50 +181,50 @@
                            make-test "purs-nix packages"
                              "${command} packages"
                              (i: ''
-                                 packages="arraybuffer-types-3.0.2
-                                 arrays-7.0.0
-                                 assert-6.0.0
-                                 bifunctors-6.0.0
-                                 console-6.0.0
-                                 const-6.0.0
-                                 contravariant-6.0.0
-                                 control-6.0.0
-                                 distributive-6.0.0
-                                 effect-override-test
-                                 either-6.1.0
-                                 exceptions-6.0.0
-                                 exists-6.0.0
-                                 foldable-traversable-6.0.0
-                                 foreign-object-4.0.0
-                                 functions-6.0.0
-                                 functors-5.0.0
-                                 gen-4.0.0
-                                 identity-6.0.0
-                                 invariant-6.0.0
-                                 lazy-6.0.0
-                                 lists-7.0.0
-                                 maybe-6.0.0
-                                 newtype-5.0.0
-                                 node-buffer-8.0.0
-                                 node-process-10.0.0
-                                 node-streams-7.0.0
-                                 nonempty-7.0.0
-                                 nullable-6.0.0
-                                 orders-6.0.0
-                                 partial-4.0.0
-                                 posix-types-6.0.0
-                                 prelude-override-test
-                                 profunctor-6.0.0
-                                 refs-6.0.0
-                                 safe-coerce-2.0.0
-                                 st-6.0.0
-                                 tailrec-6.0.0
-                                 tuples-7.0.0
-                                 type-equality-4.0.1
-                                 typelevel-prelude-7.0.0
-                                 unfoldable-6.0.0
-                                 unsafe-coerce-6.0.0
-                                 ursi.is-even-1.0.0"
+                                 packages="arraybuffer-types: 3.0.2
+                                 arrays: 7.0.0
+                                 assert: 6.0.0
+                                 bifunctors: 6.0.0
+                                 console: 6.0.0
+                                 const: 6.0.0
+                                 contravariant: 6.0.0
+                                 control: 6.0.0
+                                 distributive: 6.0.0
+                                 effect: override-test
+                                 either: 6.1.0
+                                 exceptions: 6.0.0
+                                 exists: 6.0.0
+                                 foldable-traversable: 6.0.0
+                                 foreign-object: 4.0.0
+                                 functions: 6.0.0
+                                 functors: 5.0.0
+                                 gen: 4.0.0
+                                 identity: 6.0.0
+                                 invariant: 6.0.0
+                                 lazy: 6.0.0
+                                 lists: 7.0.0
+                                 maybe: 6.0.0
+                                 newtype: 5.0.0
+                                 node-buffer: 8.0.0
+                                 node-process: 10.0.0
+                                 node-streams: 7.0.0
+                                 nonempty: 7.0.0
+                                 nullable: 6.0.0
+                                 orders: 6.0.0
+                                 partial: 4.0.0
+                                 posix-types: 6.0.0
+                                 prelude: override-test
+                                 profunctor: 6.0.0
+                                 refs: 6.0.0
+                                 safe-coerce: 2.0.0
+                                 st: 6.0.0
+                                 tailrec: 6.0.0
+                                 tuples: 7.0.0
+                                 type-equality: 4.0.1
+                                 typelevel-prelude: 7.0.0
+                                 unfoldable: 6.0.0
+                                 unsafe-coerce: 6.0.0
+                                 ursi.is-even: 1.0.0"
 
                                  [[ ${i} == $packages ]]
                                  ''

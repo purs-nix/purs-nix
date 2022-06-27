@@ -81,7 +81,12 @@ with builtins;
         ''
         ${concatStringsSep "\n"
             (map
-               (pkg: "echo ${pkg.name}")
+               (pkg:
+                  let info = pkg.purs-nix-info; in
+                  if isNull info.version
+                  then "echo ${info.name}"
+                  else "echo ${info.name}: ${info.version}"
+               )
                all-dependencies
             )
         }
