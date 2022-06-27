@@ -327,11 +327,6 @@
                      (ps.command
                         { inherit package;
                           srcs = [ "src" "src2" ];
-                          test-module = "Test.Test";
-                          test = "test-dir";
-                          compile.codegen = "docs,js";
-                          bundle.main = false;
-                          output = "cool-output";
                         }
                      )
 
