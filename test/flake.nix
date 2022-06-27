@@ -1,6 +1,11 @@
 { inputs =
     { get-flake.url = "github:ursi/get-flake";
 
+      npmlock2nix =
+        { flake = false;
+          url = "github:nix-community/npmlock2nix";
+        };
+
       purs-nix-test-packages =
         { flake = false;
           url = "github:ursi/purs-nix-test-packages";
@@ -32,12 +37,18 @@
                   test-dependencies = [ ps-pkgs."assert" ];
                   srcs = [ ./src ./src2 ];
 
-                  foreign.Nested =
-                    { src = ./foreign-js;
+                  foreign =
+                    { IsNumber.node_modules =
+                        (p.callPackages inputs.npmlock2nix {})
+                        .node_modules { src = ./foreign-js; } + /node_modules;
 
-                      paths =
-                        { foreign1 = /foreign1.js;
-                          foreign2 = /foreign2.js;
+                      Nested =
+                        { src = ./foreign-js;
+
+                          paths =
+                            { foreign1 = /foreign1.js;
+                              foreign2 = /foreign2.js;
+                            };
                         };
                     };
                 }
@@ -128,6 +139,7 @@
                          effect override
                          2 is even
                          3 isn't even
+                         1.2 is a number
                          foreign1
                          foreign2
                          ❄"
@@ -143,10 +155,12 @@
 
                        command =
                          ps.command
-                           ({ inherit name package;
-                              srcs = [ "src" "src2" ];
-                            }
-                            // args
+                           (l.recursiveUpdate
+                              { inherit name package;
+                                srcs = [ "src" "src2" ];
+                                bundle.esbuild.legal-comments = "none";
+                              }
+                              args
                            )
                          + "/bin/${name}";
                      in
