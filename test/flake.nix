@@ -126,11 +126,12 @@
                   (n: { args ? {}, test }:
                      let
                        name = "test";
+                       default-srcs = [ "src" "src2" ];
 
                        command =
                          ps.command
                            ({ inherit name package;
-                              srcs = [ "src" "src2" ];
+                              srcs = default-srcs;
                             }
                             // args
                            )
@@ -143,7 +144,15 @@
                          src =
                            filterSource
                            (path: type:
-                              type == "directory"
+                              (type == "directory"
+                               && any
+                                    (s: !isNull (match ".*/${s}" path)
+                                        || l.hasInfix "/${s}/" path
+                                    )
+                                    (args.srcs or default-srcs
+                                     ++ [ (args.test or "test") ]
+                                    )
+                              )
                               || l.hasSuffix ".purs" path
                               || l.hasSuffix ".js" path
                            )
