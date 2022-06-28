@@ -2,7 +2,13 @@ with builtins;
 let
   l = p.lib; p = pkgs;
   pkgs = (import ../deps.nix { system = currentSystem; }).pkgs;
-  package-set-repo = fetchGit "https://github.com/purescript/package-sets";
+
+  package-set-repo =
+    fetchGit
+      { url = "https://github.com/purescript/package-sets";
+        rev = "5e67347fea3e3f400b4f6f6b6f37e988c42eeb42";
+      };
+
   packages = l.importJSON (package-set-repo + /packages.json);
 
   escape-reserved-word = ps-pkgs: str:

@@ -1,1 +1,1 @@
-_: { ursi = import namespaces/ursi.nix; }
+_: { ursi = {}; }

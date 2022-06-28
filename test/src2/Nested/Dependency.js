@@ -1,1 +1,1 @@
-export const a = "❄";
+exports.a = "❄";

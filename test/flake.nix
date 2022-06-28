@@ -102,7 +102,7 @@
                      output =
                          (ps-custom { inherit purescript; }).modules.Main.output {};
 
-                     purescript = easy-ps.purs-0_15_0;
+                     purescript = easy-ps.purs-0_14_7;
                    in
                    make-test "purescript version"
                      "head -n 1 ${output}/Main/index.js"
@@ -112,11 +112,7 @@
                    make-test "expected output"
                      (make-script "Main")
                      (i: ''
-                         target="prelude override
-                         effect override
-                         2 is even
-                         3 isn't even
-                         ❄"
+                         target="❄"
 
                          [[ ${i} == $target ]]
                          ''
@@ -164,87 +160,6 @@
                          checkPhase =
                            "shopt -s globstar\n" +
 
-                           make-test "purs-nix package-info prelude"
-                             "${command} package-info prelude"
-                             (i: ''
-                                 info="name:    prelude
-                                 version: override-test
-                                 repo:    https://github.com/ursi/purs-nix-test-packages.git
-                                 commit:  25b3125cf4cac00feb6d8ba3b24c5f27271d42ff
-                                 source:  /nix/store/3bffqbpk1ir903gmqsmx9hi861n4h3y3-prelude-override-test"
-
-                                 [[ ${i} == $info ]]
-                                 ''
-                             ) +
-
-                           make-test "purs-nix package-info effect"
-                             "${command} package-info effect"
-                             (i: ''
-                                 info="name:    effect
-                                 version: override-test
-                                 path:    /nix/store/ikpp2fb4s1s558p3sld38z3ys0mp756s-source
-                                 source:  /nix/store/6gvp2csxb89bfw20674c6hjka3kp4ij2-effect-override-test"
-
-                                 [[ ${i} == $info ]]
-                                 ''
-                             ) +
-
-                           make-test "purs-nix packages"
-                             "${command} packages"
-                             (i: ''
-                                 packages="arraybuffer-types: 3.0.2
-                                 arrays: 7.0.0
-                                 assert: 6.0.0
-                                 bifunctors: 6.0.0
-                                 console: 6.0.0
-                                 const: 6.0.0
-                                 contravariant: 6.0.0
-                                 control: 6.0.0
-                                 distributive: 6.0.0
-                                 effect: override-test
-                                 either: 6.1.0
-                                 exceptions: 6.0.0
-                                 exists: 6.0.0
-                                 foldable-traversable: 6.0.0
-                                 foreign-object: 4.0.0
-                                 functions: 6.0.0
-                                 functors: 5.0.0
-                                 gen: 4.0.0
-                                 identity: 6.0.0
-                                 invariant: 6.0.0
-                                 lazy: 6.0.0
-                                 lists: 7.0.0
-                                 maybe: 6.0.0
-                                 newtype: 5.0.0
-                                 node-buffer: 8.0.0
-                                 node-process: 10.0.0
-                                 node-streams: 7.0.0
-                                 nonempty: 7.0.0
-                                 nullable: 6.0.0
-                                 orders: 6.0.0
-                                 partial: 4.0.0
-                                 posix-types: 6.0.0
-                                 prelude: override-test
-                                 profunctor: 6.0.0
-                                 refs: 6.0.0
-                                 safe-coerce: 2.0.0
-                                 st: 6.0.0
-                                 tailrec: 6.0.0
-                                 tuples: 7.0.0
-                                 type-equality: 4.0.1
-                                 typelevel-prelude: 7.0.0
-                                 unfoldable: 6.0.0
-                                 unsafe-coerce: 6.0.0
-                                 ursi.is-even: 1.0.0"
-
-                                 [[ ${i} == $packages ]]
-                                 ''
-                             ) +
-
-                           make-test "purs-nix bower"
-                             ""
-                             (_: "${command} bower") +
-
                            make-test "purs-nix bundle"
                              ""
                              (_: "${command} bundle") +
@@ -278,11 +193,7 @@
 
                           make-test "main.js exists"
                             ""
-                            (_: "ls main.js") +
-
-                          make-test "main function is called"
-                            "tail -n 1 main.js"
-                            (i: ''[[ ${i} == "main();" ]]'');
+                            (_: "ls main.js");
                       };
 
                     "purs-nix command configured" =
@@ -312,10 +223,6 @@
                           make-test "custom-named output exists"
                             ""
                             (_: "ls ${outfile}") +
-
-                          make-test "bower.json is what we expect"
-                            "diff bower.json ${./bower.json}"
-                            (i: "[[ -z ${i} ]]") +
 
                           make-test "${outfile} does not call main"
                             "tail -n 1 ${outfile}"
