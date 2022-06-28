@@ -1,21 +1,19 @@
 with builtins;
 deps:
   let
-    l = p.lib; p = pkgs; u = import ./utils.nix l;
+    l = p.lib; p = pkgs; u = import ./utils.nix p;
     inherit (deps) builders easy-ps pkgs purescript-language-server;
     purescript' = easy-ps.purs-0_14_9;
+    ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
-  { inherit (import ./build-pkgs.nix { inherit pkgs; utils = u; })
-      build ps-pkgs ps-pkgs-ns;
-
+  { inherit (ps-package-stuff) build ps-pkgs ps-pkgs-ns;
+    inherit (pkgs) esbuild;
     inherit (pkgs.lib) licenses;
     purescript = purescript';
     inherit purescript-language-server;
 
     purs =
-      { dependencies ? []
-      , test-dependencies ? []
-      , srcs
+      { srcs
         ? throw
             ''
             In order to build derivations from your PureScript code, you must supply a 'srcs' argument to 'purs'
@@ -25,42 +23,73 @@ deps:
             ''
       , nodejs ? pkgs.nodejs
       , purescript ? purescript'
-      }:
+      , ...
+      }@args:
       let
         inherit (p.stdenv) mkDerivation;
 
-        get-dep-globs = deps:
+        create-closure = deps:
           let
-            trans-deps =
-              let
-                flatten = ds:
-                  foldl'
-                    (acc: d:
-                       acc ++ flatten d.dependencies
-                    )
-                    []
-                    ds
-                  ++ ds;
+            f = direct:
+              foldl'
+                (acc: dep:
+                   let name = dep.purs-nix-info.name; in
+                   if l.hasInfix "." name then
+                     let path = l.splitString "." name; in
+                     if direct || !l.hasAttrByPath path acc.ps-pkgs-ns then
+                       let
+                         namespace = head path;
+                         name' = head (tail path);
+                       in
+                       f false
+                         (acc
+                          // { ps-pkgs-ns =
+                                 acc.ps-pkgs-ns
+                                 // { ${namespace} =
+                                        acc.ps-pkgs-ns.${namespace} or {}
+                                        // { ${name'} = dep; };
+                                    };
+                             }
+                         )
+                         dep.purs-nix-info.dependencies
+                     else
+                       acc
+                   else if direct || !acc.ps-pkgs?${name} then
+                     f false
+                       (acc
+                        // { ps-pkgs =
+                               acc.ps-pkgs
+                               // { ${name} = dep; };
+                           }
+                       )
+                       dep.purs-nix-info.dependencies
+                   else
+                     acc
+                );
 
-              in
-              l.pipe (flatten deps)
-                [ (foldl'
-                     (acc: d:
-                        if acc?${d.name} && d._local then
-                          acc
-                        else
-                          acc // { ${d.name} = d; }
-                     )
-                     {}
-                  )
-
-                  attrValues
-                ];
+            package-sets =
+              f true
+                { ps-pkgs = {};  ps-pkgs-ns = {}; }
+                (sort (a: b: a.purs-nix-info.name < b.purs-nix-info.name) deps);
           in
-          toString (map (a: ''"${a}/**/*.purs"'') trans-deps);
+          attrValues package-sets.ps-pkgs
+          ++ concatMap attrValues (attrValues package-sets.ps-pkgs-ns);
 
-        dep-globs = get-dep-globs dependencies;
-        all-dep-globs = get-dep-globs (dependencies ++ test-dependencies);
+        dependencies =
+          if args?dependencies
+          then create-closure args.dependencies
+          else [];
+
+        all-dependencies =
+          if args?test-dependencies
+          then create-closure (dependencies ++ args.test-dependencies)
+          else dependencies;
+
+        make-dep-globs = deps:
+          toString (map (a: ''"${a}/**/*.purs"'') deps);
+
+        dep-globs = make-dep-globs dependencies;
+        all-dep-globs = make-dep-globs all-dependencies;
 
         make-srcs-str = a:
           concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') a);
@@ -101,15 +130,14 @@ deps:
 
         build-single = name: local-deps:
           let
-            built-deps =
+            built-deps = args:
               mkDerivation
                 { name = "built-deps";
                   phases = [ "buildPhase" "installPhase" ];
-                  nativeBuildInputs = [ purescript ];
 
                   buildPhase =
                     if dep-globs != ""
-                    then "purs compile ${dep-globs}"
+                    then u.compile purescript (args // { globs = dep-globs; })
                     else "mkdir output";
 
                   installPhase = "mv output $out";
@@ -165,7 +193,7 @@ deps:
                       augmentations =
                         toString
                           (map
-                             (a: "${a.bin} output;")
+                             (a: "${a.bin args} output;")
                              trans-deps
                           );
 
@@ -177,7 +205,7 @@ deps:
                           );
                     in
                     ''
-                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps} output
+                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps args} output
                     ${augmentations}
 
                     ${u.compile
@@ -193,15 +221,12 @@ deps:
                   installPhase = "mv output $out";
                 };
 
-            bundle = { main ? true, namespace ? null }:
+            bundle = { esbuild ? {}, main ? true }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
-                   purescript
-                   { files = output {};
-                     module = name;
-                     main = if main then name else null;
-                     inherit namespace;
-                     output = "$out";
+                   { entry-point = output {} + "/${name}/index.js";
+                     esbuild = esbuild // { outfile = "$out"; };
+                     inherit main;
                    }
                 );
 
@@ -214,7 +239,7 @@ deps:
               let
                 exe =
                   let
-                    partial = "node ${bundle {}} $@";
+                    partial = "node ${bundle { esbuild.platform = "node"; }} $@";
                   in
                   pkgs.writeShellScript command
                     (if auto-flags then
@@ -246,7 +271,7 @@ deps:
           in
           { inherit bundle local-deps app name output src;
 
-            bin =
+            bin = args:
               let
                 merge-cache =
                   builders.write-js-script
@@ -262,7 +287,7 @@ deps:
                     fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
                     '';
 
-                output' = output {};
+                output' = output args;
               in
               p.writeShellScript name
                 ''
@@ -287,8 +312,13 @@ deps:
 
         command =
           import ./purs-nix-command.nix
-            { all-dependencies = dependencies ++ test-dependencies;
+            { inherit all-dependencies;
               inherit all-dep-globs dep-globs nodejs pkgs purescript;
+
+              repl-globs =
+                make-dep-globs
+                  (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
+
               utils = u;
             };
       };

@@ -28,6 +28,7 @@
                      nodePackages.bower
                      nodePackages.pulp
                      (ps.command {})
+                     purs-nix.esbuild
                      purs-nix.purescript
                      # purs-nix.purescript-language-server
                    ];

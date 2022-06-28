@@ -4,60 +4,102 @@ with builtins;
     l = p.lib; p = pkgs; u = utils;
 
     build =
-      { repo
-      , rev
-      , name
-      , info ? null
+      { name
       , ...
       }@args:
       let
-        ref = args.ref
-              or (if args?version then "refs/tags/v" + args.version
+        legacy =
+          l.warnIf (args?repo)
+            ''
+            Package: "${name}" is being specified with a deprecated API.
+            see: https://github.com/ursi/purs-nix/blob/ps-0.15/docs/adding-packages.md
+            ''
+            args?repo;
+
+        ref =
+          let
+            get-ref = a: b:
+              a.ref
+              or (if b?version then "refs/tags/v" + b.version
                   else null
                  );
-
-        make-package = { _local ? false }: src:
-          let
-            info' =
-              if isPath info then
-                import (src + info)
-                  { inherit ps-pkgs ps-pkgs-ns;
-                    inherit (l) licenses;
-                  }
-              else
-                args;
-
-            dependencies = info'.dependencies or [];
-            src' = info'.src or "src";
-            version = info'.version or null;
-
-            add-optional = attribute:
-              if info'?${attribute} then { ${attribute} = info'.${attribute}; } else {};
           in
-          p.stdenv.mkDerivation
-            ({ inherit src;
-               phases = [ "unpackPhase" "installPhase" ];
+          if legacy
+          then get-ref args args
+          else get-ref args.src args.info;
 
-               passthru =
-                 { inherit _local dependencies repo rev;
-                   local = make-package { _local = true; };
+        src =
+          let
+            fetch-git = { repo, rev, ... }:
+              fetchGit
+                ({ url = repo;
+                   inherit rev;
                  }
-                 // add-optional "pursuit";
+                 // (if isNull ref then {} else { inherit ref; })
+                );
+          in
+          if legacy then
+            fetch-git args
+          else
+            let src' = args.src; in
+            if src'?git then
+              fetch-git src'.git
+            else if src'?path then
+              src'.path
+            else
+              abort "'src' has no 'git' or 'path' attribute";
 
-               installPhase = args.install or "ln -s $src/${src'} $out";
-             }
-             // u.make-name name version
-            );
+        info =
+          let info' = args.info or null; in
+          if isPath info' then
+            let
+              check-arg = "_accepts-future-args-check";
+              f = import (src + info');
+            in
+            if (l.functionArgs f)?${check-arg} then
+              abort "${name}: The info function expects a '${check-arg}' attribute. The purpose of this attribute is to ensure the info function will not break if new arguments are added. If you're encountering this error, it's likely the fix you're looking for is to use the `...` syntax."
+            else
+              f { inherit build ps-pkgs ps-pkgs-ns;
+                  inherit (l) licenses;
+
+                  # make sure the function can accept new arguments in the future
+                  ${check-arg} = null;
+                }
+          else if legacy then
+            args
+          else
+            args.info;
+
+        dependencies = info.dependencies or [];
+        ps-src = info.src or "src";
+        version = info.version or null;
+
+        add-optional = attribute:
+          if info?${attribute} then { ${attribute} = info.${attribute}; } else {};
       in
-      make-package {}
-        (fetchGit
-           ({ url = repo;
-              inherit rev;
-            }
-            // (if ref == null then {}
-                else { inherit ref; }
-               )
-           )
+      p.stdenv.mkDerivation
+        ({ inherit src;
+           phases = [ "unpackPhase" "installPhase" ];
+
+           passthru =
+             { purs-nix-info =
+                 { inherit dependencies name version;
+                   src = ps-src;
+                 }
+                 // (if legacy then
+                       { inherit (args) repo rev; }
+                     else if args.src?git then
+                       { inherit (args.src.git) repo rev; }
+                     else
+                       {}
+                    )
+                 // add-optional "pursuit";
+             };
+
+           installPhase =
+             (if legacy then args else info).install or "ln -s $src/${ps-src} $out";
+         }
+         // u.make-name name version
         );
 
     ps-pkgs =

@@ -24,8 +24,8 @@ l.pipe packages
           let
             repo =
               # don't fetch versions we already have
-              if prev?${n} && v.version == "v" + prev.${n}.version then
-                v // { inherit (prev.${n}) rev; }
+              if prev?${n} && v.version == "v" + prev.${n}.info.version then
+                v // { inherit (prev.${n}.src.git) rev; }
               else
                 fetchGit
                   { url = v.repo;
@@ -35,17 +35,22 @@ l.pipe packages
           acc
           + ''
             ${escape-reserved-word false n} =
-              { version = "${substring 1 (stringLength v.version) v.version}";
-                repo = "${v.repo}";
-                rev = "${repo.rev}";
+              { src.git =
+                  { repo = "${v.repo}";
+                    rev = "${repo.rev}";
+                  };
 
-                dependencies =
-                  [ ${foldl'
-                        (acc: d: acc + escape-reserved-word true d + " ")
-                        ""
-                        v.dependencies
-                    }
-                  ];
+                info =
+                  { version = "${substring 1 (stringLength v.version) v.version}";
+
+                    dependencies =
+                      [ ${foldl'
+                            (acc: d: acc + escape-reserved-word true d + " ")
+                            ""
+                            v.dependencies
+                        }
+                      ];
+                  };
               };
 
             ''

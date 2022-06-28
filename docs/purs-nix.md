@@ -1,18 +1,16 @@
 ## purs-nix (nix)
 
-The flake for this repository is used inside your project's flake to set up your PureScript environment and/or to compile/bundle your PureScript code in a Nix derivation. The `outputs` of the flake has a `__functor` attribute, so it can be used as a function. It takes the following arguments:
+**purs-nix** is a nix library used to set up your PureScript environment and/or to compile/bundle your PureScript code in a Nix derivation. The `outputs` of the flake has a `__functor` attribute, so it can be used as a function. It takes the following arguments:
 
 ```
-{ system
-, pkgs ? nixpkgs.legacyPackages.${system}
-}
+{ system }
 ```
 and returns an attribute set with the following attributes:
-- `build`: A function for creating ad hoc PureScript packages. It's argument is a [package description attributes set](adding-packages.md) with the `name` attribute required.
+- `build`: A function for creating ad hoc PureScript packages. See: [build](adding-packages.md#build).
+- `esbuild`/`purescript`: The esbuild/PureScript packages used for everything by default.
 - `ps-pkgs`: The attribute set of all non-namespaced PureScript pacakges.
 - `ps-pkgs-ns`: The attribute set of all namespaced PureScript packages.
 - `purs`: A function for building your project.
-- `purescript`: The PureScript package used for everything by default.
 - `purescript-language-server`: A build of purescript-language-server that detects `flake.nix`/`shell.nix` files as an indication of the workspace root being a PureScript project.
 - `licenses`: This is included for convenience so you can pass the returned attribute set into a [package.nix](adding-packages.md#using-info).
 
@@ -56,15 +54,16 @@ and returns an attribute set with the following attributes:
 
 - `srcs`: A list of strings representing the paths of your project's source directories.
 - `output`: The name of the folder that `purs compile` will create.
-- `bundle`: The options that will configure the `purs bundle` command.
+- `bundle`: The options that will configure the `purs-nix bundle` command.
 
   ```
-  { module ? "Main"
-  , output ? "index.js"
-  , main ? module
-  , namespace ? null
-  , source-maps ? false
-  , debug ? false
+  { esbuild # additional esbuild flags
+    ? { format ? "esm"
+      , log-level ? "warning"
+      , outfile ? "main.js"
+      }
+  , main ? true # import and call `main()`
+  , module ? "Main"
   }
   ```
 

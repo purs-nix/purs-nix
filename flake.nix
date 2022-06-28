@@ -7,6 +7,7 @@
           url = "github:justinwoo/easy-purescript-nix";
         };
 
+      get-flake.url = "github:ursi/get-flake";
       make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
@@ -18,21 +19,18 @@
       utils.url = "github:ursi/flake-utils/8";
     };
 
-  outputs = { nixpkgs, utils, ... }@inputs:
+  outputs = { get-flake, utils, ... }@inputs:
     with builtins;
-    { __functor = _:
-        { pkgs ? nixpkgs.legacyPackages.${system}
-        , system
-        }:
+    { __functor = _: { system }:
         import ./purs-nix.nix (import ./deps.nix { inherit inputs system; });
 
-      defaultTemplate =
-        { description = "A basic purs-nix project";
-          path = "${./templates/default}";
-        };
-
       templates =
-        { flake =
+        { default =
+            { description = "A basic purs-nix project";
+              path = "${./templates/default}";
+            };
+
+          flake =
             { description = "The flake.nix only - for converting existing projects";
 
               path =
@@ -53,7 +51,7 @@
          ({ deadnix, make-shell, pkgs, system, ... }:
             let
               p = pkgs;
-              u = import ./utils.nix p.lib;
+              u = import ./utils.nix p;
               build-pkgs = import ./build-pkgs.nix { inherit pkgs; utils = u; };
               inherit (build-pkgs) ps-pkgs ps-pkgs-ns;
             in
@@ -91,7 +89,20 @@
                       ps-pkgs-ns;
                 };
 
-              devShell =
+              checks =
+                { lint =
+                    p.runCommand "lint" {}
+                      ''
+                      find ${./.} -name "*.nix" | xargs ${deadnix}/bin/deadnix -f
+                      touch $out
+                      '';
+                }
+                // (if system == "x86_64-linux"
+                    then (get-flake ./test).checks.${system}
+                    else {}
+                   );
+
+              devShells.default =
                 make-shell
                   { packages = [ deadnix ];
                     aliases.lint = ''find -name "*.nix" | xargs deadnix'';

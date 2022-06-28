@@ -4,6 +4,8 @@ You can use **purs-nix** to make a derivations for your PureScript bundle, your 
 
 You access these derivations via the [modules](./purs-nix.md#purs-modules) attribute set, using the name of your module as the attribute.
 
+NOTE: If the module name contains a `.`, it will require quotation marks around its name (e.g. `modules."Foo.Bar.Main".bundle`)
+
 There are three different attributes for each module.
 
 ### output
@@ -21,14 +23,17 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
 ### bundle
 
 ```
-{ main ? true
-, namespace ? null
+{ esbuild # additional esbuild flags
+  ? { format ? "esm"
+    , log-level ? "warning"
+    , outfile ? "main.js"
+    }
+, main ? true
 }
 
 ```
 
 - `main`: whether or not to automatically execute the main function of the module you're bundling.
-- `namespace`: The name of the JavaScript object that contains your PureScript code in the bundle.
 
 `modules.Module.bundle {}` is a derivation containing the bundled code from the module `Module`.
 

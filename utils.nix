@@ -1,29 +1,39 @@
 with builtins;
-l:
+p:
+  let l = p.lib; in
   rec
   { bundle =
-      purescript:
-      { files ? null
-      , globs ? ''"${files}/**/*.js"''
-      , module ? "Main"
-      , output ? null
-      , main ? module
-      , namespace ? null
-      , source-maps ? false
-      , debug ? false
+      { entry-point
+      , esbuild ? {}
+      , main ? true
       }:
       let
+        esbuild' =
+          { log-level = "warning";
+            outfile = "main.js";
+          }
+          // (if esbuild?platform then {} else { format = "esm"; })
+          // esbuild
+          // { bundle = true; };
+
         flags =
-          concatStringsSep " "
-            [ "--module ${module}"
-              (make-flag "--output " output)
-              (make-flag "--main " main)
-              (make-flag "--namespace " namespace)
-              (make-flag "--source-maps" source-maps)
-              (make-flag "debug" debug)
-            ];
+          toString
+            (l.mapAttrsToList
+               (n: v:
+                  if isBool v then
+                    if v then "--${n}" else ""
+                  else
+                    "--${n}=${toString v}"
+               )
+               esbuild'
+            );
+
+        build = "${p.esbuild}/bin/esbuild ${flags}";
       in
-      ''${purescript}/bin/purs bundle ${flags} ${globs}'';
+      if main
+      then ''echo 'import { main } from "${entry-point}"; main()' | ${build}''
+      else ''${build} ${entry-point}'';
+
 
     compile =
       purescript:
@@ -37,16 +47,31 @@ l:
       }:
       let
         flags =
-          concatStringsSep " "
+          toString
             [ (make-flag "--output " output)
               (make-flag "--verbose-errors" verbose-errors)
               (make-flag "--comments" comments)
               (make-flag "--codegen " codegen)
               (make-flag "--no-prefix" no-prefix)
-              (make-flag "--json-errors" no-prefix)
+              (make-flag "--json-errors" json-errors)
             ];
       in
       ''${purescript}/bin/purs compile ${flags} ${globs}'';
+
+    repl =
+      purescript:
+      { globs
+      , node-path ? null
+      , node-opts ? null
+      }:
+      let
+        flags =
+          toString
+            [ (make-flag "--node-path " node-path)
+              (make-flag "--node-opts " node-opts)
+            ];
+      in
+      ''${purescript}/bin/purs repl ${flags} ${globs}'';
 
     make-flag = flag: arg:
       if arg == null || arg == false then
@@ -63,11 +88,17 @@ l:
         { pname = name; inherit version; };
 
     package-info = pkg:
+      let info = pkg.purs-nix-info; in
       ''
-      echo "name:    ${pkg.pname or pkg.name}"
-      echo "version: ${pkg.version or "none"}"
-      echo "repo:    ${pkg.repo}"
-      echo "commit:  ${pkg.rev}"
+      echo "name:    ${info.name}"
+      echo "version: ${if isNull info.version then "none" else info.version}"
+      ${if info?repo then
+          ''
+          echo "repo:    ${info.repo}"
+          echo "commit:  ${info.rev}"''
+        else
+          ''echo "path:    ${pkg.src}"''
+      }
       echo "source:  ${pkg}"
       '';
 

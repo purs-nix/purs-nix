@@ -1,4 +1,4 @@
-{ ps-pkgs, ps-pkgs-ns }:
+{ ps-pkgs, ... }:
   with ps-pkgs;
   { aeson =
       { version = "1.0.0";
@@ -45,7 +45,7 @@
             uint
             untagged-union
           ];
-    };
+      };
 
     aeson-helpers =
       { repo = "https://github.com/mlabs-haskell/purescript-bridge-aeson-helpers.git";
@@ -82,26 +82,37 @@
       };
     
     argparse-basic =
-      { version = "1.0.0";
-        repo = "https://github.com/natefaubion/purescript-argparse-basic.git";
-        rev = "cad9bd94a84ccf50c53be2f21ab5941a0a9ffeb9";
+      { src.git =
+          { repo = "https://github.com/natefaubion/purescript-argparse-basic.git";
+            rev = "cad9bd94a84ccf50c53be2f21ab5941a0a9ffeb9";
+          };
 
-        dependencies =
-          [ arrays
-            const
-            effect
-            either
-            filterable
-            foldable-traversable
-            free
-            functors
-            maybe
-            numbers
-            strings
-            transformers
-            tuples
-            typelevel-prelude
-          ];
+        info =
+          { version = "1.0.0";
+
+            dependencies =
+              [ arrays
+                const
+                effect
+                either
+                filterable
+                foldable-traversable
+                free
+                functors
+                maybe
+                numbers
+                strings
+                transformers
+                tuples
+                typelevel-prelude
+              ];
+          };
+      };
+
+    event =
+      let info = hyrule.purs-nix-info; in
+      { src.git = { inherit (info) repo rev; };
+        info = { inherit (info) version dependencies; };
       };
 
     cardano-transaction-lib =
@@ -235,22 +246,26 @@
       };
 
     node-glob-basic =
-      { version = "1.2.0";
-        repo = "https://github.com/natefaubion/purescript-node-glob-basic.git";
-        rev = "22b374b30537a945310fb8049f5bce1b51a7a669";
+      { src.git =
+          { repo = "https://github.com/natefaubion/purescript-node-glob-basic.git";
+            rev = "22b374b30537a945310fb8049f5bce1b51a7a669";
+          };
 
-        dependencies =
-          [ aff
-            console
-            effect
-            lists
-            maybe
-            node-fs-aff
-            node-path
-            node-process
-            ordered-collections
-            strings
-          ];
+        info =
+          { version = "1.2.0";
+            dependencies =
+              [ aff
+                console
+                effect
+                lists
+                maybe
+                node-fs-aff
+                node-path
+                node-process
+                ordered-collections
+                strings
+              ];
+          };
       };
 
     node-workerbees =
@@ -328,35 +343,62 @@
             unsafe-coerce
           ];
       };
+    text-encoding =
+      { src.git =
+          { rev = "609ea0916f6817971d4a6c11b991b59715aaa096";
+            repo = "https://github.com/AlexaDeWit/purescript-text-encoding.git";
+          };
+        info =
+          { version = "1.0.0";
+            dependencies = [
+              arraybuffer-types
+              console
+              effect
+              either
+              exceptions
+              functions
+              partial
+              prelude
+              psci-support
+              strings
+              unicode
+            ];
+          };
+      };
+
+    undefined =
+      { src.git =
+          { rev = "4012dc06b58feae301140bc081135d0f24c432b0";
+            repo = "https://github.com/bklaric/purescript-undefined.git";
+          };
+        info =
+          { version = "1.0.2";
+            dependencies = [
+            ];
+          };
+  
+      };
+    untagged-union =
+      { src.git =
+          { rev = "364e172e759ebe722bd7ec12a599d532b527c0ef";
+            repo = "https://github.com/jvliwanag/purescript-untagged-union.git";
+          };
+        info =
+          { version = "0.3.0";
+            dependencies = [
+              ps-pkgs."assert"
+              console
+              effect
+              foreign
+              foreign-object
+              literals
+              maybe
+              newtype
+              psci-support
+              tuples
+              unsafe-coerce
+            ];
+          };
+      };
   }
   // import ./official-package-set ps-pkgs
-  // { event =
-         { repo = "https://github.com/ursi/purescript-event.git";
-           rev = "8332a25a65e1b939de5b778325b8e6a8571a2e7c";
-           info = /package.nix;
-         };
-
-       point-free =
-         { repo = "https://github.com/ursi/purescript-point-free.git";
-           rev = "e4291b1c982312c9dd13e33fdd428817d08548cd";
-           info = /package.nix;
-         };
-
-       return =
-         { repo = "https://github.com/ursi/purescript-return.git";
-           rev = "e839ebb8490b47a7af8b8f89f4dc9efa0b16b600";
-           info = /package.nix;
-         };
-
-       substitute =
-         { repo = "https://github.com/ursi/purescript-substitute.git";
-           rev = "a511c162d8efc7221b63551bde196d52ff59e4ea";
-           info = /package.nix;
-         };
-
-       task =
-         { repo = "https://github.com/ursi/purescript-task.git";
-           rev = "ffd9c147261ba5cbf2c49e7250595815f7879503";
-           info = /package.nix;
-         };
-     }
