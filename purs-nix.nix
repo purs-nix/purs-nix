@@ -201,7 +201,7 @@ deps:
                       let module-path = "${prefix}/${module}"; in
                       ''
                       if [[ -e ${module-path} ]]; then
-                        ln -fs ${node_modules} ${module-path}
+                        ln -fsT ${node_modules} ${module-path}/node_modules
                       fi
                       ''
                    )
