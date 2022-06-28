@@ -20,7 +20,7 @@
          in
          { packages.default = ps.modules.Main.bundle {};
 
-           devShell =
+           devShells.default =
              pkgs.mkShell
                { packages =
                    with pkgs;
