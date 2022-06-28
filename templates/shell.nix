@@ -17,7 +17,7 @@ let
       (fetchGit
          { url = "https://github.com/ursi/purs-nix.git";
            # rev = "";
-           ref = "ps-0.15";
+           ref = "ps-0.14";
          }
       )
       {};
