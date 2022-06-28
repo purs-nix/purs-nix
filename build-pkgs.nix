@@ -35,7 +35,7 @@ with builtins;
                 ({ url = repo;
                    inherit rev;
                  }
-                 // (if isNull ref then {} else { inherit ref; })
+                 // (if isNull ref then {allRefs=true;} else { inherit ref; })
                 );
           in
           if legacy then
