@@ -162,6 +162,8 @@
                          doCheck = true;
 
                          checkPhase =
+                           "shopt -s globstar\n" +
+
                            make-test "purs-nix package-info prelude"
                              "${command} package-info prelude"
                              (i: ''
@@ -269,7 +271,11 @@
                   { "purs-nix command defaults" =
                       { args.compile.codegen = "docs,js";
 
-                        test = _:
+                        test = command:
+                          make-test "purs-nix srcs"
+                            "${command} srcs"
+                            (i: ''${purs-nix.purescript}/bin/purs compile ${i}'') +
+
                           make-test "main.js exists"
                             ""
                             (_: "ls main.js") +
