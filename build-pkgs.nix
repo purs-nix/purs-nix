@@ -26,7 +26,7 @@ with builtins;
           in
           if legacy
           then get-ref args args
-          else get-ref args.src args.info;
+          else get-ref args.src.git args.info;
 
         src =
           let
