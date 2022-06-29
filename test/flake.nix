@@ -9,7 +9,10 @@
 
   outputs = { get-flake, purs-nix-test-packages, ... }@inputs:
     with builtins;
-    let purs-nix = get-flake ../.; in
+    let
+      minimal = false;
+      purs-nix = get-flake ../.;
+    in
     purs-nix.inputs.utils.apply-systems
       { inputs =
           inputs
@@ -269,9 +272,13 @@
 
                            "\n" + test command + "\n" +
 
-                           make-test "purs-nix repl"
-                             ""
-                             (_: "echo :q | HOME=. ${command} repl");
+                           (if minimal then
+                              ""
+                            else
+                              make-test "purs-nix repl"
+                                ""
+                                (_: "echo :q | HOME=. ${command} repl")
+                           );
                        }
                   )
                   { "purs-nix command defaults" =
@@ -333,7 +340,7 @@
                             (_: "[[ ! -e output ]]");
                       };
                   }
-                  // package-tests;
+                  // (if minimal then {} else package-tests);
 
            devShells.default =
              make-shell
