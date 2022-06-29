@@ -52,6 +52,17 @@
              '';
 
            package-tests = import ./packages.nix ({ inherit l p; } // purs-nix);
+
+           expected-output = i:
+             ''
+             target="prelude override
+             effect override
+             2 is even
+             3 isn't even
+             ❄"
+
+             [[ ${i} == $target ]]
+             '';
          in
          { apps.default =
              { type = "app";
@@ -111,16 +122,7 @@
                  "main output" =
                    make-test "expected output"
                      (make-script "Main")
-                     (i: ''
-                         target="prelude override
-                         effect override
-                         2 is even
-                         3 isn't even
-                         ❄"
-
-                         [[ ${i} == $target ]]
-                         ''
-                     );
+                     expected-output;
                }
              // mapAttrs
                   (n: { args ? {}, test }:
@@ -249,6 +251,10 @@
                              ""
                              (_: "${command} bundle") +
 
+                          make-test "purs-nix run"
+                            "${command} run"
+                            expected-output +
+
                            make-test "purs-nix test"
                              ""
                              (_: "${command} test") +
@@ -304,11 +310,7 @@
                             test-module = "Test.Test";
                           };
 
-                        test = command:
-                          make-test "purs-nix run works despite `main = false`"
-                            ""
-                            (_: "${command} run") +
-
+                        test = _:
                           make-test "custom-named output exists"
                             ""
                             (_: "ls ${outfile}") +

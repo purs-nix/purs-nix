@@ -156,9 +156,16 @@ with builtins;
         in
         "echo ${l.escapeShellArg (toJSON bower-set)} | ${p.jq}/bin/jq . > bower.json";
 
-    run-output = ".purs-nix-run.js";
-
     exe =
+      let
+        node-command = module:
+          let import = "./${output}/${module}/index.js"; in
+          ''
+          ${nodejs}/bin/node \
+            --input-type=module \
+            -e 'import { main } from "${import}"; main()'
+          '';
+      in
       p.writeShellScript name
         ''
         set -e
@@ -173,36 +180,12 @@ with builtins;
             echo "Bundling complete";;
 
           run )
-            ${compile-and-bundle
-                (bundle
-                 // { esbuild =
-                        { outfile = run-output;
-                          platform = "node";
-                        };
-
-                      main = true;
-                    }
-                )
-            }
-            ${nodejs}/bin/node ${run-output};;
+            ${compile'}
+            ${node-command (bundle.module or "Main")};;
 
           test )
             ${compile-test compile}
-
-            ${bundle'
-                (bundle
-                 // { esbuild =
-                        { outfile = run-output;
-                          platform = "node";
-                        };
-
-                      main = true;
-                      module = test-module;
-                    }
-                )
-            }
-
-            ${nodejs}/bin/node ${run-output};;
+            ${node-command test-module};;
 
           repl ) ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
 
