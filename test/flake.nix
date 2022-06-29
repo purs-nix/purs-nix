@@ -52,6 +52,12 @@
              '';
 
            package-tests = import ./packages.nix ({ inherit l p; } // purs-nix);
+
+           expected-output = i:
+             ''
+             target="❄"
+             [[ ${i} == $target ]]
+             '';
          in
          { apps.default =
              { type = "app";
@@ -111,12 +117,7 @@
                  "main output" =
                    make-test "expected output"
                      (make-script "Main")
-                     (i: ''
-                         target="❄"
-
-                         [[ ${i} == $target ]]
-                         ''
-                     );
+                     expected-output;
                }
              // mapAttrs
                   (n: { args ? {}, test }:
@@ -163,6 +164,10 @@
                            make-test "purs-nix bundle"
                              ""
                              (_: "${command} bundle") +
+
+                          make-test "purs-nix run"
+                            "${command} run"
+                            expected-output +
 
                            make-test "purs-nix test"
                              ""
@@ -215,11 +220,7 @@
                             test-module = "Test.Test";
                           };
 
-                        test = command:
-                          make-test "purs-nix run works despite `main = false`"
-                            ""
-                            (_: "${command} run") +
-
+                        test = _:
                           make-test "custom-named output exists"
                             ""
                             (_: "ls ${outfile}") +
