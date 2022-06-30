@@ -93,7 +93,7 @@
                 { lint =
                     p.runCommand "lint" {}
                       ''
-                      find ${./.} -name "*.nix" | xargs ${deadnix}/bin/deadnix -f
+                      ${deadnix}/bin/deadnix -f $(find ${./.} -name "*.nix")
                       touch $out
                       '';
                 }
@@ -110,7 +110,7 @@
               devShells.default =
                 make-shell
                   { packages = [ deadnix ];
-                    aliases.lint = ''find -name "*.nix" | xargs deadnix'';
+                    aliases.lint = ''deadnix **/*.nix'';
                   };
             }
          );
