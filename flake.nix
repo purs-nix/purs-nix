@@ -97,9 +97,14 @@
                       touch $out
                       '';
                 }
-                // (if system == "x86_64-linux"
-                    then (get-flake ./test).checks.${system}
-                    else {}
+                // (if system == "x86_64-linux" then
+                      (get-flake ./test).checks.${system}
+                       // { "hello world example" =
+                               (get-flake ./examples/hello-world)
+                                 .packages.${system}.default;
+                          }
+                    else
+                      {}
                    );
 
               devShells.default =
