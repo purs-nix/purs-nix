@@ -182,6 +182,7 @@ deps:
                               (l.concatStringsSep "\n")
                               (p.writeText "purs-nix.js")
                             ];
+
                         module-path = "${prefix}/${module}";
                       in
                       ''

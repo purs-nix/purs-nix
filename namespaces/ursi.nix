@@ -37,11 +37,7 @@
       info = /is-even/package.nix;
     };
 
-  # murmur3 =
-  #   { repo = "https://github.com/ursi/purescript-murmur3.git";
-  #     rev = "4da7d071ac5791b21fe9064d84e067a34fdc29e3";
-  #     info = /package.nix;
-  #   };
+  murmur3.src.flake.url = "github:ursi/purescript-murmur3/0cb1d547113a50be6fcf7bd0b6c8740cc283ba20";
 
   prelude =
     { src.git =
