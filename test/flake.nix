@@ -42,7 +42,7 @@
            ps = ps-custom {};
 
            make-script-custom = args: module:
-             "${(ps-custom args).modules.${module}.app { name = "a"; }}/bin/a";
+             "${(ps-custom args).modules.${module}.app { name = "test run"; }}/bin/'test run'";
 
            make-script = make-script-custom {};
 
@@ -58,7 +58,9 @@
 
            expected-output = i:
              ''
-             target="prelude override
+             target="test run
+             argument
+             prelude override
              effect override
              2 is even
              3 isn't even
@@ -124,7 +126,7 @@
 
                  "main output" =
                    make-test "expected output"
-                     (make-script "Main")
+                     "${make-script "Main"} argument"
                      expected-output;
                }
              // mapAttrs
@@ -135,10 +137,12 @@
 
                        command =
                          ps.command
-                           ({ inherit name package;
-                              srcs = default-srcs;
-                            }
-                            // args
+                           (l.recursiveUpdate
+                              {  bundle.esbuild.platform = "node";
+                                 inherit name package;
+                                 srcs = default-srcs;
+                               }
+                               args
                            )
                          + "/bin/${name}";
                      in
@@ -222,6 +226,7 @@
                                  maybe: 6.0.0
                                  newtype: 5.0.0
                                  node-buffer: 8.0.0
+                                 node-path: 5.0.0
                                  node-process: 10.0.0
                                  node-streams: 7.0.0
                                  nonempty: 7.0.0
@@ -255,7 +260,7 @@
                              (_: "${command} bundle") +
 
                           make-test "purs-nix run"
-                            "${command} run"
+                            "${command} run argument"
                             expected-output +
 
                            make-test "purs-nix test"
@@ -349,7 +354,8 @@
                    [ nodejs
 
                      (ps.command
-                        { inherit package;
+                        { bundle.esbuild.platform = "node";
+                          inherit package;
                           srcs = [ "src" "src2" ];
                         }
                      )
