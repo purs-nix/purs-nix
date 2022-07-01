@@ -162,10 +162,10 @@
                      "${make-script "Main"} argument"
                      expected-output;
 
-                 # "main output murmur3" =
-                 #   make-test "expected output"
-                 #     "${ps2.modules.Main.app { name = "_"; }}/bin/_"
-                 #     (i: "[[ ${i} == 1945310157 ]]");
+                 "main output murmur3" =
+                   make-test "expected output"
+                     "${ps2.modules.Main.app { name = "_"; }}/bin/_"
+                     (i: "[[ ${i} == 1945310157 ]]");
                }
              // mapAttrs
                   (n:
@@ -397,26 +397,26 @@
                             (_: "[[ ! -e output ]]");
                       };
 
-                    # "purs-nix command flake dependencies" =
-                    #   { args.srcs = [ "src3" ];
-                    #     less = true;
-                    #     ps' = ps2;
-                    #     run-output = (i: "[[ ${i} == 1945310157 ]]");
+                    "purs-nix command flake dependencies" =
+                      { args.srcs = [ "src3" ];
+                        less = true;
+                        ps' = ps2;
+                        run-output = (i: "[[ ${i} == 1945310157 ]]");
 
-                    #     test = command:
-                    #       make-test "purs-nix package-info ursi.murmur3"
-                    #         "${command} package-info ursi.murmur3"
-                    #         (i: ''
-                    #             info="name:    ursi.murmur3
-                    #             version: none
-                    #             flake:   github:ursi/purescript-murmur3/0cb1d547113a50be6fcf7bd0b6c8740cc283ba20
-                    #             package: default
-                    #             source:  /nix/store/7ph4yb1mwh45kdvj0x3ysbpiv4afxpbx-ursi.murmur3"
+                        test = command:
+                          make-test "purs-nix package-info ursi.murmur3"
+                            "${command} package-info ursi.murmur3"
+                            (i: ''
+                                info="name:    ursi.murmur3
+                                version: none
+                                flake:   github:ursi/purescript-murmur3/35c11843204892a29a4ee59513723eb34709d492
+                                package: default
+                                source:  /nix/store/fd92k2zijqh1514xv87wzva4v99gaq7l-ursi.murmur3"
 
-                    #             [[ ${i} == $info ]]
-                    #             ''
-                    #         );
-                    #   };
+                                [[ ${i} == $info ]]
+                                ''
+                            );
+                      };
                   }
                   // (if minimal then {} else package-tests);
 

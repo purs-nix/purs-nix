@@ -37,7 +37,7 @@
       info = /is-even/package.nix;
     };
 
-  murmur3.src.flake.url = "github:ursi/purescript-murmur3/0cb1d547113a50be6fcf7bd0b6c8740cc283ba20";
+  murmur3.src.flake.url = "github:ursi/purescript-murmur3/35c11843204892a29a4ee59513723eb34709d492";
 
   prelude =
     { src.git =
