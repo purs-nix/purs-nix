@@ -163,7 +163,8 @@ with builtins;
           ''
           ${nodejs}/bin/node \
             --input-type=module \
-            -e 'import { main } from "${import}"; main()'
+            -e 'import { main } from "${import}"; main()' \
+            -- "${name} run" "''${@:2}"
           '';
       in
       p.writeShellScript name
