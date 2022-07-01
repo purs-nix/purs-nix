@@ -167,6 +167,7 @@
                            )
                            ./.;
 
+                         buildInputs = [ p.nodejs ];
                          installPhase = "touch $out";
                          doCheck = true;
 
@@ -298,9 +299,16 @@
                             ""
                             (_: "ls main.js") +
 
-                          make-test "main function is called"
-                            "tail -n 1 main.js"
-                            (i: ''[[ ${i} == "main();" ]]'');
+                          "cp main.js 'test run'\n" +
+
+                          make-test "running main.js is the same as purs-nix run"
+                            "node 'test run'; ${command} run"
+                            (_: ''
+                                [[ "$(node 'test run')" \
+                                == "$(${command} run)" \
+                                ]]
+                                ''
+                            );
                       };
 
                     "purs-nix command configured" =
