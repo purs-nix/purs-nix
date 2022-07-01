@@ -93,19 +93,24 @@
                 { lint =
                     p.runCommand "lint" {}
                       ''
-                      find ${./.} -name "*.nix" | xargs ${deadnix}/bin/deadnix -f
+                      ${deadnix}/bin/deadnix -f $(find ${./.} -name "*.nix")
                       touch $out
                       '';
                 }
-                // (if system == "x86_64-linux"
-                    then (get-flake ./test).checks.${system}
-                    else {}
+                // (if system == "x86_64-linux" then
+                      (get-flake ./test).checks.${system}
+                       // { "hello world example" =
+                               (get-flake ./examples/hello-world)
+                                 .packages.${system}.default;
+                          }
+                    else
+                      {}
                    );
 
               devShells.default =
                 make-shell
                   { packages = [ deadnix ];
-                    aliases.lint = ''find -name "*.nix" | xargs deadnix'';
+                    aliases.lint = ''deadnix **/*.nix'';
                   };
             }
          );

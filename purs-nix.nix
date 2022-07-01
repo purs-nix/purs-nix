@@ -328,22 +328,33 @@ deps:
               , auto-flags ? false
               }:
               let
+                command-shell = l.escapeShellArg command;
+                command-drv = l.strings.sanitizeDerivationName command;
+
                 exe =
                   let
-                    partial = "node ${bundle { esbuild.platform = "node"; }} $@";
+                    bundle' = bundle { esbuild.platform = "node"; };
+
+                    partial =
+                      p.runCommand "${command-drv}-partial" {}
+                        ''
+                        mkdir $out; cd $out
+                        echo $'#! ${nodejs}/bin/node' > ${command-shell}
+                        cat ${bundle'} >> ${command-shell}
+                        chmod +x ${command-shell}
+                        '';
                   in
-                  pkgs.writeShellScript command
-                    (if auto-flags then
-                       ''
-                       if [[ $1 = --version ]]; then
-                         echo ${if version == null then "none" else version}
-                       else
-                         ${partial}
-                       fi
-                       ''
-                     else
-                       partial
-                    );
+                  if auto-flags then
+                    pkgs.writeShellScript "${command-drv}-auto-flags"
+                      ''
+                      if [[ $1 = --version ]]; then
+                        echo ${if version == null then "none" else version}
+                      else
+                        ${partial}/${command-shell}
+                      fi
+                      ''
+                  else
+                    "${partial}/${command-shell}";
               in
               mkDerivation
                 ({ phases = [ "installPhase" ];
@@ -354,7 +365,7 @@ deps:
                      # The makeWrapper setup allows you to add more runtime dependencies to your executable by overrideing buildInputs
                      ''
                      mkdir -p $out/bin
-                     makeWrapper ${exe} $out/bin/${command} --set PATH $PATH
+                     makeWrapper ${exe} $out/bin/${command-shell} --set PATH $PATH
                      '';
                  }
                  // u.make-name name version
