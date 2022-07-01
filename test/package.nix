@@ -4,6 +4,7 @@ _:
       with ps-pkgs;
       [ console
         effect
+        node-path
         node-process
         prelude
       ];

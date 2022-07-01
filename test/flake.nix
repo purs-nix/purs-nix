@@ -9,7 +9,10 @@
 
   outputs = { get-flake, purs-nix-test-packages, ... }@inputs:
     with builtins;
-    let purs-nix = get-flake ../.; in
+    let
+      minimal = false;
+      purs-nix = get-flake ../.;
+    in
     purs-nix.inputs.utils.apply-systems
       { inputs =
           inputs
@@ -39,7 +42,7 @@
            ps = ps-custom {};
 
            make-script-custom = args: module:
-             "${(ps-custom args).modules.${module}.app { name = "a"; }}/bin/a";
+             "${(ps-custom args).modules.${module}.app { name = "test run"; }}/bin/'test run'";
 
            make-script = make-script-custom {};
 
@@ -55,7 +58,10 @@
 
            expected-output = i:
              ''
-             target="❄"
+             target="test run
+             argument
+             ❄"
+
              [[ ${i} == $target ]]
              '';
          in
@@ -116,7 +122,7 @@
 
                  "main output" =
                    make-test "expected output"
-                     (make-script "Main")
+                     "${make-script "Main"} argument"
                      expected-output;
                }
              // mapAttrs
@@ -127,10 +133,12 @@
 
                        command =
                          ps.command
-                           ({ inherit name package;
-                              srcs = default-srcs;
-                            }
-                            // args
+                           (l.recursiveUpdate
+                              {  bundle.esbuild.platform = "node";
+                                 inherit name package;
+                                 srcs = default-srcs;
+                               }
+                               args
                            )
                          + "/bin/${name}";
                      in
@@ -155,6 +163,7 @@
                            )
                            ./.;
 
+                         buildInputs = [ p.nodejs ];
                          installPhase = "touch $out";
                          doCheck = true;
 
@@ -166,7 +175,7 @@
                              (_: "${command} bundle") +
 
                           make-test "purs-nix run"
-                            "${command} run"
+                            "${command} run argument"
                             expected-output +
 
                            make-test "purs-nix test"
@@ -183,9 +192,13 @@
 
                            "\n" + test command + "\n" +
 
-                           make-test "purs-nix repl"
-                             ""
-                             (_: "echo :q | HOME=. ${command} repl");
+                           (if minimal then
+                              ""
+                            else
+                              make-test "purs-nix repl"
+                                ""
+                                (_: "echo :q | HOME=. ${command} repl")
+                           );
                        }
                   )
                   { "purs-nix command defaults" =
@@ -198,7 +211,18 @@
 
                           make-test "main.js exists"
                             ""
-                            (_: "ls main.js");
+                            (_: "ls main.js") +
+
+                          "cp main.js 'test run'\n" +
+
+                          make-test "running main.js is the same as purs-nix run"
+                            "node 'test run'; ${command} run"
+                            (_: ''
+                                [[ "$(node 'test run')" \
+                                == "$(${command} run)" \
+                                ]]
+                                ''
+                            );
                       };
 
                     "purs-nix command configured" =
@@ -239,7 +263,7 @@
                             (_: "[[ ! -e output ]]");
                       };
                   }
-                  // package-tests;
+                  // (if minimal then {} else package-tests);
 
            devShells.default =
              make-shell
@@ -248,7 +272,8 @@
                    [ nodejs
 
                      (ps.command
-                        { inherit package;
+                        { bundle.esbuild.platform = "node";
+                          inherit package;
                           srcs = [ "src" "src2" ];
                         }
                      )

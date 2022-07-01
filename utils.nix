@@ -81,7 +81,8 @@ p:
       else
         flag + arg;
 
-    make-name = name: version:
+    make-name = unsanitized: version:
+      let name = l.strings.sanitizeDerivationName unsanitized; in
       if version == null then
         { inherit name; }
       else
