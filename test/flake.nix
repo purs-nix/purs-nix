@@ -182,15 +182,15 @@
                        command =
                          ps'.command
                            (l.recursiveUpdate
-                              {  bundle.esbuild =
-                                   { legal-comments = "none";
-                                     platform = "node";
-                                   };
+                              { bundle.esbuild =
+                                  { legal-comments = "none";
+                                    platform = "node";
+                                  };
 
-                                 inherit name package;
-                                 srcs = default-srcs;
-                               }
-                               args
+                                inherit name package;
+                                srcs = default-srcs;
+                              }
+                              args
                            )
                          + "/bin/${name}";
                      in
@@ -200,20 +200,20 @@
 
                          src =
                            filterSource
-                           (path: type:
-                              (type == "directory"
-                               && any
-                                    (s: !isNull (match ".*/${s}" path)
-                                        || l.hasInfix "/${s}/" path
-                                    )
-                                    (args.srcs or default-srcs
-                                     ++ [ (args.test or "test") ]
-                                    )
-                              )
-                              || l.hasSuffix ".purs" path
-                              || l.hasSuffix ".js" path
-                           )
-                           ./.;
+                             (path: type:
+                                (type == "directory"
+                                 && any
+                                      (s: !isNull (match ".*/${s}" path)
+                                          || l.hasInfix "/${s}/" path
+                                      )
+                                      (args.srcs or default-srcs
+                                       ++ [ (args.test or "test") ]
+                                      )
+                                )
+                                || l.hasSuffix ".purs" path
+                                || l.hasSuffix ".js" path
+                             )
+                             ./.;
 
                          installPhase = "touch $out";
                          doCheck = true;
