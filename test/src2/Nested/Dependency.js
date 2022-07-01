@@ -1,7 +1,6 @@
-import * as _ from "./purs-nix.js"
+import foreign1 from "./foreign/foreign1.js";
+import foreign2 from "./foreign/foreign2.js";
 
 const a = "❄"
-const foreign1 = _.foreign1.default
-const foreign2 = _.foreign2.default
 
 export { a, foreign1, foreign2 }

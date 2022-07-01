@@ -45,14 +45,7 @@
                         (p.callPackages inputs.npmlock2nix {})
                         .node_modules { src = ./foreign-js; } + /node_modules;
 
-                      Nested =
-                        { src = ./foreign-js;
-
-                          paths =
-                            { foreign1 = /foreign1.js;
-                              foreign2 = /foreign2.js;
-                            };
-                        };
+                      Nested.src = ./foreign-js;
                     };
                 }
                 // (if isNull nodejs then {} else { inherit nodejs; })
@@ -169,16 +162,17 @@
                      "${make-script "Main"} argument"
                      expected-output;
 
-                 "main output murmur3" =
-                   make-test "expected output"
-                     "${ps2.modules.Main.app { name = "_"; }}/bin/_"
-                     (i: "[[ ${i} == 1945310157 ]]");
+                 # "main output murmur3" =
+                 #   make-test "expected output"
+                 #     "${ps2.modules.Main.app { name = "_"; }}/bin/_"
+                 #     (i: "[[ ${i} == 1945310157 ]]");
                }
              // mapAttrs
                   (n:
                    { args ? {}
-                   , ps' ? ps
                    , less ? false
+                   , ps' ? ps
+                   , run-output ? expected-output
                    , test
                    }:
                      let
@@ -319,7 +313,7 @@
 
                           make-test "purs-nix run"
                             "${command} run argument"
-                            expected-output +
+                            run-output +
 
                            make-test "purs-nix test"
                              ""
@@ -403,25 +397,26 @@
                             (_: "[[ ! -e output ]]");
                       };
 
-                    "purs-nix command flake dependencies" =
-                      { args.srcs = [ "src3" ];
-                        less = true;
-                        ps' = ps2;
+                    # "purs-nix command flake dependencies" =
+                    #   { args.srcs = [ "src3" ];
+                    #     less = true;
+                    #     ps' = ps2;
+                    #     run-output = (i: "[[ ${i} == 1945310157 ]]");
 
-                        test = command:
-                          make-test "purs-nix package-info ursi.murmur3"
-                            "${command} package-info ursi.murmur3"
-                            (i: ''
-                                info="name:    ursi.murmur3
-                                version: none
-                                flake:   github:ursi/purescript-murmur3/0cb1d547113a50be6fcf7bd0b6c8740cc283ba20
-                                package: default
-                                source:  /nix/store/7ph4yb1mwh45kdvj0x3ysbpiv4afxpbx-ursi.murmur3"
+                    #     test = command:
+                    #       make-test "purs-nix package-info ursi.murmur3"
+                    #         "${command} package-info ursi.murmur3"
+                    #         (i: ''
+                    #             info="name:    ursi.murmur3
+                    #             version: none
+                    #             flake:   github:ursi/purescript-murmur3/0cb1d547113a50be6fcf7bd0b6c8740cc283ba20
+                    #             package: default
+                    #             source:  /nix/store/7ph4yb1mwh45kdvj0x3ysbpiv4afxpbx-ursi.murmur3"
 
-                                [[ ${i} == $info ]]
-                                ''
-                            );
-                      };
+                    #             [[ ${i} == $info ]]
+                    #             ''
+                    #         );
+                    #   };
                   }
                   // (if minimal then {} else package-tests);
 

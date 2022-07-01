@@ -164,6 +164,7 @@ with builtins;
           let import = "./${output}/${module}/index.js"; in
           ''
           ${nodejs}/bin/node \
+            --preserve-symlinks \
             --input-type=module \
             -e 'import { main } from "${import}"; main()' \
             -- "${name} run" "''${@:2}"

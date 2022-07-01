@@ -131,88 +131,33 @@ deps:
 
         foreign-stuff = deps: prefix:
           let
-            foreign-stuff' =
-              let
-                split-foreign = init: foreign':
-                  l.foldl
-                    (acc': { name, value }:
-                       if value?src then
-                         l.recursiveUpdate
-                           acc'
-                           { src.${name} = value; }
-                       else if value?node_modules then
-                         l.recursiveUpdate
-                           acc'
-                           { node.${name} = value; }
-                       else
-                         acc'
-                    )
-                    init
-                    (l.mapAttrsToList l.nameValuePair foreign');
-              in
+            combined =
               foldl'
                 (acc: dep:
-                   let info = dep.purs-nix-info; in
-                   if info?foreign then
-                       split-foreign acc info.foreign
-                   else
-                     acc
+                   l.recursiveUpdate acc (dep.purs-nix-info.foreign or {})
                 )
-                (split-foreign
-                   { src = {}; node = {}; }
-                   (if isNull foreign then {} else foreign)
-                )
+                (if isNull foreign then {} else foreign)
                 deps;
-
-            foreign-derivation =
-              l.concatStringsSep "\n"
-                (l.mapAttrsToList
-                   (module: { src, paths }:
-                      let
-                        purs-nix-js =
-                          l.pipe paths
-                            [ (l.mapAttrsToList
-                                 (n: v:
-                                    ''
-                                    export * as ${n} from "${src}${toString v}";
-                                    ''
-                                 )
-                              )
-
-                              (l.concatStringsSep "\n")
-                              (p.writeText "purs-nix.js")
-                            ];
-
-                        module-path = "${prefix}/${module}";
-                      in
-                      ''
-                      if [[ -e ${module-path} ]]; then
-                        cp ${purs-nix-js} ${module-path}/purs-nix.js
-                      fi
-                      ''
-
-                   )
-                   foreign-stuff'.src
-                );
-
-            foreign-node =
-              l.concatStringsSep "\n"
-                (l.mapAttrsToList
-                   (module: { node_modules }:
-                      let module-path = "${prefix}/${module}"; in
-                      ''
-                      if [[ -e ${module-path} ]]; then
-                        ln -fsT ${node_modules} ${module-path}/node_modules
-                      fi
-                      ''
-                   )
-                   foreign-stuff'.node
-                );
           in
-          ''
-          ${foreign-derivation}
-          ${foreign-node}
-          '';
+          foldl'
+            (acc: { name, value }:
+               let module-path = "${prefix}/${name}"; in
+               ''
+               ${acc}
+
+               if [[ -e ${module-path} ]]; then
+                 ${if value?node_modules then
+                     "ln -fsT ${value.node_modules} ${module-path}/node_modules"
+                   else if value?src then
+                     "ln -fsT ${value.src} ${module-path}/foreign"
+                   else
+                     abort "The only supported foreign options are 'node_modules' and 'src'."
+                 }
+               fi
+               ''
+            )
+            ""
+            (l.mapAttrsToList l.nameValuePair combined);
 
         build-single = name: local-deps:
           let
