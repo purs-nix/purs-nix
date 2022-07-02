@@ -5,7 +5,7 @@
     "purescript-node-path": "^v5.0.0",
     "purescript-node-process": "^v10.0.0",
     "purescript-prelude": "^voverride-test",
-    "purescript-ursi.is-even": "https://github.com/ursi/purs-nix-test-packages.git#v1.0.0"
+    "purescript-ursi.is-even": "https://github.com/purs-nix/test-packages.git#v1.0.0"
   },
   "ignore": [
     "**/.*",
@@ -19,6 +19,6 @@
   "name": "purescript-test",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ursi/purs-nix.git"
+    "url": "https://github.com/purs-nix/purs-nix.git"
   }
 }

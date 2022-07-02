@@ -19,7 +19,7 @@ deps:
             In order to build derivations from your PureScript code, you must supply a 'srcs' argument to 'purs'
 
             See:
-            https://github.com/ursi/purs-nix/blob/master/docs/purs-nix.md#purs
+            https://github.com/purs-nix/purs-nix/blob/master/docs/purs-nix.md#purs
             ''
       , nodejs ? pkgs.nodejs
       , purescript ? purescript'

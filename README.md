@@ -7,7 +7,7 @@
 ## Gettings Started (flakes)
 
 - [Setup nix](docs/nix.md).
-- Run `nix flake init -t github:ursi/purs-nix` in a new directory to initialize a new project.
+- Run `nix flake init -t github:purs-nix/purs-nix` in a new directory to initialize a new project.
 - Run `nix develop` to enter a Nix shell with the `purs-nix` command added to your `PATH`.
 - Run `purs-nix run` to see the output of the default project.
 
@@ -26,10 +26,10 @@
 - **Package namespaces:** We have package namespaces.
 - **No global module namespace:** All packages are not required to compile with each other.
 - **Single source of truth for package info:** You can define the version and dependencies of your package in its home repository and import it here. Nix is lazy so you will only ever download the information for the packages you need.
-- **Easy modification:** Using a modified version of the package set is as easy as forking it and changing the input of your flake (`"github:ursi/purs-nix"` -> `"github:<your-username>/purs-nix"`). If you put in a PR to add your package, using your fork of the package set is just as easy as using the official one, so you don't have to wait for the PR to be accepted to use your normal workflow.
+- **Easy modification:** Using a modified version of the package set is as easy as forking it and changing the input of your flake (`"github:purs-nix/purs-nix"` -> `"github:<your-username>/purs-nix"`). If you put in a PR to add your package, using your fork of the package set is just as easy as using the official one, so you don't have to wait for the PR to be accepted to use your normal workflow.
 - **Get package info:** Since package info can be imported from a foreign repository, we need a way to view the info of a package easily.
-  - To view the info of a non-namespaced package, use `nix run github:ursi/purs-nix#package-info.<pacakge-name>`.
-  - To view the info or a namespaced package, use `nix run github:ursi/purs-nix#package-info-ns.<namespace>.<package-name>`.
+  - To view the info of a non-namespaced package, use `nix run github:purs-nix/purs-nix#package-info.<pacakge-name>`.
+  - To view the info or a namespaced package, use `nix run github:purs-nix/purs-nix#package-info-ns.<namespace>.<package-name>`.
 
 ## TODO
 

@@ -3,7 +3,7 @@
 
       purs-nix-test-packages =
         { flake = false;
-          url = "github:ursi/purs-nix-test-packages";
+          url = "github:purs-nix/test-packages";
         };
     };
 
@@ -179,7 +179,7 @@
                              (i: ''
                                  info="name:    prelude
                                  version: override-test
-                                 repo:    https://github.com/ursi/purs-nix-test-packages.git
+                                 repo:    https://github.com/purs-nix/test-packages.git
                                  commit:  25b3125cf4cac00feb6d8ba3b24c5f27271d42ff
                                  source:  /nix/store/3bffqbpk1ir903gmqsmx9hi861n4h3y3-prelude-override-test"
 
