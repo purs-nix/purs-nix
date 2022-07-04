@@ -38,3 +38,22 @@ This is an incomplete list of things that are currently planned.
 - **FAQ/How To's:** I'd like to have an FAQ, but first I see which Qs are FA'd.
 - **Packaging foreign dependencies:** Being able to add dependencies that rely on npm packages without needing to use npm yourself would be a huge QoL upgrade.
 - **Module renaming:** Since there is no more global module namespace, you may find that two packages have the same module name and cannot compile together. I think arbitrary module renaming should be possible, so I plan to explore this as a solution. Something like: `html-module.rename-module "Html" "HtmlModule.Html"`. I'd also like to add opt-in module name prefixing for indirect dependencies, to guarantee they never collide.
+
+## Contributing / Mirrors
+
+Bug reports and patches are always welcome. Feature requests and new features are also welcome, but please consider discussing them with the maintainer first.
+
+You can contribute through [GitHub](https://github.com/purs-nix/purs-nix) or [Codeberg](https://codeberg.org/purs-nix/purs-nix).
+
+To set up these mirrors as push remotes for `origin`
+
+```console
+$ git remote set-url --add --push origin git@github.com:purs-nix/purs-nix.git
+$ git remote set-url --add --push origin git@codeberg.org:purs-nix/purs-nix.git
+```
+
+And pull
+
+```console
+$ git fetch --all
+```
