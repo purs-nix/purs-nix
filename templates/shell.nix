@@ -15,7 +15,7 @@ let
   purs-nix =
     import
       (fetchGit
-         { url = "https://github.com/ursi/purs-nix.git";
+u        { url = "https://github.com/purs-nix/purs-nix.git";
            # rev = "";
            ref = "ps-0.14";
          }

@@ -12,6 +12,6 @@ _:
     pursuit =
       { name = "test";
         license = licenses.bsd3;
-        repo = "https://github.com/ursi/purs-nix.git";
+        repo = "https://github.com/purs-nix/purs-nix.git";
       };
   }

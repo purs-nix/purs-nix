@@ -3,7 +3,7 @@
 
       purs-nix-test-packages =
         { flake = false;
-          url = "github:ursi/purs-nix-test-packages";
+          url = "github:purs-nix/test-packages";
         };
     };
 
@@ -168,8 +168,6 @@
                          doCheck = true;
 
                          checkPhase =
-                           "shopt -s globstar\n" +
-
                            make-test "purs-nix bundle"
                              ""
                              (_: "${command} bundle") +
