@@ -182,7 +182,7 @@ with builtins;
 
           run )
             ${compile'}
-            ${node-command (bundle.module or "Main")} \$\{@:2};;
+            ${node-command (bundle.module or "Main")} \$\{\@\:2\};;
 
           test )
             ${compile-test compile}
