@@ -20,7 +20,7 @@ with builtins;
           l.warnIf (args?repo)
             ''
             Package: "${name}" is being specified with a deprecated API.
-            see: https://github.com/ursi/purs-nix/blob/ps-0.15/docs/adding-packages.md
+            see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/adding-packages.md
             ''
             args?repo;
 

@@ -19,7 +19,7 @@ purs-nix-test-packages:
            { name = "prelude";
 
              src.git =
-               { repo = "https://github.com/ursi/purs-nix-test-packages.git";
+               { repo = "https://github.com/purs-nix/test-packages.git";
                  rev = "25b3125cf4cac00feb6d8ba3b24c5f27271d42ff";
                };
 
@@ -31,6 +31,6 @@ purs-nix-test-packages:
     pursuit =
       { name = "test";
         license = licenses.bsd3;
-        repo = "https://github.com/ursi/purs-nix.git";
+        repo = "https://github.com/purs-nix/purs-nix.git";
       };
   }
