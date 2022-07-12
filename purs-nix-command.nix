@@ -198,7 +198,12 @@ with builtins;
           packages ) ${packages};;
           bower ) ${bower};;
           output ) ${purescript}/bin/purs "''${@:2}" "${compiler-output}/**/*.js";;
-          srcs ) echo ${globs} ${dep-globs};;
+
+          srcs )
+            find -L ${
+            toString (map (a: ''"${a}"'') (srcs ++ all-dependencies))
+            } -name "*.purs";;
+
           * ) echo ${help};;
         esac
         '';

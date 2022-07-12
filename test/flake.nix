@@ -172,8 +172,6 @@
                          doCheck = true;
 
                          checkPhase =
-                           "shopt -s globstar\n" +
-
                            make-test "purs-nix package-info prelude"
                              "${command} package-info prelude"
                              (i: ''
