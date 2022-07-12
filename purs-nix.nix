@@ -234,47 +234,27 @@ deps:
               { name
               , version ? null
               , command ? name
-              , auto-flags ? false
               }:
-              let
-                command-shell = l.escapeShellArg command;
-                command-drv = l.strings.sanitizeDerivationName command;
-
-                exe =
-                  let
-                    bundle' = bundle { esbuild.platform = "node"; };
-
-                    partial =
-                      p.runCommand "${command-drv}-partial" {}
-                        ''
-                        mkdir $out; cd $out
-                        echo $'#! ${nodejs}/bin/node' > ${command-shell}
-                        cat ${bundle'} >> ${command-shell}
-                        chmod +x ${command-shell}
-                        '';
-                  in
-                  if auto-flags then
-                    pkgs.writeShellScript "${command-drv}-auto-flags"
-                      ''
-                      if [[ $1 = --version ]]; then
-                        echo ${if version == null then "none" else version}
-                      else
-                        ${partial}/${command-shell}
-                      fi
-                      ''
-                  else
-                    "${partial}/${command-shell}";
-              in
+              let command' = l.escapeShellArg command; in
               mkDerivation
                 ({ phases = [ "installPhase" ];
 
-                   buildInputs = [ p.makeWrapper nodejs ];
-
                    installPhase =
-                     # The makeWrapper setup allows you to add more runtime dependencies to your executable by overrideing buildInputs
+                     let
+                       bundle' =
+                         bundle
+                           { esbuild =
+                               { minify = true;
+                                 platform = "node";
+                               };
+                           };
+                     in
                      ''
-                     mkdir -p $out/bin
-                     makeWrapper ${exe} $out/bin/${command-shell} --set PATH $PATH
+                     mkdir -p $out/bin; cd $_
+
+                     echo $'#! ${nodejs}/bin/node' > ${command'}
+                     cat ${bundle'} >> ${command'}
+                     chmod +x ${command'}
                      '';
                  }
                  // u.make-name name version

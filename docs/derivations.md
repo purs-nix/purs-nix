@@ -43,12 +43,10 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
 { name
 , version ? null
 , command ? name
-, auto-flags ? false
 }
 ```
 - `name`: The `pname`/`name` of the derivation.
 - `version`: The version of the derivation.
 - `command`: The name of the executable.
-- `auto-flags`: Automatically add certain flags to the executable. Currently the only flag that's added is `--version`.
 
 `modules.Module.app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Module`.
