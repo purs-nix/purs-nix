@@ -205,7 +205,7 @@ deps:
                 (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
                 subsrc;
 
-            output = args:
+            output = top-level: args:
               let
                 trans-deps =
                   let
@@ -253,14 +253,18 @@ deps:
                     ''
                     mv output $out
                     cd $out
-                    ${foreign-stuff dependencies "."}
+
+                    ${if top-level
+                      then foreign-stuff dependencies "."
+                      else ""
+                    }
                     '';
                 };
 
             bundle = { esbuild ? {}, main ? true }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
-                   { entry-point = output {} + "/${name}/index.js";
+                   { entry-point = output true {} + "/${name}/index.js";
                      esbuild = esbuild // { outfile = "$out"; };
                      inherit main;
                    }
@@ -314,7 +318,7 @@ deps:
                     fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
                     '';
 
-                output' = output args;
+                output' = output false args;
               in
               p.writeShellScript name
                 ''
@@ -334,7 +338,7 @@ deps:
       in
       { modules =
           mapAttrs
-            (_: v: { inherit (v) bundle output app; })
+            (_: v: { inherit (v) bundle app; output = v.output true; })
             builds;
 
         command =
