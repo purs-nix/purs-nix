@@ -102,6 +102,10 @@
                        // { "hello world example" =
                                (get-flake ./examples/hello-world)
                                  .packages.${system}.default;
+
+                            "is-even example" =
+                               (get-flake ./examples/is-even)
+                                 .packages.${system}.default;
                           }
                     else
                       {}
