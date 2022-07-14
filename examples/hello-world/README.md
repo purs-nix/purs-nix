@@ -1,5 +1,7 @@
-app: `nix build`
+run app: `nix run`
 
-bundle: `nix build .#bundle`
+build app: `nix build`
 
-output: `nix build .#output`
+build bundle: `nix build .#bundle`
+
+build output: `nix build .#output`

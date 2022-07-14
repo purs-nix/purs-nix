@@ -28,9 +28,15 @@
                  srcs = [ ./src ];
                };
          in
-         { packages =
+         rec
+         { apps.default =
+             { type = "app";
+               program = "${packages.default}/bin/hello";
+             };
+
+           packages =
              with ps.modules.Main;
-             { default = ps.modules.Main.app { name = "hello"; };
+             { default = app { name = "hello"; };
                bundle = bundle {};
                output = output {};
              };
