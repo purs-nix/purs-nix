@@ -9,10 +9,7 @@
 
   outputs = { get-flake, purs-nix-test-packages, ... }@inputs:
     with builtins;
-    let
-      minimal = false;
-      purs-nix = get-flake ../.;
-    in
+    let purs-nix = get-flake ../.; in
     purs-nix.inputs.utils.apply-systems
       { inputs =
           inputs
@@ -24,6 +21,7 @@
       }
       ({ make-shell, pkgs, purs-nix, ... }:
          let
+           minimal = (a: l.warnIf a "minimal == true" a) false;
            l = p.lib; p = pkgs;
            inherit (purs-nix) ps-pkgs;
            package = import ./package.nix purs-nix-test-packages purs-nix;
