@@ -57,6 +57,7 @@ The packages descriptions sets consist of two parts:
 The attributes supported by `info` are:
 - `version` (without the "v" prefix)
 - `dependencies` (default: `[]`)
+- `foreign` (default: `{}`)
 - `pursuit` (default: `{}`)
 - `src` (default: `"src"`)
 - `install` (default: `"ln -s $src/${src} $out"`)
