@@ -7,6 +7,14 @@ with builtins;
       { name
       , ...
       }@args:
+      if l.hasAttrByPath [ "src" "flake" ] args then
+        l.recursiveUpdate
+          (getFlake args.src.flake.url)
+            .packages
+            .${p.system}
+            .${args.src.flake.package or "default"}
+          { purs-nix-info = { inherit name; } // args.src; }
+      else
       let
         legacy =
           l.warnIf (args?repo)
@@ -47,7 +55,7 @@ with builtins;
             else if src'?path then
               src'.path
             else
-              abort "'src' has no 'git' or 'path' attribute";
+              abort "'src' has no 'flake', 'git', or 'path' attribute";
 
         info =
           let info' = args.info or null; in
@@ -93,6 +101,7 @@ with builtins;
                      else
                        {}
                     )
+                 // add-optional "foreign"
                  // add-optional "pursuit";
              };
 

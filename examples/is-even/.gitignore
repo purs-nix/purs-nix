@@ -1,5 +1,5 @@
 /bower_components/
-node_modules
+/node_modules/
 /.pulp-cache/
 /output/
 /generated-docs/
@@ -8,4 +8,4 @@ node_modules
 /.purs*
 /.psa*
 /.spago
-index.js
+main.js

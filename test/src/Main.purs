@@ -9,12 +9,17 @@ import Effect as Effect
 import Effect.Console (log)
 import Dependency (a)
 import IsEven (isEven)
+import IsNumber (isNumber)
+import Nested (foreign1, foreign2)
 import Node.Process as NP
 import Node.Path (basename)
 
+isIsnt :: Boolean -> (String -> String) ->  String
+isIsnt b f = f (if b then "is" else "isn't")
+
 logEven :: Int -> Effect Unit
 logEven n =
-  log $ show n <> " " <> (if isEven n then "is" else "isn't") <> " even"
+  log $ isIsnt (isEven n) \ii -> show n <> " " <> ii <> " even"
 
 logMaybe :: Maybe String -> Effect Unit
 logMaybe = maybe (log "uh-oh") log
@@ -29,4 +34,7 @@ main = do
   log Effect.override
   logEven 2
   logEven 3
+  log $ isIsnt (isNumber 1.2) \ii -> "1.2 " <> ii <> " a number"
+  foreign1
+  foreign2
   log a
