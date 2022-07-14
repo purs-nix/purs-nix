@@ -20,14 +20,14 @@
       "locked": {
         "lastModified": 1656022258,
         "narHash": "sha256-Tm/mhHQUK5PQuqJ+O98I+Eas/0ymvUkPxJIH6stsRnA=",
-        "owner": "ursi",
-        "repo": "purs-nix-test-packages",
+        "owner": "purs-nix",
+        "repo": "test-packages",
         "rev": "59c9970f8c421f9950782700ca2e62836500ffff",
         "type": "github"
       },
       "original": {
-        "owner": "ursi",
-        "repo": "purs-nix-test-packages",
+        "owner": "purs-nix",
+        "repo": "test-packages",
         "type": "github"
       }
     },
