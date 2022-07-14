@@ -19,7 +19,7 @@ isIsnt b f = f (if b then "is" else "isn't")
 
 logEven :: Int -> Effect Unit
 logEven n =
-  log $ isIsnt (isEven n) \ii -> show n <> " " <> ii  <> " even"
+  log $ isIsnt (isEven n) \ii -> show n <> " " <> ii <> " even"
 
 logMaybe :: Maybe String -> Effect Unit
 logMaybe = maybe (log "uh-oh") log
