@@ -188,7 +188,12 @@ with builtins;
             ${compile-test compile}
             ${node-command test-module};;
 
-          repl ) ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
+          repl )
+            if [[ ! -e .purs-repl ]]; then
+              echo import Prelude > .purs-repl
+            fi
+
+            ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
 
           docs ) ${purescript}/bin/purs docs \
             --compile-output ${output} \

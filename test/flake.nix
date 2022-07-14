@@ -277,9 +277,24 @@
                            (if minimal then
                               ""
                             else
+                              let repl = "echo :q | HOME=. ${command} repl"; in
                               make-test "purs-nix repl"
                                 ""
-                                (_: "echo :q | HOME=. ${command} repl")
+                                (_: repl) +
+
+                              make-test "purs-nix repl: create .purs-repl"
+                                "cat .purs-repl"
+                                (i: ''[[ ${i} == "import Prelude" ]]'') +
+
+                              make-test "purs-nix repl: don't override .purs-repl"
+                                ""
+                                (_: ''
+                                    echo -- comment > .purs-repl
+                                    ${repl}
+                                    cat .purs-repl
+                                    [[ $(cat .purs-repl) == "-- comment" ]]
+                                    ''
+                                )
                            );
                        }
                   )
