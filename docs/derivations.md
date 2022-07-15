@@ -15,10 +15,11 @@ There are three different attributes for each module.
 , codegen ? null
 , no-prefix ? false
 , json-errors ? false
+, zephyr ? null
 }
 ```
 
-These correspond to the flags you can pass `purs compile`. `modules.Module.output {}` is a derivation containing the compiler output for all your project's dependencies plus all of `Module`'s dependencies.
+These (other than `zephyr`) correspond to the flags you can pass `purs compile`. `modules.Module.output {}` is a derivation containing the compiler output for all your project's dependencies plus all of `Module`'s dependencies. The `zephyr` option optionally allows you pass in a zephyr entry point, e.g. `"Main.main"`.
 
 ### bundle
 
@@ -29,11 +30,13 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
     , outfile ? "main.js"
     }
 , main ? true
+, zephyr ? true
 }
 
 ```
 
 - `main`: whether or not to automatically execute the main function of the module you're bundling.
+- `zephyr`: whether or not to use `zephyr` to drastically shrink the bundle size. Since purs-nix use `esbuild`, it does not get DCE on PureScript 0.14 output.
 
 `modules.Module.bundle {}` is a derivation containing the bundled code from the module `Module`.
 
@@ -43,10 +46,12 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
 { name
 , version ? null
 , command ? name
+, zephyr ? true
 }
 ```
 - `name`: The `pname`/`name` of the derivation.
 - `version`: The version of the derivation.
 - `command`: The name of the executable.
+- `zephyr`: Whether or not to use `zephyr` to drastically shrink the bundle size. Since purs-nix use `esbuild`, it does not get DCE on PureScript 0.14 output.
 
 `modules.Module.app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Module`.

@@ -207,6 +207,24 @@ deps:
 
             output = top-level: args:
               let
+                args' =
+                  if args?zephyr then
+                    l.pipe args
+                      [ (a: if a?codegen
+                            then assert l.hasInfix "corefn" a.codegen; a
+                            else args // { codegen = "corefn,js"; }
+                        )
+
+                        (a: if top-level
+                            then a
+                            else removeAttrs a [ "zephyr" ]
+                        )
+                      ]
+                  else
+                    args;
+
+                no-zephyr = removeAttrs args' [ "zephyr" ];
+
                 trans-deps =
                   let
                     go = ds:
@@ -224,7 +242,7 @@ deps:
                       augmentations =
                         toString
                           (map
-                             (a: "${a.bin args} output;")
+                             (a: "${a.bin args'} output;")
                              trans-deps
                           );
 
@@ -236,22 +254,27 @@ deps:
                           );
                     in
                     ''
-                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps args} output
+                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps no-zephyr} output
                     ${augmentations}
 
                     ${u.compile
                         purescript
-                        (args
+                        (no-zephyr
                          // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
                               output = "output";
                             }
                         )
                     }
+
+                    ${if args'?zephyr
+                      then "${easy-ps.zephyr}/bin/zephyr ${args'.zephyr}"
+                      else ""
+                    }
                     '';
 
                   installPhase =
                     ''
-                    mv output $out
+                    mv ${if args'?zephyr then "dce-" else ""}output $out
                     cd $out
 
                     ${if top-level
@@ -261,10 +284,17 @@ deps:
                     '';
                 };
 
-            bundle = { esbuild ? {}, main ? true }:
+            bundle = { esbuild ? {}, main ? true, zephyr ? true }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
-                   { entry-point = output true {} + "/${name}/index.js";
+                   { entry-point =
+                       output true
+                         (if zephyr
+                          then { zephyr = if main then "${name}.main" else name; }
+                          else {}
+                         )
+                       + "/${name}/index.js";
+
                      esbuild = esbuild // { outfile = "$out"; };
                      inherit main;
                    }
@@ -274,6 +304,7 @@ deps:
               { name
               , version ? null
               , command ? name
+              , zephyr ? true
               }:
               let command' = l.escapeShellArg command; in
               mkDerivation
@@ -287,6 +318,8 @@ deps:
                                { minify = true;
                                  platform = "node";
                                };
+
+                             inherit zephyr;
                            };
                      in
                      ''

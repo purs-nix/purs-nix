@@ -153,6 +153,45 @@
                    make-test "expected output"
                      "${make-script "Main"} argument"
                      expected-output;
+
+                 "zephyr" =
+                   let
+                     inherit (ps.modules.Main) app bundle output;
+                     b = args: bundle ({ esbuild.platform = "node"; } // args);
+                     a = args: app ({ name = "_"; } // args);
+                   in
+                   make-test "output"
+                     ""
+                     (_: ''
+                         a=$(ls ${output {}} | wc -l)
+                         b=$(ls ${output { zephyr = "Main.main"; }} | wc -l)
+                         echo $a
+                         echo $b
+                         (( $a > $b ))
+                         ''
+                     ) +
+
+                   make-test "bundle"
+                     ""
+                     (_: ''
+                         a=$(wc -c < ${b {}})
+                         b=$(wc -c < ${b { zephyr = false; }})
+                         echo $a
+                         echo $b
+                         (( $a < $b ))
+                         ''
+                     ) +
+
+                   make-test "app"
+                     ""
+                     (_: ''
+                         a=$(wc -c < ${a {}}/bin/_)
+                         b=$(wc -c < ${a { zephyr = false; }}/bin/_)
+                         echo $a
+                         echo $b
+                         (( $a < $b ))
+                         ''
+                     );
                }
              // mapAttrs
                   (n:
