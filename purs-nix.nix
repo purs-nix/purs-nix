@@ -274,6 +274,7 @@ deps:
               { name
               , version ? null
               , command ? name
+              , minify ? true
               }:
               let command' = l.escapeShellArg command; in
               mkDerivation
@@ -284,7 +285,7 @@ deps:
                        bundle' =
                          bundle
                            { esbuild =
-                               { minify = true;
+                               { inherit minify;
                                  platform = "node";
                                };
                            };

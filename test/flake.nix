@@ -164,6 +164,16 @@
                    make-test "expected output"
                      "${ps2.modules.Main.app { name = "_"; }}/bin/_"
                      (i: "[[ ${i} == 1945310157 ]]");
+
+                 "app minification" =
+                   let a = args: ps.modules.Main.app ({ name = "_"; } // args); in
+                   ''
+                   a=$(wc -c < ${a {}}/bin/_)
+                   b=$(wc -c < ${a { minify = false; }}/bin/_)
+                   echo $a
+                   echo $b
+                   (( $a < $b ))
+                   '';
                }
              // mapAttrs
                   (n:
