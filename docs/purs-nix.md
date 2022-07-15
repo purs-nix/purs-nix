@@ -24,6 +24,7 @@ and returns an attribute set with the following attributes:
 , srcs ? null
 , nodejs ? pkgs.nodejs
 , purescript ? easy-purescript-nix.purescript
+, foreign ? {}
 }
 ```
 
@@ -32,6 +33,7 @@ and returns an attribute set with the following attributes:
 - `srcs`: A list of Nix path values pointing to your PureScript source directories. This is not required if you're only using the Nix shell.
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
+- `foreign`: See the [documentation](foreign.md).
 
 and returns an attribute set with the following attributes:
 - <span id="purs-modules">`modules`</span>: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).

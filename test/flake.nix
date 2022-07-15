@@ -1,6 +1,11 @@
 { inputs =
     { get-flake.url = "github:ursi/get-flake";
 
+      npmlock2nix =
+        { flake = false;
+          url = "github:nix-community/npmlock2nix";
+        };
+
       purs-nix-test-packages =
         { flake = false;
           url = "github:purs-nix/test-packages";
@@ -9,10 +14,7 @@
 
   outputs = { get-flake, purs-nix-test-packages, ... }@inputs:
     with builtins;
-    let
-      minimal = false;
-      purs-nix = get-flake ../.;
-    in
+    let purs-nix = get-flake ../.; in
     purs-nix.inputs.utils.apply-systems
       { inputs =
           inputs
@@ -24,22 +26,44 @@
       }
       ({ make-shell, pkgs, purs-nix, ... }:
          let
+           minimal = (a: l.warnIf a "minimal == true" a) false;
            l = p.lib; p = pkgs;
-           inherit (purs-nix) ps-pkgs;
+           inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix-test-packages purs-nix;
            easy-ps = import (get-flake ../.).inputs.easy-ps { inherit pkgs; };
 
            ps-custom = { nodejs ? null, purescript ? null }:
-             purs-nix.purs
+             purs
                ({ inherit (package) dependencies;
                   test-dependencies = [ ps-pkgs."assert" ];
                   srcs = [ ./src ./src2 ];
+
+                  foreign =
+                    { IsNumber.node_modules =
+                        (p.callPackages inputs.npmlock2nix {})
+                        .node_modules { src = ./foreign-js; } + /node_modules;
+
+                      Nested.src = ./foreign-js;
+                    };
                 }
                 // (if isNull nodejs then {} else { inherit nodejs; })
                 // (if isNull purescript then {} else { inherit purescript; })
                );
 
            ps = ps-custom {};
+
+           ps2 =
+             purs
+               { dependencies =
+                   with ps-pkgs;
+                   [ console
+                     effect
+                     prelude
+                   ];
+
+                  test-dependencies = [ ps-pkgs."assert" ];
+                  srcs = [ ./src3 ];
+               };
 
            make-script-custom = args: module:
              "${(ps-custom args).modules.${module}.app { name = "test run"; }}/bin/'test run'";
@@ -60,6 +84,9 @@
              ''
              target="test run
              argument
+             1.2 is a number
+             foreign1
+             foreign2
              ❄"
 
              [[ ${i} == $target ]]
@@ -104,6 +131,8 @@
                      (i: "[[ -z ${i} ]]");
 
                  "custom node package" =
+                   # don't pull this out into its own project, it is also a test for
+                   # 2f5285a97c9a575e70bebf8e614fff3a42b0fe68
                    let nodejs = p.nodejs-14_x; in
                    make-test "node version"
                      (make-script-custom { inherit nodejs; } "Node")
@@ -126,19 +155,28 @@
                      expected-output;
                }
              // mapAttrs
-                  (n: { args ? {}, test }:
+                  (n:
+                   { args ? {}
+                   , ps' ? ps
+                   , run-output ? expected-output
+                   , test
+                   }:
                      let
                        name = "test";
                        default-srcs = [ "src" "src2" ];
 
                        command =
-                         ps.command
+                         ps'.command
                            (l.recursiveUpdate
-                              {  bundle.esbuild.platform = "node";
-                                 inherit name package;
-                                 srcs = default-srcs;
-                               }
-                               args
+                              { bundle.esbuild =
+                                  { legal-comments = "none";
+                                    platform = "node";
+                                  };
+
+                                inherit name package;
+                                srcs = default-srcs;
+                              }
+                              args
                            )
                          + "/bin/${name}";
                      in
@@ -148,20 +186,20 @@
 
                          src =
                            filterSource
-                           (path: type:
-                              (type == "directory"
-                               && any
-                                    (s: !isNull (match ".*/${s}" path)
-                                        || l.hasInfix "/${s}/" path
-                                    )
-                                    (args.srcs or default-srcs
-                                     ++ [ (args.test or "test") ]
-                                    )
-                              )
-                              || l.hasSuffix ".purs" path
-                              || l.hasSuffix ".js" path
-                           )
-                           ./.;
+                             (path: type:
+                                (type == "directory"
+                                 && any
+                                      (s: !isNull (match ".*/${s}" path)
+                                          || l.hasInfix "/${s}/" path
+                                      )
+                                      (args.srcs or default-srcs
+                                       ++ [ (args.test or "test") ]
+                                      )
+                                )
+                                || l.hasSuffix ".purs" path
+                                || l.hasSuffix ".js" path
+                             )
+                             ./.;
 
                          buildInputs = [ p.nodejs ];
                          installPhase = "touch $out";
@@ -172,9 +210,9 @@
                              ""
                              (_: "${command} bundle") +
 
-                          make-test "purs-nix run"
-                            "${command} run argument"
-                            expected-output +
+                           make-test "purs-nix run"
+                             "${command} run argument"
+                             run-output +
 
                            make-test "purs-nix test"
                              ""
@@ -193,9 +231,24 @@
                            (if minimal then
                               ""
                             else
+                              let repl = "echo :q | HOME=. ${command} repl"; in
                               make-test "purs-nix repl"
                                 ""
-                                (_: "echo :q | HOME=. ${command} repl")
+                                (_: repl) +
+
+                              make-test "purs-nix repl: create .purs-repl"
+                                "cat .purs-repl"
+                                (i: ''[[ ${i} == "import Prelude" ]]'') +
+
+                              make-test "purs-nix repl: don't override .purs-repl"
+                                ""
+                                (_: ''
+                                    echo -- comment > .purs-repl
+                                    ${repl}
+                                    cat .purs-repl
+                                    [[ $(cat .purs-repl) == "-- comment" ]]
+                                    ''
+                                )
                            );
                        }
                   )
@@ -273,6 +326,14 @@
                         { bundle.esbuild.platform = "node";
                           inherit package;
                           srcs = [ "src" "src2" ];
+                        }
+                     )
+
+                     (ps2.command
+                        { name = "ps2";
+                          bundle.esbuild.platform = "node";
+                          inherit package;
+                          srcs = [ "src3" ];
                         }
                      )
 

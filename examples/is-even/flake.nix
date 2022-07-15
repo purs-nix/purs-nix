@@ -4,17 +4,25 @@
       # of purs-nix
       get-flake.url = "github:ursi/get-flake";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+      npmlock2nix =
+        { flake = false;
+          url = "github:nix-community/npmlock2nix";
+        };
+
       utils.url = "github:numtide/flake-utils";
     };
 
-  outputs = { get-flake, nixpkgs, utils, ... }:
+  outputs = { get-flake, nixpkgs, utils, ... }@inputs:
     utils.lib.eachDefaultSystem
       (system:
          let
-           p = nixpkgs.legacyPackages.${system};
+           p = pkgs;
+           pkgs = nixpkgs.legacyPackages.${system};
 
                     # inputs.purs-nix | is what you would use in a normal project
            purs-nix = (get-flake ../../.) { inherit system; };
+           npmlock2nix = import inputs.npmlock2nix { inherit pkgs; };
 
            ps =
              purs-nix.purs
@@ -26,17 +34,20 @@
                    ];
 
                  srcs = [ ./src ];
+
+                 foreign.Main.node_modules =
+                   npmlock2nix.node_modules { src = ./.; } + /node_modules;
                };
          in
          rec
          { apps.default =
              { type = "app";
-               program = "${packages.default}/bin/hello";
+               program = "${packages.default}/bin/is-even";
              };
 
            packages =
              with ps.modules.Main;
-             { default = app { name = "hello"; };
+             { default = app { name = "is-even"; };
                bundle = bundle {};
                output = output {};
              };

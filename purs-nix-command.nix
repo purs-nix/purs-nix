@@ -7,6 +7,7 @@ with builtins;
 , purescript
 , repl-globs
 , utils
+, foreign
 }:
 { srcs ? [ "src" ]
 , globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
@@ -49,6 +50,7 @@ with builtins;
             )
       }
       chmod -R u+w ${output}
+      ${foreign output}
       '';
 
     compile-test = args:
@@ -162,6 +164,7 @@ with builtins;
           let import = "./${output}/${module}/index.js"; in
           ''
           ${nodejs}/bin/node \
+            --preserve-symlinks \
             --input-type=module \
             -e 'import { main } from "${import}"; main()' \
             -- "${name} run" "''${@:2}"
@@ -188,7 +191,12 @@ with builtins;
             ${compile-test compile}
             ${node-command test-module};;
 
-          repl ) ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
+          repl )
+            if [[ ! -e .purs-repl ]]; then
+              echo import Prelude > .purs-repl
+            fi
+
+            ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
 
           docs ) ${purescript}/bin/purs docs \
             --compile-output ${output} \

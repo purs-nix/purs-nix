@@ -97,6 +97,10 @@ p:
           ''
           echo "repo:    ${info.repo}"
           echo "commit:  ${info.rev}"''
+        else if info?flake then
+          ''
+          echo "flake:   ${info.flake.url}"
+          echo "package: ${info.flake.package or "default"}"''
         else
           ''echo "path:    ${pkg.src}"''
       }

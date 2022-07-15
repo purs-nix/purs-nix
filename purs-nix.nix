@@ -23,6 +23,7 @@ deps:
             ''
       , nodejs ? pkgs.nodejs
       , purescript ? purescript'
+      , foreign ? null
       , ...
       }@args:
       let
@@ -128,6 +129,36 @@ deps:
             )
             partial;
 
+        foreign-stuff = deps: prefix:
+          let
+            combined =
+              foldl'
+                (acc: dep:
+                   l.recursiveUpdate acc (dep.purs-nix-info.foreign or {})
+                )
+                (if isNull foreign then {} else foreign)
+                deps;
+          in
+          foldl'
+            (acc: { name, value }:
+               let module-path = "${prefix}/${name}"; in
+               ''
+               ${acc}
+
+               if [[ -e ${module-path} ]]; then
+                 ${if value?node_modules then
+                     "ln -fsT ${value.node_modules} ${module-path}/node_modules"
+                   else if value?src then
+                     "ln -fsT ${value.src} ${module-path}/foreign"
+                   else
+                     abort "The only supported foreign options are 'node_modules' and 'src'."
+                 }
+               fi
+               ''
+            )
+            ""
+            (l.mapAttrsToList l.nameValuePair combined);
+
         build-single = name: local-deps:
           let
             built-deps = args:
@@ -174,7 +205,7 @@ deps:
                 (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
                 subsrc;
 
-            output = args:
+            output = top-level: args:
               let
                 trans-deps =
                   let
@@ -218,13 +249,22 @@ deps:
                     }
                     '';
 
-                  installPhase = "mv output $out";
+                  installPhase =
+                    ''
+                    mv output $out
+                    cd $out
+
+                    ${if top-level
+                      then foreign-stuff dependencies "."
+                      else ""
+                    }
+                    '';
                 };
 
             bundle = { esbuild ? {}, main ? true }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
-                   { entry-point = output {} + "/${name}/index.js";
+                   { entry-point = output true {} + "/${name}/index.js";
                      esbuild = esbuild // { outfile = "$out"; };
                      inherit main;
                    }
@@ -278,7 +318,7 @@ deps:
                     fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
                     '';
 
-                output' = output args;
+                output' = output false args;
               in
               p.writeShellScript name
                 ''
@@ -298,7 +338,7 @@ deps:
       in
       { modules =
           mapAttrs
-            (_: v: { inherit (v) bundle output app; })
+            (_: v: { inherit (v) bundle app; output = v.output true; })
             builds;
 
         command =
@@ -311,6 +351,7 @@ deps:
                   (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
 
               utils = u;
+              foreign = foreign-stuff all-dependencies;
             };
       };
   }
