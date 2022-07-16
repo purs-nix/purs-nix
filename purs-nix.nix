@@ -207,6 +207,9 @@ deps:
 
             output = top-level: args:
               let
+                incremental = args.incremental or true;
+                stripped = removeAttrs args [ "incremental" ];
+
                 trans-deps =
                   let
                     go = ds:
@@ -236,12 +239,12 @@ deps:
                           );
                     in
                     ''
-                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps args} output
-                    ${augmentations}
+                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps stripped} output
+                    ${if incremental then augmentations else ""}
 
                     ${u.compile
                         purescript
-                        (args
+                        (stripped
                          // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
                               output = "output";
                             }
@@ -261,10 +264,13 @@ deps:
                     '';
                 };
 
-            bundle = { esbuild ? {}, main ? true }:
+            bundle = { esbuild ? {}, main ? true, incremental ? true }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
-                   { entry-point = output true {} + "/${name}/index.js";
+                   { entry-point =
+                       output true { inherit incremental; }
+                       + "/${name}/index.js";
+
                      esbuild = esbuild // { outfile = "$out"; };
                      inherit main;
                    }
@@ -274,6 +280,7 @@ deps:
               { name
               , version ? null
               , command ? name
+              , incremental ? true
               , minify ? true
               }:
               let command' = l.escapeShellArg command; in
@@ -288,6 +295,8 @@ deps:
                                { inherit minify;
                                  platform = "node";
                                };
+
+                             inherit incremental;
                            };
                      in
                      ''

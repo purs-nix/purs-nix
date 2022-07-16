@@ -15,10 +15,16 @@ There are three different attributes for each module.
 , codegen ? null
 , no-prefix ? false
 , json-errors ? false
+
+, incremental ? true
 }
 ```
 
-These correspond to the flags you can pass `purs compile`. `modules.Module.output {}` is a derivation containing the compiler output for all your project's dependencies plus all of `Module`'s dependencies.
+- `incremental`: Whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
+
+The upper options correspond to the flags you can pass `purs compile`.
+
+`modules.Module.output {}` is a derivation containing the compiler output for all your project's dependencies plus all of `Module`'s dependencies.
 
 ### bundle
 
@@ -29,11 +35,13 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
     , outfile ? "main.js"
     }
 , main ? true
+, incremental ? true
 }
 
 ```
 
 - `main`: whether or not to automatically execute the main function of the module you're bundling.
+- `incremental`: whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
 
 `modules.Module.bundle {}` is a derivation containing the bundled code from the module `Module`.
 
@@ -43,12 +51,14 @@ These correspond to the flags you can pass `purs compile`. `modules.Module.outpu
 { name
 , version ? null
 , command ? name
+, incremental ? true
 , minify ? true
 }
 ```
 - `name`: The `pname`/`name` of the derivation.
 - `version`: The version of the derivation.
 - `command`: The name of the executable.
+- `incremental`: Whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
 - `minify`: Whether or not to minify the bundled JavaScript.
 
 `modules.Module.app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Module`.

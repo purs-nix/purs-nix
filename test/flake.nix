@@ -175,6 +175,15 @@
                    (( $a < $b ))
                    '';
                }
+             // (with ps.modules.Main;
+                 { "non-incremental output" = output { incremental = false; };
+
+                   "non-incremental bundle" =
+                     bundle { esbuild.platform = "node"; incremental = false; };
+
+                   "non-incremental app" = app { name = "_"; incremental = false; };
+                 }
+                )
              // mapAttrs
                   (n:
                    { args ? {}
