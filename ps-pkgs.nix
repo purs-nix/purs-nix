@@ -397,6 +397,8 @@
            info = /package.nix;
          };
 
+       markdown-it.src.flake.url = "github:purs-nix/purescript-markdown-it/b8221bf5a77fb35742655539c346fe1938473365";
+
        point-free =
          { src.git =
              { repo = "https://github.com/ursi/purescript-point-free.git";
