@@ -2,6 +2,13 @@
     { builders.url = "github:ursi/nix-builders";
       deadnix.url = "github:astro/deadnix";
 
+      docs-search =
+        { # to prevent lock file explosion
+          flake = false;
+          url = "github:purs-nix/purescript-docs-search";
+        };
+
+
       easy-ps =
         { flake = false;
           url = "github:justinwoo/easy-purescript-nix";

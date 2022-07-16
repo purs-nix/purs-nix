@@ -36,6 +36,22 @@
         "type": "github"
       }
     },
+    "docs-search": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1657942794,
+        "narHash": "sha256-Y7wsPnSCt4/qXVPP/phwr+Xp/FSFXTZqs6ANcgY3D54=",
+        "owner": "purs-nix",
+        "repo": "purescript-docs-search",
+        "rev": "ea58fcecad4b403cbac38090583854bee6e99c49",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purs-nix",
+        "repo": "purescript-docs-search",
+        "type": "github"
+      }
+    },
     "easy-ps": {
       "flake": false,
       "locked": {
@@ -216,6 +232,7 @@
       "inputs": {
         "builders": "builders",
         "deadnix": "deadnix",
+        "docs-search": "docs-search",
         "easy-ps": "easy-ps",
         "get-flake": "get-flake",
         "make-shell": "make-shell",

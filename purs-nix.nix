@@ -2,7 +2,7 @@ with builtins;
 deps:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
-    inherit (deps) builders easy-ps pkgs purescript-language-server;
+    inherit (deps) builders docs-search easy-ps pkgs purescript-language-server;
     purescript' = easy-ps.purescript;
     ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
@@ -344,8 +344,14 @@ deps:
 
         command =
           import ./purs-nix-command.nix
-            { inherit all-dependencies;
-              inherit all-dep-globs dep-globs nodejs pkgs purescript;
+            { inherit
+                all-dependencies
+                all-dep-globs
+                dep-globs
+                docs-search
+                nodejs
+                pkgs
+                purescript;
 
               repl-globs =
                 make-dep-globs

@@ -2,6 +2,7 @@ with builtins;
 { all-dependencies
 , all-dep-globs
 , dep-globs
+, docs-search
 , nodejs
 , pkgs
 , purescript
@@ -160,6 +161,18 @@ with builtins;
 
     exe =
       let
+        bowers =
+          toString
+            (foldl'
+               (acc: dep:
+                  if dep.purs-nix-info?bower-json
+                  then [ ''--bower-jsons ${dep.purs-nix-info.bower-json}'' ] ++ acc
+                  else acc
+               )
+               []
+               all-dependencies
+            );
+
         node-command = module:
           let import = "./${output}/${module}/index.js"; in
           ''
@@ -200,7 +213,12 @@ with builtins;
 
           docs ) ${purescript}/bin/purs docs \
             --compile-output ${output} \
-            "''${@:2}" ${globs} ${dep-globs};;
+            "''${@:2}" ${globs} ${dep-globs}
+
+            ${docs-search}/bin/purescript-docs-search \
+              build-index \
+              --docs-files "${output}/**/docs.json" \
+              ${bowers};;
 
           package-info ) ${package-info} "$2";;
           packages ) ${packages};;
