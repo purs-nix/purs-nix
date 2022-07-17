@@ -346,7 +346,9 @@ deps:
             )
             local-graph;
       in
-      { modules =
+      { dependencies = all-dependencies;
+
+        modules =
           mapAttrs
             (_: v: { inherit (v) bundle app; output = v.output true; })
             builds;

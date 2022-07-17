@@ -174,6 +174,10 @@
                    echo $b
                    (( $a < $b ))
                    '';
+                 "ps.dependencies" =
+                   make-test "expected number"
+                     "echo ${toString (length ps.dependencies)}"
+                     (i: "[[ ${i} == 45 ]]");
                }
              // (with ps.modules.Main;
                  { "non-incremental output" = output { incremental = false; };
