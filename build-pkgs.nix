@@ -98,6 +98,8 @@ with builtins;
                        { inherit (args) repo rev; }
                      else if args.src?git then
                        { inherit (args.src.git) repo rev; }
+                     else if l.hasAttrByPath [ "pursuit" "repo" ] info then
+                       { inherit (info.pursuit) repo; }
                      else
                        {}
                     )

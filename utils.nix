@@ -93,14 +93,17 @@ p:
       ''
       echo "name:    ${info.name}"
       echo "version: ${if isNull info.version then "none" else info.version}"
-      ${if info?repo then
-          ''
-          echo "repo:    ${info.repo}"
-          echo "commit:  ${info.rev}"''
-        else if info?flake then
+      ${if info?flake then
           ''
           echo "flake:   ${info.flake.url}"
           echo "package: ${info.flake.package or "default"}"''
+        else if info?repo then
+          ''
+          echo "repo:    ${info.repo}"
+          ${if info?rev
+            then ''echo "commit:  ${info.rev}"''
+            else ''echo "path:    ${pkg.src}"''
+          }''
         else
           ''echo "path:    ${pkg.src}"''
       }
