@@ -26,7 +26,15 @@
       }
       ({ make-shell, pkgs, purs-nix, ... }:
          let
-           minimal = (a: l.warnIf a "minimal == true" a) false;
+           minimal = false;
+
+           switches =
+             mapAttrs
+               (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
+               { packages = true;
+                 repl = true;
+               };
+
            l = p.lib; p = pkgs;
            inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix-test-packages purs-nix;
@@ -349,9 +357,7 @@
 
                            "\n" + test command + "\n" +
 
-                           (if minimal then
-                              ""
-                            else
+                           (if switches.repl then
                               let repl = "echo :q | HOME=. ${command} repl"; in
                               make-test "purs-nix repl"
                                 ""
@@ -370,6 +376,8 @@
                                     [[ $(cat .purs-repl) == "-- comment" ]]
                                     ''
                                 )
+                            else
+                              ""
                            );
                        }
                   )
@@ -460,7 +468,7 @@
                             );
                       };
                   }
-                  // (if minimal then {} else package-tests);
+                  // (if switches.packages then package-tests else {});
 
            devShells.default =
              make-shell
