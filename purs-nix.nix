@@ -2,7 +2,7 @@ with builtins;
 deps:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
-    inherit (deps) builders easy-ps pkgs purescript-language-server;
+    inherit (deps) builders docs-search easy-ps pkgs purescript-language-server;
     purescript' = easy-ps.purs-0_14_9;
     ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
@@ -223,7 +223,8 @@ deps:
                   else
                     args;
 
-                no-zephyr = removeAttrs args' [ "zephyr" ];
+                incremental = args.incremental or true;
+                stripped = removeAttrs args' [ "incremental" "zephyr" ];
 
                 trans-deps =
                   let
@@ -254,12 +255,12 @@ deps:
                           );
                     in
                     ''
-                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps no-zephyr} output
-                    ${augmentations}
+                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps stripped} output
+                    ${if incremental then augmentations else ""}
 
                     ${u.compile
                         purescript
-                        (no-zephyr
+                        (stripped
                          // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
                               output = "output";
                             }
@@ -284,14 +285,21 @@ deps:
                     '';
                 };
 
-            bundle = { esbuild ? {}, main ? true, zephyr ? true }:
+            bundle =
+              { esbuild ? {}
+              , main ? true
+              , incremental ? true
+              , zephyr ? true
+              }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
                    { entry-point =
                        output true
-                         (if zephyr
-                          then { zephyr = if main then "${name}.main" else name; }
-                          else {}
+                         ({ inherit incremental; }
+                          // (if zephyr
+                              then { zephyr = if main then "${name}.main" else name; }
+                              else {}
+                             )
                          )
                        + "/${name}/index.js";
 
@@ -304,6 +312,8 @@ deps:
               { name
               , version ? null
               , command ? name
+              , incremental ? true
+              , minify ? true
               , zephyr ? true
               }:
               let command' = l.escapeShellArg command; in
@@ -315,11 +325,11 @@ deps:
                        bundle' =
                          bundle
                            { esbuild =
-                               { minify = true;
+                               { inherit minify;
                                  platform = "node";
                                };
 
-                             inherit zephyr;
+                             inherit incremental zephyr;
                            };
                      in
                      ''
@@ -369,15 +379,23 @@ deps:
             )
             local-graph;
       in
-      { modules =
+      { dependencies = all-dependencies;
+
+        modules =
           mapAttrs
             (_: v: { inherit (v) bundle app; output = v.output true; })
             builds;
 
         command =
           import ./purs-nix-command.nix
-            { inherit all-dependencies;
-              inherit all-dep-globs dep-globs nodejs pkgs purescript;
+            { inherit
+                all-dependencies
+                all-dep-globs
+                dep-globs
+                docs-search
+                nodejs
+                pkgs
+                purescript;
 
               repl-globs =
                 make-dep-globs

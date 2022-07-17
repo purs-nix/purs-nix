@@ -101,6 +101,10 @@ with builtins;
                      else
                        {}
                     )
+                 // (if (readDir src)?"bower.json"
+                     then { bower-json = src + /bower.json; }
+                     else {}
+                    )
                  // add-optional "foreign"
                  // add-optional "pursuit";
              };

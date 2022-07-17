@@ -38,6 +38,7 @@ and returns an attribute set with the following attributes:
 and returns an attribute set with the following attributes:
 - <span id="purs-modules">`modules`</span>: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).
 - `command`: A functions that builds the `purs-nix` command which you can then add to your Nix shell.
+- `dependencies`: A list of all the dependencies (transitive closure) of your project. This is exposed out of convenience for when you find yourself using a tool that needs information that can be derived from this.
 
 ### command
 `command` takes the following arguments: (Note: they all have defaults so often times you will only need to us `command {}`)

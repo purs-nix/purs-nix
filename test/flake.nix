@@ -192,7 +192,30 @@
                          (( $a < $b ))
                          ''
                      );
+
+                 "app minification" =
+                   let a = args: ps.modules.Main.app ({ name = "_"; } // args); in
+                   ''
+                   a=$(wc -c < ${a {}}/bin/_)
+                   b=$(wc -c < ${a { minify = false; }}/bin/_)
+                   echo $a
+                   echo $b
+                   (( $a < $b ))
+                   '';
+                 "ps.dependencies" =
+                   make-test "expected number"
+                     "echo ${toString (length ps.dependencies)}"
+                     (i: "[[ ${i} == 43 ]]");
                }
+             // (with ps.modules.Main;
+                 { "non-incremental output" = output { incremental = false; };
+
+                   "non-incremental bundle" =
+                     bundle { esbuild.platform = "node"; incremental = false; };
+
+                   "non-incremental app" = app { name = "_"; incremental = false; };
+                 }
+                )
              // mapAttrs
                   (n:
                    { args ? {}
@@ -363,6 +386,7 @@
 
                      (ps.command
                         { bundle.esbuild.platform = "node";
+                        bundle.module = "Node";
                           inherit package;
                           srcs = [ "src" "src2" ];
                         }
