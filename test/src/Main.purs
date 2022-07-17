@@ -8,11 +8,11 @@ import Effect (Effect)
 import Effect as Effect
 import Effect.Console (log)
 import Dependency (a)
-import IsEven (isEven)
 import IsNumber (isNumber)
 import Nested (foreign1, foreign2)
 import Node.Process as NP
 import Node.Path (basename)
+import PursNixBuildTest as PursNixBuildTest
 
 isIsnt :: Boolean -> (String -> String) ->  String
 isIsnt b f = f (if b then "is" else "isn't")
@@ -37,4 +37,5 @@ main = do
   log $ isIsnt (isNumber 1.2) \ii -> "1.2 " <> ii <> " a number"
   foreign1
   foreign2
+  PursNixBuildTest.log
   log a

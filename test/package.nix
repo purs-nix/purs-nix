@@ -1,12 +1,12 @@
+with builtins;
 purs-nix-test-packages:
-{ build, ps-pkgs, ps-pkgs-ns, licenses, ... }:
+{ build, ps-pkgs, licenses, ... }:
   { dependencies =
-      let inherit (ps-pkgs-ns) ursi; in
+      let rev = "debd6195fa1d1b2c15f244d496afe89414620a12"; in
       with ps-pkgs;
       [ console
         node-path
         node-process
-        ursi.is-even
 
         (build
            { name = "effect";
@@ -17,13 +17,19 @@ purs-nix-test-packages:
 
         (build
            { name = "prelude";
+             src.flake.url = "github:purs-nix/test-packages?dir=prelude&rev=${rev}";
+           }
+        )
+
+        (build
+           { name = "purs-nix.build-test";
 
              src.git =
                { repo = "https://github.com/purs-nix/test-packages.git";
-                 rev = "25b3125cf4cac00feb6d8ba3b24c5f27271d42ff";
+                 inherit rev;
                };
 
-             info = /prelude/package.nix;
+             info = /build-test/package.nix;
            }
         )
       ];

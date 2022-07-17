@@ -101,6 +101,7 @@
              1.2 is a number
              foreign1
              foreign2
+             build test
              ❄"
 
              [[ ${i} == $target ]]
@@ -185,7 +186,7 @@
                  "ps.dependencies" =
                    make-test "expected number"
                      "echo ${toString (length ps.dependencies)}"
-                     (i: "[[ ${i} == 45 ]]");
+                     (i: "[[ ${i} == 47 ]]");
                }
              // (with ps.modules.Main;
                  { "non-incremental output" = output { incremental = false; };
@@ -257,9 +258,9 @@
                                 (i: ''
                                     info="name:    prelude
                                     version: override-test
-                                    repo:    https://github.com/purs-nix/test-packages.git
-                                    commit:  25b3125cf4cac00feb6d8ba3b24c5f27271d42ff
-                                    source:  /nix/store/3bffqbpk1ir903gmqsmx9hi861n4h3y3-prelude-override-test"
+                                    flake:   github:purs-nix/test-packages?dir=prelude&rev=debd6195fa1d1b2c15f244d496afe89414620a12
+                                    package: default
+                                    source:  /nix/store/4z6lgq2g8zr0k2h5sanm01hyl7a6b666-purs-nix.prelude-override-test"
 
                                     [[ ${i} == $info ]]
                                     ''
@@ -270,8 +271,9 @@
                                 (i: ''
                                     info="name:    effect
                                     version: override-test
-                                    path:    /nix/store/ikpp2fb4s1s558p3sld38z3ys0mp756s-source
-                                    source:  /nix/store/6gvp2csxb89bfw20674c6hjka3kp4ij2-effect-override-test"
+                                    repo:    https://github.com/purs-nix/test-packages.git
+                                    path:    /nix/store/1mayjlr32rmir706prrfgjx205357ycz-source
+                                    source:  /nix/store/pncmmj128x7irgy4cp4ncr15l8nj3lkp-effect-override-test"
 
                                     [[ ${i} == $info ]]
                                     ''
@@ -324,7 +326,9 @@
                                     typelevel-prelude: 7.0.0
                                     unfoldable: 6.0.0
                                     unsafe-coerce: 6.0.0
-                                    ursi.is-even: 1.0.0"
+                                    purs-nix.build-test: 1.0.0
+                                    purs-nix.is-even: 1.0.0
+                                    purs-nix.is-odd: 1.0.0"
 
                                     [[ ${i} == $packages ]]
                                     ''
