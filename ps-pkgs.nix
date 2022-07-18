@@ -425,4 +425,13 @@
 
            info = /package.nix;
          };
+
+       task =
+         { src.git =
+             { repo = "https://github.com/ursi/purescript-task.git";
+               rev = "ffd9c147261ba5cbf2c49e7250595815f7879503";
+              };
+
+           info = /package.nix;
+         };
      }

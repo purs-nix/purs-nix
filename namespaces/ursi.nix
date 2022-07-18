@@ -1,7 +1,7 @@
 { debug =
     { src.git =
         { repo = "https://github.com/ursi/purescript-debuggest.git";
-          rev = "56b27bd20c78188d8e28826b8610f96c54889996";
+          rev = "eeca2daa8b5232f54e14ef6d9d4cc8ffc80f3c93";
         };
 
       info = /package.nix;
@@ -22,32 +22,50 @@
       info = {};
     };
 
-  # html =
-  #   { repo = "https://github.com/ursi/purescript-whatwg-html.git";
-  #     rev = "27ff0f79ac39f42d718a0806f0b1b79b8a7534d0";
-  #     info = /package.nix;
-  #   };
-
-  prelude =
+  html =
     { src.git =
-        { repo = "https://github.com/ursi/purescript-mason-prelude.git";
-          rev = "4cf30ef52a44ac9d88d17884188ab87cffb79fdc";
+        { repo = "https://github.com/ursi/purescript-whatwg-html.git";
+          rev = "27ff0f79ac39f42d718a0806f0b1b79b8a7534d0";
         };
 
       info = /package.nix;
     };
 
-  # producer =
-  #   { repo = "https://github.com/ursi/purescript-producer.git";
-  #     rev = "3e5a9e1be5b3e2fa37e36d5abab5753b987f2996";
-  #     info = /package.nix;
-  #   };
+  murmur3 =
+    { src.git =
+        { repo = "https://github.com/ursi/purescript-murmur3.git";
+          rev = "4da7d071ac5791b21fe9064d84e067a34fdc29e3";
+        };
 
-  # refeq =
-  #   { repo = "https://github.com/ursi/purescript-refeq.git";
-  #     rev = "155bbf2aae9235b25643b32860e8d85de3c98b8f";
-  #     info = /package.nix;
-  #   };
+      info = /package.nix;
+    };
+
+  prelude =
+    { src.git =
+        { repo = "https://github.com/ursi/purescript-mason-prelude.git";
+          rev = "f0fcf0c5daf747351095640bd5902d3fa200c545";
+        };
+
+      info = /package.nix;
+    };
+
+  producer =
+    { src.git =
+        { repo = "https://github.com/ursi/purescript-producer.git";
+          rev = "3e5a9e1be5b3e2fa37e36d5abab5753b987f2996";
+        };
+
+      info = /package.nix;
+    };
+
+  refeq =
+    { src.git =
+        { repo = "https://github.com/ursi/purescript-refeq.git";
+          rev = "155bbf2aae9235b25643b32860e8d85de3c98b8f";
+        };
+
+      info = /package.nix;
+    };
 
   # simple-json =
   #   { repo = "https://github.com/ursi/purescript-simple-json.git";
