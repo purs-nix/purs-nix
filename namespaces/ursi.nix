@@ -28,17 +28,6 @@
   #     info = /package.nix;
   #   };
 
-  is-even =
-    { src.git =
-        { repo = "https://github.com/purs-nix/test-packages.git";
-          rev = "7e50388792dfa720e52b23219021f3c350e6bb30";
-        };
-
-      info = /is-even/package.nix;
-    };
-
-  murmur3.src.flake.url = "github:ursi/purescript-murmur3/35c11843204892a29a4ee59513723eb34709d492";
-
   prelude =
     { src.git =
         { repo = "https://github.com/ursi/purescript-mason-prelude.git";

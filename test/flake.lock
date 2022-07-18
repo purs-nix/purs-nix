@@ -34,11 +34,11 @@
     "purs-nix-test-packages": {
       "flake": false,
       "locked": {
-        "lastModified": 1656022258,
-        "narHash": "sha256-Tm/mhHQUK5PQuqJ+O98I+Eas/0ymvUkPxJIH6stsRnA=",
+        "lastModified": 1658093302,
+        "narHash": "sha256-6zYxvOn0CcM0ZjWqOg9McZVYmnqa9PmJwwM502b852I=",
         "owner": "purs-nix",
         "repo": "test-packages",
-        "rev": "59c9970f8c421f9950782700ca2e62836500ffff",
+        "rev": "debd6195fa1d1b2c15f244d496afe89414620a12",
         "type": "github"
       },
       "original": {
