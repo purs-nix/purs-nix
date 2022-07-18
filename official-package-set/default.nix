@@ -783,11 +783,11 @@ debug =
 decimals =
   { src.git =
       { repo = "https://github.com/sharkdp/purescript-decimals.git";
-        rev = "dfee90a706c44b41b0ef8f5b26d4633323942937";
+        rev = "1347856b26ba194f8ee7682a038c4e95c971e064";
       };
 
     info =
-      { version = "7.0.0";
+      { version = "7.1.0";
 
         dependencies =
           [ maybe 
@@ -1331,6 +1331,21 @@ freeap =
 
         dependencies =
           [ const exists gen lists 
+          ];
+      };
+  };
+
+freer-free =
+  { src.git =
+      { repo = "https://github.com/mikesol/purescript-freer-free.git";
+        rev = "e6e82b55f320bf96a0d04f04efcb74d092222f76";
+      };
+
+    info =
+      { version = "0.0.1";
+
+        dependencies =
+          [ prelude record 
           ];
       };
   };
@@ -2250,6 +2265,21 @@ midi =
       };
   };
 
+milkis =
+  { src.git =
+      { repo = "https://github.com/justinwoo/purescript-milkis.git";
+        rev = "fdee6366bdf7705ca4171e5b8c4e7ff7ef966639";
+      };
+
+    info =
+      { version = "9.0.0";
+
+        dependencies =
+          [ aff-promise arraybuffer-types foreign-object prelude typelevel-prelude 
+          ];
+      };
+  };
+
 minibench =
   { src.git =
       { repo = "https://github.com/purescript/purescript-minibench.git";
@@ -2628,11 +2658,11 @@ node-streams =
 node-streams-aff =
   { src.git =
       { repo = "https://github.com/jamesdbrock/purescript-node-streams-aff.git";
-        rev = "3834b56c5fdb503e1501ab9431e624d3af3afe4d";
+        rev = "68bf0516cefbcc002f50d5b958666fe0aa3eb88c";
       };
 
     info =
-      { version = "2.0.0";
+      { version = "4.0.0";
 
         dependencies =
           [ aff arrays effect either exceptions maybe node-buffer node-streams prelude st tuples 
@@ -3435,6 +3465,21 @@ react-dom =
       };
   };
 
+react-icons =
+  { src.git =
+      { repo = "https://github.com/andys8/purescript-react-icons.git";
+        rev = "256388c39000d6f1b5e75f09f15b1cfc569c0b48";
+      };
+
+    info =
+      { version = "1.0.5";
+
+        dependencies =
+          [ react-basic react-basic-dom unsafe-coerce 
+          ];
+      };
+  };
+
 read =
   { src.git =
       { repo = "https://github.com/truqu/purescript-read.git";
@@ -3588,11 +3633,11 @@ ring-modules =
 rito =
   { src.git =
       { repo = "https://github.com/mikesol/purescript-rito.git";
-        rev = "ffb14f1a1976eec0f373fc6200e30bfef40ad70e";
+        rev = "998111bb2aed41317d9a06a52816b3a4f914b0f0";
       };
 
     info =
-      { version = "0.0.0";
+      { version = "0.0.2";
 
         dependencies =
           [ aff aff-promise arrays bolson control convertable-options deku effect either exceptions exists fast-vect foldable-traversable foreign foreign-object heterogeneous hyrule integers maybe newtype numbers prelude profunctor random record refs safe-coerce tuples unsafe-coerce variant web-dom web-html web-touchevents web-uievents 
