@@ -218,6 +218,7 @@
                                     platform = "node";
                                   };
 
+                                compile.codegen = "docs,js";
                                 inherit name package;
                                 srcs = default-srcs;
                               }
@@ -387,9 +388,7 @@
                        }
                   )
                   { "purs-nix command defaults" =
-                      { args.compile.codegen = "docs,js";
-
-                        test = command:
+                      { test = command:
                           make-test "purs-nix srcs"
                             "${command} srcs"
                             (i: ''${purs-nix.purescript}/bin/purs compile ${i}'') +
@@ -424,7 +423,6 @@
                                 main = false;
                               };
 
-                            compile.codegen = "docs,js";
                             test = "test-dir";
                             test-module = "Test.Test";
                           };
