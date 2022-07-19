@@ -336,7 +336,11 @@
 
                               make-test "purs-nix bower"
                                 ""
-                                (_: "${command} bower")
+                                (_: "${command} bower") +
+
+                              make-test "purs-nix test"
+                                ""
+                                (_: "${command} test")
                            ) +
 
                            make-test "purs-nix bundle"
@@ -346,10 +350,6 @@
                           make-test "purs-nix run"
                             "${command} run argument"
                             run-output +
-
-                           make-test "purs-nix test"
-                             ""
-                             (_: "${command} test") +
 
                            make-test "purs-nix docs"
                              ""
@@ -452,7 +452,11 @@
                       };
 
                     "purs-nix command flake dependencies" =
-                      { args.srcs = [ "src3" ];
+                      { args =
+                          { srcs = [ "src3" ];
+                            test = "nonexistent";
+                          };
+
                         less = true;
                         ps' = ps2;
                         run-output = (i: "[[ ${i} == 1945310157 ]]");
