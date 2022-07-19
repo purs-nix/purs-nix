@@ -214,7 +214,7 @@ with builtins;
 
           docs ) ${purescript}/bin/purs docs \
             --compile-output ${output} \
-            "''${@:2}" ${globs.main}
+            "''${@:2}" ${globs.all}
 
             ${docs-search}/bin/purescript-docs-search \
               build-index \
@@ -228,7 +228,7 @@ with builtins;
 
           srcs )
             find -L ${
-            toString (map (a: ''"${a}"'') (srcs ++ all-dependencies))
+            toString (map (a: ''"${a}"'') (srcs ++ [ test ] ++ all-dependencies))
             } -name "*.purs";;
 
           * ) echo ${help};;
