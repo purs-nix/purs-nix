@@ -66,6 +66,7 @@
                    with ps-pkgs;
                    [ console
                      effect
+                     markdown-it
                      prelude
                    ];
 
@@ -227,6 +228,7 @@
              // mapAttrs
                   (n:
                    { args ? {}
+                   , less ? false
                    , ps' ? ps
                    , run-output ? expected-output
                    , test
@@ -276,6 +278,14 @@
                          doCheck = true;
 
                          checkPhase =
+                           (if less then
+                              ""
+                            else
+                              make-test "purs-nix test"
+                                ""
+                                (_: "${command} test")
+                           ) +
+
                            make-test "purs-nix bundle"
                              ""
                              (_: "${command} bundle") +
@@ -283,10 +293,6 @@
                            make-test "purs-nix run"
                              "${command} run argument"
                              run-output +
-
-                           make-test "purs-nix test"
-                             ""
-                             (_: "${command} test") +
 
                            make-test "purs-nix docs"
                              ""
@@ -382,6 +388,31 @@
                           make-test ''"output" does not exist''
                             "ls"
                             (_: "[[ ! -e output ]]");
+                      };
+
+                    "purs-nix command flake dependencies" =
+                      { args =
+                          { srcs = [ "src3" ];
+                            test = "nonexistent";
+                          };
+
+                        less = true;
+                        ps' = ps2;
+                        run-output = (i: ''[[ ${i} == "<h1>md</h1>" ]]'');
+
+                        test = command:
+                          make-test "purs-nix package-info markdown-it"
+                            "${command} package-info markdown-it"
+                            (i: ''
+                                info="name:    markdown-it
+                                version: 0.4.0
+                                flake:   github:purs-nix/purescript-markdown-it/b8221bf5a77fb35742655539c346fe1938473365
+                                package: default
+                                source:  /nix/store/75mmp7m5i2wmp0jnm7afzxz8xvf2dzf9-markdown-it-0.4.0"
+
+                                [[ ${i} == $info ]]
+                                ''
+                            );
                       };
                   }
                   // (if switches.packages then package-tests else {});
