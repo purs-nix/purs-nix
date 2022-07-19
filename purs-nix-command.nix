@@ -11,7 +11,7 @@ with builtins;
 , foreign
 }:
 { srcs ? [ "src" ]
-, globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
+, src-globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
 , output ? "output"
 , bundle ? {}
 , compile ? {}
@@ -23,6 +23,12 @@ with builtins;
   let
     l = p.lib; p = pkgs; u = utils;
     compiler-output = output;
+
+    globs =
+      { all = ''${src-globs} ${test}/**/*.purs ${all-dep-globs}'';
+        main = "${src-globs} ${dep-globs}";
+        repl = "${src-globs} ${repl-globs}";
+      };
 
     bundle' =
       { esbuild ? {}
@@ -45,7 +51,7 @@ with builtins;
       ${u.compile
           purescript
             (compile
-             // { globs = ''${globs} ${dep-globs}'';
+             // { globs = globs.main;
                   inherit output;
                 }
             )
@@ -54,14 +60,9 @@ with builtins;
       ${foreign output}
       '';
 
+
     compile-test = args:
-      u.compile
-        purescript
-        (args
-         // { globs = ''${globs} "${test}/**/*.purs" ${all-dep-globs}'';
-              inherit output;
-            }
-        );
+      u.compile purescript (args // { globs = globs.all; inherit output; });
 
     package-info =
       p.writeShellScript "package-info"
@@ -209,11 +210,11 @@ with builtins;
               echo import Prelude > .purs-repl
             fi
 
-            ${u.repl purescript { globs = "${globs} ${repl-globs}"; }};;
+            ${u.repl purescript { globs = globs.repl; }};;
 
           docs ) ${purescript}/bin/purs docs \
             --compile-output ${output} \
-            "''${@:2}" ${globs} ${dep-globs}
+            "''${@:2}" ${globs.main}
 
             ${docs-search}/bin/purescript-docs-search \
               build-index \
