@@ -347,9 +347,9 @@
                              ""
                              (_: "${command} bundle") +
 
-                          make-test "purs-nix run"
-                            "${command} run argument"
-                            run-output +
+                           make-test "purs-nix run"
+                             "${command} run argument"
+                             run-output +
 
                            make-test "purs-nix docs"
                              ""
