@@ -394,7 +394,6 @@
 
                      (ps.command
                         { bundle.esbuild.platform = "node";
-                        bundle.module = "Node";
                           inherit package;
                           srcs = [ "src" "src2" ];
                         }
