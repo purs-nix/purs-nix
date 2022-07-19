@@ -183,6 +183,7 @@
                    echo $b
                    (( $a < $b ))
                    '';
+
                  "ps.dependencies" =
                    make-test "expected number"
                      "echo ${toString (length ps.dependencies)}"
