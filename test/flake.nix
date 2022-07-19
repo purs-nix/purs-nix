@@ -341,8 +341,8 @@
                                 (_: "${command} bower") +
 
                               make-test "purs-nix test"
-                                ""
-                                (_: "${command} test")
+                                "${command} test"
+                                (i: "[[ ${i} == testing ]]")
                            ) +
 
                            make-test "purs-nix bundle"
