@@ -22,6 +22,8 @@ p:
                (n: v:
                   if isBool v then
                     if v then "--${n}" else ""
+                  else if isList v then
+                    map (a: "--${n}:${toString a}") v
                   else
                     "--${n}=${toString v}"
                )
