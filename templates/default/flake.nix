@@ -20,7 +20,7 @@
                      prelude
                    ];
 
-                 srcs = [ ./src ];
+                 dir = ./.;
                };
          in
          { packages.default = ps.modules.Main.bundle {};

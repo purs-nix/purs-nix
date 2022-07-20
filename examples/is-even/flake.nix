@@ -33,7 +33,7 @@
                      prelude
                    ];
 
-                 srcs = [ ./src ];
+                 dir = ./.;
 
                  foreign.Main.node_modules =
                    npmlock2nix.node_modules { src = ./.; } + /node_modules;

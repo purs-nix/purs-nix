@@ -31,6 +31,8 @@ u        { url = "https://github.com/purs-nix/purs-nix.git";
             effect
             prelude
           ];
+
+        dir = ./.;
       };
 in
 pkgs.mkShell

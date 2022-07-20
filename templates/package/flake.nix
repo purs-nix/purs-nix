@@ -15,7 +15,7 @@
            ps =
              purs-nix.purs
                { inherit (package) dependencies;
-                 srcs = [ ./src ];
+                 dir = ./.;
                };
          in
          { packages.default = ps.modules.Main.bundle {};

@@ -13,21 +13,28 @@ deps:
     inherit purescript-language-server;
 
     purs =
-      { srcs
-        ? throw
-            ''
-            In order to build derivations from your PureScript code, you must supply a 'srcs' argument to 'purs'
-
-            See:
-            https://github.com/purs-nix/purs-nix/blob/master/docs/purs-nix.md#purs
-            ''
-      , nodejs ? pkgs.nodejs
+      { nodejs ? pkgs.nodejs
       , purescript ? purescript'
       , foreign ? null
       , ...
       }@args:
       let
         inherit (p.stdenv) mkDerivation;
+
+        srcs =
+          (if args?dir then
+             map (s: args.dir + "/${s}") (args.srcs or [ "src" ])
+           else
+             args.srcs
+             or (throw
+                   ''
+                   In order to build derivations from your PureScript code, you must supply a 'dir' or 'srcs' argument to 'purs'
+
+                   See:
+                   https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/purs-nix.md#purs
+                   ''
+                )
+          );
 
         create-closure = deps:
           let
@@ -368,6 +375,7 @@ deps:
                 make-dep-globs
                   (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
 
+              srcs' = (a: if args?dir then args.srcs or a else a) [ "src" ];
               utils = u;
               foreign = foreign-stuff all-dependencies;
             };

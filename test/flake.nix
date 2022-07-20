@@ -44,7 +44,8 @@
              purs
                ({ inherit (package) dependencies;
                   test-dependencies = [ ps-pkgs."assert" ];
-                  srcs = [ ./src ./src2 ];
+                  dir = ./.;
+                  srcs = [ "src" "src2" ];
 
                   foreign =
                     { IsNumber.node_modules =
@@ -208,7 +209,6 @@
                    }:
                      let
                        name = "test";
-                       default-srcs = [ "src" "src2" ];
 
                        command =
                          ps'.command
@@ -220,7 +220,6 @@
 
                                 compile.codegen = "docs,js";
                                 inherit name package;
-                                srcs = default-srcs;
                               }
                               args
                            )
@@ -238,7 +237,7 @@
                                       (s: !isNull (match ".*/${s}" path)
                                           || l.hasInfix "/${s}/" path
                                       )
-                                      (args.srcs or default-srcs
+                                      (args.srcs or [ "src" "src2" ]
                                        ++ [ (args.test or "test") ]
                                       )
                                 )

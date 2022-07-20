@@ -7,10 +7,11 @@ with builtins;
 , pkgs
 , purescript
 , repl-globs
+, srcs'
 , utils
 , foreign
 }:
-{ srcs ? [ "src" ]
+{ srcs ? srcs'
 , src-globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
 , output ? "output"
 , bundle ? {}

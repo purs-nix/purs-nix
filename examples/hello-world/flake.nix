@@ -25,7 +25,7 @@
                      prelude
                    ];
 
-                 srcs = [ ./src ];
+                 dir = ./.;
                };
          in
          rec
