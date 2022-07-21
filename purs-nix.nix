@@ -275,7 +275,7 @@ deps:
                     }
 
                     ${if args'?zephyr
-                      then "${ps-tools.for-0_14.zephyr}/bin/zephyr ${args'.zephyr}"
+                      then "${ps-tools.for-0_14.zephyr}/bin/zephyr -f ${args'.zephyr}"
                       else ""
                     }
                     '';
