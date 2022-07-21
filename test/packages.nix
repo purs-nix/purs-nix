@@ -37,7 +37,7 @@ with builtins;
         {}
         (l.mapAttrsToList l.nameValuePair all-packages);
   in
-  # to truly test this you need to manually wipe the caches in ~/.config/nix
+  # to truly test this you need to manually wipe the caches in ~/.cache/nix
   l.mapAttrs' (n: v: l.nameValuePair "${n} source" v) all-packages
   // l.mapAttrs'
        (b: d:
