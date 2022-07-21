@@ -9,20 +9,10 @@
         };
 
 
-      easy-ps =
-        { flake = false;
-          url = "github:justinwoo/easy-purescript-nix";
-        };
-
       get-flake.url = "github:ursi/get-flake";
       make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-
-      purescript-language-server =
-        { flake = false;
-          url = "github:ursi/purescript-language-server/purs-nix";
-        };
-
+      ps-tools.url = "github:purs-nix/purescript-tools";
       utils.url = "github:ursi/flake-utils/8";
     };
 
@@ -54,7 +44,10 @@
             };
         };
     }
-    // utils.apply-systems { inherit inputs; }
+    // utils.apply-systems
+         { inherit inputs;
+           systems = [ "x86_64-linux" "x86_64-darwin" ];
+         }
          ({ deadnix, make-shell, pkgs, system, ... }:
             let
               p = pkgs;

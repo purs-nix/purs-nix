@@ -14,9 +14,6 @@ in
   rec
   { builders = inputs.builders { inherit pkgs; };
     docs-search = (get-flake inputs.docs-search).packages.${system}.default;
-    easy-ps = import inputs.easy-ps { inherit pkgs; };
     pkgs = inputs.nixpkgs.legacyPackages.${system};
-
-    purescript-language-server =
-      import inputs.purescript-language-server { inherit system; };
+    ps-tools = inputs.ps-tools.legacyPackages.${system};
   }

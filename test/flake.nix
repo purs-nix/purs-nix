@@ -24,7 +24,7 @@
 
         systems = [ "x86_64-linux" ];
       }
-      ({ make-shell, pkgs, purs-nix, ... }:
+      ({ make-shell, pkgs, purs-nix, system, ... }:
          let
            minimal = false;
 
@@ -38,7 +38,7 @@
            l = p.lib; p = pkgs;
            inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix-test-packages purs-nix;
-           easy-ps = import (get-flake ../.).inputs.easy-ps { inherit pkgs; };
+           ps-tools = (get-flake ../.).inputs.ps-tools.legacyPackages.${system};
 
            ps-custom = { nodejs ? null, purescript ? null }:
              purs
@@ -159,7 +159,7 @@
                      output =
                          (ps-custom { inherit purescript; }).modules.Main.output {};
 
-                     purescript = easy-ps.purs-0_15_0;
+                     purescript = ps-tools.purescript-0_15_0;
                    in
                    make-test "purescript version"
                      "head -n 1 ${output}/Main/index.js"
