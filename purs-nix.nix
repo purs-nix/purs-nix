@@ -240,57 +240,63 @@ deps:
                       ++ ds;
                   in
                   l.unique (go local-deps);
+
+                unzephyred =
+                  mkDerivation
+                    { name = "${name}-compiled-unzephyred";
+                      phases = [ "buildPhase" "installPhase" ];
+
+                      buildPhase =
+                        let
+                          augmentations =
+                            toString
+                              (map
+                                 (a: "${a.bin args'} output;")
+                                 trans-deps
+                              );
+
+                          local-dep-globs =
+                            toString
+                              (map
+                                (a: ''"${a.src}/**/*.purs"'')
+                                trans-deps
+                              );
+                        in
+                        ''
+                        cp --no-preserve=mode --preserve=timestamps -r ${built-deps stripped} output
+                        ${if incremental then augmentations else ""}
+
+                        ${u.compile
+                            purescript
+                            (stripped
+                             // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
+                                  output = "output";
+                                }
+                            )
+                        }
+                        '';
+
+                      installPhase =
+                        "mv output $out";
+                    };
               in
-              mkDerivation
-                { name = "${name}-compiled";
-                  phases = [ "buildPhase" "installPhase" ];
+              p.runCommand "${name}-compiled" {}
+                ''
+                cp --no-preserve=mode --preserve=timestamps -r ${unzephyred} output
 
-                  buildPhase =
-                    let
-                      augmentations =
-                        toString
-                          (map
-                             (a: "${a.bin args'} output;")
-                             trans-deps
-                          );
+                ${if args'?zephyr
+                  then "${ps-tools.for-0_14.zephyr}/bin/zephyr -f ${args'.zephyr}"
+                  else ""
+                }
 
-                      local-dep-globs =
-                        toString
-                          (map
-                            (a: ''"${a.src}/**/*.purs"'')
-                            trans-deps
-                          );
-                    in
-                    ''
-                    cp --no-preserve=mode --preserve=timestamps -r ${built-deps stripped} output
-                    ${if incremental then augmentations else ""}
+                mv ${if args'?zephyr then "dce-" else ""}output $out
+                cd $out
 
-                    ${u.compile
-                        purescript
-                        (stripped
-                         // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
-                              output = "output";
-                            }
-                        )
-                    }
-
-                    ${if args'?zephyr
-                      then "${ps-tools.for-0_14.zephyr}/bin/zephyr -f ${args'.zephyr}"
-                      else ""
-                    }
-                    '';
-
-                  installPhase =
-                    ''
-                    mv ${if args'?zephyr then "dce-" else ""}output $out
-                    cd $out
-
-                    ${if top-level
-                      then foreign-stuff dependencies "."
-                      else ""
-                    }
-                    '';
-                };
+                ${if top-level
+                  then foreign-stuff dependencies "."
+                  else ""
+                }
+                '';
 
             bundle =
               { esbuild ? {}
