@@ -1,5 +1,6 @@
 { inputs =
     { nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+      ps-tools.follows = "purs-nix/ps-tools";
       purs-nix.url = "github:purs-nix/purs-nix/ps-0.14";
       utils.url = "github:numtide/flake-utils";
     };
@@ -9,13 +10,14 @@
       (system:
          let
            pkgs = nixpkgs.legacyPackages.${system};
+           ps-tools = inputs.ps-tools.legacyPackages.${system};
            purs-nix = inputs.purs-nix { inherit system; };
            package = import ./package.nix purs-nix;
 
            ps =
              purs-nix.purs
                { inherit (package) dependencies;
-                 srcs = [ ./src ];
+                 dir = ./.;
                };
          in
          { packages.default = ps.modules.Main.bundle {};
@@ -26,11 +28,11 @@
                    with pkgs;
                    [ nodejs
                      nodePackages.bower
-                     nodePackages.pulp
                      (ps.command {})
+                     ps-tools.for-0_15.pulp
+                     # ps-tools.for-0_15.purescript-language-server
                      purs-nix.esbuild
                      purs-nix.purescript
-                     # purs-nix.purescript-language-server
                    ];
                };
          }

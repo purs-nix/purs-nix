@@ -21,7 +21,8 @@ and returns an attribute set with the following attributes:
 ```
 { dependencies ? []
 , test-dependencies ? []
-, srcs ? null
+, dir ? null
+, srcs ? if isNull dir then null else [ "src" ]
 , nodejs ? pkgs.nodejs
 , purescript ? easy-purescript-nix.purescript
 , foreign ? {}
@@ -30,7 +31,8 @@ and returns an attribute set with the following attributes:
 
 - `dependencies`: A list of all your project's dependencies. You can get these from `ps-pkgs`/`ps-pkgs-ns`.
 - `test-dependencies`: A list of all your projects's dependencies that are only needed for testing.
-- `srcs`: A list of Nix path values pointing to your PureScript source directories. This is not required if you're only using the Nix shell.
+- `dir`: The directory of the project. This is not required if you're only using the Nix shell, or if you specify `srcs` with path values.
+- `srcs`: Either a list of strings corresponding to directories in `dir` or a list of path values pointing to PureScript source directories. This is not required if you're only using the Nix shell.
 - `nodejs`: The Node.js package to use.
 - `purescript`: The PureScript package to use.
 - `foreign`: See the [documentation](foreign.md).
@@ -44,7 +46,7 @@ and returns an attribute set with the following attributes:
 `command` takes the following arguments: (Note: they all have defaults so often times you will only need to us `command {}`)
 
 ```
-{ srcs ? [ "src" ]
+{ srcs ? see below
 , output ? "output"
 , bundle ? {}
 , compile ? {}
@@ -55,7 +57,7 @@ and returns an attribute set with the following attributes:
 }
 ```
 
-- `srcs`: A list of strings representing the paths of your project's source directories.
+- `srcs`: A list of strings representing the paths of your project's source directories. The default value is the `srcs` value provided to `purs` if you're using the `dir` + `srcs` options, otherwise it's `[ "src" ]`.
 - `output`: The name of the folder that `purs compile` will create.
 - `bundle`: The options that will configure the `purs-nix bundle` command.
 

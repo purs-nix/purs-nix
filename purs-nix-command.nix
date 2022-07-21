@@ -7,10 +7,11 @@ with builtins;
 , pkgs
 , purescript
 , repl-globs
+, srcs'
 , utils
 , foreign
 }:
-{ srcs ? [ "src" ]
+{ srcs ? srcs'
 , src-globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
 , output ? "output"
 , bundle ? {}
@@ -264,9 +265,8 @@ with builtins;
         ------------------------------------------------------------------------
         compile        Compile your project.
         bundle         Compile then bundle your project.
-        run            Compile, bundle, then run the bundle with 'node'.
-        test           Compile, bundle your test code, then run the bundle with
-                       'node'.
+        run            Compile and run <MainModule>.main with node.
+        test           Compile and run <TestModule>.main with node.
 
         repl           Enter the REPL
         docs <args>    Generate HTML documentation for all the modules in your
@@ -274,11 +274,11 @@ with builtins;
         ------------------------------------------------------------------------
         package-info <name>    Show the info of a specific package.
         packages               Show all packages used in your project.
-        -------------------------------------------------------------------------
+        ------------------------------------------------------------------------
         bower    Generate a bower.json for publishing to Pursuit.
-        -------------------------------------------------------------------------
+        ------------------------------------------------------------------------
         srcs    Echo all PureScript globs for your project.
-        -------------------------------------------------------------------------
+        ------------------------------------------------------------------------
 
         Anything that is not a valid command will show this text.
         '';

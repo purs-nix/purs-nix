@@ -2,8 +2,8 @@ with builtins;
 deps:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
-    inherit (deps) builders docs-search easy-ps pkgs purescript-language-server;
-    purescript' = easy-ps.purs-0_14_9;
+    inherit (deps) builders docs-search pkgs ps-tools purescript-language-server;
+    purescript' = ps-tools.for-0_14.purescript;
     ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
   { inherit (ps-package-stuff) build ps-pkgs ps-pkgs-ns;
@@ -13,21 +13,28 @@ deps:
     inherit purescript-language-server;
 
     purs =
-      { srcs
-        ? throw
-            ''
-            In order to build derivations from your PureScript code, you must supply a 'srcs' argument to 'purs'
-
-            See:
-            https://github.com/purs-nix/purs-nix/blob/master/docs/purs-nix.md#purs
-            ''
-      , nodejs ? pkgs.nodejs
+      { nodejs ? pkgs.nodejs
       , purescript ? purescript'
       , foreign ? null
       , ...
       }@args:
       let
         inherit (p.stdenv) mkDerivation;
+
+        srcs =
+          (if args?dir then
+             map (s: args.dir + "/${s}") (args.srcs or [ "src" ])
+           else
+             args.srcs
+             or (throw
+                   ''
+                   In order to build derivations from your PureScript code, you must supply a 'dir' or 'srcs' argument to 'purs'
+
+                   See:
+                   https://github.com/purs-nix/purs-nix/blob/ps-0.14/docs/purs-nix.md#purs
+                   ''
+                )
+          );
 
         create-closure = deps:
           let
@@ -268,7 +275,7 @@ deps:
                     }
 
                     ${if args'?zephyr
-                      then "${easy-ps.zephyr}/bin/zephyr ${args'.zephyr}"
+                      then "${ps-tools.for-0_14.zephyr}/bin/zephyr ${args'.zephyr}"
                       else ""
                     }
                     '';
@@ -401,6 +408,7 @@ deps:
                 make-dep-globs
                   (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
 
+              srcs' = (a: if args?dir then args.srcs or a else a) [ "src" ];
               utils = u;
               foreign = foreign-stuff all-dependencies;
             };

@@ -24,7 +24,7 @@
 
         systems = [ "x86_64-linux" ];
       }
-      ({ make-shell, pkgs, purs-nix, ... }:
+      ({ make-shell, pkgs, purs-nix, system, ... }:
          let
            minimal = false;
 
@@ -38,13 +38,14 @@
            l = p.lib; p = pkgs;
            inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix-test-packages purs-nix;
-           easy-ps = import (get-flake ../.).inputs.easy-ps { inherit pkgs; };
+           ps-tools = (get-flake ../.).inputs.ps-tools.legacyPackages.${system};
 
            ps-custom = { nodejs ? null, purescript ? null }:
              purs
                ({ inherit (package) dependencies;
                   test-dependencies = [ ps-pkgs."assert" ];
-                  srcs = [ ./src ./src2 ];
+                  dir = ./.;
+                  srcs = [ "src" "src2" ];
 
                   foreign =
                     { IsNumber.node_modules =
@@ -152,7 +153,7 @@
                      output =
                          (ps-custom { inherit purescript; }).modules.Main.output {};
 
-                     purescript = easy-ps.purs-0_14_7;
+                     purescript = ps-tools.purescript-0_14_7;
                    in
                    make-test "purescript version"
                      "head -n 1 ${output}/Main/index.js"
@@ -211,6 +212,7 @@
                    echo $b
                    (( $a < $b ))
                    '';
+
                  "ps.dependencies" =
                    make-test "expected number"
                      "echo ${toString (length ps.dependencies)}"
@@ -235,7 +237,6 @@
                    }:
                      let
                        name = "test";
-                       default-srcs = [ "src" "src2" ];
 
                        command =
                          ps'.command
@@ -245,8 +246,8 @@
                                     platform = "node";
                                   };
 
+                                compile.codegen = "docs,js";
                                 inherit name package;
-                                srcs = default-srcs;
                               }
                               args
                            )
@@ -264,7 +265,7 @@
                                       (s: !isNull (match ".*/${s}" path)
                                           || l.hasInfix "/${s}/" path
                                       )
-                                      (args.srcs or default-srcs
+                                      (args.srcs or [ "src" "src2" ]
                                        ++ [ (args.test or "test") ]
                                       )
                                 )
@@ -282,8 +283,8 @@
                               ""
                             else
                               make-test "purs-nix test"
-                                ""
-                                (_: "${command} test")
+                                "${command} test"
+                                (i: "[[ ${i} == testing ]]")
                            ) +
 
                            make-test "purs-nix bundle"
@@ -329,9 +330,7 @@
                        }
                   )
                   { "purs-nix command defaults" =
-                      { args.compile.codegen = "docs,js";
-
-                        test = command:
+                      { test = command:
                           make-test "purs-nix srcs"
                             "${command} srcs"
                             (i: ''${purs-nix.purescript}/bin/purs compile ${i}'') +
@@ -361,17 +360,20 @@
                           { inherit output;
 
                             bundle =
-                              { esbuild = { inherit outfile; };
+                              { esbuild = { external = [ 1 2 ]; inherit outfile;};
                                 module = "App";
                                 main = false;
                               };
 
-                            compile.codegen = "docs,js";
                             test = "test-dir";
                             test-module = "Test.Test";
                           };
 
-                        test = _:
+                        test = command:
+                          make-test "list flags work"
+                            ""
+                            (_: ''cat ${command} | grep -- "--external:1 --external:2"'') +
+
                           make-test "custom-named output exists"
                             ""
                             (_: "ls ${outfile}") +
