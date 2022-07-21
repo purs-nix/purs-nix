@@ -2928,11 +2928,11 @@ parallel =
 parsing =
   { src.git =
       { repo = "https://github.com/purescript-contrib/purescript-parsing.git";
-        rev = "44ef16b7cfb7cedc3d518c00ef10c6cb73ff4fc8";
+        rev = "bd5812e8f4168f2d9b899ba1ed2920e8058f43dc";
       };
 
     info =
-      { version = "9.1.0";
+      { version = "10.0.0";
 
         dependencies =
           [ arrays either foldable-traversable identity integers lists maybe nullable prelude strings transformers unicode 
