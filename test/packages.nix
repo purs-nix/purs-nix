@@ -37,23 +37,22 @@ with builtins;
         {}
         (l.mapAttrsToList l.nameValuePair all-packages);
   in
-  # to truly test this you need to manually wipe the caches in ~/.config/nix
-  l.mapAttrs' (n: v: l.nameValuePair "${n} source" v) all-packages
-  // l.mapAttrs'
-       (b: d:
-          let
-            ps = purs { dependencies = d; };
+  # to truly test this you need to manually wipe the caches in ~/.cache/nix
+  l.mapAttrs'
+    (b: d:
+       let
+         ps = purs { dependencies = d; };
 
-            command =
-              ps.command
-                { output = "$out";
-                  srcs = [];
-                }
-              + "/bin/purs-nix";
-          in
-          l.nameValuePair "compiled packages bucket ${b}"
-            (p.runCommand "compiled-packages-${b}" {}
-               "${command} compile"
-            )
-       )
-       dependencies
+         command =
+           ps.command
+             { output = "$out";
+               srcs = [];
+             }
+           + "/bin/purs-nix";
+       in
+       l.nameValuePair "compiled packages bucket ${b}"
+         (p.runCommand "compiled-packages-${b}" {}
+            "${command} compile"
+         )
+    )
+    dependencies

@@ -8,7 +8,6 @@
           url = "github:purs-nix/purescript-docs-search";
         };
 
-
       get-flake.url = "github:ursi/get-flake";
       make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
