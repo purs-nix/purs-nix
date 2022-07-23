@@ -19,7 +19,7 @@
     utils.lib.eachDefaultSystem
       (system:
          let
-           main-project-flake = (get-flake ../../.);
+           main-project-flake = get-flake ../../.;
 
                     # inputs.purs-nix | is what you would use in a normal project
            purs-nix = main-project-flake { inherit system; };

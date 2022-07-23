@@ -1,7 +1,7 @@
 with builtins;
 let
   l = p.lib; p = pkgs;
-  pkgs = (import ../deps.nix { system = currentSystem; }).pkgs;
+  inherit (import ../deps.nix { system = currentSystem; }) pkgs;
 
   package-set-repo =
     fetchGit

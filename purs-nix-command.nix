@@ -88,7 +88,7 @@ with builtins;
             (map
                (pkg:
                   let info = pkg.purs-nix-info; in
-                  if isNull info.version
+                  if info.version == null
                   then "echo ${info.name}"
                   else "echo ${info.name}: ${info.version}"
                )

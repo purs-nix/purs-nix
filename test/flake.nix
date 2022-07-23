@@ -55,8 +55,8 @@
                       Nested.src = ./foreign-js;
                     };
                 }
-                // (if isNull nodejs then {} else { inherit nodejs; })
-                // (if isNull purescript then {} else { inherit purescript; })
+                // (if nodejs == null then {} else { inherit nodejs; })
+                // (if purescript == null then {} else { inherit purescript; })
                );
 
            ps = ps-custom {};
@@ -262,7 +262,7 @@
                              (path: type:
                                 (type == "directory"
                                  && any
-                                      (s: !isNull (match ".*/${s}" path)
+                                      (s: (match ".*/${s}" path != null)
                                           || l.hasInfix "/${s}/" path
                                       )
                                       (args.srcs or [ "src" "src2" ]
@@ -400,7 +400,7 @@
 
                         less = true;
                         ps' = ps2;
-                        run-output = (i: ''[[ ${i} == "<h1>md</h1>" ]]'');
+                        run-output = i: ''[[ ${i} == "<h1>md</h1>" ]]'';
 
                         test = command:
                           make-test "purs-nix package-info markdown-it"
