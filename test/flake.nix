@@ -55,8 +55,8 @@
                       Nested.src = ./foreign-js;
                     };
                 }
-                // (if isNull nodejs then {} else { inherit nodejs; })
-                // (if isNull purescript then {} else { inherit purescript; })
+                // (if nodejs == null then {} else { inherit nodejs; })
+                // (if purescript == null then {} else { inherit purescript; })
                );
 
            ps = ps-custom {};
@@ -234,7 +234,7 @@
                              (path: type:
                                 (type == "directory"
                                  && any
-                                      (s: !isNull (match ".*/${s}" path)
+                                      (s: (match ".*/${s}" path != null)
                                           || l.hasInfix "/${s}/" path
                                       )
                                       (args.srcs or [ "src" "src2" ]
@@ -461,7 +461,7 @@
 
                         less = true;
                         ps' = ps2;
-                        run-output = (i: "[[ ${i} == 1945310157 ]]");
+                        run-output = i: "[[ ${i} == 1945310157 ]]";
 
                         test = command:
                           make-test "purs-nix package-info ursi.murmur3"

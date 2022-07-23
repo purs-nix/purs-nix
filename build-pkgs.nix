@@ -43,7 +43,7 @@ with builtins;
                 ({ url = repo;
                    inherit rev;
                  }
-                 // (if isNull ref then {} else { inherit ref; })
+                 // (if ref == null then {} else { inherit ref; })
                 );
           in
           if legacy then
@@ -145,11 +145,7 @@ with builtins;
       l.fix
         (self:
            mapAttrs
-             (ns: pkgs':
-               mapAttrs
-                 (n: v: build (v // { name = "${ns}.${n}"; }))
-                 pkgs'
-             )
+             (ns: mapAttrs (n: v: build (v // { name = "${ns}.${n}"; })))
              (f self)
         );
   in

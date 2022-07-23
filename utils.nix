@@ -94,7 +94,7 @@ p:
       let info = pkg.purs-nix-info; in
       ''
       echo "name:    ${info.name}"
-      echo "version: ${if isNull info.version then "none" else info.version}"
+      echo "version: ${if info.version == null then "none" else info.version}"
       ${if info?flake then
           ''
           echo "flake:   ${info.flake.url}"

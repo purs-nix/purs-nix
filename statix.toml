@@ -1,0 +1,2 @@
+disabled = [ "bool_comparison", "useless_has_attr" ]
+nix_version = '2.10'

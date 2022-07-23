@@ -6,13 +6,8 @@ with builtins;
       // set-buckets 2 (proper-names ps-pkgs-ns.ursi)
       // { event = 2; };
 
-    proper-names = packages:
-      l.mapAttrs'
-        (_: v: l.nameValuePair v.purs-nix-info.name v)
-        packages;
-
-    set-buckets = n: attrs:
-      mapAttrs (_: _: n) attrs;
+    proper-names = l.mapAttrs' (_: v: l.nameValuePair v.purs-nix-info.name v);
+    set-buckets = n: mapAttrs (_: _: n);
 
     all-packages =
       ps-pkgs

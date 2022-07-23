@@ -22,26 +22,25 @@ deps:
         inherit (p.stdenv) mkDerivation;
 
         srcs =
-          (if args?dir then
-             map (s: args.dir + "/${s}") (args.srcs or [ "src" ])
-           else
-             args.srcs
-             or (throw
-                   ''
-                   In order to build derivations from your PureScript code, you must supply a 'dir' or 'srcs' argument to 'purs'
+          if args?dir then
+            map (s: args.dir + "/${s}") (args.srcs or [ "src" ])
+          else
+            args.srcs
+            or (throw
+                  ''
+                  In order to build derivations from your PureScript code, you must supply a 'dir' or 'srcs' argument to 'purs'
 
-                   See:
-                   https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/purs-nix.md#purs
-                   ''
-                )
-          );
+                  See:
+                  https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/purs-nix.md#purs
+                  ''
+               );
 
         create-closure = deps:
           let
             f = direct:
               foldl'
                 (acc: dep:
-                   let name = dep.purs-nix-info.name; in
+                   let inherit (dep.purs-nix-info) name; in
                    if l.hasInfix "." name then
                      let path = l.splitString "." name; in
                      if direct || !l.hasAttrByPath path acc.ps-pkgs-ns then
@@ -143,7 +142,7 @@ deps:
                 (acc: dep:
                    l.recursiveUpdate acc (dep.purs-nix-info.foreign or {})
                 )
-                (if isNull foreign then {} else foreign)
+                (if foreign == null then {} else foreign)
                 deps;
           in
           foldl'

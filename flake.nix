@@ -12,6 +12,7 @@
       make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       ps-tools.url = "github:purs-nix/purescript-tools";
+      statix.url = "github:nerdypepper/statix";
       utils.url = "github:ursi/flake-utils/8";
     };
 
@@ -47,7 +48,7 @@
          { inherit inputs;
            systems = [ "x86_64-linux" "x86_64-darwin" ];
          }
-         ({ deadnix, make-shell, pkgs, system, ... }:
+         ({ deadnix, make-shell, pkgs, statix, system, ... }:
             let
               p = pkgs;
               u = import ./utils.nix p;
@@ -71,7 +72,7 @@
 
                   package-info-ns =
                     mapAttrs
-                      (_: ps-pkgs':
+                      (_:
                          mapAttrs
                            (_: v:
                               { type = "app";
@@ -83,7 +84,6 @@
                                     );
                               }
                            )
-                           ps-pkgs'
                       )
                       ps-pkgs-ns;
                 };
@@ -93,6 +93,10 @@
                     p.runCommand "lint" {}
                       ''
                       ${deadnix}/bin/deadnix -f $(find ${./.} -name "*.nix")
+
+                      # https://github.com/nerdypepper/statix/issues/51
+                      ln -s ${./statix.toml} statix.toml
+                      ${statix}/bin/statix check ${./.}
                       touch $out
                       '';
                 }
@@ -112,8 +116,8 @@
 
               devShells.default =
                 make-shell
-                  { packages = [ deadnix ];
-                    aliases.lint = ''deadnix **/*.nix'';
+                  { packages = [ deadnix statix ];
+                    aliases.lint = ''deadnix **/*.nix; statix check'';
                   };
             }
          );
