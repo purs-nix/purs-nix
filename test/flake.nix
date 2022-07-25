@@ -179,7 +179,7 @@
                    let a = args: ps.modules.Main.app ({ name = "_"; } // args); in
                    ''
                    a=$(wc -c < ${a {}}/bin/_)
-                   b=$(wc -c < ${a { minify = false; }}/bin/_)
+                   b=$(wc -c < ${a { esbuild.minify = false; }}/bin/_)
                    echo $a
                    echo $b
                    (( $a < $b ))
