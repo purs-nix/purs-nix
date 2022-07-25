@@ -34,7 +34,7 @@
                    [ # entr
                      nodejs
                      (ps.command {})
-                     # ps-tools.for-0_15.purescript-language-server
+                     # ps-tools.for-0_14.purescript-language-server
                      purs-nix.esbuild
                      purs-nix.purescript
                    ];
