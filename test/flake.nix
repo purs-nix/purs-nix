@@ -207,7 +207,7 @@
                    let a = args: ps.modules.Main.app ({ name = "_"; } // args); in
                    ''
                    a=$(wc -c < ${a {}}/bin/_)
-                   b=$(wc -c < ${a { minify = false; }}/bin/_)
+                   b=$(wc -c < ${a { esbuild.minify = false; }}/bin/_)
                    echo $a
                    echo $b
                    (( $a < $b ))
@@ -440,9 +440,9 @@
                         }
                      )
 
+                     ps-tools.for-0_14.purescript-language-server
                      purs-nix.esbuild
                      purs-nix.purescript
-                     purs-nix.purescript-language-server
                    ];
                };
          }

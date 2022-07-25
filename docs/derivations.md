@@ -54,8 +54,8 @@ The upper options correspond to the flags you can pass `purs compile`.
 { name
 , version ? null
 , command ? name
+, esbuild ? { minify ? true; }
 , incremental ? true
-, minify ? true
 , zephyr ? true
 }
 ```
@@ -63,8 +63,8 @@ The upper options correspond to the flags you can pass `purs compile`.
 - `name`: The `pname`/`name` of the derivation.
 - `version`: The version of the derivation.
 - `command`: The name of the executable.
+- `esbuild`: Arguments to pass to `esbuild` when bundling.
 - `incremental`: Whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
-- `minify`: Whether or not to minify the bundled JavaScript.
 - `zephyr`: Whether or not to use `zephyr` to drastically shrink the bundle size. Since purs-nix use `esbuild`, it does not get DCE on PureScript 0.14 output.
 
 `modules.Module.app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Module`.
