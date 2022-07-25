@@ -6,7 +6,7 @@ You access these derivations via the [modules](./purs-nix.md#purs-modules) attri
 
 NOTE: If the module name contains a `.`, it will require quotation marks around its name (e.g. `modules."Foo.Bar.Main".bundle`)
 
-There are three different attributes for each module.
+There are four different attributes for each module.
 
 ### output
 ```
@@ -44,6 +44,18 @@ The upper options correspond to the flags you can pass `purs compile`.
 - `incremental`: whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
 
 `modules.Module.bundle {}` is a derivation containing the bundled code from the module `Module`.
+
+### script
+
+```
+{ esbuild ? { minify ? true; }
+, incremental ? true
+}
+```
+- `esbuild`: Arguments to pass to `esbuild` when bundling.
+- `incremental`: Whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
+
+`modules.Module.script {}` is a derivation that is an executable that will execute the `main` `Effect` of the module `Module`.
 
 ### app
 

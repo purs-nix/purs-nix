@@ -281,6 +281,28 @@ deps:
                    }
                 );
 
+            script =
+              { esbuild ? {}
+              , incremental ? true
+              }:
+              let
+                bundle' =
+                  bundle
+                    { esbuild =
+                        { minify = true; }
+                        // esbuild
+                        // { platform = "node"; };
+
+                      inherit incremental;
+                    };
+              in
+              p.runCommand "${name}-script" {}
+                ''
+                echo $'#! ${nodejs}/bin/node' > $out
+                cat ${bundle'} >> $out
+                chmod +x $out
+                '';
+
             app =
               { name
               , version ? null
@@ -288,34 +310,22 @@ deps:
               , esbuild ? {}
               , incremental ? true
               }:
-              let command' = l.escapeShellArg command; in
               mkDerivation
                 ({ phases = [ "installPhase" ];
 
                    installPhase =
-                     let
-                       bundle' =
-                         bundle
-                           { esbuild =
-                               { minify = true; }
-                               // esbuild
-                               // { platform = "node"; };
-
-                             inherit incremental;
-                           };
-                     in
                      ''
                      mkdir -p $out/bin; cd $_
 
-                     echo $'#! ${nodejs}/bin/node' > ${command'}
-                     cat ${bundle'} >> ${command'}
-                     chmod +x ${command'}
+                     cp \
+                       ${script { inherit esbuild incremental; }} \
+                       ${l.escapeShellArg command}
                      '';
                  }
                  // u.make-name name version
                 );
           in
-          { inherit bundle local-deps app name output src;
+          { inherit app bundle local-deps name output script src;
 
             bin = args:
               let
@@ -355,7 +365,7 @@ deps:
 
         modules =
           mapAttrs
-            (_: v: { inherit (v) bundle app; output = v.output true; })
+            (_: v: { inherit (v) bundle script app; output = v.output true; })
             builds;
 
         command =
