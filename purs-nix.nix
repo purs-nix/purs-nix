@@ -2,7 +2,7 @@ with builtins;
 deps:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
-    inherit (deps) builders docs-search pkgs ps-tools purescript-language-server;
+    inherit (deps) builders docs-search pkgs ps-tools;
     purescript' = ps-tools.for-0_15.purescript;
     ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
@@ -10,7 +10,6 @@ deps:
     inherit (pkgs) esbuild;
     inherit (pkgs.lib) licenses;
     purescript = purescript';
-    inherit purescript-language-server;
 
     purs =
       { nodejs ? pkgs.nodejs

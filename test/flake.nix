@@ -501,9 +501,9 @@
                         }
                      )
 
+                     ps-tools.for-0_15.purescript-language-server
                      purs-nix.esbuild
                      purs-nix.purescript
-                     purs-nix.purescript-language-server
                    ];
                };
          }
