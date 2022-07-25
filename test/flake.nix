@@ -19,12 +19,12 @@
       { inputs =
           inputs
           // { inherit purs-nix;
-               inherit (purs-nix.inputs) make-shell nixpkgs;
+               inherit (purs-nix.inputs) make-shell nixpkgs ps-tools;
              };
 
         systems = [ "x86_64-linux" ];
       }
-      ({ make-shell, pkgs, purs-nix, system, ... }:
+      ({ make-shell, pkgs, ps-tools, purs-nix, ... }:
          let
            minimal = false;
 
@@ -38,7 +38,6 @@
            l = p.lib; p = pkgs;
            inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix-test-packages purs-nix;
-           ps-tools = (get-flake ../.).inputs.ps-tools.legacyPackages.${system};
 
            ps-custom = { nodejs ? null, purescript ? null }:
              purs
