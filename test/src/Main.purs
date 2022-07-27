@@ -39,3 +39,6 @@ main = do
   foreign2
   PursNixBuildTest.log
   log a
+
+forTest :: String
+forTest = "testing"
