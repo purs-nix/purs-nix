@@ -41,4 +41,4 @@ main = do
   log a
 
 forTest :: String
-forTest = "testing"
+forTest = "test"

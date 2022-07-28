@@ -39,11 +39,10 @@
            inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix-test-packages purs-nix;
 
-           ps-custom = { nodejs ? null, purescript ? null }:
+           ps-custom = { dir ? ./., ...}@args:
              purs
                ({ inherit (package) dependencies;
                   test-dependencies = [ ps-pkgs."assert" ];
-                  dir = ./.;
                   srcs = [ "src" "src2" ];
 
                   foreign =
@@ -54,8 +53,8 @@
                       Nested.src = ./foreign-js;
                     };
                 }
-                // (if nodejs == null then {} else { inherit nodejs; })
-                // (if purescript == null then {} else { inherit purescript; })
+                // (if dir == null then {} else { inherit dir; })
+                // (removeAttrs args [ "dir" ])
                );
 
            ps = ps-custom {};
@@ -202,6 +201,41 @@
                    make-test "expected number"
                      "echo ${toString (length ps.dependencies)}"
                      (i: "[[ ${i} == 47 ]]");
+
+                 "test script defaults" =
+                   make-test "expected output"
+                     "${ps.test.script {}}"
+                     (i: "[[ ${i} == testing ]]");
+
+                 "test script configured" =
+                   make-test "expected output"
+                     "${(ps-custom { test = "test-dir"; test-module = "Test.Test"; })
+                          .test.script {}
+                      }"
+                     (i: "[[ ${i} == testing ]]");
+
+                 "no test app" =
+                   make-test "expected output"
+                     "${(ps-custom { test = "nonexistent"; })
+                          .modules.Main.app { name = "test run"; }
+                      }/bin/'test run' argument"
+                      expected-output;
+
+                 "no dir app" =
+                   make-test "expected output"
+                     "${(ps-custom
+                           { dir = null; srcs = [ ./src ./src2 ];}
+                        ).modules.Main.app { name = "test run"; }
+                      }/bin/'test run' argument"
+                     expected-output;
+
+                 "no dir test" =
+                   make-test "expected output"
+                     "${(ps-custom
+                           { dir = null; srcs = [ ./src ./src2 ]; test = ./test;}
+                        ).test.script {}
+                      }"
+                     (i: "[[ ${i} == testing ]]");
                }
              // (with ps.modules.Main;
                  { "non-incremental output" = output { incremental = false; };
@@ -434,10 +468,10 @@
                                 module = "App";
                                 main = false;
                               };
-
-                            test = "test-dir";
-                            test-module = "Test.Test";
                           };
+
+                        ps' =
+                          ps-custom { test = "test-dir"; test-module = "Test.Test"; };
 
                         test = command:
                           make-test "list flags work"

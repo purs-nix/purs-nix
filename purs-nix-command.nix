@@ -8,6 +8,8 @@ with builtins;
 , purescript
 , repl-globs
 , srcs'
+, test'
+, test-module'
 , utils
 , foreign
 }:
@@ -17,8 +19,8 @@ with builtins;
 , bundle ? {}
 , compile ? {}
 , package ? {}
-, test ? "test"
-, test-module ? "Test.Main"
+, test ? test'
+, test-module ? test-module'
 , name ? "purs-nix"
 }:
   let
