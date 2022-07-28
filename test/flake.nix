@@ -406,7 +406,11 @@
                           { inherit output;
 
                             bundle =
-                              { esbuild = { external = [ 1 2 ]; inherit outfile;};
+                              { esbuild =
+                                  { external = [ 1 ''"2"'' "$three" "'4'" ];
+                                    inherit outfile;
+                                  };
+
                                 module = "App";
                                 main = false;
                               };
@@ -417,8 +421,8 @@
 
                         test = command:
                           make-test "list flags work"
-                            ""
-                            (_: ''cat ${command} | grep -- "--external:1 --external:2"'') +
+                            "echo ${command}"
+                            (_: ''cat ${command} | grep -- "--external:'1' --external:\"2\" --external:\$three --external:'4'"'') +
 
                           make-test "custom-named output exists"
                             ""

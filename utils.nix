@@ -20,12 +20,19 @@ p:
           toString
             (l.mapAttrsToList
                (n: v:
+                  let
+                    process = val:
+                      let str = toString val; in
+                      if any (a: l.hasPrefix a str) [ "\"" "$" "'" ]
+                      then str
+                      else l.escapeShellArg str;
+                  in
                   if isBool v then
                     if v then "--${n}" else ""
                   else if isList v then
-                    map (a: "--${n}:${toString a}") v
+                    map (a: "--${n}:${process a}") v
                   else
-                    "--${n}=${toString v}"
+                    "--${n}=${process v}"
                )
                esbuild'
             );
