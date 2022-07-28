@@ -6,12 +6,12 @@
 { system }
 ```
 and returns an attribute set with the following attributes:
-- `build`: A function for creating ad hoc PureScript packages. See: [build](adding-packages.md#build).
+- `build`: A function for creating ad hoc PureScript packages. See: [build](adding-packages.md#user-content-build).
 - `esbuild`/`purescript`: The esbuild/PureScript packages used for everything by default.
 - `ps-pkgs`: The attribute set of all non-namespaced PureScript pacakges.
 - `ps-pkgs-ns`: The attribute set of all namespaced PureScript packages.
 - `purs`: A function for building your project.
-- `licenses`: This is included for convenience so you can pass the returned attribute set into a [package.nix](adding-packages.md#using-info).
+- `licenses`: This is included for convenience so you can pass the returned attribute set into a [package.nix](adding-packages.md#user-content-using-info).
 
 ### purs
 
@@ -37,7 +37,7 @@ and returns an attribute set with the following attributes:
 - `foreign`: See the [documentation](foreign.md).
 
 and returns an attribute set with the following attributes:
-- <span id="purs-modules">`modules`</span>: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).
+- <span id="user-content-purs-modules">`modules`</span>: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more about this [here](derivations.md).
 - `command`: A functions that builds the `purs-nix` command which you can then add to your Nix shell.
 - `dependencies`: A list of all the dependencies (transitive closure) of your project. This is exposed out of convenience for when you find yourself using a tool that needs information that can be derived from this.
 
