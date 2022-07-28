@@ -34,6 +34,22 @@ deps:
                   ''
                );
 
+        test-src =
+          if args?dir then
+             args.dir + "/${args.test or "test"}"
+          else
+            args.test
+            or (throw
+                  ''
+                  In order to build derivations from your PureScript code, you must supply a 'dir' or 'test' argument to 'purs'
+
+                  See:
+                  https://github.com/purs-nix/purs-nix/blob/ps-0.14/docs/purs-nix.md#purs
+                  ''
+               );
+
+        test-module = args.test-module or "Test.Main";
+
         create-closure = deps:
           let
             f = direct:
@@ -100,11 +116,13 @@ deps:
         make-srcs-str = a:
           concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') a);
 
-        local-graph =
+        local-graph = include-test:
           let
+            globs = if include-test then all-dep-globs else dep-globs;
+
             make-graph = extra:
-              if extra + dep-globs != "" then
-                l.pipe "${purescript}/bin/purs graph ${extra} ${dep-globs} > $out"
+              if extra + globs != "" then
+                l.pipe "${purescript}/bin/purs graph ${extra} ${globs} > $out"
                   [ (p.runCommand "purescript-dependency-graph" {})
                     readFile
                     # is this safe?
@@ -115,7 +133,12 @@ deps:
                 {};
 
             deps-graph = make-graph "";
-            graph = make-graph (make-srcs-str srcs);
+
+            graph =
+              make-graph
+                (make-srcs-str
+                   (srcs ++ (if include-test then [ test-src ] else []))
+                );
 
             partial =
               l.filterAttrs
@@ -164,8 +187,10 @@ deps:
             ""
             (l.mapAttrsToList l.nameValuePair combined);
 
-        build-single = name: local-deps:
+        build-single = { include-test ? false, name, local-deps }:
           let
+            copy = "cp --no-preserve=mode --preserve=timestamps -r";
+
             built-deps = args:
               mkDerivation
                 { name = "built-deps";
@@ -179,9 +204,26 @@ deps:
                   installPhase = "mv output $out";
                 };
 
+            all-built-deps = args:
+              mkDerivation
+                { name = "all-built-deps";
+                  phases = [ "buildPhase" "installPhase" ];
+
+                  buildPhase =
+                    if all-dep-globs != "" then
+                      ''
+                      ${copy} ${built-deps args} output
+                      ${u.compile purescript (args // { globs = all-dep-globs; })}
+                      ''
+                    else
+                      "mkdir output";
+
+                  installPhase = "mv output $out";
+                };
+
             src =
               let
-                graph-path = local-graph.${name}.path;
+                graph-path = (local-graph include-test).${name}.path;
 
                 purs-path =
                   let matches = match "/nix/store/[^/]+/(.+)$" graph-path; in
@@ -198,7 +240,7 @@ deps:
                       l.findFirst
                         (path: l.hasPrefix "${path}" graph-path)
                         (throw "should always find a match")
-                        srcs;
+                        (srcs ++ (if include-test then [ test-src ] else []));
 
                     relative-path = u.subtract-string graph-path "${src'}";
                     matches = match "(.+)/[^/]+$" relative-path;
@@ -210,7 +252,7 @@ deps:
                 (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
                 subsrc;
 
-            output = top-level: args:
+            output = { top-level ? true, include-test ? false }: args:
               let
                 args' =
                   if args?zephyr then
@@ -246,10 +288,15 @@ deps:
 
                       buildPhase =
                         let
+                          dg =
+                            if include-test
+                            then { deps = all-built-deps; globs = all-dep-globs; }
+                            else { deps = built-deps; globs = dep-globs; };
+
                           augmentations =
                             toString
                               (map
-                                 (a: "${a.bin args'} output;")
+                                 (a: "${a.bin args} output;")
                                  trans-deps
                               );
 
@@ -261,13 +308,13 @@ deps:
                               );
                         in
                         ''
-                        cp --no-preserve=mode --preserve=timestamps -r ${built-deps stripped} output
+                        ${copy} ${dg.deps stripped} output
                         ${if incremental then augmentations else ""}
 
                         ${u.compile
                             purescript
                             (stripped
-                             // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dep-globs}'';
+                             // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dg.globs}'';
                                   output = "output";
                                 }
                             )
@@ -280,7 +327,7 @@ deps:
               in
               p.runCommand "${name}-compiled" {}
                 ''
-                cp --no-preserve=mode --preserve=timestamps -r ${unzephyred} output
+                ${copy} ${unzephyred} output
 
                 ${if args'?zephyr
                   then "${ps-tools.for-0_14.zephyr}/bin/zephyr -f ${args'.zephyr}"
@@ -297,6 +344,7 @@ deps:
                 '';
 
             bundle =
+              include-test:
               { esbuild ? {}
               , main ? true
               , incremental ? true
@@ -305,7 +353,8 @@ deps:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
                    { entry-point =
-                       output true
+                       output
+                         { inherit include-test; }
                          ({ inherit incremental; }
                           // (if zephyr
                               then { zephyr = if main then "${name}.main" else name; }
@@ -319,6 +368,30 @@ deps:
                    }
                 );
 
+            script =
+              include-test:
+              { esbuild ? {}
+              , incremental ? true
+              , zephyr ? true
+              }:
+              let
+                bundle' =
+                  bundle include-test
+                    { esbuild =
+                        { minify = true; }
+                        // esbuild
+                        // { platform = "node"; };
+
+                      inherit incremental zephyr;
+                    };
+              in
+              p.runCommand "${name}-script" {}
+                ''
+                echo $'#! ${nodejs}/bin/node' > $out
+                cat ${bundle'} >> $out
+                chmod +x $out
+                '';
+
             app =
               { name
               , version ? null
@@ -327,34 +400,22 @@ deps:
               , incremental ? true
               , zephyr ? true
               }:
-              let command' = l.escapeShellArg command; in
               mkDerivation
                 ({ phases = [ "installPhase" ];
 
                    installPhase =
-                     let
-                       bundle' =
-                         bundle
-                           { esbuild =
-                               { minify = true; }
-                               // esbuild
-                               // { platform = "node"; };
-
-                             inherit incremental zephyr;
-                           };
-                     in
                      ''
                      mkdir -p $out/bin; cd $_
 
-                     echo $'#! ${nodejs}/bin/node' > ${command'}
-                     cat ${bundle'} >> ${command'}
-                     chmod +x ${command'}
+                     cp \
+                       ${script false { inherit esbuild incremental zephyr; }} \
+                       ${l.escapeShellArg command}
                      '';
                  }
                  // u.make-name name version
                 );
           in
-          { inherit bundle local-deps app name output src;
+          { inherit app bundle local-deps name output script src;
 
             bin = args:
               let
@@ -372,11 +433,11 @@ deps:
                     fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
                     '';
 
-                output' = output false args;
+                output' = output { top-level = false; } args;
               in
               p.writeShellScript name
                 ''
-                cp --no-preserve=mode --preserve=timestamps -r ${output'}/${name} $1/${name}
+                ${copy} ${output'}/${name} $1/${name}
                 ${merge-cache} ${output'}/cache-db.json $1/cache-db.json $1/cache-db.json
                 '';
           };
@@ -385,16 +446,34 @@ deps:
           mapAttrs
             (name: v:
                build-single
-                 name
-                 (map (v: builds.${v}) v.depends)
+                 { inherit name;
+                   local-deps = map (v: builds.${v}) v.depends;
+                 }
             )
-            local-graph;
+            (local-graph false);
+
+        all-builds =
+          mapAttrs
+            (name: v:
+               build-single
+                 { include-test = true;
+                   inherit name;
+                   local-deps = map (v: all-builds.${v}) v.depends;
+                 }
+            )
+            (local-graph true);
       in
       { dependencies = all-dependencies;
 
         modules =
           mapAttrs
-            (_: v: { inherit (v) bundle app; output = v.output true; })
+            (_: v:
+               { inherit (v) app;
+                 bundle = v.bundle false;
+                 output = v.output {};
+                 script = v.script false;
+               }
+            )
             builds;
 
         command =
@@ -413,8 +492,17 @@ deps:
                   (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
 
               srcs' = (a: if args?dir then args.srcs or a else a) [ "src" ];
+              test' = (a: if args?dir then args.test or a else a) "test";
+              test-module' = test-module;
               utils = u;
               foreign = foreign-stuff all-dependencies;
             };
+
+        test =
+          let v = all-builds.${test-module}; in
+          { bundle = v.bundle true;
+            output = v.output { include-test = true; };
+            script = v.script true;
+          };
       };
   }

@@ -27,3 +27,6 @@ main = do
   foreign1
   foreign2
   log a
+
+forTest :: String
+forTest = "test"

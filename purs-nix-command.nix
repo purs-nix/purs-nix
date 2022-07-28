@@ -8,6 +8,8 @@ with builtins;
 , purescript
 , repl-globs
 , srcs'
+, test'
+, test-module'
 , utils
 , foreign
 }:
@@ -17,8 +19,8 @@ with builtins;
 , bundle ? {}
 , compile ? {}
 , package ? {}
-, test ? "test"
-, test-module ? "Test.Main"
+, test ? test'
+, test-module ? test-module'
 , name ? "purs-nix"
 }:
   let
@@ -47,23 +49,15 @@ with builtins;
       ${bundle' args}
       '';
 
-    compile' =
+    make-compile = args:
       ''
-      ${u.compile
-          purescript
-            (compile
-             // { globs = globs.main;
-                  inherit output;
-                }
-            )
-      }
+      ${u.compile purescript (compile // args)}
       chmod -R u+w ${output}
       ${foreign output}
       '';
 
-
-    compile-test = args:
-      u.compile purescript (args // { globs = globs.all; inherit output; });
+    compile' = make-compile { globs = globs.main; inherit output; };
+    compile-test = make-compile { globs = globs.all; inherit output; };
 
     package-info =
       p.writeShellScript "package-info"
@@ -203,7 +197,7 @@ with builtins;
             ${node-command (bundle.module or "Main")};;
 
           test )
-            ${compile-test compile}
+            ${compile-test}
             ${node-command test-module};;
 
           repl )
