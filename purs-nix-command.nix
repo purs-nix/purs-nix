@@ -169,14 +169,14 @@ with builtins;
                all-dependencies
             );
 
-        node-command = module:
+        node-command = command: module:
           let import = "./${output}/${module}/index.js"; in
           ''
           ${nodejs}/bin/node \
             --preserve-symlinks \
             --input-type=module \
             -e 'import { main } from "${import}"; main()' \
-            -- "${name} run" "''${@:2}"
+            -- "${name} ${command}" "''${@:2}"
           '';
       in
       p.writeShellScript name
@@ -194,11 +194,11 @@ with builtins;
 
           run )
             ${compile'}
-            ${node-command (bundle.module or "Main")};;
+            ${node-command "run" (bundle.module or "Main")};;
 
           test )
             ${compile-test}
-            ${node-command test-module};;
+            ${node-command "test" test-module};;
 
           repl )
             if [[ ! -e .purs-repl ]]; then
