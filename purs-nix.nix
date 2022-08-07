@@ -279,7 +279,7 @@ deps:
                       augmentations =
                         toString
                           (map
-                             (a: "${a.bin args} output;")
+                             (a: "${a.bin include-test args} output;")
                              trans-deps
                           );
 
@@ -375,7 +375,7 @@ deps:
           in
           { inherit app bundle local-deps name output script src;
 
-            bin = args:
+            bin = include-test: args:
               let
                 merge-cache =
                   builders.write-js-script
@@ -391,7 +391,7 @@ deps:
                     fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
                     '';
 
-                output' = output { top-level = false; } args;
+                output' = output { inherit include-test; top-level = false; } args;
               in
               p.writeShellScript name
                 ''
