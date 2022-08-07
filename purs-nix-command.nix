@@ -28,7 +28,7 @@ with builtins;
     compiler-output = output;
 
     globs =
-      { all = ''${src-globs} ${test}/**/*.purs ${all-dep-globs}'';
+      { all = ''${src-globs} "${test}/**/*.purs" ${all-dep-globs}'';
         main = "${src-globs} ${dep-globs}";
         repl = "${src-globs} ${repl-globs}";
       };
