@@ -117,20 +117,17 @@ with builtins;
          // u.make-name name version
         );
 
-    ps-pkgs =
-      let
-        f = self:
-          import ./ps-pkgs.nix
-            { ps-pkgs = self;
-              inherit ps-pkgs-ns;
-            };
-      in
+    build-set = f:
       l.fix
         (self:
            mapAttrs
              (n: v: build (v // { name = n; }))
              (f self)
         );
+
+    ps-pkgs =
+      build-set
+      (import ./ps-pkgs.nix { inherit ps-pkgs-ns; });
 
     ps-pkgs-ns =
       let
@@ -147,4 +144,4 @@ with builtins;
              (f self)
         );
   in
-  { inherit build ps-pkgs ps-pkgs-ns; }
+  { inherit build build-set ps-pkgs ps-pkgs-ns; }

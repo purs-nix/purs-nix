@@ -6,7 +6,7 @@ deps:
     purescript' = ps-tools.for-0_15.purescript;
     ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
-  { inherit (ps-package-stuff) build ps-pkgs ps-pkgs-ns;
+  { inherit (ps-package-stuff) build build-set ps-pkgs ps-pkgs-ns;
     inherit (pkgs) esbuild;
     inherit (pkgs.lib) licenses;
     purescript = purescript';

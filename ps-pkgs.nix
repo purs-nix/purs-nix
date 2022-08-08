@@ -1,5 +1,6 @@
-{ ps-pkgs, ... }:
-  with ps-pkgs;
+_:
+self:
+  with self;
   { event =
       let info = hyrule.purs-nix-info; in
       { src.git = { inherit (info) repo rev; };
@@ -30,4 +31,4 @@
           };
       };
   }
-  // import ./official-package-set ps-pkgs
+  // import ./official-package-set self
