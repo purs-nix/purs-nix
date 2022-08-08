@@ -36,6 +36,8 @@ with builtins;
           then get-ref args args
           else get-ref args.src.git args.info;
 
+        info' = args.info or null;
+
         src =
           let
             fetch-git = { repo, rev, ... }:
@@ -53,16 +55,26 @@ with builtins;
             if src'?git then
               fetch-git src'.git
             else if src'?path then
-              src'.path
+              filterSource
+                (path: type:
+                   type == "directory"
+                   || l.hasSuffix ".purs" path
+                   || l.hasSuffix ".js" path
+                   || l.hasSuffix "bower.json" path
+                   || (if isPath info'
+                       then l.hasSuffix (toString args.info) path
+                       else false
+                      )
+                )
+                src'.path
             else
               abort "'src' has no 'flake', 'git', or 'path' attribute";
 
         info =
-          let info' = args.info or null; in
           if isPath info' then
             let
               check-arg = "_accepts-future-args-check";
-              f = import (src + info');
+              f = import (src + toString info');
             in
             if (l.functionArgs f)?${check-arg} then
               abort "${name}: The info function expects a '${check-arg}' attribute. The purpose of this attribute is to ensure the info function will not break if new arguments are added. If you're encountering this error, it's likely the fix you're looking for is to use the `...` syntax."
