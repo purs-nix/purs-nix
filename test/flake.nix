@@ -202,12 +202,12 @@
                      "echo ${toString (length ps.dependencies)}"
                      (i: "[[ ${i} == 47 ]]");
 
-                 "test script defaults" =
+                 "test run defaults" =
                    make-test "expected output"
                      "${ps.test.run {}}"
                      (i: "[[ ${i} == testing ]]");
 
-                 "test script configured" =
+                 "test run configured" =
                    make-test "expected output"
                      "${(ps-custom { test = "test-dir"; test-module = "Test.Test"; })
                           .test.run {}
