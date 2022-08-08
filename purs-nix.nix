@@ -344,7 +344,6 @@ deps:
                 '';
 
             bundle =
-              include-test:
               { esbuild ? {}
               , main ? true
               , incremental ? true
@@ -353,8 +352,7 @@ deps:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
                    { entry-point =
-                       output
-                         { inherit include-test; }
+                       output {}
                          ({ inherit incremental; }
                           // (if zephyr
                               then { zephyr = if main then "${name}.main" else name; }
@@ -369,14 +367,13 @@ deps:
                 );
 
             script =
-              include-test:
               { esbuild ? {}
               , incremental ? true
               , zephyr ? true
               }:
               let
                 bundle' =
-                  bundle include-test
+                  bundle
                     { esbuild =
                         { minify = true; }
                         // esbuild
@@ -408,7 +405,7 @@ deps:
                      mkdir -p $out/bin; cd $_
 
                      cp \
-                       ${script false { inherit esbuild incremental zephyr; }} \
+                       ${script { inherit esbuild incremental zephyr; }} \
                        ${l.escapeShellArg command}
                      '';
                  }
@@ -468,10 +465,8 @@ deps:
         modules =
           mapAttrs
             (_: v:
-               { inherit (v) app;
-                 bundle = v.bundle false;
+               { inherit (v) bundle script app;
                  output = v.output {};
-                 script = v.script false;
                }
             )
             builds;
@@ -499,10 +494,28 @@ deps:
             };
 
         test =
-          let v = all-builds.${test-module}; in
-          { bundle = v.bundle true;
-            output = v.output { include-test = true; };
-            script = v.script true;
+          rec
+          { run = args:
+              let
+                output =
+                  all-builds.${test-module}.output
+                    { include-test = true; }
+                    args;
+              in
+              p.writeScript "${test-module}-run"
+                (u.node-command
+                   { argv-1 = "${test-module}-run";
+                     inherit nodejs;
+                     import = "${output}/${test-module}/index.js";
+                   }
+                );
+
+            check = args:
+              p.runCommand "${test-module}-check" {}
+                ''
+                ${run args}
+                touch $out
+                '';
           };
       };
   }
