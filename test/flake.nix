@@ -36,13 +36,17 @@
                };
 
            l = p.lib; p = pkgs;
-           inherit (purs-nix) ps-pkgs purs;
+           inherit (purs-nix) ps-pkgs ps-pkgs-ns purs;
            package = import ./package.nix purs-nix-test-packages purs-nix;
 
            ps-custom = { dir ? ./., ...}@args:
              purs
                ({ inherit (package) dependencies;
-                  test-dependencies = [ ps-pkgs."assert" ];
+                  test-dependencies =
+                    [ ps-pkgs."assert"
+                      ps-pkgs-ns.ursi.murmur3
+                    ];
+
                   srcs = [ "src" "src2" ];
 
                   foreign =
@@ -62,7 +66,7 @@
            ps2 =
              purs
                { dependencies =
-                   let inherit (purs-nix.ps-pkgs-ns) ursi; in
+                   let inherit (ps-pkgs-ns) ursi; in
                    with ps-pkgs;
                    [ console
                      effect
@@ -200,7 +204,7 @@
                  "ps.dependencies" =
                    make-test "expected number"
                      "echo ${toString (length ps.dependencies)}"
-                     (i: "[[ ${i} == 47 ]]");
+                     (i: "[[ ${i} == 48 ]]");
 
                  "test run defaults" =
                    make-test "expected output"
@@ -376,7 +380,8 @@
                                     unsafe-coerce: 6.0.0
                                     purs-nix.build-test: 1.0.0
                                     purs-nix.is-even: 1.0.0
-                                    purs-nix.is-odd: 1.0.0"
+                                    purs-nix.is-odd: 1.0.0
+                                    ursi.murmur3"
 
                                     [[ ${i} == $packages ]]
                                     ''
