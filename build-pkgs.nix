@@ -139,8 +139,6 @@ with builtins;
             { inherit ps-pkgs;
               ps-pkgs-ns = self;
             };
-
-        l = pkgs.lib;
       in
       l.fix
         (self:
