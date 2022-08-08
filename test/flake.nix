@@ -42,7 +42,11 @@
            ps-custom = { dir ? ./., ...}@args:
              purs
                ({ inherit (package) dependencies;
-                  test-dependencies = [ ps-pkgs."assert" ];
+                  test-dependencies =
+                    [ ps-pkgs."assert"
+                      ps-pkgs.markdown-it
+                    ];
+
                   srcs = [ "src" "src2" ];
 
                   foreign =
@@ -227,14 +231,14 @@
                  "ps.dependencies" =
                    make-test "expected number"
                      "echo ${toString (length ps.dependencies)}"
-                     (i: "[[ ${i} == 43 ]]");
+                     (i: "[[ ${i} == 52 ]]");
 
-                 "test script defaults" =
+                 "test run defaults" =
                    make-test "expected output"
                      "${ps.test.run {}}"
                      (i: "[[ ${i} == testing ]]");
 
-                 "test script configured" =
+                 "test run configured" =
                    make-test "expected output"
                      "${(ps-custom { test = "test-dir"; test-module = "Test.Test"; })
                           .test.run {}

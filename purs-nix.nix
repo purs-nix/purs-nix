@@ -281,6 +281,18 @@ deps:
                   in
                   l.unique (go local-deps);
 
+                dg =
+                  if include-test then
+                    { deps-drv = all-built-deps;
+                      deps-list = all-dependencies;
+                      globs = all-dep-globs;
+                    }
+                  else
+                    { deps-drv = built-deps;
+                      deps-list = dependencies;
+                      globs = dep-globs;
+                    };
+
                 unzephyred =
                   mkDerivation
                     { name = "${name}-compiled-unzephyred";
@@ -288,11 +300,6 @@ deps:
 
                       buildPhase =
                         let
-                          dg =
-                            if include-test
-                            then { deps = all-built-deps; globs = all-dep-globs; }
-                            else { deps = built-deps; globs = dep-globs; };
-
                           augmentations =
                             toString
                               (map
@@ -308,7 +315,7 @@ deps:
                               );
                         in
                         ''
-                        ${copy} ${dg.deps stripped} output
+                        ${copy} ${dg.deps-drv stripped} output
                         ${if incremental then augmentations else ""}
 
                         ${u.compile
@@ -338,7 +345,7 @@ deps:
                 cd $out
 
                 ${if top-level
-                  then foreign-stuff dependencies "."
+                  then foreign-stuff dg.deps-list "."
                   else ""
                 }
                 '';
