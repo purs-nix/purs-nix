@@ -204,13 +204,13 @@
 
                  "test script defaults" =
                    make-test "expected output"
-                     "${ps.test.script {}}"
+                     "${ps.test.run {}}"
                      (i: "[[ ${i} == testing ]]");
 
                  "test script configured" =
                    make-test "expected output"
                      "${(ps-custom { test = "test-dir"; test-module = "Test.Test"; })
-                          .test.script {}
+                          .test.run {}
                       }"
                      (i: "[[ ${i} == testing ]]");
 
@@ -233,7 +233,7 @@
                    make-test "expected output"
                      "${(ps-custom
                            { dir = null; srcs = [ ./src ./src2 ]; test = ./test;}
-                        ).test.script {}
+                        ).test.run {}
                       }"
                      (i: "[[ ${i} == testing ]]");
                }
@@ -529,7 +529,8 @@
                             );
                       };
                   }
-                  // (if switches.packages then package-tests else {});
+                  // (if switches.packages then package-tests else {})
+                  // { "'check' api" = ps.test.check {}; };
 
            devShells.default =
              make-shell

@@ -170,14 +170,11 @@ with builtins;
             );
 
         node-command = command: module:
-          let import = "./${output}/${module}/index.js"; in
-          ''
-          ${nodejs}/bin/node \
-            --preserve-symlinks \
-            --input-type=module \
-            -e 'import { main } from "${import}"; main()' \
-            -- "${name} ${command}" "''${@:2}"
-          '';
+          u.node-command
+            { argv-1 = "${name} ${command}";
+              inherit nodejs;
+              import = "./${output}/${module}/index.js";
+            };
       in
       p.writeShellScript name
         ''

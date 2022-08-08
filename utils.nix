@@ -97,6 +97,19 @@ p:
       else
         { pname = name; inherit version; };
 
+    node-command =
+      { argv-1
+      , import
+      , nodejs
+      }:
+      ''
+      ${nodejs}/bin/node \
+        --preserve-symlinks \
+        --input-type=module \
+        -e 'import { main } from "${import}"; main()' \
+        -- "${argv-1}" "''${@:2}"
+      '';
+
     package-info = pkg:
       let info = pkg.purs-nix-info; in
       ''
