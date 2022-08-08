@@ -6,7 +6,7 @@ deps:
     purescript' = ps-tools.for-0_14.purescript;
     ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
-  { inherit (ps-package-stuff) build ps-pkgs ps-pkgs-ns;
+  { inherit (ps-package-stuff) build build-set ps-pkgs ps-pkgs-ns;
     inherit (pkgs) esbuild;
     inherit (pkgs.lib) licenses;
     purescript = purescript';
@@ -296,7 +296,7 @@ deps:
                           augmentations =
                             toString
                               (map
-                                 (a: "${a.bin args} output;")
+                                 (a: "${a.bin include-test args} output;")
                                  trans-deps
                               );
 
@@ -417,7 +417,7 @@ deps:
           in
           { inherit app bundle local-deps name output script src;
 
-            bin = args:
+            bin = include-test: args:
               let
                 merge-cache =
                   builders.write-js-script
@@ -433,7 +433,7 @@ deps:
                     fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
                     '';
 
-                output' = output { top-level = false; } args;
+                output' = output { inherit include-test; top-level = false; } args;
               in
               p.writeShellScript name
                 ''

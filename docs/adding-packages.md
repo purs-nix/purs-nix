@@ -90,12 +90,15 @@ Here's an example:
 ```
 
 The arguments that are currently passed are:\
-`build` `ps-pkgs` `ps-pkgs-ns` [`licenses`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix)
+`build` `build-set` `ps-pkgs` `ps-pkgs-ns` [`licenses`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix)
 
 ## <code id="user-content-build">build</code>
 purs-nix exports a `build` function that can be used to add packages to your project from arbitrary sources. It takes an argument in mostly the same form as described above, but with a few differences.
 - `name`: You must specify a name attribute for the package.
 - `src.path`: This is another type of source you can specify for `build` (and technically the package set as well). `src.path` takes a path or derivation that points to the source of the package.
+
+## <code id="user-content-build-set">build-set</code>
+purs-nix exports a `build-set` function that can be used to add packages to your project from arbitrary sources. It is used to build the standard `ps-pkgs` package set and therefore takes an attrset in the same form shown above.
 
 ## Package Set: Flake
 

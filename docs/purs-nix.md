@@ -7,6 +7,7 @@
 ```
 and returns an attribute set with the following attributes:
 - `build`: A function for creating ad hoc PureScript packages. See: [build](adding-packages.md#user-content-build).
+- `build-set`: A function for creating ad hoc PureScript packages en masse. See: [build](adding-packages.md#user-content-build-set).
 - `esbuild`/`purescript`: The esbuild/PureScript packages used for everything by default.
 - `ps-pkgs`: The attribute set of all non-namespaced PureScript pacakges.
 - `ps-pkgs-ns`: The attribute set of all namespaced PureScript packages.

@@ -1,5 +1,6 @@
-{ ps-pkgs, ... }:
-  with ps-pkgs;
+_:
+self:
+  with self;
   { aeson =
       { src.git =
           { repo = "https://github.com/mlabs-haskell/purescript-aeson.git";
@@ -367,7 +368,7 @@
 
            dependencies =
              [ arrays
-               ps-pkgs."assert"
+               self."assert"
                console
                effect
                lazy
@@ -387,7 +388,7 @@
          };
       };
   }
-  // import ./official-package-set ps-pkgs
+  // import ./official-package-set self
   // { event =
          { src.git =
              { repo = "https://github.com/ursi/purescript-event.git";
