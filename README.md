@@ -37,3 +37,7 @@ This is an incomplete list of things that are currently planned.
 
 - **FAQ/How To's:** I'd like to have an FAQ, but first I see which Qs are FA'd.
 - **Module renaming:** Since there is no more global module namespace, you may find that two packages have the same module name and cannot compile together. I think arbitrary module renaming should be possible, so I plan to explore this as a solution. Something like: `html-module.rename-module "Html" "HtmlModule.Html"`. I'd also like to add opt-in module name prefixing for indirect dependencies, to guarantee they never collide.
+
+## Actively Maintained
+
+This project is actively maintained by [<img src="https://platonic.systems/logo.svg" height="25" width="25" alt="Platonic Systems" /> Platonic.Systems](https://platonic.systems)
