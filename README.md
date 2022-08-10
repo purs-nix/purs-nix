@@ -53,4 +53,4 @@ This is an incomplete list of things that are currently planned.
 
 ## Actively Maintained
 
-This project is actively maintained by [<img src="https://platonic.systems/logo.svg" height="25" width="25" alt="Platonic Systems" /> Platonic.Systems](https://platonic.systems)
+This project is actively maintained by [<img src="https://platonic.systems/logo.svg" height="25" width="25" alt=""> Platonic.Systems](https://platonic.systems)
