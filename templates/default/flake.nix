@@ -6,11 +6,11 @@
     };
 
   outputs = { nixpkgs, utils, ... }@inputs:
-    utils.lib.eachDefaultSystem
+    utils.lib.eachSystem [ "x86_64-linux" "x86_64-darwin" ]
       (system:
          let
            pkgs = nixpkgs.legacyPackages.${system};
-           # ps-tools = inputs.ps-tools.legacyPackages.${system};
+           ps-tools = inputs.ps-tools.legacyPackages.${system};
            purs-nix = inputs.purs-nix { inherit system; };
 
            ps =
@@ -31,15 +31,18 @@
              pkgs.mkShell
                { packages =
                    with pkgs;
-                   [ # entr
+                   [ entr
                      nodejs
                      (ps.command {})
-                     # ps-tools.for-0_15.purescript-language-server
+                     ps-tools.for-0_15.purescript-language-server
                      purs-nix.esbuild
                      purs-nix.purescript
                    ];
 
-                 # aliases.watch = "find src | entr -s 'echo bundling; purs-nix bundle'";
+                 shellHook =
+                   ''
+                   alias watch="find src | entr -s 'echo bundling; purs-nix bundle'"
+                   '';
                };
          }
       );

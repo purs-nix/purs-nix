@@ -6,7 +6,7 @@
     };
 
   outputs = { nixpkgs, utils, ... }@inputs:
-    utils.lib.eachDefaultSystem
+    utils.lib.eachSystem [ "x86_64-linux" "x86_64-darwin" ]
       (system:
          let
            pkgs = nixpkgs.legacyPackages.${system};
@@ -30,7 +30,7 @@
                      nodePackages.bower
                      (ps.command {})
                      ps-tools.for-0_15.pulp
-                     # ps-tools.for-0_15.purescript-language-server
+                     ps-tools.for-0_15.purescript-language-server
                      purs-nix.esbuild
                      purs-nix.purescript
                    ];
