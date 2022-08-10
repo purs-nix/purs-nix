@@ -1,8 +1,7 @@
 with builtins;
-deps:
+{ builders, docs-search, pkgs, ps-tools }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
-    inherit (deps) builders docs-search pkgs ps-tools;
     purescript' = ps-tools.for-0_14.purescript;
     ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in

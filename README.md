@@ -4,14 +4,14 @@
 
 **This project is currently unstable**. That being said, most of the current API has been stable for some time, and we try to maintain backwards compatibility when introducing new APIs if possible.
 
-## Gettings Started (flakes)
+## Gettings Started
 
 - [Setup nix](docs/nix.md).
 - Run `nix flake init -t github:purs-nix/purs-nix` in a new directory to initialize a new project.
 - Run `nix develop` to enter a Nix shell with the `purs-nix` command added to your `PATH`.
 - Run `purs-nix run` to see the output of the default project.
 
-## Getting Started (Nix stable)
+## Getting Started (non-flakes)
 
 - [Install Nix](https://nixos.org/download.html#nix-quick-install)
 - Copy the template from [templates/default](templates/default), and then replace `flake.nix` with [templates/shell.nix](templates/shell.nix).
@@ -53,4 +53,4 @@ This is an incomplete list of things that are currently planned.
 
 ## Actively Maintained
 
-This project is actively maintained by [<img src="https://platonic.systems/logo.svg" height="25" width="25" alt="Platonic Systems" /> Platonic.Systems](https://platonic.systems)
+This project is actively maintained by [<img src="https://platonic.systems/logo.svg" height="25" width="25" alt=""> Platonic.Systems](https://platonic.systems)

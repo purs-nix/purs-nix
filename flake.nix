@@ -19,7 +19,13 @@
   outputs = { get-flake, utils, ... }@inputs:
     with builtins;
     { __functor = _: { system }:
-        import ./purs-nix.nix (import ./deps.nix { inherit inputs system; });
+        import ./purs-nix.nix
+          rec
+          { builders = inputs.builders { inherit pkgs; };
+            docs-search = (get-flake inputs.docs-search).packages.${system}.default;
+            pkgs = inputs.nixpkgs.legacyPackages.${system};
+            ps-tools = inputs.ps-tools.legacyPackages.${system};
+          };
 
       templates =
         { default =
