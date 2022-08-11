@@ -61,18 +61,13 @@
               build-pkgs = import ./build-pkgs.nix { inherit pkgs; utils = u; };
               inherit (build-pkgs) ps-pkgs ps-pkgs-ns;
             in
-            { apps =
+            { legacyPackages =
                 { package-info =
                     mapAttrs
                       (_: v:
-                         { type = "app";
-                           program =
-                             toString
-                               (p.writeScript
-                                  "package-info-${v.name}"
-                                  (u.package-info v)
-                               );
-                         }
+                         p.writeScriptBin
+                           v.purs-nix-info.name
+                           (u.package-info v)
                       )
                       ps-pkgs;
 
@@ -81,14 +76,9 @@
                       (_:
                          mapAttrs
                            (_: v:
-                              { type = "app";
-                                program =
-                                  toString
-                                    (p.writeScript
-                                         "package-info-${v.name}"
-                                         (u.package-info v)
-                                    );
-                              }
+                              p.writeScriptBin
+                                v.purs-nix-info.name
+                                (u.package-info v)
                            )
                       )
                       ps-pkgs-ns;
