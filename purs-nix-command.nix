@@ -82,9 +82,9 @@ with builtins;
             (map
                (pkg:
                   let info = pkg.purs-nix-info; in
-                  if info.version == null
-                  then "echo ${info.name}"
-                  else "echo ${info.name}: ${info.version}"
+                  if u.has-version pkg
+                  then "echo ${info.name}: ${info.version}"
+                  else "echo ${info.name}"
                )
                all-dependencies
             )

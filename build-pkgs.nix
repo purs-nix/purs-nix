@@ -103,7 +103,7 @@ with builtins;
 
            passthru =
              { purs-nix-info =
-                 { inherit dependencies name version;
+                 { inherit dependencies name;
                    src = ps-src;
                  }
                  // (if legacy then
@@ -119,6 +119,7 @@ with builtins;
                      then { bower-json = src + /bower.json; }
                      else {}
                     )
+                 // add-optional "version"
                  // add-optional "foreign"
                  // add-optional "pursuit";
              };
