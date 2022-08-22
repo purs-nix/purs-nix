@@ -110,11 +110,23 @@ p:
         -- "${argv-1}" "''${@:2}"
       '';
 
+    has-version = pkg:
+      let info = pkg.purs-nix-info; in
+      if info?version then
+        if info.version == null then
+          l.warn
+            "the package '${info.name}' is built with an old version of purs-nix, please update it if possible"
+            false
+        else
+          true
+      else
+        false;
+
     package-info = pkg:
       let info = pkg.purs-nix-info; in
       ''
       echo "name:    ${info.name}"
-      echo "version: ${if info.version == null then "none" else info.version}"
+      echo "version: ${if has-version pkg then info.version else "none"}"
       ${if info?flake then
           ''
           echo "flake:   ${info.flake.url}"

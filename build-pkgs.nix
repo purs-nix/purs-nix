@@ -60,7 +60,6 @@ with builtins;
                    type == "directory"
                    || l.hasSuffix ".purs" path
                    || l.hasSuffix ".js" path
-                   || l.hasSuffix "bower.json" path
                    || (if isPath info'
                        then l.hasSuffix (toString args.info) path
                        else false
@@ -103,7 +102,7 @@ with builtins;
 
            passthru =
              { purs-nix-info =
-                 { inherit dependencies name version;
+                 { inherit dependencies name;
                    src = ps-src;
                  }
                  // (if legacy then
@@ -115,10 +114,7 @@ with builtins;
                      else
                        {}
                     )
-                 // (if (readDir src)?"bower.json"
-                     then { bower-json = src + /bower.json; }
-                     else {}
-                    )
+                 // add-optional "version"
                  // add-optional "foreign"
                  // add-optional "pursuit";
              };

@@ -82,9 +82,9 @@ with builtins;
             (map
                (pkg:
                   let info = pkg.purs-nix-info; in
-                  if info.version == null
-                  then "echo ${info.name}"
-                  else "echo ${info.name}: ${info.version}"
+                  if u.has-version pkg
+                  then "echo ${info.name}: ${info.version}"
+                  else "echo ${info.name}"
                )
                all-dependencies
             )
@@ -159,13 +159,34 @@ with builtins;
       let
         bowers =
           toString
-            (foldl'
-               (acc: dep:
-                  if dep.purs-nix-info?bower-json
-                  then [ ''--bower-jsons ${dep.purs-nix-info.bower-json}'' ] ++ acc
-                  else acc
+            (map
+               (dep:
+                  let
+                    bower-json =
+                      let info = dep.purs-nix-info; in
+                      toFile "${info.name}-bower.json"
+                        (toJSON
+                           ({ inherit (info) name;
+
+                              dependencies =
+                                foldl'
+                                  (acc: dep:
+                                     acc // { ${dep.purs-nix-info.name} = ""; }
+                                  )
+                                  {}
+                                  info.dependencies;
+                            }
+                            // l.optionalAttrs (info?repo)
+                                 { repository =
+                                     { type = "git";
+                                       url = info.repo;
+                                     };
+                                 }
+                           )
+                        );
+                  in
+                  "--bower-jsons ${bower-json}"
                )
-               []
                all-dependencies
             );
 
