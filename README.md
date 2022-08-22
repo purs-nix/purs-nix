@@ -44,13 +44,6 @@
 
   - To view the info or a namespaced package, use `nix run github:purs-nix/purs-nix#package-info-ns.<namespace>.<package-name>`.
 
-## TODO
-
-This is an incomplete list of things that are currently planned.
-
-- **FAQ/How To's:** I'd like to have an FAQ, but first I see which Qs are FA'd.
-- **Module renaming:** Since there is no more global module namespace, you may find that two packages have the same module name and cannot compile together. I think arbitrary module renaming should be possible, so I plan to explore this as a solution. Something like: `html-module.rename-module "Html" "HtmlModule.Html"`. I'd also like to add opt-in module name prefixing for indirect dependencies, to guarantee they never collide.
-
 ## Contributing / Mirrors
 
 Bug reports and patches are always welcome. Feature requests and new features are also welcome, but please consider discussing them with the maintainer first.
