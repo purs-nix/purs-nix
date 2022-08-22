@@ -42,11 +42,14 @@
       info = /package.nix;
     };
 
-  # producer =
-  #   { repo = "https://github.com/ursi/purescript-producer.git";
-  #     rev = "3e5a9e1be5b3e2fa37e36d5abab5753b987f2996";
-  #     info = /package.nix;
-  #   };
+  producer =
+    { src.git =
+        { repo = "https://github.com/ursi/purescript-producer.git";
+          rev = "209a66fe1ce243b789637dc5289777b45c90f95e";
+        };
+
+      info = /package.nix;
+    };
 
   refeq =
     { src.git =
