@@ -1,7 +1,8 @@
 with builtins;
 let
   l = p.lib; p = pkgs;
-  inherit (import ../deps.nix { system = currentSystem; }) pkgs;
+  get-flake = getFlake "github:ursi/get-flake/703f15558daa56dfae19d1858bb3046afe68831a";
+  pkgs = (get-flake ../.).inputs.nixpkgs.legacyPackages.${currentSystem};
   package-set-repo = fetchGit "https://github.com/purescript/package-sets";
   packages = l.importJSON (package-set-repo + /packages.json);
 
