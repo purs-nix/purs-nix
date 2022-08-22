@@ -525,9 +525,9 @@
                             (i: ''
                                 info="name:    ursi.murmur3
                                 version: none
-                                flake:   github:ursi/purescript-murmur3/2ac1505a1a79bb62bf4a0d7c0a6ab61e3819c7cf
+                                flake:   github:ursi/purescript-murmur3/3aec0007073128b807a58adace08ee2b1197334b
                                 package: default
-                                source:  /nix/store/zxjg5xkji3clzhg5qqi7rsqcgkl329x1-ursi.murmur3"
+                                source:  /nix/store/gb8qj76dpmy4cgb0zp6xmbn2ial1abxi-ursi.murmur3"
 
                                 [[ ${i} == $info ]]
                                 ''

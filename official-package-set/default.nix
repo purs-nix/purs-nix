@@ -168,11 +168,11 @@ argonaut =
 argonaut-codecs =
   { src.git =
       { repo = "https://github.com/purescript-contrib/purescript-argonaut-codecs.git";
-        rev = "176a5dddae28fda9a2ff31ed4bf1efcc148513a4";
+        rev = "f8fdc1e34142fa84e66022ea5d417a008d709146";
       };
 
     info =
-      { version = "9.0.0";
+      { version = "9.1.0";
 
         dependencies =
           [ argonaut-core arrays effect foreign-object identity integers maybe nonempty ordered-collections prelude record 
@@ -438,11 +438,11 @@ bigints =
 bolson =
   { src.git =
       { repo = "https://github.com/mikesol/purescript-bolson.git";
-        rev = "dd6ed27560b2da4dcedc993334ed38967a0af743";
+        rev = "1856454bf978ad6748c8f3670a23483a3a74e2c4";
       };
 
     info =
-      { version = "0.0.6";
+      { version = "0.1.1";
 
         dependencies =
           [ control effect fast-vect filterable foldable-traversable foreign-object heterogeneous hyrule maybe monoid-extras prelude st tuples unsafe-coerce 
@@ -798,14 +798,14 @@ decimals =
 deku =
   { src.git =
       { repo = "https://github.com/mikesol/purescript-deku.git";
-        rev = "8779d94a93398cb5274f65f52201213bedfd89ee";
+        rev = "b1cb12c2ffd84230dc2bd5e143be1b2651a505bc";
       };
 
     info =
-      { version = "0.4.13";
+      { version = "0.6.0";
 
         dependencies =
-          [ arrays bolson control effect fast-vect filterable foldable-traversable foreign-object heterogeneous hyrule maybe monoid-extras newtype ordered-collections prelude profunctor quickcheck record refs safe-coerce st strings transformers unsafe-coerce web-dom web-events web-html 
+          [ aff arrays bolson control effect fast-vect filterable foldable-traversable foreign-object heterogeneous hyrule maybe monoid-extras newtype ordered-collections prelude profunctor quickcheck record refs safe-coerce st strings transformers unsafe-coerce web-dom web-events web-html 
           ];
       };
   };
@@ -881,6 +881,21 @@ dom-indexed =
 
         dependencies =
           [ media-types prelude web-clipboard web-pointerevents web-touchevents 
+          ];
+      };
+  };
+
+dotenv =
+  { src.git =
+      { repo = "https://github.com/nsaunders/purescript-dotenv.git";
+        rev = "37eb752b1df3ef90fa228bd53f9f18dac8815c20";
+      };
+
+    info =
+      { version = "3.0.0";
+
+        dependencies =
+          [ aff arrays control effect either exceptions foldable-traversable maybe node-buffer node-child-process node-fs-aff node-process parsing prelude run strings sunde transformers tuples 
           ];
       };
   };
@@ -1038,11 +1053,11 @@ encoding =
 enums =
   { src.git =
       { repo = "https://github.com/purescript/purescript-enums.git";
-        rev = "bae47961d401f9acf88da38f32e87403e5f0cf2f";
+        rev = "bf8cd640314f051a910a2df4427f0b99529c098c";
       };
 
     info =
-      { version = "6.0.0";
+      { version = "6.0.1";
 
         dependencies =
           [ control either gen maybe newtype nonempty partial prelude tuples unfoldable 
@@ -1121,6 +1136,66 @@ fast-vect =
 
         dependencies =
           [ arrays filterable foldable-traversable lists maybe ordered-collections prelude profunctor tuples unfoldable 
+          ];
+      };
+  };
+
+fetch =
+  { src.git =
+      { repo = "https://github.com/rowtype-yoga/purescript-fetch.git";
+        rev = "0bb2d88e10a2d86fa380c253e6ae875e1ef1175f";
+      };
+
+    info =
+      { version = "1.1.0";
+
+        dependencies =
+          [ aff aff-promise arraybuffer-types effect fetch-core foreign http-methods newtype prelude record typelevel-prelude unsafe-coerce web-file web-promise web-streams 
+          ];
+      };
+  };
+
+fetch-argonaut =
+  { src.git =
+      { repo = "https://github.com/rowtype-yoga/purescript-fetch-argonaut.git";
+        rev = "313922aa852bb87b05a0c3e215970d11756fd320";
+      };
+
+    info =
+      { version = "1.0.0";
+
+        dependencies =
+          [ aff argonaut console effect either foreign prelude transformers unsafe-coerce 
+          ];
+      };
+  };
+
+fetch-core =
+  { src.git =
+      { repo = "https://github.com/rowtype-yoga/purescript-fetch-core.git";
+        rev = "56271c741ee4c6e7125b4c09b157c2b806d46d4c";
+      };
+
+    info =
+      { version = "4.0.4";
+
+        dependencies =
+          [ arraybuffer-types arrays console effect foldable-traversable foreign foreign-object functions http-methods maybe newtype nullable prelude record tuples typelevel-prelude unfoldable unsafe-coerce web-file web-promise web-streams 
+          ];
+      };
+  };
+
+fetch-yoga-json =
+  { src.git =
+      { repo = "https://github.com/rowtype-yoga/purescript-fetch-yoga-json.git";
+        rev = "19994479fe7d76848d84ab3ff6eb181b828956fd";
+      };
+
+    info =
+      { version = "1.1.0";
+
+        dependencies =
+          [ aff either exceptions foreign lists prelude transformers yoga-json 
           ];
       };
   };
@@ -1833,11 +1908,11 @@ httpurple-yoga-json =
 hyrule =
   { src.git =
       { repo = "https://github.com/mikesol/purescript-hyrule.git";
-        rev = "5e546a8d00c55fa5f4a2a3b79b37a0071e2bcb27";
+        rev = "260a65cbbdeaaabd061f37b0f463ed93461e5f1f";
       };
 
     info =
-      { version = "2.0.0";
+      { version = "2.1.0";
 
         dependencies =
           [ arrays control datetime effect either filterable foldable-traversable js-timers lists maybe monoid-extras newtype now ordered-collections partial prelude profunctor record refs st tuples unsafe-coerce unsafe-reference web-events web-html web-uievents 
@@ -2778,11 +2853,11 @@ numbers =
 ocarina =
   { src.git =
       { repo = "https://github.com/mikesol/purescript-ocarina.git";
-        rev = "014692a67b364199a7c4a953a3ce0ef20fb8867c";
+        rev = "029f1c34703ca99a146f9c3241b6cb7d82d074b0";
       };
 
     info =
-      { version = "1.2.0";
+      { version = "1.3.0";
 
         dependencies =
           [ aff aff-promise arraybuffer-types avar bolson control convertable-options effect either exceptions fast-vect foldable-traversable foreign foreign-object homogeneous hyrule indexed-monad integers js-timers lists maybe newtype numbers ordered-collections prelude profunctor profunctor-lenses random refs safe-coerce simple-json sized-vectors tuples type-equality typelevel typelevel-prelude unsafe-coerce unsafe-reference variant web-events web-file web-html 
@@ -3138,11 +3213,11 @@ precise-datetime =
 prelude =
   { src.git =
       { repo = "https://github.com/purescript/purescript-prelude.git";
-        rev = "32787f4399c92459c41602131a5858559eb868c5";
+        rev = "d71bc5e81f59a401005970ceaf233a1d62f21d8f";
       };
 
     info =
-      { version = "6.0.0";
+      { version = "6.0.1";
 
         dependencies =
           [ 
@@ -3543,11 +3618,11 @@ react-halo =
 react-icons =
   { src.git =
       { repo = "https://github.com/andys8/purescript-react-icons.git";
-        rev = "e224af3b292210a2224b7faeffc4e070017ad07a";
+        rev = "9233873af23d1dacf941f94b217af621d3c824d8";
       };
 
     info =
-      { version = "1.0.7";
+      { version = "1.0.8";
 
         dependencies =
           [ react-basic react-basic-dom unsafe-coerce 
@@ -3708,11 +3783,11 @@ ring-modules =
 rito =
   { src.git =
       { repo = "https://github.com/mikesol/purescript-rito.git";
-        rev = "998111bb2aed41317d9a06a52816b3a4f914b0f0";
+        rev = "a930b0fe31cac6bc59fea0246ea586a369f9e804";
       };
 
     info =
-      { version = "0.0.2";
+      { version = "0.1.0";
 
         dependencies =
           [ aff aff-promise arrays bolson control convertable-options deku effect either exceptions exists fast-vect foldable-traversable foreign foreign-object heterogeneous hyrule integers maybe newtype numbers prelude profunctor random record refs safe-coerce tuples unsafe-coerce variant web-dom web-html web-touchevents web-uievents 
@@ -4068,11 +4143,11 @@ string-parsers =
 strings =
   { src.git =
       { repo = "https://github.com/purescript/purescript-strings.git";
-        rev = "4bc6954448d056f8aa7a659695a6ad60ad4fdf19";
+        rev = "04f0730b2e4892f9a2b92a5cc2ba74f81c2039a2";
       };
 
     info =
-      { version = "6.0.0";
+      { version = "6.0.1";
 
         dependencies =
           [ arrays control either enums foldable-traversable gen integers maybe newtype nonempty partial prelude tailrec tuples unfoldable unsafe-coerce 
@@ -4121,6 +4196,21 @@ substitute =
 
         dependencies =
           [ foldable-traversable foreign-object maybe prelude return strings 
+          ];
+      };
+  };
+
+sunde =
+  { src.git =
+      { repo = "https://github.com/justinwoo/purescript-sunde.git";
+        rev = "32ecafa291e1ca67c43b7c8fad7fae123d3bd4d7";
+      };
+
+    info =
+      { version = "3.0.0";
+
+        dependencies =
+          [ aff effect node-child-process prelude 
           ];
       };
   };
@@ -4526,6 +4616,21 @@ unsafe-reference =
 
         dependencies =
           [ prelude 
+          ];
+      };
+  };
+
+untagged-union =
+  { src.git =
+      { repo = "https://github.com/rowtype-yoga/purescript-untagged-union.git";
+        rev = "a9d78a1eb6e1a1907e2b930e1117cace4e8f52df";
+      };
+
+    info =
+      { version = "1.0.0";
+
+        dependencies =
+          [ ps-pkgs."assert" console effect foreign foreign-object literals maybe newtype psci-support tuples unsafe-coerce 
           ];
       };
   };
@@ -4968,14 +5073,14 @@ yoga-fetch =
 yoga-json =
   { src.git =
       { repo = "https://github.com/rowtype-yoga/purescript-yoga-json.git";
-        rev = "f5dec0e6dbf933667f5dfb71f99047a44a0e7657";
+        rev = "3ede0d1c49ee2e7c854a0ff86b7028885cbee31c";
       };
 
     info =
-      { version = "2.0.0";
+      { version = "3.0.2";
 
         dependencies =
-          [ arrays bifunctors control effect either exceptions foldable-traversable foreign foreign-object identity lists maybe nullable partial prelude record transformers typelevel-prelude variant 
+          [ arrays bifunctors bigints control effect either exceptions foldable-traversable foreign foreign-object identity js-date lists maybe nullable partial prelude record transformers typelevel-prelude variant 
           ];
       };
   };

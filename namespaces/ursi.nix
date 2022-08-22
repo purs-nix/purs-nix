@@ -1,7 +1,7 @@
 { debug =
     { src.git =
         { repo = "https://github.com/ursi/purescript-debuggest.git";
-          rev = "56b27bd20c78188d8e28826b8610f96c54889996";
+          rev = "f03ae5f6984b6f89101660fdd0e09620c8281c87";
         };
 
       info = /package.nix;
@@ -22,13 +22,16 @@
       info = {};
     };
 
-  # html =
-  #   { repo = "https://github.com/ursi/purescript-whatwg-html.git";
-  #     rev = "27ff0f79ac39f42d718a0806f0b1b79b8a7534d0";
-  #     info = /package.nix;
-  #   };
+  html =
+    { src.git =
+        { repo = "https://github.com/ursi/purescript-whatwg-html.git";
+          rev = "e4096a163c2799be4108df2a46225896d348677e";
+        };
 
-  murmur3.src.flake.url = "github:ursi/purescript-murmur3/2ac1505a1a79bb62bf4a0d7c0a6ab61e3819c7cf";
+      info = /package.nix;
+    };
+
+  murmur3.src.flake.url = "github:ursi/purescript-murmur3/3aec0007073128b807a58adace08ee2b1197334b";
 
   prelude =
     { src.git =
@@ -45,11 +48,14 @@
   #     info = /package.nix;
   #   };
 
-  # refeq =
-  #   { repo = "https://github.com/ursi/purescript-refeq.git";
-  #     rev = "155bbf2aae9235b25643b32860e8d85de3c98b8f";
-  #     info = /package.nix;
-  #   };
+  refeq =
+    { src.git =
+        { repo = "https://github.com/ursi/purescript-refeq.git";
+          rev = "7b0df2a73c6ed425ab7c87850804519e9ffc1034";
+        };
+
+      info = /package.nix;
+    };
 
   # simple-json =
   #   { repo = "https://github.com/ursi/purescript-simple-json.git";
