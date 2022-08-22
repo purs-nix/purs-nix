@@ -123,6 +123,7 @@ self:
       { src.git =
           { repo = "https://github.com/Plutonomicon/cardano-transaction-lib.git";
             rev = "6d47a100781379b54debc801b4f13a21ea182c23";
+            ref = "develop";
           };
 
         info =
