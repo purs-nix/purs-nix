@@ -7,11 +7,14 @@
       info = /package.nix;
     };
 
-  # elmish =
-  #   { repo = "https://github.com/ursi/purescript-elmish.git";
-  #     rev = "61bc2ecf760a6f6b8cd05ad45c7da1c9e524d818";
-  #     info = /package.nix;
-  #   };
+  elmish =
+    { src.git =
+        { repo = "https://github.com/ursi/purescript-elmish.git";
+          rev = "36c5a566faedbe65b753ad459987008d316f1e59";
+        };
+
+      info = /package.nix;
+    };
 
   ffi-options =
     { src.git =
