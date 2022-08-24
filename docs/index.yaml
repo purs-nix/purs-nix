@@ -3,6 +3,11 @@
 
 page:
   siteTitle: purs-nix Documentation
+  headHtml: |
+    <snippet var="js.highlightjs" />
+    <with var="js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${value:highlightjs-ver}/languages/purescript.min.js"></script>
+    </with>
 
 template:
   theme: red
