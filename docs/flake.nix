@@ -24,6 +24,7 @@
             # port = 8080;
             # baseUrl = "/mynotes";
             # prettyUrls = true;
+            allowBrokenLinks = true;
           };
         };
         devShells.default = pkgs.mkShell {
