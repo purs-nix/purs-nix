@@ -4,7 +4,7 @@
 
 Packages are added by adding a package description attributes set to either [ps-pkgs.nix](/ps-pkgs.nix) or [ps-pkgs-ns.nix](/ps-pkgs-ns.nix), or by adding your package to the [official package set](https://github.com/purescript/package-sets) and [updating the generated](/official-package-set) nix.\
 The packages descriptions sets consist of two parts:
-```
+```nix
 { src.git
 , info
 }
@@ -13,7 +13,7 @@ The packages descriptions sets consist of two parts:
 - `info`: `info` supports two variants. It is either a literal attrset containing the info, or an absolute path to a function that returns the info, relative to the source specified with `src`.
 
 ### Example
-   ```
+   ```nix
    # ...
 
    arrays =

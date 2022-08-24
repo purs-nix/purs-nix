@@ -11,7 +11,7 @@ NOTE: If the module name contains a `.`, it will require quotation marks around 
 There are four different attributes for each module.
 
 ### output
-```
+```nix
 { verbose-errors ? false
 , comments ? false
 , codegen ? null
@@ -30,7 +30,7 @@ The upper options correspond to the flags you can pass `purs compile`.
 
 ### bundle
 
-```
+```nix
 { esbuild # additional esbuild flags
   ? { format ? "esm"
     , log-level ? "warning"
@@ -49,7 +49,7 @@ The upper options correspond to the flags you can pass `purs compile`.
 
 ### script
 
-```
+```nix
 { esbuild ? { minify ? true; }
 , incremental ? true
 }
@@ -61,7 +61,7 @@ The upper options correspond to the flags you can pass `purs compile`.
 
 ### app
 
-```
+```nix
 { name
 , version ? null
 , command ? name
