@@ -42,9 +42,9 @@ and returns an attribute set with the following attributes:
 - `foreign`: See the [documentation](foreign.md).
 
 and returns an attribute set with the following attributes:
-- <span id="user-content-purs-modules">`modules`</span>: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more [here](derivations.md).
+- [`modules`]{#user-content-purs-modules}: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more [here](derivations.md).
 - `command`: A functions that builds the `purs-nix` command which you can then add to your Nix shell.
-- <span id="user-content-purs-test">`test`</span>: An attribute set with functions for derivations corresponding to the test module. Read more [here](derivations.md).
+- [`test`]{#user-content-purs-modules}: An attribute set with functions for derivations corresponding to the test module. Read more [here](derivations.md).
 - `dependencies`: A list of all the dependencies (transitive closure) of your project. This is exposed out of convenience for when you find yourself using a tool that needs information that can be derived from this.
 
 ### command
