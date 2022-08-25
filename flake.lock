@@ -1,20 +1,5 @@
 {
   "nodes": {
-    "builders": {
-      "locked": {
-        "lastModified": 1646266317,
-        "narHash": "sha256-sO7lFbuhK2t13elpWgNB+Nyo40qQOUnX4FwJ+3Ao9ZE=",
-        "owner": "ursi",
-        "repo": "nix-builders",
-        "rev": "72e9cc5487b07d152e3f5f6ed0654bbc7086e6b4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ursi",
-        "repo": "nix-builders",
-        "type": "github"
-      }
-    },
     "deadnix": {
       "inputs": {
         "fenix": "fenix",
@@ -426,7 +411,6 @@
     },
     "root": {
       "inputs": {
-        "builders": "builders",
         "deadnix": "deadnix",
         "docs-search": "docs-search",
         "get-flake": "get-flake",

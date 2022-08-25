@@ -1,5 +1,5 @@
 with builtins;
-{ builders, docs-search, pkgs, ps-tools }:
+{ docs-search, pkgs, ps-tools }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
     purescript' = ps-tools.for-0_15.purescript;
@@ -383,17 +383,12 @@ with builtins;
             bin = include-test: args:
               let
                 merge-cache =
-                  builders.write-js-script
-                    "merge-cache"
+                  p.writeShellScript "merge-cache"
                     ''
-                    const fs = require(`fs`);
-
-                    const [c1Path, c2Path, outPath] = process.argv.slice(2);
-
-                    c1 = JSON.parse(fs.readFileSync(c1Path));
-                    c2 = JSON.parse(fs.readFileSync(c2Path));
-
-                    fs.writeFileSync(outPath, JSON.stringify({...c1, ...c2}));
+                    f=$(mktemp)
+                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
+                    cat $f > "$3"
+                    rm $f
                     '';
 
                 output' = output { inherit include-test; top-level = false; } args;
