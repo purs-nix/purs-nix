@@ -4,7 +4,9 @@ with builtins;
     buckets =
       set-buckets 1 all-packages
       // set-buckets 2 (proper-names ps-pkgs-ns.ursi)
-      // { event = 2; task = 2; };
+      // { event = 2;
+           task = 2;
+         };
 
     proper-names = l.mapAttrs' (_: v: l.nameValuePair v.purs-nix-info.name v);
     set-buckets = n: mapAttrs (_: _: n);

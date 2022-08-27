@@ -1,6 +1,5 @@
 { inputs =
-    { builders.url = "github:ursi/nix-builders";
-      deadnix.url = "github:astro/deadnix";
+    { deadnix.url = "github:astro/deadnix";
 
       docs-search =
         { # to prevent lock file explosion
@@ -21,8 +20,7 @@
     { __functor = _: { system }:
         import ./purs-nix.nix
           rec
-          { builders = inputs.builders { inherit pkgs; };
-            docs-search = (get-flake inputs.docs-search).packages.${system}.default;
+          { docs-search = (get-flake inputs.docs-search).packages.${system}.default;
             pkgs = inputs.nixpkgs.legacyPackages.${system};
             ps-tools = inputs.ps-tools.legacyPackages.${system};
           };
