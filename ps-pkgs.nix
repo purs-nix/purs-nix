@@ -408,7 +408,7 @@ self:
            info = /package.nix;
          };
 
-       markdown-it.src.flake.url = "github:purs-nix/purescript-markdown-it/b8221bf5a77fb35742655539c346fe1938473365";
+       markdown-it.src.flake.url = "github:purs-nix/purescript-markdown-it/880aba9a692eb6738130aa4681ba5bb8d0cab5e7";
 
        point-free =
          { src.git =
