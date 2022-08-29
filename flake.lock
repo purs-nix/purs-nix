@@ -388,6 +388,21 @@
         "type": "github"
       }
     },
+    "parsec": {
+      "locked": {
+        "lastModified": 1635533376,
+        "narHash": "sha256-/HrG0UPGnI5VdkhrNrpDiM2+nhdL6lD/bqyGtYv0QDE=",
+        "owner": "nprindle",
+        "repo": "nix-parsec",
+        "rev": "1bf25dd9c5de1257a1c67de3c81c96d05e8beb5e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nprindle",
+        "repo": "nix-parsec",
+        "type": "github"
+      }
+    },
     "ps-tools": {
       "inputs": {
         "deadnix": "deadnix_2",
@@ -416,6 +431,7 @@
         "get-flake": "get-flake",
         "make-shell": "make-shell",
         "nixpkgs": "nixpkgs_4",
+        "parsec": "parsec",
         "ps-tools": "ps-tools",
         "statix": "statix",
         "utils": "utils_4"

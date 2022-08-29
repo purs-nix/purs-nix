@@ -1,7 +1,8 @@
 with builtins;
-{ docs-search, pkgs, ps-tools }:
+{ docs-search, parsec, pkgs, ps-tools }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
+    parser = import ./parser.nix { inherit l parsec; };
     purescript' = ps-tools.for-0_15.purescript;
     ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
   in
@@ -112,37 +113,14 @@ with builtins;
         dep-globs = make-dep-globs dependencies;
         all-dep-globs = make-dep-globs all-dependencies;
 
-        make-srcs-str = a:
-          concatStringsSep " " (map (src: ''"${src}/**/*.purs"'') a);
-
         local-graph = include-test:
           let
-            globs = if include-test then all-dep-globs else dep-globs;
-
-            make-graph = extra:
-              if extra + globs != "" then
-                l.pipe "${purescript}/bin/purs graph ${extra} ${globs} > $out"
-                  [ (p.runCommand "purescript-dependency-graph" {})
-                    readFile
-                    # is this safe?
-                    unsafeDiscardStringContext
-                    fromJSON
-                  ]
-              else
-                {};
-
-            deps-graph = make-graph "";
-
-            graph =
-              make-graph
-                (make-srcs-str
-                   (srcs ++ (if include-test then [ test-src ] else []))
-                );
-
             partial =
-              l.filterAttrs
-                (n: _: !deps-graph?${n})
-                graph;
+              parser
+                 (map
+                    (a: "${a}")
+                    (srcs ++ (if include-test then [ test-src ] else []))
+                 );
           in
           mapAttrs
             (_: v:
@@ -155,6 +133,10 @@ with builtins;
                }
             )
             partial;
+
+        # These are needed to prevent repeate evaluation
+        local-graph-tests = local-graph true;
+        local-graph-no-tests = local-graph false;
 
         foreign-stuff = deps: prefix:
           let
@@ -222,7 +204,11 @@ with builtins;
 
             src =
               let
-                graph-path = (local-graph include-test).${name}.path;
+                graph-path =
+                  (if include-test
+                   then local-graph-tests
+                   else local-graph-no-tests
+                  ).${name}.path;
 
                 purs-path =
                   let matches = match "/nix/store/[^/]+/(.+)$" graph-path; in
@@ -408,7 +394,7 @@ with builtins;
                    local-deps = map (v: builds.${v}) v.depends;
                  }
             )
-            (local-graph false);
+            local-graph-no-tests;
 
         all-builds =
           mapAttrs
@@ -419,7 +405,7 @@ with builtins;
                    local-deps = map (v: all-builds.${v}) v.depends;
                  }
             )
-            (local-graph true);
+            local-graph-tests;
       in
       { dependencies = all-dependencies;
 

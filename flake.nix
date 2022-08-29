@@ -10,17 +10,18 @@
       get-flake.url = "github:ursi/get-flake";
       make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+      parsec.url = "github:nprindle/nix-parsec";
       ps-tools.url = "github:purs-nix/purescript-tools";
       statix.url = "github:nerdypepper/statix";
       utils.url = "github:ursi/flake-utils/8";
     };
 
-  outputs = { get-flake, utils, ... }@inputs:
+  outputs = { get-flake, parsec, utils, ... }@inputs:
     with builtins;
     { __functor = _: { system }:
         import ./purs-nix.nix
-          rec
           { docs-search = (get-flake inputs.docs-search).packages.${system}.default;
+            inherit (parsec.lib) parsec;
             pkgs = inputs.nixpkgs.legacyPackages.${system};
             ps-tools = inputs.ps-tools.legacyPackages.${system};
           };

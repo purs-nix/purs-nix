@@ -14,12 +14,12 @@
 
   outputs = { get-flake, purs-nix-test-packages, ... }@inputs:
     with builtins;
-    let purs-nix = get-flake ../.; in
-    purs-nix.inputs.utils.apply-systems
+    let purs-nix-flake = get-flake ../.; in
+    purs-nix-flake.inputs.utils.apply-systems
       { inputs =
           inputs
-          // { inherit purs-nix;
-               inherit (purs-nix.inputs) make-shell nixpkgs ps-tools;
+          // { purs-nix = purs-nix-flake;
+               inherit (purs-nix-flake.inputs) make-shell nixpkgs ps-tools;
              };
 
         systems = [ "x86_64-linux" ];
@@ -32,6 +32,7 @@
              mapAttrs
                (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
                { packages = true;
+                 parser = true;
                  repl = true;
                };
 
@@ -91,7 +92,13 @@
              echo
              '';
 
-           package-tests = import ./packages.nix ({ inherit l p; } // purs-nix);
+           package-tests =
+             import ./packages.nix
+               ({ inherit l p switches;
+                  inherit (purs-nix-flake.inputs.parsec.lib) parsec;
+                }
+                // purs-nix
+               );
 
            expected-output-tail =
              ''

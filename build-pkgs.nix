@@ -123,7 +123,7 @@ with builtins;
              (if legacy then args else info).install or "ln -s $src/${ps-src} $out";
          }
          // u.make-name name version
-        );
+        ); 
 
     build-set = f:
       l.fix
