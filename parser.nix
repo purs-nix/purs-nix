@@ -10,7 +10,7 @@ with builtins;
         ws = "([ \r\n]|--[^\n]*\n|\\{-([^-]|-[^}])*-})";
         module-name = ''([^ ${"\r\n"}()=:{},-]+)'';
         fun-type-name = ''([^ ${"\r\n"}()=:{},.-]+)'';
-        op-name = ''(\([^ ${"\n"})]*?\))'';
+        op-name = ''(\([^ ${"\n"})]*\))'';
         fun-type-export = ''(${fun-type-name}(${ws}*\(${ws}*(${csl fun-type-name}|\.\.)${ws}*\))?)'';
         type-op-export = ''(type${ws}*${op-name})'';
         class-export = ''(class${ws}+${fun-type-name})'';
