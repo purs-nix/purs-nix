@@ -45,11 +45,11 @@
     "docs-search": {
       "flake": false,
       "locked": {
-        "lastModified": 1658376882,
-        "narHash": "sha256-GV42QnJn0q5d4v3m0qTBCSfvU3a7jnytSh3D3Ch656Y=",
+        "lastModified": 1661752197,
+        "narHash": "sha256-zER3gYd9Liy4vzgHsNpgdXR5R20CbiD8RkXrYp+pbbM=",
         "owner": "purs-nix",
         "repo": "purescript-docs-search",
-        "rev": "8f3ea8cd24b7cf605ce80e040622f273801fc646",
+        "rev": "9b1c0cb5e2dd0b4bd0c4e9ee4cef147d90090e76",
         "type": "github"
       },
       "original": {
