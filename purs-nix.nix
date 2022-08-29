@@ -239,7 +239,7 @@ with builtins;
 
             output = { top-level ? true, include-test ? false }: args:
               let
-                incremental = args.incremental or true;
+                incremental = args.incremental or false;
                 stripped = removeAttrs args [ "incremental" ];
 
                 trans-deps =
@@ -308,7 +308,7 @@ with builtins;
                     '';
                 };
 
-            bundle = { esbuild ? {}, main ? true, incremental ? true }:
+            bundle = { esbuild ? {}, main ? true, incremental ? false }:
               p.runCommand "${name}-bundle" {}
                 (u.bundle
                    { entry-point =
@@ -322,7 +322,7 @@ with builtins;
 
             script =
               { esbuild ? {}
-              , incremental ? true
+              , incremental ? false
               }:
               let
                 bundle' =
@@ -347,7 +347,7 @@ with builtins;
               , version ? null
               , command ? name
               , esbuild ? {}
-              , incremental ? true
+              , incremental ? false
               }:
               mkDerivation
                 ({ phases = [ "installPhase" ];

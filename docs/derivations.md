@@ -18,11 +18,12 @@ There are four different attributes for each module.
 , no-prefix ? false
 , json-errors ? false
 
-, incremental ? true
+, incremental ? false
 }
 ```
 
-- `incremental`: Whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
+- `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
+Note: turning this off will not disable the separate compiling of dependencies.
 
 The upper options correspond to the flags you can pass `purs compile`.
 
@@ -37,13 +38,14 @@ The upper options correspond to the flags you can pass `purs compile`.
     , outfile ? "main.js"
     }
 , main ? true
-, incremental ? true
+, incremental ? false
 }
 
 ```
 
 - `main`: whether or not to automatically execute the main function of the module you're bundling.
-- `incremental`: whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
+- `incremental`: whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
+Note: turning this off will not disable the separate compiling of dependencies.
 
 `modules.Module.bundle {}` is a derivation containing the bundled code of the module `Module`.
 
@@ -51,11 +53,14 @@ The upper options correspond to the flags you can pass `purs compile`.
 
 ```
 { esbuild ? { minify ? true; }
-, incremental ? true
+, incremental ? false
 }
 ```
 - `esbuild`: Arguments to pass to `esbuild` when bundling.
-- `incremental`: Whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
+- `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
+Note: turning this off will not disable the separate compiling of dependencies.
+
+- `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules
 
 `modules.Module.script {}` is a derivation that is an executable that will run the `main` `Effect` of the module `Module`.
 
@@ -66,14 +71,15 @@ The upper options correspond to the flags you can pass `purs compile`.
 , version ? null
 , command ? name
 , esbuild ? { minify ? true; }
-, incremental ? true
+, incremental ? false
 }
 ```
 - `name`: The `pname`/`name` of the derivation.
 - `version`: The version of the derivation.
 - `command`: The name of the executable.
 - `esbuild`: Arguments to pass to `esbuild` when bundling.
-- `incremental`: Whether or not to build the modules incrementally. This will cause the initial build time to be much slower, but will generally increase the build time after the individual modules have been initially built.
+- `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
+Note: turning this off will not disable the separate compiling of dependencies.
 
 `modules.Module.app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Module`.
 

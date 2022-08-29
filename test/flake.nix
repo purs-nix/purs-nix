@@ -249,12 +249,12 @@
                      (i: "[[ ${i} == testing ]]");
                }
              // (with ps.modules.Main;
-                 { "non-incremental output" = output { incremental = false; };
+                 { "incremental output" = output { incremental = true; };
 
-                   "non-incremental bundle" =
-                     bundle { esbuild.platform = "node"; incremental = false; };
+                   "incremental bundle" =
+                     bundle { esbuild.platform = "node"; incremental = true; };
 
-                   "non-incremental app" = app { name = "_"; incremental = false; };
+                   "incremental app" = app { name = "_"; incremental = true; };
                  }
                 )
              // mapAttrs
