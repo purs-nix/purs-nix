@@ -469,9 +469,10 @@
                             (i: ''
                                 info="name:    markdown-it
                                 version: 0.4.0
-                                flake:   github:purs-nix/purescript-markdown-it/880aba9a692eb6738130aa4681ba5bb8d0cab5e7
+                                flake:   github:purs-nix/purescript-markdown-it/34d412a7f51a2f2782a12c5ed91908decdd82211
                                 package: default
-                                source:  /nix/store/fkds5106v2a91wgp9zjbhd2nc8hs3973-markdown-it-0.4.0"
+                                source:  /nix/store/gnjs91j7ssqlyim66madp1hqqxz3q656-markdown-it-0.4.0"
+
 
                                 [[ ${i} == $info ]]
                                 ''
