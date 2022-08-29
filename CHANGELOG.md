@@ -1,0 +1,7 @@
+## 2022-8-28
+### Non-Breaking
+- Disable incremental building by default
+
+  Turns out it's just way slower. Dependencies are still compiled separately to the local files so that giant computation can be cached, but trying to build and cache every module individually turns out to be almost always slower than just recompiling all the local modules any time there's a change. This has no effect on the `purs-nix` command in nix shells - this is only changes the [derivations](docs/derivations.md).
+
+- Stop using IFD to compute the dependency graph

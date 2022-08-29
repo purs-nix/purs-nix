@@ -1,5 +1,14 @@
 with builtins;
-{ l, p, ps-pkgs, ps-pkgs-ns, purs, ... }:
+{ switches
+, l
+, p
+, parsec
+, ps-pkgs
+, ps-pkgs-ns
+, purescript
+, purs
+, ...
+}:
   let
     buckets =
       set-buckets 1 all-packages
@@ -33,23 +42,42 @@ with builtins;
         )
         {}
         (l.mapAttrsToList l.nameValuePair all-packages);
+
+    purs-graph = deps:
+      let globs = toString (map (a: ''"${a}/**/*.purs"'') deps); in
+      l.pipe "${purescript}/bin/purs graph ${globs} > $out"
+        [ (p.runCommand "purescript-dependency-graph" {})
+          readFile
+          unsafeDiscardStringContext
+          fromJSON
+        ];
   in
   # to truly test this you need to manually wipe the caches in ~/.cache/nix
-  l.mapAttrs'
-    (b: d:
+  l.foldl'
+    (acc: { name, value }:
        let
-         ps = purs { dependencies = d; };
-
-         command =
-           ps.command
-             { output = "$out";
-               srcs = [];
-             }
-           + "/bin/purs-nix";
+         ps = purs { dependencies = value; };
+         test-name = "compiled packages bucket ${name}";
        in
-       l.nameValuePair "compiled packages bucket ${b}"
-         (p.runCommand "compiled-packages-${b}" {}
-            "${command} compile"
-         )
+
+       acc
+       // { ${test-name} =
+              let
+                command =
+                  ps.command
+                    { output = "$out";
+                      srcs = [];
+                    }
+                  + "/bin/purs-nix";
+              in
+              p.runCommand test-name {} "${command} compile";
+          }
+       // l.optionalAttrs switches.parser
+            { "parser matches `purs graph` ${name}" =
+                let parser = import ../parser.nix { inherit l parsec; }; in
+                assert purs-graph ps.dependencies == parser ps.dependencies;
+                p.runCommand "empty" {} "touch $out";
+            }
     )
-    dependencies
+    {}
+    (l.mapAttrsToList l.nameValuePair dependencies)
