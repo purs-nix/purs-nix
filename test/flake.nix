@@ -31,7 +31,7 @@
            switches =
              mapAttrs
                (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
-               { packages = true;
+               { packages-compile = true;
                  parser = true;
                  repl = true;
                };
@@ -479,7 +479,7 @@
                             );
                       };
                   }
-                  // (if switches.packages then package-tests else {})
+                  // package-tests
                   // { "'check' api" = ps.test.check {}; };
 
            devShells.default =
