@@ -61,17 +61,18 @@ with builtins;
        in
 
        acc
-       // { ${test-name} =
-              let
-                command =
-                  ps.command
-                    { output = "$out";
-                      srcs = [];
-                    }
-                  + "/bin/purs-nix";
-              in
-              p.runCommand test-name {} "${command} compile";
-          }
+       // l.optionalAttrs switches.packages-compile
+            { ${test-name} =
+                let
+                  command =
+                    ps.command
+                      { output = "$out";
+                        srcs = [];
+                      }
+                    + "/bin/purs-nix";
+                in
+                p.runCommand test-name {} "${command} compile";
+            }
        // l.optionalAttrs switches.parser
             { "parser matches `purs graph` ${name}" =
                 let parser = import ../parser.nix { inherit l parsec; }; in
