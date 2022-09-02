@@ -26,7 +26,7 @@
 
 ## Package Set
 
-**purs-nix** has it's own package set, which is an extension of the [the official package set](https://github.com/purescript/package-sets) with the following differences:
+**purs-nix** has its own package set, which is an extension of the [the official package set](https://github.com/purescript/package-sets) with the following differences:
 
 - **Package namespaces:** We have package namespaces.
 
