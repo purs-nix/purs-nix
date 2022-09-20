@@ -43,7 +43,6 @@ p:
       then ''echo 'import { main } from "${entry-point}"; main()' | ${build}''
       else ''${build} ${entry-point}'';
 
-
     compile =
       purescript:
       { globs
