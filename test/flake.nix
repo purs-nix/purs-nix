@@ -32,7 +32,7 @@
              mapAttrs
                (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
                { packages-compile = true;
-                 parser = true;
+                 parser = false;
                  repl = true;
                };
 
