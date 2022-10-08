@@ -2,7 +2,7 @@
 
 ## Package Set: Git
 
-Packages are added by adding a package description attributes set to either [ps-pkgs.nix](/ps-pkgs.nix) or [ps-pkgs-ns.nix](/ps-pkgs-ns.nix), or by adding your package to the [official package set](https://github.com/purescript/package-sets) and [updating the generated](/official-package-set) nix.\
+Packages are added by adding a package description attributes set to either [ps-pkgs.nix](/ps-pkgs.nix) or `namespaces/<namespace>.nix`, or by adding your package to the [official package set](https://github.com/purescript/package-sets) and [updating the generated](/official-package-set) nix.\
 The packages descriptions sets consist of two parts:
 ```
 { src.git
@@ -68,8 +68,8 @@ All of these are optional.
 If you're using a file in for the package info, you need to make sure it's a function that accepts attribute sets of arbitrary size, either by using the `...` syntax or by not destructuring at all. This is to make sure purs-nix can call it with new arguments in the future and your package will still be compatible.\
 Here's an example:
 ```nix
-{ ps-pkgs, ... }:
-  with ps-pkgs;
+self:
+  with self:
   { version = "6.0.0";
 
     dependencies =

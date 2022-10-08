@@ -1,4 +1,5 @@
-_:
+with builtins;
+l:
 self:
   with self;
   { aeson =
@@ -399,6 +400,7 @@ self:
       };
   }
   // import ./official-package-set self
+  // import ./ps-pkgs-ns.nix { inherit l; ps-pkgs = self; }
   // { event =
          { src.git =
              { repo = "https://github.com/ursi/purescript-event.git";

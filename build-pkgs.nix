@@ -133,23 +133,26 @@ with builtins;
              (f self)
         );
 
-    ps-pkgs =
-      build-set
-      (import ./ps-pkgs.nix { inherit ps-pkgs-ns; });
+    ps-pkgs = build-set (import ./ps-pkgs.nix l);
 
     ps-pkgs-ns =
-      let
-        f = self:
-          import ./ps-pkgs-ns.nix
-            { inherit ps-pkgs;
-              ps-pkgs-ns = self;
-            };
-      in
-      l.fix
-        (self:
-           mapAttrs
-             (ns: mapAttrs (n: v: build (v // { name = "${ns}.${n}"; })))
-             (f self)
-        );
+      foldl'
+        (acc: { name, value }:
+           let m = match ''(.+)\.(.+)'' name; in
+           if m == null then
+             acc
+           else
+             let
+               namespace = head m;
+               no-namespace = l.last m;
+             in
+             acc
+             // { ${namespace} =
+                    (acc.${namespace} or {})
+                    // { ${no-namespace} = value; };
+                }
+        )
+        {}
+        (l.mapAttrsToList l.nameValuePair ps-pkgs);
   in
   { inherit build build-set ps-pkgs ps-pkgs-ns; }
