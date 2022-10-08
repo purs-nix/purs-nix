@@ -59,8 +59,9 @@
             let
               p = pkgs;
               u = import ./utils.nix p;
-              build-pkgs = import ./build-pkgs.nix { inherit pkgs; utils = u; };
-              inherit (build-pkgs) ps-pkgs ps-pkgs-ns;
+
+              inherit (import ./build-pkgs.nix { inherit pkgs; utils = u; })
+                ps-pkgs;
             in
             { legacyPackages =
                 { package-info =
@@ -71,18 +72,6 @@
                            (u.package-info v)
                       )
                       ps-pkgs;
-
-                  package-info-ns =
-                    mapAttrs
-                      (_:
-                         mapAttrs
-                           (_: v:
-                              p.writeScriptBin
-                                v.purs-nix-info.name
-                                (u.package-info v)
-                           )
-                      )
-                      ps-pkgs-ns;
                 };
 
               checks =

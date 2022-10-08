@@ -2,7 +2,7 @@
 
 ## Package Set: Git
 
-Packages are added by adding a package description attributes set to either [ps-pkgs.nix](/ps-pkgs.nix) or [ps-pkgs-ns.nix](/ps-pkgs-ns.nix), or by adding your package to the [official package set](https://github.com/purescript/package-sets) and [updating the generated](/official-package-set) nix.\
+Packages are added by adding a package description attributes set to either [ps-pkgs.nix](/ps-pkgs.nix) or `namespaces/<namespace>.nix`, or by adding your package to the [official package set](https://github.com/purescript/package-sets) and [updating the generated](/official-package-set) nix.\
 The packages descriptions sets consist of two parts:
 ```
 { src.git

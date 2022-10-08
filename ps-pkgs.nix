@@ -1,4 +1,5 @@
-_:
+with builtins;
+l:
 self:
   with self;
   { event =
@@ -41,3 +42,4 @@ self:
       };
   }
   // import ./official-package-set self
+  // import ./ps-pkgs-ns.nix { inherit l; ps-pkgs = self; }
