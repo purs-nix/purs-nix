@@ -18,9 +18,10 @@
 
   outputs = { get-flake, parsec, utils, ... }@inputs:
     with builtins;
-    { __functor = _: { system }:
+    { __functor = _: { overrides ? [], system }:
         import ./purs-nix.nix
           { docs-search = (get-flake inputs.docs-search).packages.${system}.default;
+            inherit overrides;
             inherit (parsec.lib) parsec;
             pkgs = inputs.nixpkgs.legacyPackages.${system};
             ps-tools = inputs.ps-tools.legacyPackages.${system};

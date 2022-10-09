@@ -1,5 +1,5 @@
 with builtins;
-{ pkgs, utils }:
+{ overrides ? [], pkgs, utils }:
   let
     l = p.lib; p = pkgs; u = utils;
 
@@ -133,7 +133,37 @@ with builtins;
              (f self)
         );
 
-    ps-pkgs = build-set (import ./ps-pkgs.nix l);
+    # modified versions of lib.extends
+    extends =
+      let
+        merge =
+          let
+            build-set' =
+              mapAttrs
+                (n: v:
+                   if v?type && v.type == "derivation"
+                   then v
+                   else build (v // { name = n; })
+                );
+          in
+          p1: p2: p1 // (build-set' p2);
+      in
+      f: rattrs: self:
+        let
+          super = rattrs self;
+          a = f self super;
+        in
+        merge super a;
+
+    ps-pkgs =
+      l.fix
+        (extends (l.composeManyExtensions overrides)
+           (self:
+              mapAttrs
+                (n: v: build (v // { name = n; }))
+                (import ./ps-pkgs.nix l self)
+           )
+        );
 
     ps-pkgs-ns =
       foldl'
