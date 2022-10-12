@@ -56,46 +56,20 @@ with builtins;
               foldl'
                 (acc: dep:
                    let inherit (dep.purs-nix-info) name; in
-                   if l.hasInfix "." name then
-                     let path = l.splitString "." name; in
-                     if direct || !l.hasAttrByPath path acc.ps-pkgs-ns then
-                       let
-                         namespace = head path;
-                         name' = head (tail path);
-                       in
-                       f false
-                         (acc
-                          // { ps-pkgs-ns =
-                                 acc.ps-pkgs-ns
-                                 // { ${namespace} =
-                                        acc.ps-pkgs-ns.${namespace} or {}
-                                        // { ${name'} = dep; };
-                                    };
-                             }
-                         )
-                         dep.purs-nix-info.dependencies
-                     else
-                       acc
-                   else if direct || !acc.ps-pkgs?${name} then
+                   if direct || !acc?${name} then
                      f false
-                       (acc
-                        // { ps-pkgs =
-                               acc.ps-pkgs
-                               // { ${name} = dep; };
-                           }
-                       )
+                       (acc // { ${name} = dep; })
                        dep.purs-nix-info.dependencies
                    else
                      acc
                 );
 
-            package-sets =
+            trans-deps =
               f true
-                { ps-pkgs = {};  ps-pkgs-ns = {}; }
+                {}
                 (sort (a: b: a.purs-nix-info.name < b.purs-nix-info.name) deps);
           in
-          attrValues package-sets.ps-pkgs
-          ++ concatMap attrValues (attrValues package-sets.ps-pkgs-ns);
+          attrValues trans-deps;
 
         dependencies =
           if args?dependencies

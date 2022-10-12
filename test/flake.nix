@@ -376,6 +376,9 @@
                                     posix-types: 6.0.0
                                     prelude: override-test
                                     profunctor: 6.0.0
+                                    purs-nix.build-test: 1.0.0
+                                    purs-nix.is-even: 1.0.0
+                                    purs-nix.is-odd: 1.0.0
                                     refs: 6.0.0
                                     safe-coerce: 2.0.0
                                     st: 6.0.0
@@ -385,9 +388,6 @@
                                     typelevel-prelude: 7.0.0
                                     unfoldable: 6.0.0
                                     unsafe-coerce: 6.0.0
-                                    purs-nix.build-test: 1.0.0
-                                    purs-nix.is-even: 1.0.0
-                                    purs-nix.is-odd: 1.0.0
                                     ursi.murmur3"
 
                                     [[ ${i} == $packages ]]
