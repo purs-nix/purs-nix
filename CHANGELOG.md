@@ -1,12 +1,12 @@
 ## 2022-8-29
-### Non-Breaking
+### Breaking: Unlikely
 
 - Remove all IFD from dependencies of purs-nix.
 
   IFD causes issues with the current flakes API, and now purs-nix should be free from them.
 
 ## 2022-8-28
-### Non-Breaking
+### Breaking: Unlikely
 
 - Disable incremental building by default
 
