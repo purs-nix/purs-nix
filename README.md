@@ -40,7 +40,7 @@
 
 - **Get package info:** Since package info can be imported from a foreign repository, we need a way to view the info of a package easily.
 
-  - To view the info of a package, use `nix run github:purs-nix/purs-nix#package-info.<pacakge-name>`. (a namespaced package will need to have quotes around its name, as it contains a `.`. You can do that like this: `.#package-info.'"<namespace>.<name>"')
+  - To view the info of a package, use `nix run github:purs-nix/purs-nix#package-info.<pacakge-name>`. (a namespaced package will need to have quotes around its name, as it contains a `.`. You can do that like this: `.#package-info.'"<namespace>.<name>"'`.)
 
 ## Contributing / Mirrors
 
