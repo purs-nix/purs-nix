@@ -1,3 +1,11 @@
+## 2022-10-7
+## Breaking: Probably Not
+
+- Namespaced packages are now just normal packages that have a name following the schema `<namespace>.<name>`. You can now access them in the normal `ps-pkgs` package set. `ps-pkgs-ns` still exists, but it's just generated from `ps-pkgs` now by looking at package names.
+
+- `nix run purs-nix#package-info-ns` has been removed. You can now use `nix run purs-nix#package-info.'"<namespace>.<name>"'` instead.
+
+
 ## 2022-8-29
 ### Breaking: Unlikely
 
