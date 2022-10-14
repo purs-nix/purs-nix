@@ -3,8 +3,8 @@
 **purs-nix** is a nix library used to set up your PureScript environment and/or to compile/bundle your PureScript code in a Nix derivation. The `outputs` of the flake has a `__functor` attribute, so it can be used as a function. It takes the following arguments:
 
 ```
-{ overrides ? [], system }
-- `overrides`: A list of [overrides](overriding-packages.md) to modify `ps-pkgs`/`ps-pkgs-ns`.
+{ overlays ? [], system }
+- `overlays`: A list of [overlays](overriding-packages.md) to modify `ps-pkgs`/`ps-pkgs-ns`.
 - `system`: The system you're building on.
 
 ```

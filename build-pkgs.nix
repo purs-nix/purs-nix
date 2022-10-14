@@ -1,5 +1,5 @@
 with builtins;
-{ overrides ? [], pkgs, utils }:
+{ overlays ? [], pkgs, utils }:
   let
     l = p.lib; p = pkgs; u = utils;
 
@@ -157,7 +157,7 @@ with builtins;
 
     ps-pkgs =
       l.fix
-        (extends (l.composeManyExtensions overrides)
+        (extends (l.composeManyExtensions overlays)
            (self:
               mapAttrs
                 (n: v: build (v // { name = n; }))
