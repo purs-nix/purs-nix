@@ -12,7 +12,7 @@
         };
     };
 
-  outputs = { get-flake, purs-nix-test-packages, ... }@inputs:
+  outputs = { get-flake, ... }@inputs:
     with builtins;
     let purs-nix-flake = get-flake ../.; in
     purs-nix-flake.inputs.utils.apply-systems
@@ -24,21 +24,49 @@
 
         systems = [ "x86_64-linux" ];
       }
-      ({ make-shell, pkgs, ps-tools, purs-nix, ... }:
+      ({ make-shell, pkgs, ps-tools, system, ... }:
          let
+           purs-nix =
+             purs-nix-flake
+               { inherit system;
+
+                 overlays =
+                   [ (_: super: assert !super?test-package; {})
+
+                     (self: super:
+                        with self;
+                        { inherit (super) console;
+
+                          # testing overlay precedence
+                          murmur3 = prelude;
+
+                          # test if later overlays have access to this package
+                          test-package = prelude;
+                        }
+                     )
+
+                     (self: super:
+                        with self;
+                        { murmur3 = self."ursi.murmur3";
+                          "test.prelude" = super.test-package;
+                        }
+                     )
+                   ];
+               };
+
            minimal = false;
 
            switches =
              mapAttrs
                (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
                { packages-compile = true;
-                 parser = true;
+                 parser = false;
                  repl = true;
                };
 
            l = p.lib; p = pkgs;
-           inherit (purs-nix) ps-pkgs purs;
-           package = import ./package.nix purs-nix-test-packages purs-nix;
+           inherit (purs-nix) ps-pkgs ps-pkgs-ns purs;
+           package = import ./package.nix purs-nix;
 
            ps-custom = { dir ? ./., ...}@args:
              purs
@@ -67,11 +95,12 @@
            ps2 =
              purs
                { dependencies =
+                   let inherit (ps-pkgs-ns) test; in
                    with ps-pkgs;
                    [ console
                      effect
                      markdown-it
-                     prelude
+                     test.prelude
                    ];
 
                   test-dependencies = [ ps-pkgs."assert" ];
@@ -96,7 +125,7 @@
                ({ inherit l p switches;
                   inherit (purs-nix-flake.inputs.parsec.lib) parsec;
                 }
-                // purs-nix
+                // (purs-nix-flake { inherit system; })
                );
 
            expected-output-tail =

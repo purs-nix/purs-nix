@@ -1,5 +1,11 @@
+## 2022-10-17
+### Breaking: Very Unlikely
+
+- Add [overlay system](docs/modifying-package-set.md).
+
+
 ## 2022-10-7
-## Breaking: Probably Not
+### Breaking: Probably Not
 
 - Namespaced packages are now just normal packages that have a name following the schema `<namespace>.<name>`. You can now access them in the normal `ps-pkgs` package set. `ps-pkgs-ns` still exists, but it's just generated from `ps-pkgs` now by looking at package names.
 

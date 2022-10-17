@@ -68,8 +68,8 @@ All of these are optional.
 If you're using a file in for the package info, you need to make sure it's a function that accepts attribute sets of arbitrary size, either by using the `...` syntax or by not destructuring at all. This is to make sure purs-nix can call it with new arguments in the future and your package will still be compatible.\
 Here's an example:
 ```nix
-self:
-  with self:
+{ ps-pkgs, ... }:
+  with ps-pkgs:
   { version = "6.0.0";
 
     dependencies =

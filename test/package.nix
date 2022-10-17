@@ -1,4 +1,4 @@
-_:
+with builtins;
 { ps-pkgs, licenses, ... }:
   { dependencies =
       with ps-pkgs;

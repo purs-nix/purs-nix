@@ -1,10 +1,13 @@
 with builtins;
-{ docs-search, parsec, pkgs, ps-tools }:
+{ docs-search, overlays, parsec, pkgs, ps-tools }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
     parser = import ./parser.nix { inherit l parsec; };
     purescript' = ps-tools.for-0_14.purescript;
-    ps-package-stuff = import ./build-pkgs.nix { inherit pkgs; utils = u; };
+
+    ps-package-stuff =
+      import ./build-pkgs.nix
+        { inherit overlays pkgs; utils = u; };
   in
   { inherit (ps-package-stuff) build build-set ps-pkgs ps-pkgs-ns;
     inherit (pkgs) esbuild;
