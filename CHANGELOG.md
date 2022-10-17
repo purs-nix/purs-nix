@@ -1,3 +1,9 @@
+## 2022-10-17
+### Breaking: Very Unlikely
+
+- Add [overlay system](docs/modifying-package-set.md).
+
+
 ## 2022-10-7
 ### Breaking: Probably Not
 

@@ -1,5 +1,4 @@
 with builtins;
-purs-nix-test-packages:
 { build, ps-pkgs, licenses, ... }:
   { dependencies =
       let rev = "debd6195fa1d1b2c15f244d496afe89414620a12"; in
@@ -7,13 +6,7 @@ purs-nix-test-packages:
       [ console
         node-path
         node-process
-
-        (build
-           { name = "effect";
-             src.path = purs-nix-test-packages;
-             info = /effect/package.nix;
-           }
-        )
+        effect
 
         (build
            { name = "prelude";
