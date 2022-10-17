@@ -60,7 +60,7 @@
              mapAttrs
                (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
                { packages-compile = true;
-                 parser = false;
+                 parser = true;
                  repl = true;
                };
 
