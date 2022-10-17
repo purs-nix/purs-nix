@@ -375,7 +375,7 @@
                                 "${command} packages"
                                 (i: ''
                                     packages="arraybuffer-types: 3.0.2
-                                    arrays: 7.0.0
+                                    arrays: 7.1.0
                                     assert: 6.0.0
                                     bifunctors: 6.0.0
                                     console: 6.0.0
@@ -414,8 +414,8 @@
                                     purs-nix.is-odd: 1.0.0
                                     refs: 6.0.0
                                     safe-coerce: 2.0.0
-                                    st: 6.0.0
-                                    tailrec: 6.0.0
+                                    st: 6.2.0
+                                    tailrec: 6.1.0
                                     tuples: 7.0.0
                                     type-equality: 4.0.1
                                     typelevel-prelude: 7.0.0
