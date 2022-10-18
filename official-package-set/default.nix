@@ -4320,6 +4320,21 @@ slug =
       };
   };
 
+small-ffi =
+  { src.git =
+      { repo = "https://github.com/lfarroco/purescript-small-ffi.git";
+        rev = "ca1039b30e32458e5dc39ac892091201ffdd34e5";
+      };
+
+    info =
+      { version = "4.0.1";
+
+        dependencies =
+          [ arrays console effect prelude quickcheck 
+          ];
+      };
+  };
+
 soundfonts =
   { src.git =
       { repo = "https://github.com/newlandsvalley/purescript-soundfonts.git";
@@ -4631,6 +4646,21 @@ tecton =
 
         dependencies =
           [ arrays colors either foldable-traversable integers lists numbers prelude record strings transformers tuples 
+          ];
+      };
+  };
+
+tecton-halogen =
+  { src.git =
+      { repo = "https://github.com/nsaunders/purescript-tecton-halogen.git";
+        rev = "180fa9aa00aedfac58506d9f774016532bab3c8a";
+      };
+
+    info =
+      { version = "0.1.0";
+
+        dependencies =
+          [ halogen media-types prelude record tecton transformers typelevel-prelude 
           ];
       };
   };

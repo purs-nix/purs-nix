@@ -24,12 +24,8 @@ l.pipe packages
        (acc: { n, v }:
           let
             repo =
-              if
-                # don't fetch versions we already have
-                (prev?${n} && v.version == "v" + prev.${n}.info.version)
-                # the version in the package set is broken and it will not be getting fixed
-                || n == "metadata"
-              then
+              # don't fetch versions we already have
+              if prev?${n} && v.version == "v" + prev.${n}.info.version then
                 v // { inherit (prev.${n}.src.git) rev; }
               else
                 fetchGit
