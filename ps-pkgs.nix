@@ -8,6 +8,8 @@ self:
         info = { inherit (info) version dependencies; };
       };
 
+    markdown-it.src.flake.url = "github:purs-nix/purescript-markdown-it/4b90edc070c9ede0ee045224e0c64f9c502c3bf7";
+
     node-glob-basic =
       { src.git =
           { repo = "https://github.com/natefaubion/purescript-node-glob-basic.git";
