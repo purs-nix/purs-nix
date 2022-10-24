@@ -42,7 +42,7 @@
              };
 
            packages =
-             with ps.modules.Main;
+             with ps;
              { default = app { name = "hello"; };
                bundle = bundle {};
                output = output {};

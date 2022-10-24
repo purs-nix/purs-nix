@@ -12,3 +12,5 @@ main :: Effect Unit
 main = do
   assert $ Murmur3.hash 0 "murmur" == 1945310157
   log $ forTest <> suffix
+
+  --
