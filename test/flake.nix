@@ -562,13 +562,6 @@
                   // package-tests
                   // { "'check' api" = ps.test.check {}; };
 
-           # packages.default = ps.output {};
-           # packages.default = ps.bundle { esbuild.platform = "node"; esbuild.minify = true;};
-           # packages.default = ps.script { esbuild.platform = "node"; esbuild.minify = true;};
-           # packages.default = ps.app { name = "app"; };
-           # packages.default = ps.test.run {};
-           # packages.default = ps.test.check {};
-
            devShells.default =
              make-shell
                { packages =

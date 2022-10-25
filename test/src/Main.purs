@@ -42,4 +42,3 @@ main = do
 
 forTest :: String
 forTest = "test"
---
