@@ -41,7 +41,7 @@ with builtins;
                p.bind (p.many import') (imports:
                p.pure { inherit imports name; })))))
               # `builtins.match` will stack overflow if strings are too large
-              (substring 0 100000 str);
+              (substring 0 50000 str);
         in
         if result.type == "success"
         then result.value

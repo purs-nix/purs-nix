@@ -107,7 +107,8 @@ with builtins;
             l.importJSON
               (fetchGit
                  { url = "https://github.com/purescript/registry.git";
-                   rev = "55bce52392cab4b595ac1f542954cfceeef2d431";
+                   ref = "main";
+                   rev = "c03e3c7834bc5153a4f6f5d47276a763bab83bfe";
                  }
                + /bower-packages.json
               );
