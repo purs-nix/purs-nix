@@ -1,8 +1,8 @@
 with builtins;
-{ docs-search, overlays, pkgs, ps-tools }:
+{ docs-search, overlays, parsec, pkgs, ps-tools }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
-    # parser = import ./parser.nix { inherit l parsec; };
+    parser = import ./parser.nix { inherit l parsec; };
     purescript' = ps-tools.for-0_15.purescript;
 
     ps-package-stuff =
@@ -90,30 +90,30 @@ with builtins;
         dep-globs = make-dep-globs dependencies;
         all-dep-globs = make-dep-globs all-dependencies;
 
-        # local-graph = include-test:
-        #   let
-        #     partial =
-        #       parser
-        #          (map
-        #             (a: "${a}")
-        #             (srcs ++ (if include-test then [ test-src ] else []))
-        #          );
-        #   in
-        #   mapAttrs
-        #     (_: v:
-        #        { depends =
-        #            filter
-        #              (v: partial?${v})
-        #              v.depends;
+        local-graph = include-test:
+          let
+            partial =
+              parser
+                 (map
+                    (a: "${a}")
+                    (srcs ++ (if include-test then [ test-src ] else []))
+                 );
+          in
+          mapAttrs
+            (_: v:
+               { depends =
+                   filter
+                     (v: partial?${v})
+                     v.depends;
 
-        #          inherit (v) path;
-        #        }
-        #     )
-        #     partial;
+                 inherit (v) path;
+               }
+            )
+            partial;
 
-        # # These are needed to prevent repeate evaluation
-        # local-graph-tests = local-graph true;
-        # local-graph-no-tests = local-graph false;
+        # These are needed to prevent repeate evaluation
+        local-graph-tests = local-graph true;
+        local-graph-no-tests = local-graph false;
 
         foreign-stuff = deps: prefix:
           let
@@ -195,244 +195,201 @@ with builtins;
               pre-compile = built-deps;
             };
 
-        # build-single = { include-test ? false, name, local-deps }:
-        #   let
-        #     # copy = "cp --no-preserve=mode --preserve=timestamps -r";
+        build-single = { include-test ? false, name, local-deps }:
+          let
+            src =
+              let
+                graph-path =
+                  (if include-test
+                   then local-graph-tests
+                   else local-graph-no-tests
+                  ).${name}.path;
 
-        #     built-deps = args:
-        #       mkDerivation
-        #         { name = "built-deps";
-        #           phases = [ "buildPhase" "installPhase" ];
+                purs-path =
+                  let matches = match "/nix/store/[^/]+/(.+)$" graph-path; in
+                  if matches != null then
+                    head matches
+                  else
+                    throw "${name}: there should be a match here!";
 
-        #           buildPhase =
-        #             if dep-globs != ""
-        #             then u.compile purescript (args // { globs = dep-globs; })
-        #             else "mkdir output";
+                js-path = replaceStrings [ ".purs" ] [ ".js" ] purs-path;
 
-        #           installPhase = "mv output $out";
-        #         };
+                subsrc =
+                  let
+                    src' =
+                      l.findFirst
+                        (path: l.hasPrefix "${path}" graph-path)
+                        (throw "should always find a match")
+                        (srcs ++ (if include-test then [ test-src ] else []));
 
-        #     all-built-deps = args:
-        #       mkDerivation
-        #         { name = "all-built-deps";
-        #           phases = [ "buildPhase" "installPhase" ];
+                    relative-path = u.subtract-string graph-path "${src'}";
+                    matches = match "(.+)/[^/]+$" relative-path;
+                  in
+                  if matches == null then src'
+                  else src' + head matches;
+              in
+              filterSource
+                (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
+                subsrc;
 
-        #           buildPhase =
-        #             if all-dep-globs != "" then
-        #               ''
-        #               ${copy} ${built-deps args} output
-        #               ${u.compile purescript (args // { globs = all-dep-globs; })}
-        #               ''
-        #             else
-        #               "mkdir output";
+            output = { top-level ? true, include-test ? false }: args:
+              let
+                incremental = args.incremental or false;
+                stripped = removeAttrs args [ "incremental" ];
 
-        #           installPhase = "mv output $out";
-        #         };
+                trans-deps =
+                  let
+                    go = ds:
+                      foldl' (acc: d: acc ++ go d.local-deps) [] ds
+                      ++ ds;
+                  in
+                  l.unique (go local-deps);
 
-        #     src =
-        #       let
-        #         graph-path =
-        #           (if include-test
-        #            then local-graph-tests
-        #            else local-graph-no-tests
-        #           ).${name}.path;
+                dg =
+                  if include-test then
+                    { deps-drv = all-built-deps;
+                      deps-list = all-dependencies;
+                      globs = all-dep-globs;
+                    }
+                  else
+                    { deps-drv = built-deps;
+                      deps-list = dependencies;
+                      globs = dep-globs;
+                    };
+              in
+              mkDerivation
+                { name = "${name}-compiled";
+                  phases = [ "buildPhase" "installPhase" ];
 
-        #         purs-path =
-        #           let matches = match "/nix/store/[^/]+/(.+)$" graph-path; in
-        #           if matches != null then
-        #             head matches
-        #           else
-        #             throw "${name}: there should be a match here!";
+                  buildPhase =
+                    let
+                      augmentations =
+                        toString
+                          (map
+                             (a: "${a.bin include-test args} output;")
+                             trans-deps
+                          );
 
-        #         js-path = replaceStrings [ ".purs" ] [ ".js" ] purs-path;
+                      local-dep-globs =
+                        toString
+                          (map
+                            (a: ''"${a.src}/**/*.purs"'')
+                            trans-deps
+                          );
+                    in
+                    ''
+                    ${copy} ${dg.deps-drv stripped} output
+                    ${if incremental then augmentations else ""}
 
-        #         subsrc =
-        #           let
-        #             src' =
-        #               l.findFirst
-        #                 (path: l.hasPrefix "${path}" graph-path)
-        #                 (throw "should always find a match")
-        #                 (srcs ++ (if include-test then [ test-src ] else []));
+                    ${u.compile
+                        purescript
+                        (stripped
+                         // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dg.globs}'';
+                              output = "output";
+                            }
+                        )
+                    }
+                    '';
 
-        #             relative-path = u.subtract-string graph-path "${src'}";
-        #             matches = match "(.+)/[^/]+$" relative-path;
-        #           in
-        #           if matches == null then src'
-        #           else src' + head matches;
-        #       in
-        #       filterSource
-        #         (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
-        #         subsrc;
+                  installPhase =
+                    ''
+                    mv output $out
+                    cd $out
 
-        #     output = { top-level ? true, include-test ? false }: args:
-        #       let
-        #         incremental = args.incremental or false;
-        #         stripped = removeAttrs args [ "incremental" ];
+                    ${if top-level
+                      then foreign-stuff dg.deps-list "."
+                      else ""
+                    }
+                    '';
+                };
 
-        #         trans-deps =
-        #           let
-        #             go = ds:
-        #               foldl' (acc: d: acc ++ go d.local-deps) [] ds
-        #               ++ ds;
-        #           in
-        #           l.unique (go local-deps);
+            bundle = { esbuild ? {}, main ? true, incremental ? false }:
+              p.runCommand "${name}-bundle" {}
+                (u.bundle
+                   { entry-point =
+                       output {} { inherit incremental; }
+                       + "/${name}/index.js";
 
-        #         dg =
-        #           if include-test then
-        #             { deps-drv = all-built-deps;
-        #               deps-list = all-dependencies;
-        #               globs = all-dep-globs;
-        #             }
-        #           else
-        #             { deps-drv = built-deps;
-        #               deps-list = dependencies;
-        #               globs = dep-globs;
-        #             };
-        #       in
-        #       mkDerivation
-        #         { name = "${name}-compiled";
-        #           phases = [ "buildPhase" "installPhase" ];
+                     esbuild = esbuild // { outfile = "$out"; };
+                     inherit main;
+                   }
+                );
 
-        #           buildPhase =
-        #             let
-        #               augmentations =
-        #                 toString
-        #                   (map
-        #                      (a: "${a.bin include-test args} output;")
-        #                      trans-deps
-        #                   );
+            script =
+              { esbuild ? {}
+              , incremental ? false
+              }:
+              let
+                bundle' =
+                  bundle
+                    { esbuild =
+                        { minify = true; }
+                        // esbuild
+                        // { platform = "node"; };
 
-        #               local-dep-globs =
-        #                 toString
-        #                   (map
-        #                     (a: ''"${a.src}/**/*.purs"'')
-        #                     trans-deps
-        #                   );
-        #             in
-        #             ''
-        #             ${copy} ${dg.deps-drv stripped} output
-        #             ${if incremental then augmentations else ""}
+                      inherit incremental;
+                    };
+              in
+              p.runCommand "${name}-script" {}
+                ''
+                echo $'#! ${nodejs}/bin/node' > $out
+                cat ${bundle'} >> $out
+                chmod +x $out
+                '';
 
-        #             ${u.compile
-        #                 purescript
-        #                 (stripped
-        #                  // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dg.globs}'';
-        #                       output = "output";
-        #                     }
-        #                 )
-        #             }
-        #             '';
+            app =
+              { name
+              , version ? null
+              , command ? name
+              , esbuild ? {}
+              , incremental ? false
+              }:
+              mkDerivation
+                ({ phases = [ "installPhase" ];
 
-        #           installPhase =
-        #             ''
-        #             mv output $out
-        #             cd $out
+                   installPhase =
+                     ''
+                     mkdir -p $out/bin; cd $_
 
-        #             ${if top-level
-        #               then foreign-stuff dg.deps-list "."
-        #               else ""
-        #             }
-        #             '';
-        #         };
+                     cp \
+                       ${script { inherit esbuild incremental; }} \
+                       ${l.escapeShellArg command}
+                     '';
+                 }
+                 // u.make-name name version
+                );
+          in
+          { inherit app bundle local-deps name output script src;
 
-        #     bundle = { esbuild ? {}, main ? true, incremental ? false }:
-        #       p.runCommand "${name}-bundle" {}
-        #         (u.bundle
-        #            { entry-point =
-        #                output {} { inherit incremental; }
-        #                + "/${name}/index.js";
+            bin = include-test: args:
+              let
+                merge-cache =
+                  p.writeShellScript "merge-cache"
+                    ''
+                    f=$(mktemp)
+                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
+                    cat $f > "$3"
+                    rm $f
+                    '';
 
-        #              esbuild = esbuild // { outfile = "$out"; };
-        #              inherit main;
-        #            }
-        #         );
+                output' = output { inherit include-test; top-level = false; } args;
+              in
+              p.writeShellScript name
+                ''
+                ${copy} ${output'}/${name} $1/${name}
+                ${merge-cache} ${output'}/cache-db.json $1/cache-db.json $1/cache-db.json
+                '';
+          };
 
-        #     script =
-        #       { esbuild ? {}
-        #       , incremental ? false
-        #       }:
-        #       let
-        #         bundle' =
-        #           bundle
-        #             { esbuild =
-        #                 { minify = true; }
-        #                 // esbuild
-        #                 // { platform = "node"; };
-
-        #               inherit incremental;
-        #             };
-        #       in
-        #       p.runCommand "${name}-script" {}
-        #         ''
-        #         echo $'#! ${nodejs}/bin/node' > $out
-        #         cat ${bundle'} >> $out
-        #         chmod +x $out
-        #         '';
-
-        #     app =
-        #       { name
-        #       , version ? null
-        #       , command ? name
-        #       , esbuild ? {}
-        #       , incremental ? false
-        #       }:
-        #       mkDerivation
-        #         ({ phases = [ "installPhase" ];
-
-        #            installPhase =
-        #              ''
-        #              mkdir -p $out/bin; cd $_
-
-        #              cp \
-        #                ${script { inherit esbuild incremental; }} \
-        #                ${l.escapeShellArg command}
-        #              '';
-        #          }
-        #          // u.make-name name version
-        #         );
-        #   in
-        #   { inherit app bundle local-deps name output script src;
-
-        #     bin = include-test: args:
-        #       let
-        #         merge-cache =
-        #           p.writeShellScript "merge-cache"
-        #             ''
-        #             f=$(mktemp)
-        #             ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
-        #             cat $f > "$3"
-        #             rm $f
-        #             '';
-
-        #         output' = output { inherit include-test; top-level = false; } args;
-        #       in
-        #       p.writeShellScript name
-        #         ''
-        #         ${copy} ${output'}/${name} $1/${name}
-        #         ${merge-cache} ${output'}/cache-db.json $1/cache-db.json $1/cache-db.json
-        #         '';
-        #   };
-
-        # builds =
-        #   mapAttrs
-        #     (name: v:
-        #        build-single
-        #          { inherit name;
-        #            local-deps = map (v: builds.${v}) v.depends;
-        #          }
-        #     )
-        #     local-graph-no-tests;
-
-        # all-builds =
-        #   mapAttrs
-        #     (name: v:
-        #        build-single
-        #          { include-test = true;
-        #            inherit name;
-        #            local-deps = map (v: all-builds.${v}) v.depends;
-        #          }
-        #     )
-        #     local-graph-tests;
+        builds =
+          mapAttrs
+            (name: v:
+               build-single
+                 { inherit name;
+                   local-deps = map (v: builds.${v}) v.depends;
+                 }
+            )
+            local-graph-no-tests;
 
         output = { test-modules ? false }: args:
           let
@@ -525,14 +482,20 @@ with builtins;
         output = output {};
         inherit app bundle script;
 
-        # modules =
-        #   mapAttrs
-        #     (_: v:
-        #        { inherit (v) bundle script app;
-        #          output = v.output {};
-        #        }
-        #     )
-        #     builds;
+        modules =
+          l.warn
+            ''
+            The `modules` API is deprecated.
+            see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/derivations.md
+            ''
+            (mapAttrs
+              (_: v:
+                 { inherit (v) bundle script app;
+                   output = v.output {};
+                 }
+              )
+              builds
+            );
 
         command =
           import ./purs-nix-command.nix

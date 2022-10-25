@@ -65,7 +65,6 @@
              mapAttrs
                (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
                { packages-compile = true;
-                 parser = false;
                  repl = true;
                };
 
@@ -127,9 +126,7 @@
 
            package-tests =
              import ./packages.nix
-               ({ inherit l p switches;
-                  inherit (purs-nix-flake.inputs.parsec.lib) parsec;
-                }
+               ({ inherit l p switches; }
                 // (purs-nix-flake { inherit system; })
                );
 

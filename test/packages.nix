@@ -2,9 +2,7 @@ with builtins;
 { switches
 , l
 , p
-, parsec
 , ps-pkgs
-, purescript
 , purs
 , ...
 }:
@@ -34,15 +32,6 @@ with builtins;
         )
         {}
         (l.mapAttrsToList l.nameValuePair ps-pkgs);
-
-    purs-graph = deps:
-      let globs = toString (map (a: ''"${a}/**/*.purs"'') deps); in
-      l.pipe "${purescript}/bin/purs graph ${globs} > $out"
-        [ (p.runCommand "purescript-dependency-graph" {})
-          readFile
-          unsafeDiscardStringContext
-          fromJSON
-        ];
   in
   # to truly test this you need to manually wipe the caches in ~/.cache/nix
   l.foldl'
@@ -64,12 +53,6 @@ with builtins;
                     + "/bin/purs-nix";
                 in
                 p.runCommand test-name {} "${command} compile";
-            }
-       // l.optionalAttrs switches.parser
-            { "parser matches `purs graph` ${name}" =
-                let parser = import ../parser.nix { inherit l parsec; }; in
-                assert purs-graph ps.dependencies == parser ps.dependencies;
-                p.runCommand "empty" {} "touch $out";
             }
     )
     {}

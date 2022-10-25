@@ -16,13 +16,13 @@
       utils.url = "github:ursi/flake-utils/8";
     };
 
-  outputs = { get-flake, utils, ... }@inputs:
+  outputs = { get-flake, parsec, utils, ... }@inputs:
     with builtins;
     { __functor = _: { overlays ? [], system }:
         import ./purs-nix.nix
           { docs-search = (get-flake inputs.docs-search).packages.${system}.default;
             inherit overlays;
-            # inherit (parsec.lib) parsec;
+            inherit (parsec.lib) parsec;
             pkgs = inputs.nixpkgs.legacyPackages.${system};
             ps-tools = inputs.ps-tools.legacyPackages.${system};
           };
