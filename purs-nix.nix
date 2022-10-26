@@ -147,44 +147,57 @@ with builtins;
 
         copy = "cp --no-preserve=mode --preserve=timestamps -r";
 
-        compile = { name, deps, pre-compile ? null, foreign ? false }: args:
-          mkDerivation
-            { inherit name;
-              phases = [ "buildPhase" "installPhase" ];
+        compile =
+          { name
+          , deps
+          , postprocessing ? null
+          , pre-compile ? null
+          }:
+          args:
+          let
+            unprocessed =
+              mkDerivation
+                { inherit name;
+                  phases = [ "buildPhase" "installPhase" ];
 
-              buildPhase =
-                if deps != [] then
-                  ''
-                  ${if pre-compile != null
-                    then "${copy} ${pre-compile args} output"
-                    else ""
-                  }
+                  buildPhase =
+                    if deps != [] then
+                      ''
+                      ${if pre-compile != null
+                        then "${copy} ${pre-compile args} output"
+                        else ""
+                      }
 
-                  ${u.compile
-                      purescript
-                      (args
-                       // { globs = make-dep-globs deps;
-                            output = "output";
-                          }
-                      )
-                  }
-                  ''
-                else
-                  "mkdir output";
+                      ${u.compile
+                          purescript
+                          (args
+                           // { globs = make-dep-globs deps;
+                                output = "output";
+                              }
+                          )
+                      }
+                      ''
+                    else
+                      "mkdir output";
 
-              installPhase =
-                ''
-                mv output $out
-                ${if foreign then
-                    ''
-                    cd $out
-                    ${foreign-stuff deps "."}
-                    ''
-                  else
-                    ""
-                }
-                '';
-            };
+                  installPhase = "mv output $out";
+                };
+          in
+          if postprocessing != null
+          then postprocessing name deps unprocessed
+          else unprocessed;
+
+        pp.foreign = name: deps: output:
+          let foreign = foreign-stuff deps "."; in
+          if foreign == "" then
+            output
+          else
+            p.runCommand "${name}+foreign" {}
+              ''
+              mkdir $out; cd $out
+              ${copy} ${output}/. .
+              ${foreign}
+              '';
 
         built-deps = compile { name = "dependencies"; deps = dependencies; };
 
@@ -414,7 +427,7 @@ with builtins;
           in
           compile
             { inherit (dg) name deps pre-compile;
-              foreign = true;
+              postprocessing = pp.foreign;
             }
             args;
 
