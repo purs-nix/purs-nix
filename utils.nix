@@ -52,6 +52,7 @@ p:
       , codegen ? null
       , no-prefix ? false
       , json-errors ? false
+      , ...
       }:
       let
         flags =

@@ -53,7 +53,7 @@
              };
 
            packages =
-             with ps.modules.Main;
+             with ps;
              { default = app { name = "is-even"; };
                bundle = bundle {};
                output = output {};

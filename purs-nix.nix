@@ -145,40 +145,83 @@ with builtins;
             ""
             (l.mapAttrsToList l.nameValuePair combined);
 
-        build-single = { include-test ? false, name, local-deps }:
+        copy = "cp --no-preserve=mode --preserve=timestamps -r";
+
+        compile =
+          { name
+          , deps
+          , postprocessing ? null
+          , pre-compile ? null
+          }:
+          args:
           let
-            copy = "cp --no-preserve=mode --preserve=timestamps -r";
-
-            built-deps = args:
+            unprocessed =
               mkDerivation
-                { name = "built-deps";
+                { inherit name;
                   phases = [ "buildPhase" "installPhase" ];
 
                   buildPhase =
-                    if dep-globs != ""
-                    then u.compile purescript (args // { globs = dep-globs; })
-                    else "mkdir output";
-
-                  installPhase = "mv output $out";
-                };
-
-            all-built-deps = args:
-              mkDerivation
-                { name = "all-built-deps";
-                  phases = [ "buildPhase" "installPhase" ];
-
-                  buildPhase =
-                    if all-dep-globs != "" then
+                    if deps != [] then
                       ''
-                      ${copy} ${built-deps args} output
-                      ${u.compile purescript (args // { globs = all-dep-globs; })}
+                      ${if pre-compile != null
+                        then "${copy} ${pre-compile args} output"
+                        else ""
+                      }
+
+                      ${u.compile
+                          purescript
+                          (args
+                           // { globs = make-dep-globs deps;
+                                output = "output";
+                              }
+                          )
+                      }
                       ''
                     else
                       "mkdir output";
 
                   installPhase = "mv output $out";
                 };
+          in
+          if postprocessing != null
+          then postprocessing name deps unprocessed
+          else unprocessed;
 
+        pp =
+          { compose = f: g: name: deps: output: f name deps (g name deps output);
+
+            foreign = name: deps: output:
+              let foreign = foreign-stuff deps "."; in
+              if foreign == "" then
+                output
+              else
+                p.runCommand "${name}+foreign" {}
+                  ''
+                  mkdir $out; cd $out
+                  ${copy} ${output}/. .
+                  ${foreign}
+                  '';
+
+            zephyr = args: name: _: output:
+              p.runCommand "${name}+zephyr" {}
+                ''
+                ${copy} ${output} output
+                ${ps-tools.for-0_14.zephyr}/bin/zephyr -f ${args}
+                mv dce-output $out
+                '';
+          };
+
+        built-deps = compile { name = "dependencies"; deps = dependencies; };
+
+        all-built-deps =
+          compile
+            { name = "test-dependencies";
+              deps = all-dependencies;
+              pre-compile = built-deps;
+            };
+
+        build-single = { include-test ? false, name, local-deps }:
+          let
             src =
               let
                 graph-path =
@@ -413,27 +456,134 @@ with builtins;
             )
             local-graph-no-tests;
 
-        all-builds =
-          mapAttrs
-            (name: v:
-               build-single
-                 { include-test = true;
-                   inherit name;
-                   local-deps = map (v: all-builds.${v}) v.depends;
+        output = { test-modules ? false }: args:
+          let
+            inherit
+              (if args?zephyr then
+                 { args' =
+                     if args?codegen
+                     then assert l.hasInfix "corefn" a.codegen; a
+                     else args // { codegen = "corefn,js"; };
+
+                   pp' = pp.compose pp.foreign (pp.zephyr args.zephyr);
                  }
-            )
-            local-graph-tests;
+               else
+                 { args' = args;
+                   pp' = pp.foreign;
+                 }
+              )
+              args' pp';
+
+            dg =
+              if test-modules then
+                { name = "all-deps+modules+test-modules";
+
+                  pre-compile =
+                    compile
+                      { name = "all-deps+modules";
+                        deps = srcs ++ all-dependencies;
+                        pre-compile = all-built-deps;
+                      };
+
+                  deps = srcs ++ [ test-src ] ++ all-dependencies;
+                }
+              else
+                { name = "deps+modules";
+                  pre-compile = built-deps;
+                  deps = srcs ++ dependencies;
+                };
+          in
+          compile
+            { inherit (dg) name deps pre-compile;
+              postprocessing = pp';
+            }
+            args';
+
+        bundle =
+          { module ? "Main"
+          , esbuild ? {}
+          , main ? true
+          , zephyr ? true
+          }:
+          p.runCommand "${module}-bundle" {}
+            (u.bundle
+               { entry-point =
+                   output {}
+                     (if zephyr
+                      then { zephyr = if main then "${module}.main" else module; }
+                      else {}
+                     )
+                   + "/${module}/index.js";
+
+                 esbuild = esbuild // { outfile = "$out"; };
+                 inherit main;
+               }
+            );
+
+        script =
+          { module ? "Main"
+          , esbuild ? {}
+          , zephyr ? true
+          }:
+          let
+            bundle' =
+              bundle
+                { esbuild =
+                    { minify = true; }
+                    // esbuild
+                    // { platform = "node"; };
+
+                  inherit module zephyr;
+                };
+          in
+          p.runCommand "${module}-script" {}
+            ''
+            echo $'#! ${nodejs}/bin/node' > $out
+            cat ${bundle'} >> $out
+            chmod +x $out
+            '';
+
+        app =
+          { name
+          , module ? "Main"
+          , version ? null
+          , command ? name
+          , esbuild ? {}
+          , zephyr ? true
+          }:
+          mkDerivation
+            ({ phases = [ "installPhase" ];
+
+               installPhase =
+                 ''
+                 mkdir -p $out/bin; cd $_
+
+                 cp \
+                   ${script { inherit esbuild module zephyr; }} \
+                   ${l.escapeShellArg command}
+                 '';
+             }
+             // u.make-name name version
+            );
       in
       { dependencies = all-dependencies;
+        output = output {};
+        inherit app bundle script;
 
         modules =
-          mapAttrs
-            (_: v:
-               { inherit (v) bundle script app;
-                 output = v.output {};
-               }
-            )
-            builds;
+          l.warn
+            ''
+            The `modules` API is deprecated.
+            see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/derivations.md
+            ''
+            (mapAttrs
+              (_: v:
+                 { inherit (v) bundle script app;
+                   output = v.output {};
+                 }
+              )
+              builds
+            );
 
         command =
           import ./purs-nix-command.nix
@@ -460,17 +610,12 @@ with builtins;
         test =
           rec
           { run = args:
-              let
-                output =
-                  all-builds.${test-module}.output
-                    { include-test = true; }
-                    args;
-              in
+              let output' = output { test-modules = true; } args; in
               p.writeScript "${test-module}-run"
                 (u.node-command
                    { argv-1 = "${test-module}-run";
                      inherit nodejs;
-                     import = "${output}/${test-module}/index.js";
+                     import = "${output'}/${test-module}/index.js";
                    }
                 );
 
