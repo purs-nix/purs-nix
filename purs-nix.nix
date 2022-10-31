@@ -187,6 +187,165 @@ with builtins;
           then postprocessing name deps unprocessed
           else unprocessed;
 
+        compile' =
+          { name
+          , deps
+          , postprocessing ? null
+          , pre-compile ? null
+          }:
+          args:
+          let
+            bin = name': deps':
+              let
+                merge-cache =
+                  p.writeShellScript "merge-cache"
+                    ''
+                    f=$(mktemp)
+                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
+                    cat $f > "$3"
+                    rm $f
+                    '';
+
+                output' = compile' { name = name'; deps = deps'; } args;
+              in
+              p.writeShellScript "${name}-compiled"
+                ''
+                ${copy} ${output'}/. output
+                ${merge-cache} ${output'}/cache-db.json output/cache-db.json output/cache-db.json
+                '';
+
+            augmentations =
+              l.pipe deps
+                [ (filter (a: a?purs-nix-info))
+                  (map
+                     (a: bin
+                           a.purs-nix-info.name
+                           a.purs-nix-info.dependencies
+                         + ";"
+                     )
+                  )
+                  toString
+                ];
+
+            unprocessed =
+              mkDerivation
+                { inherit name;
+                  phases = [ "buildPhase" "installPhase" ];
+
+                  buildPhase =
+                    if deps != [] then
+                      # ${if pre-compile != null
+                      #   then "${copy} ${pre-compile args} output"
+                      #   else ""
+                      # }
+                      ''
+                      ${augmentations}
+
+                      ${u.compile
+                          purescript
+                          (args
+                           // { globs = make-dep-globs deps;
+                                output = "output";
+                              }
+                          )
+                      }
+                      ''
+                    else
+                      "mkdir output";
+
+                  installPhase = "mv output $out";
+                };
+          in
+          if postprocessing != null
+          then postprocessing name deps unprocessed
+          else unprocessed;
+
+        compile-package = acc: package: args:
+          let
+            info = package.purs-nix-info;
+            all-deps = create-closure info.dependencies;
+
+            bin = acc': package':
+              let
+                info = package'.purs-nix-info;
+                merge-cache =
+                  p.writeShellScript "merge-cache"
+                    ''
+                    f=$(mktemp)
+                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
+                    cat $f > "$3"
+                    rm $f
+                    '';
+
+                result =
+                  if acc'?${info.name} then
+                    { drv = acc'.${info.name};
+                      acc = acc';
+                    }
+                  else
+                    compile-package acc' package' args;
+              in
+              { augment =
+                  p.writeShellScript "${info.name}-merge"
+                    ''
+                    shopt -s extglob
+                    if [ -e output ]; then
+                      ${copy} ${result.drv}/!(cache-db.json) output
+                      ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
+                    else
+                      ${copy} ${result.drv} output
+                    fi
+                    '';
+
+                acc = acc' // result.acc;
+              };
+
+            augmentations =
+              foldl'
+                (acc': d:
+                   let result = bin acc'.acc d; in
+                   { acc = acc' // result.acc;
+                     command = acc'.command + result.augment + ";";
+                   }
+                )
+                { inherit acc; command = ""; }
+                info.dependencies;
+
+            unprocessed =
+              mkDerivation
+                { name = l.traceVal "${info.name}-compiled";
+                  phases = [ "buildPhase" "installPhase" ];
+
+                  buildPhase =
+                    ''
+                    echo ${toString (length all-deps)}
+                    echo a
+                    echo '${augmentations.command}'
+                    echo b
+                    ${augmentations.command}
+
+                    ${if length all-deps > 0
+                      then "" #"ls output"
+                      else ""
+                    }
+
+                    ${u.compile
+                        purescript
+                        (args
+                         // { globs = make-dep-globs ([ package ] ++ all-deps);
+                              output = "output";
+                            }
+                        )
+                    }
+                    '';
+
+                  installPhase = "mv output $out";
+                };
+          in
+          { drv = unprocessed;
+            acc = acc // augmentations.acc // { ${info.name} = unprocessed; };
+          };
+
         pp =
           { compose = f: g: name: deps: output: f name deps (g name deps output);
 
@@ -570,20 +729,20 @@ with builtins;
         output = output {};
         inherit app bundle script;
 
-        modules =
-          l.warn
-            ''
-            The `modules` API is deprecated.
-            see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/derivations.md
-            ''
-            (mapAttrs
-              (_: v:
-                 { inherit (v) bundle script app;
-                   output = v.output {};
-                 }
-              )
-              builds
-            );
+        # modules =
+        #   l.warn
+        #     ''
+        #     The `modules` API is deprecated.
+        #     see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/derivations.md
+        #     ''
+        #     (mapAttrs
+        #       (_: v:
+        #          { inherit (v) bundle script app;
+        #            output = v.output {};
+        #          }
+        #       )
+        #       builds
+        #     );
 
         command =
           import ./purs-nix-command.nix
@@ -626,5 +785,7 @@ with builtins;
                 touch $out
                 '';
           };
+
+        compile-package = (compile-package {} ps-package-stuff.ps-pkgs."cardano-transaction-lib" {}).drv;
       };
   }

@@ -54,7 +54,7 @@
                    ];
                };
 
-           minimal = false;
+           minimal = true;
 
            switches =
              mapAttrs
