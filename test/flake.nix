@@ -388,7 +388,7 @@
                                     exceptions: 6.0.0
                                     exists: 6.0.0
                                     foldable-traversable: 6.0.0
-                                    foreign-object: 4.0.0
+                                    foreign-object: 4.1.0
                                     functions: 6.0.0
                                     functors: 5.0.0
                                     gen: 4.0.0
