@@ -260,8 +260,11 @@ with builtins;
           then postprocessing name deps unprocessed
           else unprocessed;
 
-        compile-package = acc: package: args:
+        # the lookup argument is to make sure everything is using the same dependencies
+        # as packages can lock their own versions
+        compile-package = lookup: acc: { purs-nix-info, ... }: args:
           let
+            package = lookup.${purs-nix-info.name};
             info = package.purs-nix-info;
             all-deps = create-closure info.dependencies;
 
@@ -313,7 +316,7 @@ with builtins;
 
             unprocessed =
               mkDerivation
-                { name = l.traceVal "${info.name}-compiled";
+                { name = "${info.name}-compiled";
                   phases = [ "buildPhase" "installPhase" ];
 
                   buildPhase =
@@ -344,6 +347,250 @@ with builtins;
           in
           { drv = unprocessed;
             acc = acc // augmentations.acc // { ${info.name} = unprocessed; };
+          };
+
+        compile-packages =
+          { packages
+          , lookup
+            ? listToAttrs
+                (map
+                   (p: l.nameValuePair (p.purs-nix-info.name) p)
+                   (create-closure packages)
+                )
+          }:
+          foldl'
+            (acc: package:
+               compile-package lookup acc.acc package
+            )
+            { packages = {};
+              acc = {};
+            }
+            packages;
+
+        compile-package' = lookup: acc: { purs-nix-info, ... }: args:
+          let
+            package = lookup.${purs-nix-info.name};
+            info = package.purs-nix-info;
+            all-deps = create-closure info.dependencies;
+            augmentations = compile-packages' { inherit lookup package; };
+
+            unprocessed =
+              mkDerivation
+                { name = "${info.name}-compiled";
+                  phases = [ "buildPhase" "installPhase" ];
+
+                  buildPhase =
+                    ''
+                    echo ${toString (length all-deps)}
+                    echo a
+                    echo '${augmentations.command}'
+                    echo b
+                    ${augmentations.command}
+
+                    ${if length all-deps > 0
+                      then "" #"ls output"
+                      else ""
+                    }
+
+                    ${u.compile
+                        purescript
+                        (args
+                         // { globs = make-dep-globs ([ package ] ++ all-deps);
+                              output = "output";
+                            }
+                        )
+                    }
+                    '';
+
+                  installPhase = "mv output $out";
+                };
+          in
+          { drv = unprocessed;
+            acc = acc // augmentations.acc // { ${info.name} = unprocessed; };
+          };
+
+        compile-packages' =
+          { packages
+          , lookup
+            ? listToAttrs
+                (map
+                   (p: l.nameValuePair (p.purs-nix-info.name) p)
+                   (create-closure packages)
+                )
+          }:
+          let
+            bin = acc: package:
+              let
+                info = package'.purs-nix-info;
+                merge-cache =
+                  p.writeShellScript "merge-cache"
+                    ''
+                    f=$(mktemp)
+                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
+                    cat $f > "$3"
+                    rm $f
+                    '';
+
+                result =
+                  if acc'?${info.name} then
+                    { drv = acc'.${info.name};
+                      acc = acc';
+                    }
+                  else
+                    compile-package' acc' package' args;
+              in
+              { augment =
+                  p.writeShellScript "${info.name}-merge"
+                    ''
+                    shopt -s extglob
+                    if [ -e output ]; then
+                      ${copy} ${result.drv}/!(cache-db.json) output
+                      ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
+                    else
+                      ${copy} ${result.drv} output
+                    fi
+                    '';
+
+                acc = acc' // result.acc;
+              };
+
+            stuff =
+              foldl'
+                (acc: package:
+                   compile-package lookup acc.acc package
+                   # let a = bin acc.acc package; in
+                   # { augment = acc.agument + "${a.augment};";
+                   #   acc = acc.acc // a.acc;
+                   # }
+                )
+                { augment = "";
+                  acc = {};
+                }
+                packages;
+          in
+          stuff.augment;
+
+        compile-stuff =
+          { lookups
+          , acc
+          , local-globs
+          , dependencies
+          , name
+          }:
+          args:
+          let
+            lookup = package: lookups.${package.purs-nix-info.name};
+            all-deps = map lookup (create-closure dependencies);
+
+            bin = acc': package:
+              let
+                info = package.purs-nix-info;
+
+                merge-cache =
+                  p.writeShellScript "merge-cache"
+                    ''
+                    f=$(mktemp)
+                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
+                    cat $f > "$3"
+                    rm $f
+                    '';
+
+                result =
+                  if acc'?${info.name} then
+                    { drv = acc'.${info.name};
+                      acc = acc';
+                    }
+                  else
+                    compile-package''
+                      { inherit lookups package;
+                        acc = acc';
+                      }
+                      args;
+              in
+              { augment =
+                  p.writeShellScript "${info.name}-merge"
+                    ''
+                    shopt -s extglob
+                    if [ -e output ]; then
+                      ${copy} ${result.drv}/!(cache-db.json) output
+                      ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
+                    else
+                      ${copy} ${result.drv} output
+                    fi
+                    '';
+
+                acc = acc' // result.acc;
+              };
+
+            augmentations =
+              foldl'
+                (acc': d:
+                   let result = bin acc'.acc (lookup d); in
+                   { acc = acc' // result.acc;
+                     command = acc'.command + result.augment + ";";
+                   }
+                )
+                { inherit acc; command = ""; }
+                dependencies;
+
+            unprocessed =
+              mkDerivation
+                { name = "${name}-compiled";
+                  phases = [ "buildPhase" "installPhase" ];
+
+                  buildPhase =
+                    ''
+                    echo name: ${name}
+                    echo augmentations command
+                    echo '${augmentations.command}'
+                    echo local-globs
+                    echo '${break local-globs}'
+                    echo all-deps
+                    echo '${toString all-deps}'
+
+                    ${augmentations.command}
+
+                    ${u.compile
+                        purescript
+                        (args
+                         // { globs = ''"${local-globs}" ${make-dep-globs all-deps}'';
+                              output = "output";
+                            }
+                        )
+                    }
+                    '';
+
+                  installPhase = "mv output $out";
+                };
+          in
+          { drv = unprocessed;
+            acc = acc // augmentations.acc;
+          };
+
+        compile-package'' =
+          { lookups
+            ? l.pipe package.purs-nix-info.dependencies
+                [ create-closure
+                  (map (dep: l.nameValuePair dep.purs-nix-info.name dep))
+                  listToAttrs
+                ]
+          , acc
+          , package
+          }:
+          args:
+          let
+            info = package.purs-nix-info;
+
+            a =
+              compile-stuff
+                { inherit acc lookups;
+                  inherit (info) dependencies name;
+                  local-globs = "${package}/**/*.purs";
+                }
+                args;
+          in
+          { inherit (a) drv;
+            acc = a.acc // { ${info.name} = a.drv; };
           };
 
         pp =
@@ -786,6 +1033,14 @@ with builtins;
                 '';
           };
 
-        compile-package = (compile-package {} ps-package-stuff.ps-pkgs."cardano-transaction-lib" {}).drv;
+        # compile-package = (compile-package'' {} ps-package-stuff.ps-pkgs."cardano-transaction-lib" {}).drv;
+
+        compile-package =
+          (compile-package''
+             { acc = {};
+               package = ps-package-stuff.ps-pkgs."cardano-transaction-lib";
+             }
+             {}
+          ).drv;
       };
   }
