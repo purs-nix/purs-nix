@@ -8,6 +8,8 @@ with builtins;
     ps-package-stuff =
       import ./build-pkgs.nix
         { inherit overlays pkgs; utils = u; };
+
+    inherit (ps-package-stuff) ps-pkgs;
   in
   { inherit (ps-package-stuff) build build-set ps-pkgs ps-pkgs-ns;
     inherit (pkgs) esbuild;
@@ -56,23 +58,32 @@ with builtins;
         create-closure = deps:
           let
             f = direct:
+              let g = f false; in
               foldl'
                 (acc: dep:
-                   let inherit (dep.purs-nix-info) name; in
-                   if direct || !acc?${name} then
-                     f false
-                       (acc // { ${name} = dep; })
-                       dep.purs-nix-info.dependencies
+                   let
+                     name = u.dep-name dep;
+                     included = acc?${name};
+                   in
+                   if typeOf dep == "string" then
+                     if !included then
+                       g (acc // { ${dep} = ps-pkgs.${dep}; })
+                         ps-pkgs.${dep}.purs-nix-info.dependencies
+                     else
+                       acc
                    else
-                     acc
+                     let info = dep.purs-nix-info; in
+                     if direct then
+                       g (acc // { ${info.name} = dep; })
+                         info.dependencies
+                     else if !included then
+                       g (acc // { ${info.name} = ps-pkgs.${info.name}; })
+                         info.dependencies
+                     else
+                       acc
                 );
-
-            trans-deps =
-              f true
-                {}
-                (sort (a: b: a.purs-nix-info.name < b.purs-nix-info.name) deps);
           in
-          attrValues trans-deps;
+          attrValues (f true {} deps);
 
         dependencies =
           if args?dependencies
@@ -404,11 +415,12 @@ with builtins;
                 docs-search
                 nodejs
                 pkgs
+                ps-pkgs
                 purescript;
 
               repl-globs =
                 make-dep-globs
-                  (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
+                  (all-dependencies ++ [ ps-pkgs.psci-support ]);
 
               srcs' = (a: if args?dir then args.srcs or a else a) [ "src" ];
               test' = (a: if args?dir then args.test or a else a) "test";

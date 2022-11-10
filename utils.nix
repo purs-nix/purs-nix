@@ -151,4 +151,15 @@ p:
         l2 = stringLength s2;
       in
       substring l2 (l1 - l2) s1;
+
+    dep-name = dep:
+      if typeOf dep == "string"
+      then dep
+      else dep.purs-nix-info.name;
+
+    dep-info = ps-pkgs: dep:
+      (if typeOf dep == "string"
+       then ps-pkgs.${dep}
+       else dep
+      ).purs-nix-info;
   }

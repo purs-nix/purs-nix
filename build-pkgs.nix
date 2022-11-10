@@ -101,7 +101,31 @@ with builtins;
            phases = [ "unpackPhase" "installPhase" ];
 
            passthru =
-             { purs-nix-info =
+             { overlay =
+                   let
+                     f =
+                       foldl'
+                         (acc: dep:
+                            if typeOf dep == "string" then
+                              acc
+                            else
+                              let info = dep.purs-nix-info; in
+                              { current = acc.current // { ${info.name} = dep; };
+
+                                overlays =
+                                  let a = f acc info.dependencies; in
+                                  a.overlays
+                                  ++ [ (_: _: a.current) ]
+                                  ++ acc.overlays;
+                              }
+                         );
+
+                     a = f { current = {}; overlays = []; } dependencies;
+                     inherit (a) current overlays;
+                   in
+                   l.composeManyExtensions (overlays ++ [ (_: _: current) ]);
+
+               purs-nix-info =
                  { inherit dependencies name;
                    src = ps-src;
                  }
