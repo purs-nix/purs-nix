@@ -35,9 +35,9 @@
              purs-nix.purs
                { dependencies =
                    with purs-nix.ps-pkgs;
-                   [ console
-                     effect
-                     prelude
+                   [ "console"
+                     "effect"
+                     "prelude"
                    ];
 
                  dir = ./.;

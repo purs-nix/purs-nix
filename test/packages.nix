@@ -21,19 +21,19 @@ with builtins;
 
     dependencies =
       foldl'
-        (acc: { name, value }:
+        (acc: name:
            let
              bucket = toString buckets.${name};
            in
            acc
            // { ${bucket} =
                   if acc?${bucket}
-                  then acc.${bucket} ++ [ value ]
-                  else [ value ];
+                  then acc.${bucket} ++ [ name ]
+                  else [ name ];
               }
         )
         {}
-        (l.mapAttrsToList l.nameValuePair ps-pkgs);
+        (attrNames ps-pkgs);
 
     purs-graph = deps:
       let globs = toString (map (a: ''"${a}/**/*.purs"'') deps); in
