@@ -2190,21 +2190,6 @@ invariant =
       };
   };
 
-jarilo =
-  { src.git =
-      { repo = "https://github.com/bklaric/purescript-jarilo.git";
-        rev = "a83d45cfd9b444d19d47dea4a8700f6cfaf6c048";
-      };
-
-    info =
-      { version = "1.0.1";
-
-        dependencies =
-          [ "arrays" "bifunctors" "console" "effect" "either" "foldable-traversable" "http-methods" "integers" "lists" "maybe" "prelude" "record" "strings" "tuples" "uri" "variant" 
-          ];
-      };
-  };
-
 jelly =
   { src.git =
       { repo = "https://github.com/yukikurage/purescript-jelly.git";
