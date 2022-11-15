@@ -602,7 +602,22 @@
                       };
                   }
                   // package-tests
-                  // { "'check' api" = ps.test.check {}; };
+                  // { "'check' api" = ps.test.check {}; }
+                  // { ".overlay" =
+                         let
+                           overlay =
+                             (purs-nix.build
+                                { name = "local-package";
+                                  src.path = ./.;
+                                  info = { inherit (package) dependencies; };
+                                }
+                             ).overlay null null;
+                         in
+                         assert
+                           overlay?"purs-nix.build-test"
+                           && length (attrValues overlay) == 1;
+                         p.runCommand "empty" {} "touch $out";
+                     };
 
            devShells.default =
              make-shell
