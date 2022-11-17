@@ -47,7 +47,8 @@
 
                      (self: super:
                         with self;
-                        { murmur3 = self."ursi.murmur3";
+                        { effect = super.effect.overrideAttrs (_: {});
+                          murmur3 = self."ursi.murmur3";
                           "test.prelude" = super.test-package;
                         }
                      )
