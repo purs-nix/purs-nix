@@ -92,7 +92,6 @@
              mapAttrs
                (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
                { packages-compile = true;
-                 parser = true;
                  repl = true;
                };
 
@@ -140,7 +139,7 @@
                };
 
            run-app-custom = args: module:
-             "${(ps-custom args).modules.${module}.app { name = "test run"; }}/bin/'test run'";
+             "${(ps-custom args).app { inherit module; name = "test run"; }}/bin/'test run'";
 
            run-app = run-app-custom {};
 
@@ -154,9 +153,7 @@
 
            package-tests =
              import ./packages.nix
-               ({ inherit l p switches;
-                  inherit (purs-nix-flake.inputs.parsec.lib) parsec;
-                }
+               ({ inherit l p switches; }
                 // (purs-nix-flake { inherit system; })
                );
 
@@ -201,7 +198,7 @@
                { "compiler flags" =
                    let
                      output =
-                       ps.modules.Main.output
+                       ps.output
                          { codegen = "corefn,js";
                            comments = true;
                            no-prefix = true;
@@ -229,9 +226,7 @@
 
                  "custom purescript package" =
                    let
-                     output =
-                         (ps-custom { inherit purescript; }).modules.Main.output {};
-
+                     output = (ps-custom { inherit purescript; }).output {};
                      purescript = ps-tools.purescript-0_15_0;
                    in
                    make-test "purescript version"
@@ -245,21 +240,21 @@
 
                  "main script output head" =
                    make-test "expected output"
-                     "head -n 1 <(${ps.modules.Main.script {}})"
+                     "head -n 1 <(${ps.script {}})"
                      (i: ''[[ ${i} == *-Main-script ]]'');
 
                  "main script output tail" =
                    make-test "expected output"
-                     "tail -n +2 <(${ps.modules.Main.script {}} argument)"
+                     "tail -n +2 <(${ps.script {}} argument)"
                      (i: ''[[ ${i} == "${expected-output-tail}" ]]'');
 
                  "main output murmur3" =
                    make-test "expected output"
-                     "${ps2.modules.Main.app { name = "_"; }}/bin/_"
+                     "${ps2.app { name = "_"; }}/bin/_"
                      (i: "[[ ${i} == 1945310157 ]]");
 
                  "app minification" =
-                   let a = args: ps.modules.Main.app ({ name = "_"; } // args); in
+                   let a = args: ps.app ({ name = "_"; } // args); in
                    ''
                    a=$(wc -c < ${a {}}/bin/_)
                    b=$(wc -c < ${a { esbuild.minify = false; }}/bin/_)
@@ -287,16 +282,15 @@
 
                  "no test app" =
                    make-test "expected output"
-                     "${(ps-custom { test = "nonexistent"; })
-                          .modules.Main.app { name = "test run"; }
+                     "${(ps-custom { test = "nonexistent"; }).app
+                          { name = "test run"; }
                       }/bin/'test run' argument"
                       expected-output;
 
                  "no dir app" =
                    make-test "expected output"
-                     "${(ps-custom
-                           { dir = null; srcs = [ ./src ./src2 ];}
-                        ).modules.Main.app { name = "test run"; }
+                     "${(ps-custom { dir = null; srcs = [ ./src ./src2 ];}).app
+                          { name = "test run"; }
                       }/bin/'test run' argument"
                      expected-output;
 
@@ -308,15 +302,6 @@
                       }"
                      (i: "[[ ${i} == testing ]]");
                }
-             // (with ps.modules.Main;
-                 { "incremental output" = output { incremental = true; };
-
-                   "incremental bundle" =
-                     bundle { esbuild.platform = "node"; incremental = true; };
-
-                   "incremental app" = app { name = "_"; incremental = true; };
-                 }
-                )
              // mapAttrs
                   (n:
                    { args ? {}
