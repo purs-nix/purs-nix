@@ -370,7 +370,7 @@ with builtins;
               ).drv
           else
             compile-and-process
-              { name = "test-dependencies";
+              { name = "all-dependencies";
                 deps = all-dependencies;
                 pre-compile = built-deps;
               };
