@@ -86,7 +86,7 @@
                    info = /build-test/package.nix;
                  };
 
-           minimal = false;
+           minimal = true;
 
            switches =
              mapAttrs
@@ -116,6 +116,8 @@
 
                       Nested.src = ./foreign-js;
                     };
+
+                  compile-packages = true;
                 }
                 // (if dir == null then {} else { inherit dir; })
                 // (removeAttrs args [ "dir" ])

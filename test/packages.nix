@@ -1,7 +1,7 @@
 with builtins;
 { switches
 , l
-, p
+# , p
 , ps-pkgs
 , purs
 , ...
@@ -37,23 +37,19 @@ with builtins;
   l.foldl'
     (acc: { name, value }:
        let
-         ps = purs { dependencies = value; };
+         ps =
+           purs
+             { dependencies = value;
+               compile-packages = true;
+               srcs = [];
+             };
+
          test-name = "compiled packages bucket ${name}";
        in
 
        acc
        // l.optionalAttrs switches.packages-compile
-            { ${test-name} =
-                let
-                  command =
-                    ps.command
-                      { output = "$out";
-                        srcs = [];
-                      }
-                    + "/bin/purs-nix";
-                in
-                p.runCommand test-name {} "${command} compile";
-            }
+            { ${test-name} = ps.output {}; }
     )
     {}
     (l.mapAttrsToList l.nameValuePair dependencies)

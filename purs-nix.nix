@@ -20,6 +20,7 @@ with builtins;
       { nodejs ? pkgs.nodejs
       , purescript ? purescript'
       , foreign ? null
+      , compile-packages ? false
       , ...
       }@args:
       let
@@ -198,6 +199,131 @@ with builtins;
           then postprocessing name deps unprocessed
           else unprocessed;
 
+        compile-stuff =
+          { lookups
+          , acc
+          , local-globs ? ""
+          , dependencies
+          , name
+          }:
+          args:
+          let
+            lookup = package: lookups.${u.dep-name package};
+            all-deps = map lookup (create-closure (map lookup dependencies));
+
+            bin = acc': package:
+              let
+                info = package.purs-nix-info;
+
+                merge-cache =
+                  p.writeShellScript "merge-cache"
+                    ''
+                    f=$(mktemp)
+                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
+                    cat $f > "$3"
+                    rm $f
+                    '';
+
+                result =
+                  if acc'?${info.name} then
+                    { drv = acc'.${info.name};
+                      acc = acc';
+                    }
+                  else
+                    compile-package
+                      { inherit lookups package;
+                        acc = acc';
+                      }
+                      args;
+              in
+              { augment =
+                  p.writeShellScript "${info.name}-merge"
+                    ''
+                    shopt -s extglob
+                    if [ -e output ]; then
+                      ${copy} ${result.drv}/!(cache-db.json) output
+                      ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
+                    else
+                      ${copy} ${result.drv} output
+                    fi
+                    '';
+
+                acc = acc' // result.acc;
+              };
+
+            augmentations =
+              foldl'
+                (acc': d:
+                   let result = bin acc'.acc (lookup d); in
+                   { acc = acc' // result.acc;
+                     command = acc'.command + result.augment + ";";
+                   }
+                )
+                { inherit acc; command = ""; }
+                dependencies;
+
+            unprocessed =
+              mkDerivation
+                { inherit name;
+                  phases = [ "buildPhase" "installPhase" ];
+
+                  buildPhase =
+                    ''
+                    echo name: ${name}
+                    echo augmentations command
+                    echo '${augmentations.command}'
+                    echo local-globs
+                    echo '${local-globs}'
+                    echo all-deps
+                    echo '${toString all-deps}'
+
+                    ${augmentations.command}
+                    ls
+
+                    ${(a: ''echo '${a}'; ${a};'')
+                    (u.compile
+                        purescript
+                        (args
+                         // { globs =
+                                ''${if local-globs == ""
+                                    then ""
+                                    else ''"${local-globs}"''
+                                  } ${make-dep-globs all-deps}'';
+                              output = "output";
+                            }
+                        ))
+                    }
+                    '';
+
+                  installPhase = "mv output $out";
+                };
+          in
+          { drv = unprocessed;
+            acc = acc // augmentations.acc;
+          };
+
+        compile-package =
+          { lookups ? make-lookups package.purs-nix-info.dependencies
+          , acc
+          , package
+          }:
+          args:
+          let
+            info = package.purs-nix-info;
+
+            a =
+              compile-stuff
+                { inherit acc lookups;
+                  inherit (info) dependencies;
+                  name = "${info.name}";
+                  local-globs = "${package}/**/*.purs";
+                }
+                args;
+          in
+          { inherit (a) drv;
+            acc = a.acc // { ${info.name} = a.drv; };
+          };
+
         pp.foreign = name: deps: output:
           let foreign = foreign-stuff deps "."; in
           if foreign == "" then
@@ -210,14 +336,44 @@ with builtins;
               ${foreign}
               '';
 
-        built-deps = compile-and-process { name = "dependencies"; deps = dependencies; };
+        make-lookups = deps:
+          l.pipe deps
+            [ create-closure
+              (map (dep: l.nameValuePair dep.purs-nix-info.name dep))
+              listToAttrs
+            ];
+
+        built-deps =
+          let name = "dependencies"; in
+          if compile-packages then
+            args:
+              (compile-stuff
+                 { inherit dependencies name;
+                   acc = {};
+                   lookups = make-lookups dependencies;
+                 }
+                 args
+              ).drv
+          else
+            compile-and-process { inherit name; deps = dependencies; };
 
         all-built-deps =
-          compile-and-process
-            { name = "all-dependencies";
-              deps = all-dependencies;
-              pre-compile = built-deps;
-            };
+          if compile-packages then
+            args:
+              (compile-stuff
+                 { name = "all-dependencies";
+                   acc = {};
+                   lookups = make-lookups all-dependencies;
+                   dependencies = all-dependencies;
+                 }
+                 args
+              ).drv
+          else
+            compile-and-process
+              { name = "test-dependencies";
+                deps = all-dependencies;
+                pre-compile = built-deps;
+              };
 
         build-single = { include-test ? false, name, local-deps }:
           let
