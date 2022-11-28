@@ -8,6 +8,8 @@ with builtins;
     ps-package-stuff =
       import ./build-pkgs.nix
         { inherit overlays pkgs; utils = u; };
+
+    inherit (ps-package-stuff) ps-pkgs;
   in
   { inherit (ps-package-stuff) build build-set ps-pkgs ps-pkgs-ns;
     inherit (pkgs) esbuild;
@@ -18,6 +20,7 @@ with builtins;
       { nodejs ? pkgs.nodejs
       , purescript ? purescript'
       , foreign ? null
+      , compile-packages ? false
       , ...
       }@args:
       let
@@ -56,23 +59,32 @@ with builtins;
         create-closure = deps:
           let
             f = direct:
+              let g = f false; in
               foldl'
                 (acc: dep:
-                   let inherit (dep.purs-nix-info) name; in
-                   if direct || !acc?${name} then
-                     f false
-                       (acc // { ${name} = dep; })
-                       dep.purs-nix-info.dependencies
+                   let
+                     name = u.dep-name dep;
+                     included = acc?${name};
+                   in
+                   if typeOf dep == "string" then
+                     if !included then
+                       g (acc // { ${dep} = ps-pkgs.${dep}; })
+                         ps-pkgs.${dep}.purs-nix-info.dependencies
+                     else
+                       acc
                    else
-                     acc
+                     let info = dep.purs-nix-info; in
+                     if direct then
+                       g (acc // { ${info.name} = dep; })
+                         info.dependencies
+                     else if !included then
+                       g (acc // { ${info.name} = ps-pkgs.${info.name}; })
+                         info.dependencies
+                     else
+                       acc
                 );
-
-            trans-deps =
-              f true
-                {}
-                (sort (a: b: a.purs-nix-info.name < b.purs-nix-info.name) deps);
           in
-          attrValues trans-deps;
+          attrValues (f true {} deps);
 
         dependencies =
           if args?dependencies
@@ -187,300 +199,17 @@ with builtins;
           then postprocessing name deps unprocessed
           else unprocessed;
 
-        compile' =
-          { name
-          , deps
-          , postprocessing ? null
-          , pre-compile ? null
-          }:
-          args:
-          let
-            bin = name': deps':
-              let
-                merge-cache =
-                  p.writeShellScript "merge-cache"
-                    ''
-                    f=$(mktemp)
-                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
-                    cat $f > "$3"
-                    rm $f
-                    '';
-
-                output' = compile' { name = name'; deps = deps'; } args;
-              in
-              p.writeShellScript "${name}-compiled"
-                ''
-                ${copy} ${output'}/. output
-                ${merge-cache} ${output'}/cache-db.json output/cache-db.json output/cache-db.json
-                '';
-
-            augmentations =
-              l.pipe deps
-                [ (filter (a: a?purs-nix-info))
-                  (map
-                     (a: bin
-                           a.purs-nix-info.name
-                           a.purs-nix-info.dependencies
-                         + ";"
-                     )
-                  )
-                  toString
-                ];
-
-            unprocessed =
-              mkDerivation
-                { inherit name;
-                  phases = [ "buildPhase" "installPhase" ];
-
-                  buildPhase =
-                    if deps != [] then
-                      # ${if pre-compile != null
-                      #   then "${copy} ${pre-compile args} output"
-                      #   else ""
-                      # }
-                      ''
-                      ${augmentations}
-
-                      ${u.compile
-                          purescript
-                          (args
-                           // { globs = make-dep-globs deps;
-                                output = "output";
-                              }
-                          )
-                      }
-                      ''
-                    else
-                      "mkdir output";
-
-                  installPhase = "mv output $out";
-                };
-          in
-          if postprocessing != null
-          then postprocessing name deps unprocessed
-          else unprocessed;
-
-        # the lookup argument is to make sure everything is using the same dependencies
-        # as packages can lock their own versions
-        compile-package = lookup: acc: { purs-nix-info, ... }: args:
-          let
-            package = lookup.${purs-nix-info.name};
-            info = package.purs-nix-info;
-            all-deps = create-closure info.dependencies;
-
-            bin = acc': package':
-              let
-                info = package'.purs-nix-info;
-                merge-cache =
-                  p.writeShellScript "merge-cache"
-                    ''
-                    f=$(mktemp)
-                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
-                    cat $f > "$3"
-                    rm $f
-                    '';
-
-                result =
-                  if acc'?${info.name} then
-                    { drv = acc'.${info.name};
-                      acc = acc';
-                    }
-                  else
-                    compile-package acc' package' args;
-              in
-              { augment =
-                  p.writeShellScript "${info.name}-merge"
-                    ''
-                    shopt -s extglob
-                    if [ -e output ]; then
-                      ${copy} ${result.drv}/!(cache-db.json) output
-                      ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
-                    else
-                      ${copy} ${result.drv} output
-                    fi
-                    '';
-
-                acc = acc' // result.acc;
-              };
-
-            augmentations =
-              foldl'
-                (acc': d:
-                   let result = bin acc'.acc d; in
-                   { acc = acc' // result.acc;
-                     command = acc'.command + result.augment + ";";
-                   }
-                )
-                { inherit acc; command = ""; }
-                info.dependencies;
-
-            unprocessed =
-              mkDerivation
-                { name = "${info.name}-compiled";
-                  phases = [ "buildPhase" "installPhase" ];
-
-                  buildPhase =
-                    ''
-                    echo ${toString (length all-deps)}
-                    echo a
-                    echo '${augmentations.command}'
-                    echo b
-                    ${augmentations.command}
-
-                    ${if length all-deps > 0
-                      then "" #"ls output"
-                      else ""
-                    }
-
-                    ${u.compile
-                        purescript
-                        (args
-                         // { globs = make-dep-globs ([ package ] ++ all-deps);
-                              output = "output";
-                            }
-                        )
-                    }
-                    '';
-
-                  installPhase = "mv output $out";
-                };
-          in
-          { drv = unprocessed;
-            acc = acc // augmentations.acc // { ${info.name} = unprocessed; };
-          };
-
-        compile-packages =
-          { packages
-          , lookup
-            ? listToAttrs
-                (map
-                   (p: l.nameValuePair (p.purs-nix-info.name) p)
-                   (create-closure packages)
-                )
-          }:
-          foldl'
-            (acc: package:
-               compile-package lookup acc.acc package
-            )
-            { packages = {};
-              acc = {};
-            }
-            packages;
-
-        compile-package' = lookup: acc: { purs-nix-info, ... }: args:
-          let
-            package = lookup.${purs-nix-info.name};
-            info = package.purs-nix-info;
-            all-deps = create-closure info.dependencies;
-            augmentations = compile-packages' { inherit lookup package; };
-
-            unprocessed =
-              mkDerivation
-                { name = "${info.name}-compiled";
-                  phases = [ "buildPhase" "installPhase" ];
-
-                  buildPhase =
-                    ''
-                    echo ${toString (length all-deps)}
-                    echo a
-                    echo '${augmentations.command}'
-                    echo b
-                    ${augmentations.command}
-
-                    ${if length all-deps > 0
-                      then "" #"ls output"
-                      else ""
-                    }
-
-                    ${u.compile
-                        purescript
-                        (args
-                         // { globs = make-dep-globs ([ package ] ++ all-deps);
-                              output = "output";
-                            }
-                        )
-                    }
-                    '';
-
-                  installPhase = "mv output $out";
-                };
-          in
-          { drv = unprocessed;
-            acc = acc // augmentations.acc // { ${info.name} = unprocessed; };
-          };
-
-        compile-packages' =
-          { packages
-          , lookup
-            ? listToAttrs
-                (map
-                   (p: l.nameValuePair (p.purs-nix-info.name) p)
-                   (create-closure packages)
-                )
-          }:
-          let
-            bin = acc: package:
-              let
-                info = package'.purs-nix-info;
-                merge-cache =
-                  p.writeShellScript "merge-cache"
-                    ''
-                    f=$(mktemp)
-                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
-                    cat $f > "$3"
-                    rm $f
-                    '';
-
-                result =
-                  if acc'?${info.name} then
-                    { drv = acc'.${info.name};
-                      acc = acc';
-                    }
-                  else
-                    compile-package' acc' package' args;
-              in
-              { augment =
-                  p.writeShellScript "${info.name}-merge"
-                    ''
-                    shopt -s extglob
-                    if [ -e output ]; then
-                      ${copy} ${result.drv}/!(cache-db.json) output
-                      ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
-                    else
-                      ${copy} ${result.drv} output
-                    fi
-                    '';
-
-                acc = acc' // result.acc;
-              };
-
-            stuff =
-              foldl'
-                (acc: package:
-                   compile-package lookup acc.acc package
-                   # let a = bin acc.acc package; in
-                   # { augment = acc.agument + "${a.augment};";
-                   #   acc = acc.acc // a.acc;
-                   # }
-                )
-                { augment = "";
-                  acc = {};
-                }
-                packages;
-          in
-          stuff.augment;
-
         compile-stuff =
           { lookups
           , acc
-          , local-globs
+          , local-globs ? ""
           , dependencies
           , name
           }:
           args:
           let
-            lookup = package: lookups.${package.purs-nix-info.name};
-            all-deps = map lookup (create-closure dependencies);
+            lookup = package: lookups.${u.dep-name package};
+            all-deps = map lookup (create-closure (map lookup dependencies));
 
             bin = acc': package:
               let
@@ -501,7 +230,7 @@ with builtins;
                       acc = acc';
                     }
                   else
-                    compile-package''
+                    compile-package
                       { inherit lookups package;
                         acc = acc';
                       }
@@ -535,25 +264,21 @@ with builtins;
 
             unprocessed =
               mkDerivation
-                { name = "${name}-compiled";
+                { inherit name;
                   phases = [ "buildPhase" "installPhase" ];
 
                   buildPhase =
                     ''
-                    echo name: ${name}
-                    echo augmentations command
-                    echo '${augmentations.command}'
-                    echo local-globs
-                    echo '${break local-globs}'
-                    echo all-deps
-                    echo '${toString all-deps}'
-
                     ${augmentations.command}
 
                     ${u.compile
                         purescript
                         (args
-                         // { globs = ''"${local-globs}" ${make-dep-globs all-deps}'';
+                         // { globs =
+                                ''${if local-globs == ""
+                                    then ""
+                                    else ''"${local-globs}"''
+                                  } ${make-dep-globs all-deps}'';
                               output = "output";
                             }
                         )
@@ -567,13 +292,8 @@ with builtins;
             acc = acc // augmentations.acc;
           };
 
-        compile-package'' =
-          { lookups
-            ? l.pipe package.purs-nix-info.dependencies
-                [ create-closure
-                  (map (dep: l.nameValuePair dep.purs-nix-info.name dep))
-                  listToAttrs
-                ]
+        compile-package =
+          { lookups ? make-lookups package.purs-nix-info.dependencies
           , acc
           , package
           }:
@@ -584,7 +304,8 @@ with builtins;
             a =
               compile-stuff
                 { inherit acc lookups;
-                  inherit (info) dependencies name;
+                  inherit (info) dependencies;
+                  name = "${info.name}";
                   local-globs = "${package}/**/*.purs";
                 }
                 args;
@@ -617,14 +338,44 @@ with builtins;
                 '';
           };
 
-        built-deps = compile { name = "dependencies"; deps = dependencies; };
+        make-lookups = deps:
+          l.pipe deps
+            [ create-closure
+              (map (dep: l.nameValuePair dep.purs-nix-info.name dep))
+              listToAttrs
+            ];
+
+        built-deps =
+          let name = "dependencies"; in
+          if compile-packages then
+            args:
+              (compile-stuff
+                 { inherit dependencies name;
+                   acc = {};
+                   lookups = make-lookups dependencies;
+                 }
+                 args
+              ).drv
+          else
+            compile { inherit name; deps = dependencies; };
 
         all-built-deps =
-          compile
-            { name = "test-dependencies";
-              deps = all-dependencies;
-              pre-compile = built-deps;
-            };
+          if compile-packages then
+            args:
+              (compile-stuff
+                 { name = "all-dependencies";
+                   acc = {};
+                   lookups = make-lookups all-dependencies;
+                   dependencies = all-dependencies;
+                 }
+                 args
+              ).drv
+          else
+            compile
+              { name = "all-dependencies";
+                deps = all-dependencies;
+                pre-compile = built-deps;
+              };
 
         build-single = { include-test ? false, name, local-deps }:
           let
@@ -976,20 +727,20 @@ with builtins;
         output = output {};
         inherit app bundle script;
 
-        # modules =
-        #   l.warn
-        #     ''
-        #     The `modules` API is deprecated.
-        #     see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/derivations.md
-        #     ''
-        #     (mapAttrs
-        #       (_: v:
-        #          { inherit (v) bundle script app;
-        #            output = v.output {};
-        #          }
-        #       )
-        #       builds
-        #     );
+        modules =
+          l.warn
+            ''
+            The `modules` API is deprecated.
+            see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/derivations.md
+            ''
+            (mapAttrs
+              (_: v:
+                 { inherit (v) bundle script app;
+                   output = v.output {};
+                 }
+              )
+              builds
+            );
 
         command =
           import ./purs-nix-command.nix
@@ -1000,11 +751,12 @@ with builtins;
                 docs-search
                 nodejs
                 pkgs
+                ps-pkgs
                 purescript;
 
               repl-globs =
                 make-dep-globs
-                  (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
+                  (all-dependencies ++ [ ps-pkgs.psci-support ]);
 
               srcs' = (a: if args?dir then args.srcs or a else a) [ "src" ];
               test' = (a: if args?dir then args.test or a else a) "test";

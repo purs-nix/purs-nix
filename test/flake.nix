@@ -8,7 +8,7 @@
 
       purs-nix-test-packages =
         { flake = false;
-          url = "github:purs-nix/test-packages";
+          url = "github:purs-nix/test-packages/new-api";
         };
     };
 
@@ -37,9 +37,6 @@
                         with self;
                         { inherit (super) console;
 
-                          # testing overlay precedence
-                          murmur3 = prelude;
-
                           # test if later overlays have access to this package
                           test-package = prelude;
                         }
@@ -47,14 +44,12 @@
 
                      (self: super:
                         with self;
-                        { murmur3 = self."ursi.murmur3";
-                          "test.prelude" = super.test-package;
-                        }
+                        { "test.prelude" = super.test-package; }
                      )
                    ];
                };
 
-           minimal = true;
+           minimal = false;
 
            switches =
              mapAttrs
@@ -64,15 +59,15 @@
                };
 
            l = p.lib; p = pkgs;
-           inherit (purs-nix) ps-pkgs ps-pkgs-ns purs;
+           inherit (purs-nix) ps-pkgs purs;
            package = import ./package.nix purs-nix;
 
            ps-custom = { dir ? ./., ...}@args:
              purs
                ({ inherit (package) dependencies;
                   test-dependencies =
-                    [ ps-pkgs."assert"
-                      ps-pkgs.markdown-it
+                    [ "assert"
+                      "markdown-it"
                     ];
 
                   srcs = [ "src" "src2" ];
@@ -84,6 +79,8 @@
 
                       Nested.src = ./foreign-js;
                     };
+
+                  compile-packages = true;
                 }
                 // (if dir == null then {} else { inherit dir; })
                 // (removeAttrs args [ "dir" ])
@@ -94,12 +91,11 @@
            ps2 =
              purs
                { dependencies =
-                   let inherit (ps-pkgs-ns) test; in
                    with ps-pkgs;
-                   [ console
-                     effect
-                     markdown-it
-                     test.prelude
+                   [ "console"
+                     "effect"
+                     "markdown-it"
+                     "test.prelude"
                    ];
 
                   test-dependencies = [ ps-pkgs."assert" ];

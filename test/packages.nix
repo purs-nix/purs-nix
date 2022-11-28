@@ -1,7 +1,6 @@
 with builtins;
 { switches
 , l
-, p
 , ps-pkgs
 , purs
 , ...
@@ -19,41 +18,37 @@ with builtins;
 
     dependencies =
       foldl'
-        (acc: { name, value }:
+        (acc: name:
            let
              bucket = toString buckets.${name};
            in
            acc
            // { ${bucket} =
                   if acc?${bucket}
-                  then acc.${bucket} ++ [ value ]
-                  else [ value ];
+                  then acc.${bucket} ++ [ name ]
+                  else [ name ];
               }
         )
         {}
-        (l.mapAttrsToList l.nameValuePair ps-pkgs);
+        (attrNames ps-pkgs);
   in
   # to truly test this you need to manually wipe the caches in ~/.cache/nix
   l.foldl'
     (acc: { name, value }:
        let
-         ps = purs { dependencies = value; };
+         ps =
+           purs
+             { dependencies = value;
+               compile-packages = true;
+               srcs = [];
+             };
+
          test-name = "compiled packages bucket ${name}";
        in
 
        acc
        // l.optionalAttrs switches.packages-compile
-            { ${test-name} =
-                let
-                  command =
-                    ps.command
-                      { output = "$out";
-                        srcs = [];
-                      }
-                    + "/bin/purs-nix";
-                in
-                p.runCommand test-name {} "${command} compile";
-            }
+            { ${test-name} = ps.output {}; }
     )
     {}
     (l.mapAttrsToList l.nameValuePair dependencies)

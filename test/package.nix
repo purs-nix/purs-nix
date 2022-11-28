@@ -2,11 +2,11 @@ with builtins;
 { ps-pkgs, licenses, ... }:
   { dependencies =
       with ps-pkgs;
-      [ console
-        effect
-        node-path
-        node-process
-        prelude
+      [ "console"
+        "effect"
+        "node-path"
+        "node-process"
+        "prelude"
       ];
 
     pursuit =

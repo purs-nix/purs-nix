@@ -63,7 +63,8 @@ self:
 
         info =
           { dependencies =
-              [ aff
+              [ aeson
+                aff
                 argonaut-codecs
                 argonaut-core
                 arrays
@@ -112,6 +113,7 @@ self:
                functors
                maybe
                numbers
+               record
                strings
                transformers
                tuples

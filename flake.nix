@@ -16,7 +16,7 @@
       utils.url = "github:ursi/flake-utils/8";
     };
 
-  outputs = { get-flake, parsec, utils, self, ... }@inputs:
+  outputs = { get-flake, parsec, utils, ... }@inputs:
     with builtins;
     { __functor = _: { overlays ? [], system }:
         import ./purs-nix.nix
@@ -73,8 +73,6 @@
                            (u.package-info v)
                       )
                       ps-pkgs;
-
-                  compile-package = ((self { inherit system; }).purs { dir = ./.; }).compile-package;
                 };
 
               checks =
