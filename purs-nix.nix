@@ -201,6 +201,21 @@ with builtins;
           then postprocessing name deps unprocessed
           else unprocessed;
 
+        get-leaves = deps:
+          attrValues
+          (foldl'
+            (acc: d:
+               let
+                 info = u.dep-info ps-pkgs d;
+                 dep-deps = map u.dep-name info.dependencies;
+               in
+               removeAttrs acc dep-deps
+               // { ${info.name} = d; }
+            )
+            {}
+            deps
+          );
+
         compile-stuff =
           { lookups
           , acc
@@ -262,7 +277,7 @@ with builtins;
                    }
                 )
                 { inherit acc; command = ""; }
-                dependencies;
+                (get-leaves dependencies);
 
             unprocessed =
               mkDerivation
