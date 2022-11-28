@@ -86,7 +86,7 @@
                    info = /build-test/package.nix;
                  };
 
-           minimal = true;
+           minimal = false;
 
            switches =
              mapAttrs

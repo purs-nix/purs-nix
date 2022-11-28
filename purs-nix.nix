@@ -286,19 +286,9 @@ with builtins;
 
                   buildPhase =
                     ''
-                    echo name: ${name}
-                    echo augmentations command
-                    echo '${augmentations.command}'
-                    echo local-globs
-                    echo '${local-globs}'
-                    echo all-deps
-                    echo '${toString all-deps}'
-
                     ${augmentations.command}
-                    ls
 
-                    ${(a: ''echo '${a}'; ${a};'')
-                    (u.compile
+                    ${u.compile
                         purescript
                         (args
                          // { globs =
@@ -308,7 +298,7 @@ with builtins;
                                   } ${make-dep-globs all-deps}'';
                               output = "output";
                             }
-                        ))
+                        )
                     }
                     '';
 
