@@ -56,7 +56,7 @@ with builtins;
 
         test-module = args.test-module or "Test.Main";
 
-        create-closure = deps:
+        create-closure-set = deps:
           let
             f = direct:
               let g = f false; in
@@ -84,7 +84,9 @@ with builtins;
                        acc
                 );
           in
-          attrValues (f true {} deps);
+          f true {} deps;
+
+        create-closure = deps: attrValues (create-closure-set deps);
 
         dependencies =
           if args?dependencies
@@ -157,7 +159,7 @@ with builtins;
             ""
             (l.mapAttrsToList l.nameValuePair combined);
 
-        copy = "cp --no-preserve=mode --preserve=timestamps -r";
+        copy = "cp --no-preserve=mode --preserve=timestamps -nr";
 
         compile =
           { name
@@ -198,6 +200,21 @@ with builtins;
           if postprocessing != null
           then postprocessing name deps unprocessed
           else unprocessed;
+
+        get-leaves = deps:
+          attrValues
+            (foldl'
+              (acc: d:
+                 let
+                   info = u.dep-info ps-pkgs d;
+                   dep-deps = map u.dep-name info.dependencies;
+                 in
+                 removeAttrs acc dep-deps
+                 // { ${info.name} = d; }
+              )
+              {}
+              deps
+            );
 
         compile-stuff =
           { lookups
@@ -260,7 +277,7 @@ with builtins;
                    }
                 )
                 { inherit acc; command = ""; }
-                dependencies;
+                (get-leaves dependencies);
 
             unprocessed =
               mkDerivation
@@ -293,7 +310,7 @@ with builtins;
           };
 
         compile-package =
-          { lookups ? make-lookups package.purs-nix-info.dependencies
+          { lookups ? create-closure-set package.purs-nix-info.dependencies
           , acc
           , package
           }:
@@ -338,13 +355,6 @@ with builtins;
                 '';
           };
 
-        make-lookups = deps:
-          l.pipe deps
-            [ create-closure
-              (map (dep: l.nameValuePair dep.purs-nix-info.name dep))
-              listToAttrs
-            ];
-
         built-deps =
           let name = "dependencies"; in
           if compile-packages then
@@ -352,7 +362,7 @@ with builtins;
               (compile-stuff
                  { inherit dependencies name;
                    acc = {};
-                   lookups = make-lookups dependencies;
+                   lookups = create-closure-set dependencies;
                  }
                  args
               ).drv
@@ -365,7 +375,7 @@ with builtins;
               (compile-stuff
                  { name = "all-dependencies";
                    acc = {};
-                   lookups = make-lookups all-dependencies;
+                   lookups = create-closure-set all-dependencies;
                    dependencies = all-dependencies;
                  }
                  args
