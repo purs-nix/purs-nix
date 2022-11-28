@@ -159,7 +159,7 @@ with builtins;
             ""
             (l.mapAttrsToList l.nameValuePair combined);
 
-        copy = "cp --no-preserve=mode --preserve=timestamps -r";
+        copy = "cp --no-preserve=mode --preserve=timestamps -nr";
 
         compile =
           { name
