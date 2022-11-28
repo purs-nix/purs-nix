@@ -216,7 +216,7 @@ with builtins;
               deps
             );
 
-        compile-stuff =
+        incremental-compile =
           { lookups
           , acc
           , local-globs ? ""
@@ -319,7 +319,7 @@ with builtins;
             info = package.purs-nix-info;
 
             a =
-              compile-stuff
+              incremental-compile
                 { inherit acc lookups;
                   inherit (info) dependencies;
                   name = "${info.name}";
@@ -347,7 +347,7 @@ with builtins;
           let name = "dependencies"; in
           if compile-packages then
             args:
-              (compile-stuff
+              (incremental-compile
                  { inherit dependencies name;
                    acc = {};
                    lookups = create-closure-set dependencies;
@@ -360,7 +360,7 @@ with builtins;
         all-built-deps =
           if compile-packages then
             args:
-              (compile-stuff
+              (incremental-compile
                  { name = "all-dependencies";
                    acc = {};
                    lookups = create-closure-set all-dependencies;
