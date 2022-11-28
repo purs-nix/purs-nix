@@ -158,7 +158,7 @@ with builtins;
 
         copy = "cp --no-preserve=mode --preserve=timestamps -r";
 
-        compile =
+        compile-and-process =
           { name
           , deps
           , postprocessing ? null
@@ -210,10 +210,10 @@ with builtins;
               ${foreign}
               '';
 
-        built-deps = compile { name = "dependencies"; deps = dependencies; };
+        built-deps = compile-and-process { name = "dependencies"; deps = dependencies; };
 
         all-built-deps =
-          compile
+          compile-and-process
             { name = "all-dependencies";
               deps = all-dependencies;
               pre-compile = built-deps;
@@ -422,7 +422,7 @@ with builtins;
                 { name = "all-deps+modules+test-modules";
 
                   pre-compile =
-                    compile
+                    compile-and-process
                       { name = "all-deps+modules";
                         deps = srcs ++ all-dependencies;
                         pre-compile = all-built-deps;
@@ -436,7 +436,7 @@ with builtins;
                   deps = srcs ++ dependencies;
                 };
           in
-          compile
+          compile-and-process
             { inherit (dg) name deps pre-compile;
               postprocessing = pp.foreign;
             }
