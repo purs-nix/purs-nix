@@ -178,7 +178,7 @@ with builtins;
                     if deps != [] then
                       ''
                       ${if pre-compile != null
-                        then "${copy} ${pre-compile args} output"
+                        then "${copy} -L ${pre-compile args} output"
                         else ""
                       }
 
@@ -258,10 +258,12 @@ with builtins;
                     ''
                     shopt -s extglob
                     if [ -e output ]; then
-                      ${copy} ${result.drv}/!(cache-db.json) output
+                      ln -s ${result.drv}/!(cache-db.json) output 2> /dev/null
                       ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
                     else
-                      ${copy} ${result.drv} output
+                      mkdir output
+                      ln -s ${result.drv}/!(*.json) output
+                      ${copy} ${result.drv}/*.json output
                     fi
                     '';
 
