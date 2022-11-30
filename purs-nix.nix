@@ -161,7 +161,7 @@ with builtins;
 
         copy = "cp --no-preserve=mode --preserve=timestamps -nr";
 
-        compile =
+        compile-and-process =
           { name
           , deps
           , postprocessing ? null
@@ -178,7 +178,7 @@ with builtins;
                     if deps != [] then
                       ''
                       ${if pre-compile != null
-                        then "${copy} ${pre-compile args} output"
+                        then "${copy} -L ${pre-compile args} output"
                         else ""
                       }
 
@@ -216,7 +216,7 @@ with builtins;
               deps
             );
 
-        compile-stuff =
+        incremental-compile =
           { lookups
           , acc
           , local-globs ? ""
@@ -258,10 +258,12 @@ with builtins;
                     ''
                     shopt -s extglob
                     if [ -e output ]; then
-                      ${copy} ${result.drv}/!(cache-db.json) output
+                      ln -s ${result.drv}/!(cache-db.json) output 2> /dev/null
                       ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
                     else
-                      ${copy} ${result.drv} output
+                      mkdir output
+                      ln -s ${result.drv}/!(*.json) output
+                      ${copy} ${result.drv}/*.json output
                     fi
                     '';
 
@@ -319,7 +321,7 @@ with builtins;
             info = package.purs-nix-info;
 
             a =
-              compile-stuff
+              incremental-compile
                 { inherit acc lookups;
                   inherit (info) dependencies;
                   name = "${info.name}";
@@ -359,7 +361,7 @@ with builtins;
           let name = "dependencies"; in
           if compile-packages then
             args:
-              (compile-stuff
+              (incremental-compile
                  { inherit dependencies name;
                    acc = {};
                    lookups = create-closure-set dependencies;
@@ -367,12 +369,12 @@ with builtins;
                  args
               ).drv
           else
-            compile { inherit name; deps = dependencies; };
+            compile-and-process { inherit name; deps = dependencies; };
 
         all-built-deps =
           if compile-packages then
             args:
-              (compile-stuff
+              (incremental-compile
                  { name = "all-dependencies";
                    acc = {};
                    lookups = create-closure-set all-dependencies;
@@ -381,7 +383,7 @@ with builtins;
                  args
               ).drv
           else
-            compile
+            compile-and-process
               { name = "all-dependencies";
                 deps = all-dependencies;
                 pre-compile = built-deps;
@@ -646,7 +648,7 @@ with builtins;
                 { name = "all-deps+modules+test-modules";
 
                   pre-compile =
-                    compile
+                    compile-and-process
                       { name = "all-deps+modules";
                         deps = srcs ++ all-dependencies;
                         pre-compile = all-built-deps;
@@ -660,7 +662,7 @@ with builtins;
                   deps = srcs ++ dependencies;
                 };
           in
-          compile
+          compile-and-process
             { inherit (dg) name deps pre-compile;
               postprocessing = pp';
             }
