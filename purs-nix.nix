@@ -146,6 +146,12 @@ with builtins;
                ${acc}
 
                if [[ -e ${module-path} ]]; then
+                 if [[ -h ${module-path} ]]; then
+                   local src=$(readlink -f ${module-path})
+                   rm ${module-path}
+                   ${copy} $src ${module-path}
+                 fi
+
                  ${if value?node_modules then
                      "ln -fsT ${value.node_modules} ${module-path}/node_modules"
                    else if value?src then
@@ -178,7 +184,7 @@ with builtins;
                     if deps != [] then
                       ''
                       ${if pre-compile != null
-                        then "${copy} -L ${pre-compile args} output"
+                        then "${copy} ${pre-compile args} output"
                         else ""
                       }
 

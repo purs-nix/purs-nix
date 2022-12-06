@@ -11,6 +11,7 @@ p:
         esbuild' =
           { log-level = "warning";
             outfile = "main.js";
+            preserve-symlinks = true;
           }
           // (if esbuild?platform then {} else { format = "esm"; })
           // esbuild
