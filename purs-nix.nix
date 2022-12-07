@@ -55,7 +55,7 @@ with builtins;
 
         test-module = args.test-module or "Test.Main";
 
-        create-closure = deps:
+        create-closure-set = deps:
           let
             f = direct:
               let g = f false; in
@@ -83,7 +83,9 @@ with builtins;
                        acc
                 );
           in
-          attrValues (f true {} deps);
+          f true {} deps;
+
+        create-closure = deps: attrValues (create-closure-set deps);
 
         dependencies =
           if args?dependencies
