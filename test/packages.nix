@@ -36,13 +36,7 @@ with builtins;
   l.foldl'
     (acc: { name, value }:
        let
-         ps =
-           purs
-             { dependencies = value;
-               compile-packages = true;
-               srcs = [];
-             };
-
+         ps = purs { dependencies = value; srcs = []; };
          test-name = "compiled packages bucket ${name}";
        in
 

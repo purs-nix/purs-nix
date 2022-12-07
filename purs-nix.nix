@@ -20,7 +20,10 @@ with builtins;
       { nodejs ? pkgs.nodejs
       , purescript ? purescript'
       , foreign ? null
-      , compile-packages ? false
+        # this parameter is purposely undocumented because I don't see a reason to make
+        # it part of the API. However, I have already done the work to make it optional,
+        # so I will leave it here for now just in case.
+      , _compile-packages-separately ? true
       , ...
       }@args:
       let
@@ -165,7 +168,7 @@ with builtins;
             ""
             (l.mapAttrsToList l.nameValuePair combined);
 
-        copy = "cp --no-preserve=mode --preserve=timestamps -nr";
+        copy = "cp --no-preserve=mode --preserve=timestamps -r";
 
         compile-and-process =
           { name
@@ -221,7 +224,6 @@ with builtins;
               {}
               deps
             );
-
         incremental-compile =
           { lookups
           , acc
@@ -365,7 +367,7 @@ with builtins;
 
         built-deps =
           let name = "dependencies"; in
-          if compile-packages then
+          if _compile-packages-separately then
             args:
               (incremental-compile
                  { inherit dependencies name;
@@ -378,7 +380,7 @@ with builtins;
             compile-and-process { inherit name; deps = dependencies; };
 
         all-built-deps =
-          if compile-packages then
+          if _compile-packages-separately then
             args:
               (incremental-compile
                  { name = "all-dependencies";
