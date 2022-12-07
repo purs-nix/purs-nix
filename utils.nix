@@ -14,7 +14,9 @@ p:
           }
           // (if esbuild?platform then {} else { format = "esm"; })
           // esbuild
-          // { bundle = true; };
+          // { bundle = true;
+               preserve-symlinks = true;
+              };
 
         flags =
           toString
