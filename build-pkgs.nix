@@ -157,31 +157,38 @@ with builtins;
              (f self)
         );
 
-    # modified versions of lib.extends
-    extends =
+    overlay-stuff =
       let
-        merge =
+        build-set' =
+          mapAttrs
+            (n: v:
+               if v?type && v.type == "derivation"
+               then v
+               else build (v // { name = n; })
+            );
+
+        composeExtensions = f: g: final: prev:
           let
-            build-set' =
-              mapAttrs
-                (n: v:
-                   if v?type && v.type == "derivation"
-                   then v
-                   else build (v // { name = n; })
-                );
+            fApplied = f final prev;
+            prev' = build-set' (prev // fApplied);
           in
-          p1: p2: p1 // (build-set' p2);
+          fApplied // (g final prev');
       in
-      f: rattrs: self:
-        let
-          super = rattrs self;
-          a = f self super;
-        in
-        merge super a;
+      # modified versions of the functions in lib.fixedPoints
+      { extends = f: rattrs: self:
+          let
+            super = rattrs self;
+            a = f self super;
+          in
+          super // build-set' a;
+
+        composeManyExtensions = l.foldr composeExtensions (_: _: {});
+      };
 
     ps-pkgs =
       l.fix
-        (extends (l.composeManyExtensions overlays)
+        (overlay-stuff.extends
+           (overlay-stuff.composeManyExtensions overlays)
            (self:
               mapAttrs
                 (n: v: build (v // { name = n; }))
