@@ -3,7 +3,6 @@
 
 - New API: `modules.x` has been replaced with just `x` (the `modules` API is still here, but is now deprecated). See [here](docs/derivations.md).
 
-- New API: `modules.x` has now been replaced with just `x` (the `modules` API is still here, but is now deprecated). See [here](docs/derivations.md).
 - Switch dependencies to be primarily strings.
 
 - Add a [.overlay](docs/modifying-package-set.md#generating-overlays-from-packages) property on packages.
