@@ -1,7 +1,7 @@
 ## 2022-12-12
 ### Breaking: Likely
 
-- New API: `modules.x` has been replaced with just `x` (the `modules` API is still here, but is now deprecated). See [here](docs/derivations.md).
+- New API: `modules.<module-name>.x` has been replaced with just `x` (the `modules` API is still here, but is now deprecated). See [here](docs/derivations.md).
 
 - Switch dependencies to be primarily strings.
 
