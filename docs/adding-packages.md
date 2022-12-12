@@ -26,18 +26,18 @@ The packages descriptions sets consist of two parts:
         { version = "7.0.0";
 
           dependencies =
-            [ bifunctors
-              control
-              foldable-traversable
-              maybe
-              nonempty
-              partial
-              prelude
-              st
-              tailrec
-              tuples
-              unfoldable
-              unsafe-coerce
+            [ "bifunctors"
+              "control"
+              "foldable-traversable"
+              "maybe"
+              "nonempty"
+              "partial"
+              "prelude"
+              "st"
+              "tailrec"
+              "tuples"
+              "unfoldable"
+              "unsafe-coerce"
             ];
         }
      };
@@ -73,18 +73,18 @@ Here's an example:
   { version = "6.0.0";
 
     dependencies =
-      [ bifunctors
-        control
-        foldable-traversable
-        maybe
-        nonempty
-        partial
-        prelude
-        st
-        tailrec
-        tuples
-        unfoldable
-        unsafe-coerce
+      [ "bifunctors"
+        "control"
+        "foldable-traversable"
+        "maybe"
+        "nonempty"
+        "partial"
+        "prelude"
+        "st"
+        "tailrec"
+        "tuples"
+        "unfoldable"
+        "unsafe-coerce"
       ];
   }
 ```

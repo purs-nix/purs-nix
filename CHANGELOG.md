@@ -1,3 +1,10 @@
+## <date>
+### Breaking:
+
+- Switch dependencies to be primarily strings.
+- Add a [.overlay](docs/modifying-package-set.md#generating-overlays-from-packages) property on packages.
+
+
 ## 2022-10-17
 ### Breaking: Very Unlikely
 
