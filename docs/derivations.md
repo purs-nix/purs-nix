@@ -1,8 +1,98 @@
 # Creating Derivations
 
-You can use **purs-nix** to make a derivations for your PureScript bundle, your compiler output, and to make executables. They all use incremental compiling, so you don't have you recompile your entire project every time you make a small change.
+You can use purs-nix to make a derivations for your PureScript bundle, your compiler output, and to make executables. You access these derivations via different attributes on the output of the [purs](./purs-nix.md#purs) function.
 
-## modules
+## output
+
+`output {}` is a derivation containing the compiler output for your project.
+
+```
+{ verbose-errors ? false
+, comments ? false
+, codegen ? null
+, no-prefix ? false
+, json-errors ? false
+
+, zephyr ? null
+}
+```
+
+- `zephyr`: An entry point to use with zephyr for the output.
+
+The upper arguments correspond to the flags you can pass to `purs compile`.
+
+## bundle
+
+`bundle {}` is a derivation containing the bundled code of the module `Main`.
+
+```
+{ esbuild # additional esbuild flags
+  ? { format ? "esm"
+    , log-level ? "warning"
+    , outfile ? "main.js"
+    }
+, main ? true
+, module ? "Main"
+, zephyr ? true
+}
+
+```
+
+- `main`: whether or not to automatically execute the main function of the module you're bundling.
+Note: turning this off will not disable the separate compiling of dependencies.
+- `module`: The module to bundle.
+- `zephyr`: whether or not to use `zephyr` to drastically shrink the bundle size. Since purs-nix use `esbuild`, it does not get DCE on PureScript 0.14 output.
+
+## script
+
+`script {}` is a derivation that is an executable that will run the `main` `Effect` of the module `Main`.
+
+```
+{ esbuild ? { minify ? true }
+, module ? "Main"
+, zephyr ? true
+}
+```
+
+- `esbuild`: Arguments to pass to `esbuild` when bundling.
+- `module`: The module whose `main` function will be turned into an executable.
+Note: turning this off will not disable the separate compiling of dependencies.
+- `zephyr`: Whether or not to use `zephyr` to drastically shrink the bundle size. Since purs-nix use `esbuild`, it does not get DCE on PureScript 0.14 output.
+
+## app
+`app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Main`.
+
+```
+{ name
+, version ? null
+, command ? name
+, esbuild ? { minify ? true }
+, module ? "Main"
+, zephyr ? true
+}
+
+```
+- `name`: The `pname`/`name` of the derivation.
+- `version`: The version of the derivation.
+- `command`: The name of the executable.
+- `esbuild`: Arguments to pass to `esbuild` when bundling.
+- `module`: The module whose `main` function will be turned into an executable
+- `zephyr`: Whether or not to use `zephyr` to drastically shrink the bundle size. Since purs-nix use `esbuild`, it does not get DCE on PureScript 0.14 output.
+
+## test
+
+You access these derivations via the [test](./purs-nix.md#user-content-purs-test) attribute.
+
+
+### run
+
+`test.run {}` returns an executable that runs your test module's `main` function with Node.js. It takes the same arguments as [output](#output).
+
+### check
+
+`test.check {}` Is a derivation that runs `test.run`. It's a convenience function for adding your tests as a Nix flake check. It takes the same arguments as [output](#output).
+
+## modules (deprecated)
 
 You access these derivations via the [modules](./purs-nix.md#user-content-purs-modules) attribute set, using the name of your module as the attribute.
 
@@ -55,15 +145,16 @@ Note: turning this off will not disable the separate compiling of dependencies.
 ### script
 
 ```
-{ esbuild ? { minify ? true; }
+{ esbuild ? { minify ? true }
 , incremental ? false
+, zephyr ? true
 }
 ```
 - `esbuild`: Arguments to pass to `esbuild` when bundling.
 - `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
 Note: turning this off will not disable the separate compiling of dependencies.
-
 - `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules
+- `zephyr`: Whether or not to use `zephyr` to drastically shrink the bundle size. Since purs-nix use `esbuild`, it does not get DCE on PureScript 0.14 output.
 
 `modules.Module.script {}` is a derivation that is an executable that will run the `main` `Effect` of the module `Module`.
 
@@ -73,7 +164,7 @@ Note: turning this off will not disable the separate compiling of dependencies.
 { name
 , version ? null
 , command ? name
-, esbuild ? { minify ? true; }
+, esbuild ? { minify ? true }
 , incremental ? false
 , zephyr ? true
 }

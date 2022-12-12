@@ -8,6 +8,8 @@ with builtins;
     ps-package-stuff =
       import ./build-pkgs.nix
         { inherit overlays pkgs; utils = u; };
+
+    inherit (ps-package-stuff) ps-pkgs;
   in
   { inherit (ps-package-stuff) build build-set ps-pkgs ps-pkgs-ns;
     inherit (pkgs) esbuild;
@@ -18,6 +20,10 @@ with builtins;
       { nodejs ? pkgs.nodejs
       , purescript ? purescript'
       , foreign ? null
+        # this parameter is purposely undocumented because I don't see a reason to make
+        # it part of the API. However, I have already done the work to make it optional,
+        # so I will leave it here for now just in case.
+      , _compile-packages-separately ? true
       , ...
       }@args:
       let
@@ -53,26 +59,37 @@ with builtins;
 
         test-module = args.test-module or "Test.Main";
 
-        create-closure = deps:
+        create-closure-set = deps:
           let
             f = direct:
+              let g = f false; in
               foldl'
                 (acc: dep:
-                   let inherit (dep.purs-nix-info) name; in
-                   if direct || !acc?${name} then
-                     f false
-                       (acc // { ${name} = dep; })
-                       dep.purs-nix-info.dependencies
+                   let
+                     name = u.dep-name dep;
+                     included = acc?${name};
+                   in
+                   if typeOf dep == "string" then
+                     if !included then
+                       g (acc // { ${dep} = ps-pkgs.${dep}; })
+                         ps-pkgs.${dep}.purs-nix-info.dependencies
+                     else
+                       acc
                    else
-                     acc
+                     let info = dep.purs-nix-info; in
+                     if direct then
+                       g (acc // { ${info.name} = dep; })
+                         info.dependencies
+                     else if !included then
+                       g (acc // { ${info.name} = ps-pkgs.${info.name}; })
+                         info.dependencies
+                     else
+                       acc
                 );
-
-            trans-deps =
-              f true
-                {}
-                (sort (a: b: a.purs-nix-info.name < b.purs-nix-info.name) deps);
           in
-          attrValues trans-deps;
+          f true {} deps;
+
+        create-closure = deps: attrValues (create-closure-set deps);
 
         dependencies =
           if args?dependencies
@@ -132,6 +149,12 @@ with builtins;
                ${acc}
 
                if [[ -e ${module-path} ]]; then
+                 if [[ -h ${module-path} ]]; then
+                   local src=$(readlink -f ${module-path})
+                   rm ${module-path}
+                   ${copy} $src ${module-path}
+                 fi
+
                  ${if value?node_modules then
                      "ln -fsT ${value.node_modules} ${module-path}/node_modules"
                    else if value?src then
@@ -145,40 +168,238 @@ with builtins;
             ""
             (l.mapAttrsToList l.nameValuePair combined);
 
-        build-single = { include-test ? false, name, local-deps }:
+        copy = "cp --no-preserve=mode --preserve=timestamps -r";
+
+        compile-and-process =
+          { name
+          , deps
+          , postprocessing ? null
+          , pre-compile ? null
+          }:
+          args:
           let
-            copy = "cp --no-preserve=mode --preserve=timestamps -r";
-
-            built-deps = args:
+            unprocessed =
               mkDerivation
-                { name = "built-deps";
+                { inherit name;
                   phases = [ "buildPhase" "installPhase" ];
 
                   buildPhase =
-                    if dep-globs != ""
-                    then u.compile purescript (args // { globs = dep-globs; })
-                    else "mkdir output";
-
-                  installPhase = "mv output $out";
-                };
-
-            all-built-deps = args:
-              mkDerivation
-                { name = "all-built-deps";
-                  phases = [ "buildPhase" "installPhase" ];
-
-                  buildPhase =
-                    if all-dep-globs != "" then
+                    if deps != [] then
                       ''
-                      ${copy} ${built-deps args} output
-                      ${u.compile purescript (args // { globs = all-dep-globs; })}
+                      ${if pre-compile != null
+                        then "${copy} ${pre-compile args} output"
+                        else ""
+                      }
+
+                      ${u.compile
+                          purescript
+                          (args
+                           // { globs = make-dep-globs deps;
+                                output = "output";
+                              }
+                          )
+                      }
                       ''
                     else
                       "mkdir output";
 
                   installPhase = "mv output $out";
                 };
+          in
+          if postprocessing != null
+          then postprocessing name deps unprocessed
+          else unprocessed;
 
+        get-leaves = deps:
+          attrValues
+            (foldl'
+              (acc: d:
+                 let
+                   info = u.dep-info ps-pkgs d;
+                   dep-deps = map u.dep-name info.dependencies;
+                 in
+                 removeAttrs acc dep-deps
+                 // { ${info.name} = d; }
+              )
+              {}
+              deps
+            );
+
+        incremental-compile =
+          { lookups
+          , acc
+          , local-globs ? ""
+          , dependencies
+          , name
+          }:
+          args:
+          let
+            lookup = package: lookups.${u.dep-name package};
+            all-deps = map lookup (create-closure (map lookup dependencies));
+
+            bin = acc': package:
+              let
+                info = package.purs-nix-info;
+
+                merge-cache =
+                  p.writeShellScript "merge-cache"
+                    ''
+                    f=$(mktemp)
+                    ${p.jq}/bin/jq -s '.[0] * .[1]' "$1" "$2" > $f
+                    cat $f > "$3"
+                    rm $f
+                    '';
+
+                result =
+                  if acc'?${info.name} then
+                    { drv = acc'.${info.name};
+                      acc = acc';
+                    }
+                  else
+                    compile-package
+                      { inherit lookups package;
+                        acc = acc';
+                      }
+                      args;
+              in
+              { augment =
+                  p.writeShellScript "${info.name}-merge"
+                    ''
+                    shopt -s extglob
+                    if [ -e output ]; then
+                      ln -s ${result.drv}/!(cache-db.json) output 2> /dev/null
+                      ${merge-cache} ${result.drv}/cache-db.json output/cache-db.json output/cache-db.json
+                    else
+                      mkdir output
+                      ln -s ${result.drv}/!(*.json) output
+                      ${copy} ${result.drv}/*.json output
+                    fi
+                    '';
+
+                acc = acc' // result.acc;
+              };
+
+            augmentations =
+              foldl'
+                (acc': d:
+                   let result = bin acc'.acc (lookup d); in
+                   { acc = acc' // result.acc;
+                     command = acc'.command + result.augment + ";";
+                   }
+                )
+                { inherit acc; command = ""; }
+                (get-leaves dependencies);
+
+            unprocessed =
+              mkDerivation
+                { inherit name;
+                  phases = [ "buildPhase" "installPhase" ];
+
+                  buildPhase =
+                    ''
+                    ${augmentations.command}
+
+                    ${u.compile
+                        purescript
+                        (args
+                         // { globs =
+                                ''${if local-globs == ""
+                                    then ""
+                                    else ''"${local-globs}"''
+                                  } ${make-dep-globs all-deps}'';
+                              output = "output";
+                            }
+                        )
+                    }
+                    '';
+
+                  installPhase = "mv output $out";
+                };
+          in
+          { drv = unprocessed;
+            acc = acc // augmentations.acc;
+          };
+
+        compile-package =
+          { lookups ? create-closure-set package.purs-nix-info.dependencies
+          , acc
+          , package
+          }:
+          args:
+          let
+            info = package.purs-nix-info;
+
+            a =
+              incremental-compile
+                { inherit acc lookups;
+                  inherit (info) dependencies;
+                  name = "${info.name}";
+                  local-globs = "${package}/**/*.purs";
+                }
+                args;
+          in
+          { inherit (a) drv;
+            acc = a.acc // { ${info.name} = a.drv; };
+          };
+
+        pp =
+          { compose = f: g: name: deps: output: f name deps (g name deps output);
+
+            foreign = name: deps: output:
+              let foreign = foreign-stuff deps "."; in
+              if foreign == "" then
+                output
+              else
+                p.runCommand "${name}+foreign" {}
+                  ''
+                  mkdir $out; cd $out
+                  ${copy} ${output}/. .
+                  ${foreign}
+                  '';
+
+            zephyr = args: name: _: output:
+              p.runCommand "${name}+zephyr" {}
+                ''
+                ${copy} ${output} output
+                ${ps-tools.for-0_14.zephyr}/bin/zephyr -f ${args}
+                mv dce-output $out
+                '';
+          };
+
+        built-deps =
+          let name = "dependencies"; in
+          if _compile-packages-separately then
+            args:
+              (incremental-compile
+                 { inherit dependencies name;
+                   acc = {};
+                   lookups = create-closure-set dependencies;
+                 }
+                 args
+              ).drv
+          else
+            compile-and-process { inherit name; deps = dependencies; };
+
+        all-built-deps =
+          if _compile-packages-separately then
+            args:
+              (incremental-compile
+                 { name = "all-dependencies";
+                   acc = {};
+                   lookups = create-closure-set all-dependencies;
+                   dependencies = all-dependencies;
+                 }
+                 args
+              ).drv
+          else
+            compile-and-process
+              { name = "all-dependencies";
+                deps = all-dependencies;
+                pre-compile = built-deps;
+              };
+
+        build-single = { include-test ? false, name, local-deps }:
+          let
             src =
               let
                 graph-path =
@@ -413,27 +634,134 @@ with builtins;
             )
             local-graph-no-tests;
 
-        all-builds =
-          mapAttrs
-            (name: v:
-               build-single
-                 { include-test = true;
-                   inherit name;
-                   local-deps = map (v: all-builds.${v}) v.depends;
+        output = { test-modules ? false }: args:
+          let
+            inherit
+              (if args?zephyr then
+                 { args' =
+                     if args?codegen
+                     then assert l.hasInfix "corefn" a.codegen; a
+                     else args // { codegen = "corefn,js"; };
+
+                   pp' = pp.compose pp.foreign (pp.zephyr args.zephyr);
                  }
-            )
-            local-graph-tests;
+               else
+                 { args' = args;
+                   pp' = pp.foreign;
+                 }
+              )
+              args' pp';
+
+            dg =
+              if test-modules then
+                { name = "all-deps+modules+test-modules";
+
+                  pre-compile =
+                    compile-and-process
+                      { name = "all-deps+modules";
+                        deps = srcs ++ all-dependencies;
+                        pre-compile = all-built-deps;
+                      };
+
+                  deps = srcs ++ [ test-src ] ++ all-dependencies;
+                }
+              else
+                { name = "deps+modules";
+                  pre-compile = built-deps;
+                  deps = srcs ++ dependencies;
+                };
+          in
+          compile-and-process
+            { inherit (dg) name deps pre-compile;
+              postprocessing = pp';
+            }
+            args';
+
+        bundle =
+          { module ? "Main"
+          , esbuild ? {}
+          , main ? true
+          , zephyr ? true
+          }:
+          p.runCommand "${module}-bundle" {}
+            (u.bundle
+               { entry-point =
+                   output {}
+                     (if zephyr
+                      then { zephyr = if main then "${module}.main" else module; }
+                      else {}
+                     )
+                   + "/${module}/index.js";
+
+                 esbuild = esbuild // { outfile = "$out"; };
+                 inherit main;
+               }
+            );
+
+        script =
+          { module ? "Main"
+          , esbuild ? {}
+          , zephyr ? true
+          }:
+          let
+            bundle' =
+              bundle
+                { esbuild =
+                    { minify = true; }
+                    // esbuild
+                    // { platform = "node"; };
+
+                  inherit module zephyr;
+                };
+          in
+          p.runCommand "${module}-script" {}
+            ''
+            echo $'#! ${nodejs}/bin/node' > $out
+            cat ${bundle'} >> $out
+            chmod +x $out
+            '';
+
+        app =
+          { name
+          , module ? "Main"
+          , version ? null
+          , command ? name
+          , esbuild ? {}
+          , zephyr ? true
+          }:
+          mkDerivation
+            ({ phases = [ "installPhase" ];
+
+               installPhase =
+                 ''
+                 mkdir -p $out/bin; cd $_
+
+                 cp \
+                   ${script { inherit esbuild module zephyr; }} \
+                   ${l.escapeShellArg command}
+                 '';
+             }
+             // u.make-name name version
+            );
       in
       { dependencies = all-dependencies;
+        output = output {};
+        inherit app bundle script;
 
         modules =
-          mapAttrs
-            (_: v:
-               { inherit (v) bundle script app;
-                 output = v.output {};
-               }
-            )
-            builds;
+          l.warn
+            ''
+            The `modules` API is deprecated.
+            see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/derivations.md
+            ''
+            (mapAttrs
+              (_: v:
+                 { inherit (v) bundle script app;
+                   output = v.output {};
+                 }
+              )
+              builds
+            );
 
         command =
           import ./purs-nix-command.nix
@@ -444,11 +772,12 @@ with builtins;
                 docs-search
                 nodejs
                 pkgs
+                ps-pkgs
                 purescript;
 
               repl-globs =
                 make-dep-globs
-                  (all-dependencies ++ [ ps-package-stuff.ps-pkgs.psci-support ]);
+                  (all-dependencies ++ [ ps-pkgs.psci-support ]);
 
               srcs' = (a: if args?dir then args.srcs or a else a) [ "src" ];
               test' = (a: if args?dir then args.test or a else a) "test";
@@ -460,17 +789,12 @@ with builtins;
         test =
           rec
           { run = args:
-              let
-                output =
-                  all-builds.${test-module}.output
-                    { include-test = true; }
-                    args;
-              in
+              let output' = output { test-modules = true; } args; in
               p.writeScript "${test-module}-run"
                 (u.node-command
                    { argv-1 = "${test-module}-run";
                      inherit nodejs;
-                     import = "${output}/${test-module}/index.js";
+                     import = "${output'}/${test-module}/index.js";
                    }
                 );
 
