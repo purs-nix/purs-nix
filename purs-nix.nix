@@ -360,8 +360,7 @@ with builtins;
             zephyr = args: name: _: output:
               p.runCommand "${name}+zephyr" {}
                 ''
-                ${copy} ${output} output
-                ${ps-tools.for-0_14.zephyr}/bin/zephyr -f ${args}
+                ${ps-tools.for-0_14.zephyr}/bin/zephyr -i ${output} -f ${args}
                 mv dce-output $out
                 '';
           };
