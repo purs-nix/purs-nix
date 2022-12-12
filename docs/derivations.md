@@ -1,8 +1,88 @@
 # Creating Derivations
 
-You can use **purs-nix** to make a derivations for your PureScript bundle, your compiler output, and to make executables. They all use incremental compiling, so you don't have you recompile your entire project every time you make a small change.
+You can use purs-nix to make a derivations for your PureScript bundle, your compiler output, and to make executables. You access these derivations via different attributes on the output of the [purs](./purs-nix.md#purs) function.
 
-## modules
+## output
+
+`output {}` is a derivation containing the compiler output for your project.
+
+```
+{ verbose-errors ? false
+, comments ? false
+, codegen ? null
+, no-prefix ? false
+, json-errors ? false
+}
+```
+
+These arguments correspond to the flags you can pass to `purs compile`.
+
+## bundle
+
+`bundle {}` is a derivation containing the bundled code of the module `Main`.
+
+```
+{ esbuild # additional esbuild flags
+  ? { format ? "esm"
+    , log-level ? "warning"
+    , outfile ? "main.js"
+    }
+, main ? true
+, module ? "Main"
+}
+
+```
+
+- `main`: whether or not to automatically execute the main function of the module you're bundling.
+Note: turning this off will not disable the separate compiling of dependencies.
+- `module`: The module to bundle.
+
+## script
+
+`script {}` is a derivation that is an executable that will run the `main` `Effect` of the module `Main`.
+
+```
+{ esbuild ? { minify ? true }
+, module ? "Main"
+}
+```
+
+- `esbuild`: Arguments to pass to `esbuild` when bundling.
+- `module`: The module whose `main` function will be turned into an executable.
+Note: turning this off will not disable the separate compiling of dependencies.
+
+## app
+`app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Main`.
+
+```
+{ name
+, version ? null
+, command ? name
+, esbuild ? { minify ? true }
+, module ? "Main"
+}
+
+```
+- `name`: The `pname`/`name` of the derivation.
+- `version`: The version of the derivation.
+- `command`: The name of the executable.
+- `esbuild`: Arguments to pass to `esbuild` when bundling.
+- `module`: The module whose `main` function will be turned into an executable
+
+## test
+
+You access these derivations via the [test](./purs-nix.md#user-content-purs-test) attribute.
+
+
+### run
+
+`test.run {}` returns an executable that runs your test module's `main` function with Node.js. It takes the same arguments as [output](#output).
+
+### check
+
+`test.check {}` Is a derivation that runs `test.run`. It's a convenience function for adding your tests as a Nix flake check. It takes the same arguments as [output](#output).
+
+## modules (deprecated)
 
 You access these derivations via the [modules](./purs-nix.md#user-content-purs-modules) attribute set, using the name of your module as the attribute.
 
@@ -52,7 +132,7 @@ Note: turning this off will not disable the separate compiling of dependencies.
 ### script
 
 ```
-{ esbuild ? { minify ? true; }
+{ esbuild ? { minify ? true }
 , incremental ? false
 }
 ```
@@ -70,7 +150,7 @@ Note: turning this off will not disable the separate compiling of dependencies.
 { name
 , version ? null
 , command ? name
-, esbuild ? { minify ? true; }
+, esbuild ? { minify ? true }
 , incremental ? false
 }
 ```

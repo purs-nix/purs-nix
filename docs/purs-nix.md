@@ -45,10 +45,18 @@ and returns an attribute set with the following attributes:
 - `foreign`: See the [documentation](foreign.md).
 
 and returns an attribute set with the following attributes:
-- <span id="user-content-purs-modules">`modules`</span>: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more [here](derivations.md).
+
+- `output`: A function for building a derivation from the compiler output.
+- `bundle`: A function for building a derivation from the bundling of a particular module.
+- `script`: A function for building a derivation that is an executable.
+- `app`: A function for building a derivation with an executable in `/bin`.
+- `test`: An attribute set of functions for building test-related things.
 - `command`: A functions that builds the `purs-nix` command which you can then add to your Nix shell.
 - <span id="user-content-purs-test">`test`</span>: An attribute set with functions for derivations corresponding to the test module. Read more [here](derivations.md).
 - `dependencies`: A list of all the dependencies (transitive closure) of your project. This is exposed out of convenience for when you find yourself using a tool that needs information that can be derived from this.
+- <span id="user-content-purs-modules">`modules` **(deprecated)** </span>: An attribute set with an attribute for each local module in your project. Use this to incorporate your PureScript project into bigger nix builds. Read more [here](derivations.md).
+
+Read more about `output`, `bundle`, `script`, `app`, and `test` [here](derivations.md).
 
 ### command
 `command` takes the following arguments: (Note: they all have defaults so often times you will only need to us `command {}`)
