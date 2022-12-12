@@ -1,9 +1,13 @@
-## <date>
-### Breaking:
+## 2022-12-12
+### Breaking: Likely
+
+- New API: `modules.x` has been replaced with just `x` (the `modules` API is still here, but is now deprecated). See [here](docs/derivations.md).
 
 - New API: `modules.x` has now been replaced with just `x` (the `modules` API is still here, but is now deprecated). See [here](docs/derivations.md).
 - Switch dependencies to be primarily strings.
+
 - Add a [.overlay](docs/modifying-package-set.md#generating-overlays-from-packages) property on packages.
+- Dependency packages are now compiled separately.
 
 
 ## 2022-10-17
@@ -26,6 +30,7 @@
 - Remove all IFD from dependencies of purs-nix.
 
   IFD causes issues with the current flakes API, and now purs-nix should be free from them.
+
 
 ## 2022-8-28
 ### Breaking: Unlikely
