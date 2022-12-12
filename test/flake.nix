@@ -8,7 +8,7 @@
 
       purs-nix-test-packages =
         { flake = false;
-          url = "github:purs-nix/test-packages";
+          url = "github:purs-nix/test-packages/new-api";
         };
     };
 
@@ -26,7 +26,17 @@
       }
       ({ make-shell, pkgs, ps-tools, system, ... }:
          let
+           rev = "fd4a6c6796412cabbc3a03bfa7e4eda92d5e196c";
            purs-nix =
+             let
+               inherit (purs-nix-flake { inherit system; }) build;
+
+               test-prelude =
+                 build
+                   { name = "prelude";
+                     src.flake.url = "github:purs-nix/test-packages?dir=prelude&rev=${rev}";
+                   };
+             in
              purs-nix-flake
                { inherit system;
 
@@ -45,6 +55,8 @@
                           # testing overlay precedence
                           murmur3 = prelude;
 
+                          prelude = test-prelude;
+
                           # test if later overlays have access to this package
                           test-package = prelude;
                         }
@@ -57,8 +69,23 @@
                           "test.prelude" = super.test-package;
                         }
                      )
+
+                     test-prelude.overlay
                    ];
                };
+
+            build-test =
+              purs-nix.build
+                 { name = "purs-nix.build-test";
+
+                   src.git =
+                     { repo = "https://github.com/purs-nix/test-packages.git";
+                       inherit rev;
+                       ref = "new-api";
+                     };
+
+                   info = /build-test/package.nix;
+                 };
 
            minimal = false;
 
@@ -66,20 +93,19 @@
              mapAttrs
                (n: v: (a: l.warnIf (!a) "switches.${n} == false" a) (!minimal && v))
                { packages-compile = true;
-                 parser = true;
                  repl = true;
                };
 
            l = p.lib; p = pkgs;
            inherit (purs-nix) ps-pkgs ps-pkgs-ns purs;
-           package = import ./package.nix purs-nix;
+           package = import ./package.nix build-test purs-nix;
 
            ps-custom = { dir ? ./., ...}@args:
              purs
                ({ inherit (package) dependencies;
                   test-dependencies =
-                    [ ps-pkgs."assert"
-                      ps-pkgs-ns.ursi.murmur3
+                    [ "assert"
+                      "ursi.murmur3"
                     ];
 
                   srcs = [ "src" "src2" ];
@@ -114,7 +140,7 @@
                };
 
            run-app-custom = args: module:
-             "${(ps-custom args).modules.${module}.app { name = "test run"; }}/bin/'test run'";
+             "${(ps-custom args).app { inherit module; name = "test run"; }}/bin/'test run'";
 
            run-app = run-app-custom {};
 
@@ -128,9 +154,7 @@
 
            package-tests =
              import ./packages.nix
-               ({ inherit l p switches;
-                  inherit (purs-nix-flake.inputs.parsec.lib) parsec;
-                }
+               ({ inherit l p switches; }
                 // (purs-nix-flake { inherit system; })
                );
 
@@ -175,7 +199,7 @@
                { "compiler flags" =
                    let
                      output =
-                       ps.modules.Main.output
+                       ps.output
                          { codegen = "corefn,js";
                            comments = true;
                            no-prefix = true;
@@ -203,9 +227,7 @@
 
                  "custom purescript package" =
                    let
-                     output =
-                         (ps-custom { inherit purescript; }).modules.Main.output {};
-
+                     output = (ps-custom { inherit purescript; }).output {};
                      purescript = ps-tools.purescript-0_15_0;
                    in
                    make-test "purescript version"
@@ -219,21 +241,21 @@
 
                  "main script output head" =
                    make-test "expected output"
-                     "head -n 1 <(${ps.modules.Main.script {}})"
+                     "head -n 1 <(${ps.script {}})"
                      (i: ''[[ ${i} == *-Main-script ]]'');
 
                  "main script output tail" =
                    make-test "expected output"
-                     "tail -n +2 <(${ps.modules.Main.script {}} argument)"
+                     "tail -n +2 <(${ps.script {}} argument)"
                      (i: ''[[ ${i} == "${expected-output-tail}" ]]'');
 
                  "main output murmur3" =
                    make-test "expected output"
-                     "${ps2.modules.Main.app { name = "_"; }}/bin/_"
+                     "${ps2.app { name = "_"; }}/bin/_"
                      (i: "[[ ${i} == 1945310157 ]]");
 
                  "app minification" =
-                   let a = args: ps.modules.Main.app ({ name = "_"; } // args); in
+                   let a = args: ps.app ({ name = "_"; } // args); in
                    ''
                    a=$(wc -c < ${a {}}/bin/_)
                    b=$(wc -c < ${a { esbuild.minify = false; }}/bin/_)
@@ -261,16 +283,15 @@
 
                  "no test app" =
                    make-test "expected output"
-                     "${(ps-custom { test = "nonexistent"; })
-                          .modules.Main.app { name = "test run"; }
+                     "${(ps-custom { test = "nonexistent"; }).app
+                          { name = "test run"; }
                       }/bin/'test run' argument"
                       expected-output;
 
                  "no dir app" =
                    make-test "expected output"
-                     "${(ps-custom
-                           { dir = null; srcs = [ ./src ./src2 ];}
-                        ).modules.Main.app { name = "test run"; }
+                     "${(ps-custom { dir = null; srcs = [ ./src ./src2 ];}).app
+                          { name = "test run"; }
                       }/bin/'test run' argument"
                      expected-output;
 
@@ -282,15 +303,6 @@
                       }"
                      (i: "[[ ${i} == testing ]]");
                }
-             // (with ps.modules.Main;
-                 { "incremental output" = output { incremental = true; };
-
-                   "incremental bundle" =
-                     bundle { esbuild.platform = "node"; incremental = true; };
-
-                   "incremental app" = app { name = "_"; incremental = true; };
-                 }
-                )
              // mapAttrs
                   (n:
                    { args ? {}
@@ -351,9 +363,9 @@
                                 (i: ''
                                     info="name:    prelude
                                     version: override-test
-                                    flake:   github:purs-nix/test-packages?dir=prelude&rev=debd6195fa1d1b2c15f244d496afe89414620a12
+                                    flake:   github:purs-nix/test-packages?dir=prelude&rev=fd4a6c6796412cabbc3a03bfa7e4eda92d5e196c
                                     package: default
-                                    source:  /nix/store/4z6lgq2g8zr0k2h5sanm01hyl7a6b666-purs-nix.prelude-override-test"
+                                    source:  /nix/store/lc7s5181vj1fka5dssj0bafi220m7qgp-purs-nix.prelude-override-test"
 
                                     [[ ${i} == $info ]]
                                     ''
@@ -365,8 +377,8 @@
                                     info="name:    effect
                                     version: override-test
                                     repo:    https://github.com/purs-nix/test-packages.git
-                                    path:    /nix/store/ynjlvzkgnagj29kw1chi49pbfnx1kb19-1mayjlr32rmir706prrfgjx205357ycz-source
-                                    source:  /nix/store/dhpfrhwy1ydwnzinrd61rrnyrjs5ai28-effect-override-test"
+                                    path:    /nix/store/lvic9hidqlk859fsmfksrxsy9swp2gk5-4n1s3a8183r7zrl0xwyxpya0z59ym7gj-source
+                                    source:  /nix/store/lwi69xspjlqrgbnn4dd4q1jqscph9p4r-effect-override-test"
 
                                     [[ ${i} == $info ]]
                                     ''
@@ -576,7 +588,22 @@
                       };
                   }
                   // package-tests
-                  // { "'check' api" = ps.test.check {}; };
+                  // { "'check' api" = ps.test.check {}; }
+                  // { ".overlay" =
+                         let
+                           overlay =
+                             (purs-nix.build
+                                { name = "local-package";
+                                  src.path = ./.;
+                                  info = { inherit (package) dependencies; };
+                                }
+                             ).overlay null null;
+                         in
+                         assert
+                           overlay?"purs-nix.build-test"
+                           && length (attrValues overlay) == 1;
+                         p.runCommand "empty" {} "touch $out";
+                     };
 
            devShells.default =
              make-shell

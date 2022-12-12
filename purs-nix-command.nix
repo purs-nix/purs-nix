@@ -5,6 +5,7 @@ with builtins;
 , docs-search
 , nodejs
 , pkgs
+, ps-pkgs
 , purescript
 , repl-globs
 , srcs'
@@ -135,7 +136,7 @@ with builtins;
                   (map
                      (pkg:
                         let
-                          info = pkg.purs-nix-info;
+                          info = u.dep-info ps-pkgs pkg;
                           registry-name = "purescript-${info.pursuit.name or info.name}";
                         in
                         l.nameValuePair
@@ -172,7 +173,7 @@ with builtins;
                               dependencies =
                                 foldl'
                                   (acc: dep:
-                                     acc // { ${dep.purs-nix-info.name} = ""; }
+                                     acc // { ${u.dep-name dep} = ""; }
                                   )
                                   {}
                                   info.dependencies;

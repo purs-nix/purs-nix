@@ -6,15 +6,11 @@ let
   package-set-repo = fetchGit "https://github.com/purescript/package-sets";
   packages = l.importJSON (package-set-repo + /packages.json);
 
-  escape-reserved-word = ps-pkgs: str:
-    let
-      reserved-words = [ "assert" ];
-    in
-    if elem str reserved-words then
-      if ps-pkgs then ''ps-pkgs."${str}"''
-      else ''"${str}"''
-    else
-      str;
+  escape-reserved-word = str:
+    let reserved-words = [ "assert" ]; in
+    if elem str reserved-words
+    then ''"${str}"''
+    else str;
 
   prev = import ./. null;
 in
@@ -35,7 +31,7 @@ l.pipe packages
           in
           acc
           + ''
-            ${escape-reserved-word false n} =
+            ${escape-reserved-word n} =
               { src.git =
                   { repo = "${v.repo}";
                     rev = "${repo.rev}";
@@ -46,7 +42,7 @@ l.pipe packages
 
                     dependencies =
                       [ ${foldl'
-                            (acc: d: acc + escape-reserved-word true d + " ")
+                            (acc: d: acc + ''"${d}" '')
                             ""
                             v.dependencies
                         }

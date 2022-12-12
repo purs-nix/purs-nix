@@ -35,9 +35,9 @@
              purs-nix.purs
                { dependencies =
                    with purs-nix.ps-pkgs;
-                   [ console
-                     effect
-                     prelude
+                   [ "console"
+                     "effect"
+                     "prelude"
                    ];
 
                  dir = ./.;
@@ -53,7 +53,7 @@
              };
 
            packages =
-             with ps.modules.Main;
+             with ps;
              { default = app { name = "is-even"; };
                bundle = bundle {};
                output = output {};
