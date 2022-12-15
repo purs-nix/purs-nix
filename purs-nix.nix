@@ -720,6 +720,7 @@ with builtins;
                    { argv-1 = "${test-module}-run";
                      inherit nodejs;
                      import = "${output'}/${test-module}/index.js";
+                     starting-arg = 1;
                    }
                 );
 

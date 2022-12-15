@@ -102,13 +102,14 @@ p:
       { argv-1
       , import
       , nodejs
+      , starting-arg ? 2
       }:
       ''
       ${nodejs}/bin/node \
         --preserve-symlinks \
         --input-type=module \
         -e 'import { main } from "${import}"; main()' \
-        -- "${argv-1}" "''${@:2}"
+        -- "${argv-1}" "''${@:${toString starting-arg}}"
       '';
 
     has-version = pkg:
