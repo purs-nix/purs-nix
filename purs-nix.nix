@@ -1,5 +1,5 @@
 with builtins;
-{ docs-search, overlays, parsec, pkgs, ps-tools }:
+{ defaults, docs-search, overlays, parsec, pkgs, ps-tools }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
     parser = import ./parser.nix { inherit l parsec; };
@@ -607,7 +607,7 @@ with builtins;
             { inherit (dg) name deps pre-compile;
               postprocessing = pp.foreign;
             }
-            args;
+            ((defaults.compile or {}) // args);
 
         bundle =
           { module ? "Main"
@@ -693,6 +693,7 @@ with builtins;
             { inherit
                 all-dependencies
                 all-dep-globs
+                defaults
                 dep-globs
                 docs-search
                 nodejs

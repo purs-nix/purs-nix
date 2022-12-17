@@ -1,6 +1,7 @@
 with builtins;
 { all-dependencies
 , all-dep-globs
+, defaults
 , dep-globs
 , docs-search
 , nodejs
@@ -16,7 +17,7 @@ with builtins;
 }:
 { srcs ? srcs'
 , src-globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
-, output ? "output"
+, output ? (defaults.compile or { output = "output"; }).output
 , bundle ? {}
 , compile ? {}
 , package ? {}
@@ -52,7 +53,7 @@ with builtins;
 
     make-compile = args:
       ''
-      ${u.compile purescript (compile // args)}
+      ${u.compile purescript ((defaults.compile or {}) // compile // args)}
       chmod -R u+w ${output}
       ${foreign output}
       '';

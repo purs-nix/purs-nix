@@ -27,6 +27,9 @@
       ({ make-shell, pkgs, ps-tools, system, ... }:
          let
            rev = "fd4a6c6796412cabbc3a03bfa7e4eda92d5e196c";
+
+           output-default = "output-default";
+
            purs-nix =
              let
                inherit (purs-nix-flake { inherit system; }) build;
@@ -39,6 +42,7 @@
              in
              purs-nix-flake
                { inherit system;
+                 defaults.compile.output = output-default;
 
                  overlays =
                    [ (_: super: assert !super?test-package; {})
@@ -493,6 +497,10 @@
                   )
                   { "purs-nix command defaults" =
                       { test = command:
+                          make-test "check output name"
+                            ""
+                            (_: "ls ${output-default}") +
+
                           make-test "purs-nix srcs"
                             "${command} srcs"
                             (i: ''${purs-nix.purescript}/bin/purs compile ${i}'') +

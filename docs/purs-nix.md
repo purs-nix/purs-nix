@@ -3,9 +3,13 @@
 **purs-nix** is a nix library used to set up your PureScript environment and/or to compile/bundle your PureScript code in a Nix derivation. The `outputs` of the flake has a `__functor` attribute, so it can be used as a function. It takes the following arguments:
 
 ```
-{ overlays ? [], system }
+{ defaults ? {}
+, overlays ? []
+, system
+}
 ```
 
+- `defaults`: Arguments to be applied to everything by default. Currently the only argument is `compile`, accepting [these](purs-nix.md#compile) arguments.
 - `overlays`: A list of [overlays](overriding-packages.md) to modify `ps-pkgs`/`ps-pkgs-ns`.
 - `system`: The system you're building on.
 
@@ -89,7 +93,7 @@ Read more about `output`, `bundle`, `script`, `app`, and `test` [here](derivatio
   }
   ```
 
-- `compile`: The options that will configure the `purs compile` command.
+- <span id="user-content-compile">`compile`</span>: The options that will configure the `purs compile` command.
 
   ```
   { verbose-errors ? false
