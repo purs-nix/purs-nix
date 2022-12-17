@@ -1,3 +1,9 @@
+## 2022-12-17
+### Breaking: Very Unlikely
+
+- Added a `defaults` argument to the `purs-nix` Nix function, with sub-argument `compile` for configuring compiler flags to use project wide.
+
+
 ## 2022-12-12
 ### Breaking: Likely
 

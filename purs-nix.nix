@@ -1,5 +1,5 @@
 with builtins;
-{ docs-search, overlays, parsec, pkgs, ps-tools }:
+{ defaults, docs-search, overlays, parsec, pkgs, ps-tools }:
   let
     l = p.lib; p = pkgs; u = import ./utils.nix p;
     parser = import ./parser.nix { inherit l parsec; };
@@ -635,21 +635,23 @@ with builtins;
 
         output = { test-modules ? false }: args:
           let
+            args' = (defaults.compile or {}) // args;
+
             inherit
               (if args?zephyr then
-                 { args' =
-                     if args?codegen
-                     then assert l.hasInfix "corefn" a.codegen; a
-                     else args // { codegen = "corefn,js"; };
+                 { args'' =
+                     if args'?codegen
+                     then assert l.hasInfix "corefn" args'.codegen; args'
+                     else args' // { codegen = "corefn,js"; };
 
-                   pp' = pp.compose pp.foreign (pp.zephyr args.zephyr);
+                   pp' = pp.compose pp.foreign (pp.zephyr args'.zephyr);
                  }
                else
-                 { args' = args;
+                 { args'' = args';
                    pp' = pp.foreign;
                  }
               )
-              args' pp';
+              args'' pp';
 
             dg =
               if test-modules then
@@ -674,7 +676,7 @@ with builtins;
             { inherit (dg) name deps pre-compile;
               postprocessing = pp';
             }
-            args';
+            args'';
 
         bundle =
           { module ? "Main"
@@ -767,6 +769,7 @@ with builtins;
             { inherit
                 all-dependencies
                 all-dep-globs
+                defaults
                 dep-globs
                 docs-search
                 nodejs
@@ -794,6 +797,7 @@ with builtins;
                    { argv-1 = "${test-module}-run";
                      inherit nodejs;
                      import = "${output'}/${test-module}/index.js";
+                     starting-arg = 1;
                    }
                 );
 

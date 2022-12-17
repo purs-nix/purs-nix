@@ -18,10 +18,10 @@
 
   outputs = { get-flake, parsec, utils, ... }@inputs:
     with builtins;
-    { __functor = _: { overlays ? [], system }:
+    { __functor = _: { defaults ? {}, overlays ? [], system }:
         import ./purs-nix.nix
           { docs-search = (get-flake inputs.docs-search).packages.${system}.default;
-            inherit overlays;
+            inherit defaults overlays;
             inherit (parsec.lib) parsec;
             pkgs = inputs.nixpkgs.legacyPackages.${system};
             ps-tools = inputs.ps-tools.legacyPackages.${system};
