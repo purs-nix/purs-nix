@@ -4,10 +4,11 @@
 
 ```
 { overlays ? [], system }
+```
+
 - `overlays`: A list of [overlays](overriding-packages.md) to modify `ps-pkgs`/`ps-pkgs-ns`.
 - `system`: The system you're building on.
 
-```
 and returns an attribute set with the following attributes:
 - `build`: A function for creating ad hoc PureScript packages. See: [build](adding-packages.md#user-content-build).
 - `build-set`: A function for creating ad hoc PureScript packages en masse. See: [build](adding-packages.md#user-content-build-set).
