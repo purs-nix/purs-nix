@@ -15,9 +15,10 @@ with builtins;
 , utils
 , foreign
 }:
+let l = p.lib; p = pkgs; u = utils; in
 { srcs ? srcs'
 , src-globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
-, output ? (defaults.compile or { output = "output"; }).output
+, output ? l.attrByPath [ "compile" "output" ] "output" defaults
 , bundle ? {}
 , compile ? {}
 , package ? {}
@@ -26,7 +27,6 @@ with builtins;
 , name ? "purs-nix"
 }:
   let
-    l = p.lib; p = pkgs; u = utils;
     compiler-output = output;
 
     globs =
