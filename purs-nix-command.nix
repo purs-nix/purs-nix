@@ -226,6 +226,7 @@ let l = p.lib; p = pkgs; u = utils; in
               echo import Prelude > .purs-repl
             fi
 
+            ${foreign ".psci_modules"}
             ${u.repl purescript { globs = globs.repl; }};;
 
           docs ) ${purescript}/bin/purs docs \
