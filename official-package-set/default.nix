@@ -18,11 +18,11 @@ ps-pkgs:
 ace =
   { src.git =
       { repo = "https://github.com/purescript-contrib/purescript-ace.git";
-        rev = "f5ef6a8f9cbd61f4e42997ab7210fe72d03afc48";
+        rev = "9f13d2027b3d9766215285381a332393850387ab";
       };
 
     info =
-      { version = "9.0.0";
+      { version = "9.1.0";
 
         dependencies =
           [ "arrays" "effect" "foreign" "nullable" "prelude" "web-html" "web-uievents" 
@@ -176,6 +176,21 @@ argonaut =
 
         dependencies =
           [ "argonaut-codecs" "argonaut-core" "argonaut-traversals" 
+          ];
+      };
+  };
+
+argonaut-aeson-generic =
+  { src.git =
+      { repo = "https://github.com/coot/purescript-argonaut-aeson-generic.git";
+        rev = "4cee717e3e0003b76e699550f5fc35976901078c";
+      };
+
+    info =
+      { version = "0.4.1";
+
+        dependencies =
+          [ "argonaut-codecs" "argonaut-core" "argonaut-generic" "arrays" "bifunctors" "control" "effect" "either" "foldable-traversable" "foreign-object" "maybe" "partial" "prelude" "psci-support" "record" "test-unit" "typelevel-prelude" 
           ];
       };
   };
@@ -475,7 +490,7 @@ bigints =
       { version = "7.0.1";
 
         dependencies =
-          [ "integers" "maybe" "strings" 
+          [ "arrays" "assert" "console" "effect" "foldable-traversable" "integers" "maybe" "numbers" "partial" "prelude" "quickcheck" "quickcheck-laws" "strings" 
           ];
       };
   };
@@ -1173,11 +1188,11 @@ default-values =
 deku =
   { src.git =
       { repo = "https://github.com/mikesol/purescript-deku.git";
-        rev = "cb7fd1ea1073853a848c46818dcac484f6be40ad";
+        rev = "5aa396ff111aef699932ea3c4745ce4a048118f9";
       };
 
     info =
-      { version = "0.9.8";
+      { version = "0.9.9";
 
         dependencies =
           [ "aff" "arrays" "bolson" "catenable-lists" "control" "css" "effect" "either" "fast-vect" "filterable" "foldable-traversable" "foreign-object" "hyrule" "maybe" "newtype" "ordered-collections" "prelude" "profunctor" "profunctor-lenses" "quickcheck" "record" "safe-coerce" "st" "strings" "transformers" "tuples" "unsafe-coerce" "web-dom" "web-events" "web-html" "web-uievents" 
@@ -1398,11 +1413,11 @@ elmish-enzyme =
 elmish-hooks =
   { src.git =
       { repo = "https://github.com/collegevine/purescript-elmish-hooks.git";
-        rev = "c629812a86112d80f9063902dc801a714b69bc3f";
+        rev = "2d15237b86ead1cba9a2221607445fb0d7b14360";
       };
 
     info =
-      { version = "0.8.3";
+      { version = "0.9.1";
 
         dependencies =
           [ "aff" "debug" "elmish" "maybe" "prelude" "tuples" "undefined-is-not-a-problem" 
@@ -1788,11 +1803,11 @@ foreign-object =
 foreign-readwrite =
   { src.git =
       { repo = "https://github.com/artemisSystem/purescript-foreign-readwrite.git";
-        rev = "dbc7bef1591c95f13544dd27892cbcc38d692913";
+        rev = "6ff7bd755272e61c80cfb7cf9882e98488c4e666";
       };
 
     info =
-      { version = "3.3.0";
+      { version = "3.4.0";
 
         dependencies =
           [ "foldable-traversable" "foreign" "foreign-object" "identity" "lists" "maybe" "newtype" "prelude" "record" "safe-coerce" "transformers" "unsafe-coerce" 
@@ -2103,11 +2118,11 @@ grain-virtualized =
 graphql-client =
   { src.git =
       { repo = "https://github.com/OxfordAbstracts/purescript-graphql-client.git";
-        rev = "9ab457f42e22e51b97983c5c6029fbf4e3fb66b8";
+        rev = "ebef4aea5c8f5a27a5d33272207006139dcd57bb";
       };
 
     info =
-      { version = "9.2.2";
+      { version = "9.3.2";
 
         dependencies =
           [ "aff" "aff-promise" "affjax" "affjax-node" "affjax-web" "argonaut-codecs" "argonaut-core" "arrays" "bifunctors" "control" "datetime" "debug" "effect" "either" "enums" "exceptions" "foldable-traversable" "foreign" "foreign-object" "functions" "halogen-subscriptions" "heterogeneous" "http-methods" "integers" "lists" "maybe" "media-types" "newtype" "node-buffer" "node-fs" "nullable" "numbers" "ordered-collections" "parsing" "prelude" "profunctor" "profunctor-lenses" "psci-support" "quickcheck" "record" "spec" "spec-discovery" "string-parsers" "strings" "strings-extra" "transformers" "tuples" "unicode" "unsafe-coerce" "variant" 
@@ -2193,11 +2208,11 @@ halogen-css =
 halogen-echarts-simple =
   { src.git =
       { repo = "https://github.com/lucasdicioccio/purescript-halogen-echarts-simple.git";
-        rev = "828a35f927bc6dd32f6074587ad5ecbbb70c5988";
+        rev = "d294821b7a23944260ee48257cd2c4a503ef9a86";
       };
 
     info =
-      { version = "0.0.3";
+      { version = "0.0.4";
 
         dependencies =
           [ "aff" "console" "echarts-simple" "effect" "foldable-traversable" "halogen" "halogen-subscriptions" "maybe" "prelude" 
@@ -2460,14 +2475,29 @@ httpurple-yoga-json =
       };
   };
 
-hyrule =
+humdrum =
   { src.git =
-      { repo = "https://github.com/mikesol/purescript-hyrule.git";
-        rev = "8ecb4c52b3cd6ff33f7fb99d8836f1e205bde82b";
+      { repo = "https://github.com/lucasdicioccio/purescript-humdrum.git";
+        rev = "6fd229a78be11f91473cf931b51302dd16d757b7";
       };
 
     info =
-      { version = "2.3.5";
+      { version = "0.0.1";
+
+        dependencies =
+          [ "console" "effect" "foldable-traversable" "maybe" "prelude" "web-dom" "web-html" 
+          ];
+      };
+  };
+
+hyrule =
+  { src.git =
+      { repo = "https://github.com/mikesol/purescript-hyrule.git";
+        rev = "188d869097adf8d4a4818a9687dd8b781daec998";
+      };
+
+    info =
+      { version = "2.3.6";
 
         dependencies =
           [ "arrays" "control" "datetime" "effect" "either" "filterable" "foldable-traversable" "js-timers" "lists" "maybe" "monoid-extras" "newtype" "now" "ordered-collections" "partial" "prelude" "profunctor" "record" "refs" "st" "tuples" "unsafe-coerce" "unsafe-reference" "web-events" "web-html" "web-uievents" 
@@ -2523,14 +2553,14 @@ indexed-monad =
 int64 =
   { src.git =
       { repo = "https://github.com/purescript-contrib/purescript-int64.git";
-        rev = "a038f961b2068d9f317d572354c0a2becde5cf22";
+        rev = "00b6d5fbfd12081c4cf58b702066269270b53743";
       };
 
     info =
-      { version = "2.0.0";
+      { version = "3.0.0";
 
         dependencies =
-          [ "effect" "foreign" "functions" "integers" "maybe" "nullable" "prelude" "quickcheck" 
+          [ "effect" "foreign" "functions" "gen" "integers" "maybe" "nullable" "prelude" "unsafe-coerce" 
           ];
       };
   };
@@ -2613,14 +2643,14 @@ jelly =
 jelly-hooks =
   { src.git =
       { repo = "https://github.com/yukikurage/purescript-jelly-hooks.git";
-        rev = "84c510d3f2c4f5742c6471826c1c9e0d4c7ce69d";
+        rev = "66572aa22243625051451b4ece5fd68d232fe2c1";
       };
 
     info =
-      { version = "0.3.0";
+      { version = "0.3.1";
 
         dependencies =
-          [ "aff" "effect" "jelly-signal" "js-timers" "maybe" "prelude" "refs" "tailrec" "transformers" "tuples" "unsafe-coerce" "web-events" 
+          [ "aff" "effect" "jelly-signal" "js-timers" "maybe" "partial" "prelude" "refs" "tailrec" "transformers" "tuples" "web-events" 
           ];
       };
   };
@@ -2970,6 +3000,51 @@ machines =
       };
   };
 
+marionette =
+  { src.git =
+      { repo = "https://github.com/thought2/purescript-marionette.git";
+        rev = "ce56a08e1fb9423d92cbab36e5b6ca7355f3ef5c";
+      };
+
+    info =
+      { version = "1.0.0";
+
+        dependencies =
+          [ "aff" "console" "datetime" "effect" "either" "enums" "foldable-traversable" "maybe" "newtype" "now" "ordered-collections" "prelude" "refs" "transformers" "tuples" 
+          ];
+      };
+  };
+
+marionette-commander =
+  { src.git =
+      { repo = "https://github.com/thought2/purescript-marionette-commander.git";
+        rev = "165e3a3efd754ae225af3cbe971141528d3c9fbb";
+      };
+
+    info =
+      { version = "0.1.1";
+
+        dependencies =
+          [ "aff" "arrays" "console" "effect" "either" "marionette" "maybe" "node-readline" "prelude" "strings" "transformers" 
+          ];
+      };
+  };
+
+marionette-react-basic-hooks =
+  { src.git =
+      { repo = "https://github.com/thought2/purescript-marionette-react-basic-hooks.git";
+        rev = "ae597e909ec22625d003097c158828ca3474d4c4";
+      };
+
+    info =
+      { version = "0.1.1";
+
+        dependencies =
+          [ "aff" "aff-promise" "console" "effect" "exceptions" "marionette" "maybe" "newtype" "prelude" "react-basic" "react-basic-dom" "react-basic-hooks" "transformers" "tuples" "unsafe-coerce" "web-dom" "web-html" 
+          ];
+      };
+  };
+
 matrices =
   { src.git =
       { repo = "https://github.com/kRITZCREEK/purescript-matrices.git";
@@ -3048,11 +3123,11 @@ media-types =
 metadata =
   { src.git =
       { repo = "https://github.com/purescript/purescript-metadata.git";
-        rev = "6529ece5167934712454d9b5d9814b3e663a2c85";
+        rev = "9dccf1788bd56a4a168a38a7dbb969498d619eb3";
       };
 
     info =
-      { version = "0.15.4";
+      { version = "0.15.7";
 
         dependencies =
           [ 
@@ -3543,14 +3618,14 @@ node-streams =
 node-streams-aff =
   { src.git =
       { repo = "https://github.com/purescript-node/purescript-node-streams-aff.git";
-        rev = "fd0994bf41f16b560c0d31318bb374b7671aefcf";
+        rev = "c0d2c10ebf0f66ca456e6d22f57c51062a743bad";
       };
 
     info =
-      { version = "4.0.1";
+      { version = "5.0.0";
 
         dependencies =
-          [ "aff" "arrays" "effect" "either" "exceptions" "maybe" "node-buffer" "node-streams" "nullable" "prelude" "refs" "st" "tuples" 
+          [ "aff" "arrays" "effect" "either" "exceptions" "maybe" "node-buffer" "node-streams" "nullable" "prelude" "refs" "st" "tailrec" 
           ];
       };
   };
@@ -4113,11 +4188,11 @@ profunctor-lenses =
 protobuf =
   { src.git =
       { repo = "https://github.com/xc-jp/purescript-protobuf.git";
-        rev = "f851088eb9589384dcd4d014f25e3d832212818a";
+        rev = "ddda49cca6fb4a4994962e68e5fc2eb71924c13b";
       };
 
     info =
-      { version = "4.1.0";
+      { version = "4.2.0";
 
         dependencies =
           [ "arraybuffer" "arraybuffer-builder" "arraybuffer-types" "arrays" "control" "effect" "either" "enums" "exceptions" "float32" "foldable-traversable" "functions" "int64" "lists" "maybe" "newtype" "parsing" "parsing-dataview" "prelude" "record" "strings" "tailrec" "transformers" "tuples" "uint" "web-encoding" 
@@ -4398,11 +4473,11 @@ react-basic-dnd =
 react-basic-dom =
   { src.git =
       { repo = "https://github.com/lumihq/purescript-react-basic-dom.git";
-        rev = "5d9978a247d5ff9677d72fd5365cc9b7011bab1d";
+        rev = "58784a7f6fca2c962d8951479957a21f54b75bf1";
       };
 
     info =
-      { version = "6.0.0";
+      { version = "6.1.0";
 
         dependencies =
           [ "arrays" "effect" "foldable-traversable" "foreign-object" "maybe" "nullable" "prelude" "react-basic" "record" "unsafe-coerce" "web-dom" "web-events" "web-file" "web-html" 
@@ -5028,14 +5103,14 @@ sparse-polynomials =
 spec =
   { src.git =
       { repo = "https://github.com/purescript-spec/purescript-spec.git";
-        rev = "51c0039eca7fe0633f16f55342551e783db65b3c";
+        rev = "35266d386039698d7b92f34aae6bc1b0caf98de6";
       };
 
     info =
-      { version = "7.1.0";
+      { version = "7.2.0";
 
         dependencies =
-          [ "aff" "ansi" "avar" "console" "exceptions" "foldable-traversable" "fork" "now" "pipes" "prelude" "strings" "transformers" 
+          [ "aff" "ansi" "arrays" "avar" "bifunctors" "control" "datetime" "effect" "either" "exceptions" "foldable-traversable" "fork" "identity" "integers" "lists" "maybe" "newtype" "now" "ordered-collections" "parallel" "pipes" "prelude" "strings" "tailrec" "transformers" "tuples" 
           ];
       };
   };
@@ -5831,6 +5906,21 @@ vectorfield =
 
         dependencies =
           [ "console" "effect" "group" "prelude" "psci-support" 
+          ];
+      };
+  };
+
+vectors =
+  { src.git =
+      { repo = "https://github.com/thought2/purescript-vectors.git";
+        rev = "2a61dca5b39de1361cc01cdc0c32b9ffc6741d71";
+      };
+
+    info =
+      { version = "2.1.0";
+
+        dependencies =
+          [ "console" "effect" "foldable-traversable" "prelude" "profunctor-lenses" 
           ];
       };
   };
