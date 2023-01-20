@@ -25,7 +25,7 @@
                  dir = ./.;
                };
          in
-         { packages.default = ps.modules.Main.bundle {};
+         { packages.default = ps.bundle {};
 
            devShells.default =
              pkgs.mkShell
