@@ -123,8 +123,6 @@ The upper options correspond to the flags you can pass `purs compile`.
 
 ```
 
-- `esbuild`: additional esbuild flags
-    - `format`: Specifies the [esbuild format](https://esbuild.github.io/api/#format). Default is [ESM format](https://esbuild.github.io/api/#format-esm). Note default for [`spago bundle-app`](https://github.com/purescript/spago#1-spago-bundle-app) is [IIFE format](https://esbuild.github.io/api/#format-iife); specify this with `"iife"`.
 - `main`: whether or not to automatically execute the main function of the module you're bundling.
 - `incremental`: whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
 Note: turning this off will not disable the separate compiling of dependencies.
