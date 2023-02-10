@@ -42,6 +42,18 @@
 
   - To view the info of a package, use `nix run github:purs-nix/purs-nix#package-info.<package-name>`. (a namespaced package will need to have quotes around its name, as it contains a `.`. You can do that like this: `.#package-info.'"<namespace>.<name>"'`.)
 
+## Migrating from [`spago`](https://github.com/purescript/spago)
+
+There is a difference in the default [esbuild](https://esbuild.github.io/) [format](https://esbuild.github.io/api/#format) used by `purs-nix` and `spago`. The default used by `purs-nix` is [ESM format](https://esbuild.github.io/api/#format-esm). The default used by [`spago bundle-app`](https://github.com/purescript/spago#1-spago-bundle-app) is [IIFE format](https://esbuild.github.io/api/#format-iife). To match `spago`, specify [`bundle.esbuild.format = "iife"`](https://github.com/purs-nix/purs-nix/blob/master/docs/derivations.md#bundle), i.e.:
+```
+...
+bundle =
+  { ...
+    esbuild = { format = "iife"; };
+  }
+...
+```
+
 ## Contributing / Mirrors
 
 Bug reports and patches are always welcome. Feature requests and new features are also welcome, but please consider discussing them with the maintainer first.
