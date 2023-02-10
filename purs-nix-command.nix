@@ -52,8 +52,18 @@ let l = p.lib; p = pkgs; u = utils; in
       '';
 
     make-compile = args:
+      let
+        with-docs =
+          let all-args = defaults.compile or {} // compile // args; in
+          if all-args?codegen then
+            if l.hasInfix "docs" all-args.codegen
+            then all-args
+            else all-args // { codegen = "${compile.codegen},docs"; }
+          else
+            all-args // { codegen = "docs,js"; };
+      in
       ''
-      ${u.compile purescript ((defaults.compile or {}) // compile // args)}
+      ${u.compile purescript with-docs}
       chmod -R u+w ${output}
       ${foreign output}
       '';
