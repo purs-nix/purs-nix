@@ -20,16 +20,16 @@ self:
           { version = "1.2.0";
 
             dependencies =
-              [ aff
-                console
-                effect
-                lists
-                maybe
-                node-fs-aff
-                node-path
-                node-process
-                ordered-collections
-                strings
+              [ "aff"
+                "console"
+                "effect"
+                "lists"
+                "maybe"
+                "node-fs-aff"
+                "node-path"
+                "node-process"
+                "ordered-collections"
+                "strings"
               ];
           };
       };
