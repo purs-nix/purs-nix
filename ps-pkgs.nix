@@ -8,6 +8,24 @@ self:
         info = { inherit (info) version dependencies; };
       };
 
+    html-parser-halogen =
+      { info.dependencies =
+          [ "arrays"
+            "control"
+            "dom-indexed"
+            "foldable-traversable"
+            "effect"
+            "halogen"
+            "maybe"
+            "prelude"
+          ];
+
+        src.git =
+          { repo = "https://github.com/rnons/purescript-html-parser-halogen.git";
+            rev = "035a51d02ba9f8b70c3ffd9fe31a3f5bed19941c";
+          };
+      };
+
     markdown-it.src.flake.url = "github:purs-nix/purescript-markdown-it/4b90edc070c9ede0ee045224e0c64f9c502c3bf7";
 
     node-glob-basic =

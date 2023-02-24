@@ -1500,6 +1500,21 @@ enums =
       };
   };
 
+env-names =
+  { src.git =
+      { repo = "https://github.com/joellefkowitz/env-names.git";
+        rev = "a62286fb1a236592dc3946234fc0bdd19832578b";
+      };
+
+    info =
+      { version = "0.3.1";
+
+        dependencies =
+          [ "arrays" "maybe" 
+          ];
+      };
+  };
+
 error =
   { src.git =
       { repo = "https://github.com/bklaric/purescript-error.git";
@@ -6543,11 +6558,11 @@ yoga-fetch =
 yoga-json =
   { src.git =
       { repo = "https://github.com/rowtype-yoga/purescript-yoga-json.git";
-        rev = "2966c38f698dcf7279b65a3788e00e74fab4220b";
+        rev = "eed8ae9817a2c88b730c9fd4db99291390308dea";
       };
 
     info =
-      { version = "5.0.1";
+      { version = "5.1.0";
 
         dependencies =
           [ "arrays" "bifunctors" "control" "datetime" "effect" "either" "exceptions" "foldable-traversable" "foreign" "foreign-object" "free" "identity" "integers" "js-bigints" "js-date" "lists" "maybe" "newtype" "nullable" "numbers" "ordered-collections" "partial" "prelude" "record" "strings" "transformers" "tuples" "typelevel-prelude" "unsafe-coerce" "variant" "yoga-tree" 
