@@ -1,7 +1,5 @@
 { inputs =
-    { deadnix.url = "github:astro/deadnix";
-
-      docs-search =
+    { docs-search =
         { # to prevent lock file explosion
           flake = false;
           url = "github:purs-nix/purescript-docs-search";
@@ -12,7 +10,6 @@
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       parsec.url = "github:nprindle/nix-parsec";
       ps-tools.url = "github:purs-nix/purescript-tools";
-      statix.url = "github:nerdypepper/statix";
       utils.url = "github:ursi/flake-utils/8";
     };
 
@@ -56,7 +53,7 @@
          { inherit inputs;
            systems = [ "x86_64-linux" "x86_64-darwin" ];
          }
-         ({ deadnix, make-shell, pkgs, statix, system, ... }:
+         ({ make-shell, pkgs, system, ... }:
             let
               p = pkgs;
               u = import ./utils.nix p;
@@ -79,11 +76,11 @@
                 { lint =
                     p.runCommand "lint" {}
                       ''
-                      ${deadnix}/bin/deadnix -f $(find ${./.} -name "*.nix")
+                      ${p.deadnix}/bin/deadnix -f $(find ${./.} -name "*.nix")
 
                       # https://github.com/nerdypepper/statix/issues/51
                       ln -s ${./statix.toml} statix.toml
-                      ${statix}/bin/statix check ${./.}
+                      ${p.statix}/bin/statix check ${./.}
                       touch $out
                       '';
                 }
@@ -103,7 +100,7 @@
 
               devShells.default =
                 make-shell
-                  { packages = [ deadnix statix ];
+                  { packages = with p; [ deadnix statix ];
                     aliases.lint = ''deadnix **/*.nix; statix check'';
                   };
             }
