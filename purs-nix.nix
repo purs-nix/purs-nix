@@ -19,7 +19,7 @@ with builtins;
     purs =
       { nodejs ? pkgs.nodejs
       , purescript ? purescript'
-      , foreign ? null
+      , foreign ? {}
         # this parameter is purposely undocumented because I don't see a reason to make
         # it part of the API. However, I have already done the work to make it optional,
         # so I will leave it here for now just in case.
@@ -139,7 +139,7 @@ with builtins;
                 (acc: dep:
                    l.recursiveUpdate acc (dep.purs-nix-info.foreign or {})
                 )
-                (if foreign == null then {} else foreign)
+                foreign
                 deps;
           in
           foldl'
