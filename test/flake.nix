@@ -197,7 +197,7 @@
                  ).outPath;
              };
 
-           checks =
+           checks = l.deepSeq switches
              mapAttrs
                (n: v: p.runCommand n {} "${v}\ntouch $out")
                { "compiler flags" =
