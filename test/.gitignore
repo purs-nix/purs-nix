@@ -9,3 +9,5 @@ node_modules
 /.psa*
 /.spago
 index.js
+main.js
+output-default
