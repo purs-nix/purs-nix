@@ -102,6 +102,7 @@
                 make-shell
                   { packages = with p; [ deadnix statix ];
                     aliases.lint = ''deadnix **/*.nix; statix check'';
+                    env.GIT_LFS_SKIP_SMUDGE = 1;
                   };
             }
          );
