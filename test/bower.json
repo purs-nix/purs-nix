@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "purescript-assert": "^v6.0.0",
     "purescript-console": "^v6.0.0",
     "purescript-effect": "^voverride-test",
     "purescript-node-path": "^v5.0.0",

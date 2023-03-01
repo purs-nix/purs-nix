@@ -107,15 +107,15 @@
            ps-custom = { dir ? ./., ...}@args:
              purs
                ({ inherit (package) dependencies;
-                  test-dependencies =
-                    [ "assert"
-                      "ursi.murmur3"
-                    ];
+                  test-dependencies = [ "ursi.murmur3" ];
 
                   srcs = [ "src" "src2" ];
 
                   foreign =
-                    { IsNumber.node_modules =
+                    { Class.src = ./foreign-js;
+                      Class2.src = ./foreign-js;
+
+                      IsNumber.node_modules =
                         (p.callPackages inputs.npmlock2nix {})
                         .node_modules { src = ./foreign-js; } + /node_modules;
 
@@ -136,7 +136,11 @@
                    [ console
                      effect
                      murmur3
-                     test.prelude
+
+                     (l.recursiveUpdate
+                        test.prelude
+                        { purs-nix-info.foreign.Prelude.src = ./foreign-js; }
+                     )
                    ];
 
                   test-dependencies = [ ps-pkgs."assert" ];
@@ -257,6 +261,11 @@
                    make-test "expected output"
                      "${ps2.app { name = "_"; }}/bin/_"
                      (i: "[[ ${i} == 1945310157 ]]");
+
+                 "Prelude has foreign dependencies (build)" =
+                   make-test "file exists"
+                     ""
+                     (_: "ls ${ps2.output {}}/Prelude/foreign");
 
                  "app minification" =
                    let a = args: ps.app ({ name = "_"; } // args); in
@@ -592,7 +601,11 @@
 
                                 [[ ${i} == $info ]]
                                 ''
-                            );
+                            ) +
+
+                          make-test "Prelude has foreign dependencies (shell)"
+                            ""
+                            (_: "ls ${output-default}/Prelude/foreign");
                       };
                   }
                   // package-tests
@@ -613,6 +626,7 @@
                          p.runCommand "empty" {} "touch $out";
                      };
 
+           packages.default = ps.output {};
            devShells.default =
              make-shell
                { packages =

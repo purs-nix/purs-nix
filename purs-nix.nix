@@ -132,7 +132,48 @@ with builtins;
         local-graph-tests = local-graph true;
         local-graph-no-tests = local-graph false;
 
-        foreign-stuff = deps: prefix:
+        link-foreign = foreign: prefix:
+          let
+            make-module = drv:
+              if (readDir drv)?"package.json" then
+                drv
+              else
+                p.runCommand "${drv.pname or drv.name}+package.json" {}
+                  ''
+                  mkdir $out
+                  cd $_
+                  cp -r ${drv}/. .
+                  echo '{ "type": "module" }' > package.json
+                  '';
+          in
+          foldl'
+            (acc: { name, value }:
+               let module-path = "${prefix}/${name}"; in
+               ''
+               ${acc}
+
+               if [[ -e ${module-path} ]]; then
+                 ${if value?node_modules then
+                     "ln -fsT ${value.node_modules} ${module-path}/node_modules"
+                   else if value?src then
+                     ''
+                     if [[ -h ${module-path} ]]; then
+                       echo "Error: You're trying to add foreign dependencies to the module '${name}', but that module is not part of this project. Add the foreign dependencies to the package that contains '${name}'."
+                       exit 1
+                     else
+                       ln -fsT ${make-module value.src} ${module-path}/foreign
+                     fi
+                     ''
+                   else
+                     abort "The only supported foreign options are 'node_modules' and 'src'."
+                 }
+               fi
+               ''
+            )
+            ""
+            (l.mapAttrsToList l.nameValuePair foreign);
+
+        link-all-foreign = deps:
           let
             combined =
               foldl'
@@ -142,31 +183,7 @@ with builtins;
                 foreign
                 deps;
           in
-          foldl'
-            (acc: { name, value }:
-               let module-path = "${prefix}/${name}"; in
-               ''
-               ${acc}
-
-               if [[ -e ${module-path} ]]; then
-                 if [[ -h ${module-path} ]]; then
-                   local src=$(readlink -f ${module-path})
-                   rm ${module-path}
-                   ${copy} $src ${module-path}
-                 fi
-
-                 ${if value?node_modules then
-                     "ln -fsT ${value.node_modules} ${module-path}/node_modules"
-                   else if value?src then
-                     "ln -fsT ${value.src} ${module-path}/foreign"
-                   else
-                     abort "The only supported foreign options are 'node_modules' and 'src'."
-                 }
-               fi
-               ''
-            )
-            ""
-            (l.mapAttrsToList l.nameValuePair combined);
+          link-foreign combined;
 
         copy = "cp --no-preserve=mode --preserve=timestamps -r";
 
@@ -231,6 +248,7 @@ with builtins;
           , local-globs ? ""
           , dependencies
           , name
+          , foreign ? {}
           }:
           args:
           let
@@ -311,6 +329,8 @@ with builtins;
                             }
                         )
                     }
+
+                    ${link-foreign foreign "output"}
                     '';
 
                   installPhase = "mv output $out";
@@ -335,6 +355,7 @@ with builtins;
                   inherit (info) dependencies;
                   name = "${info.name}";
                   local-globs = "${package}/**/*.purs";
+                  foreign = info.foreign or {};
                 }
                 args;
           in
@@ -342,16 +363,16 @@ with builtins;
             acc = a.acc // { ${info.name} = a.drv; };
           };
 
-        pp.foreign = name: deps: output:
-          let foreign = foreign-stuff deps "."; in
-          if foreign == "" then
+        pp.foreign = name: _: output:
+          let foreign' = link-foreign foreign "."; in
+          if foreign' == "" then
             output
           else
             p.runCommand "${name}+foreign" {}
               ''
               mkdir $out; cd $out
               ${copy} ${output}/. .
-              ${foreign}
+              ${foreign'}
               '';
 
         built-deps =
@@ -488,7 +509,7 @@ with builtins;
                     cd $out
 
                     ${if top-level
-                      then foreign-stuff dg.deps-list "."
+                      then link-all-foreign dg.deps-list "."
                       else ""
                     }
                     '';
@@ -709,7 +730,7 @@ with builtins;
               test' = (a: if args?dir then args.test or a else a) "test";
               test-module' = test-module;
               utils = u;
-              foreign = foreign-stuff all-dependencies;
+              foreign = link-all-foreign all-dependencies;
             };
 
         test =
