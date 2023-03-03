@@ -1,4 +1,4 @@
-{ ... }:
+_:
   { dependencies =
       [ "console"
         "effect"
