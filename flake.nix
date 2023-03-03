@@ -90,8 +90,8 @@
                                (get-flake ./examples/hello-world)
                                  .packages.${system}.default;
 
-                            "is-even example" =
-                               (get-flake ./examples/is-even)
+                            "foreign deps example" =
+                               (get-flake ./examples/foreign-dependencies)
                                  .packages.${system}.default;
                           }
                     else
