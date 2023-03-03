@@ -34,7 +34,6 @@
            ps =
              purs-nix.purs
                { dependencies =
-                   with purs-nix.ps-pkgs;
                    [ "console"
                      "effect"
                      "prelude"
