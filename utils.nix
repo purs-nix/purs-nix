@@ -14,9 +14,7 @@ p:
           }
           // (if esbuild?platform then {} else { format = "esm"; })
           // esbuild
-          // { bundle = true;
-               preserve-symlinks = true;
-              };
+          // { bundle = true; };
 
         flags =
           toString
@@ -106,7 +104,6 @@ p:
       }:
       ''
       ${nodejs}/bin/node \
-        --preserve-symlinks \
         --input-type=module \
         -e 'import { main } from "${import}"; main()' \
         -- "${argv-1}" "''${@:${toString starting-arg}}"

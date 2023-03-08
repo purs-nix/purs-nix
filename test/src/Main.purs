@@ -2,6 +2,7 @@ module Main where
 
 import Prelude
 import Prelude as Prelude
+import Class as Class
 import Data.Array ((!!))
 import Data.Maybe (Maybe, maybe)
 import Effect (Effect)
@@ -38,6 +39,7 @@ main = do
   foreign1
   foreign2
   PursNixBuildTest.log
+  Class.sameInstances
   log a
 
 forTest :: String

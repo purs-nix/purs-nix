@@ -4,6 +4,7 @@ build-test:
   { dependencies =
       with ps-pkgs;
       [ build-test
+        "assert"
         "console"
         "effect"
         "node-path"
