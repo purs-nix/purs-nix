@@ -1,8 +1,7 @@
-{ ps-pkgs, ... }:
+_:
   { dependencies =
-      with ps-pkgs;
-      [ console
-        effect
-        prelude
+      [ "console"
+        "effect"
+        "prelude"
       ];
   }

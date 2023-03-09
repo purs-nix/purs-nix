@@ -1,3 +1,9 @@
+## 2023-2-28
+### Breaking: Potentially
+
+- Foreign dependency declarations are restricted to only the modules that are in the project/package for which you are declaring them. This restriction is required to fix [issue 44](https://github.com/purs-nix/purs-nix/issues/44). You can still add foreign dependencies to arbitrary modules, you now just have to patch the packages that they come from instead. See [docs](docs/foreign.md).
+
+
 ## 2022-12-17
 ### Breaking: Very Unlikely
 

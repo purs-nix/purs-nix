@@ -29,12 +29,11 @@
 
            p = pkgs;
            pkgs = nixpkgs.legacyPackages.${system};
-           npmlock2nix = import inputs.npmlock2nix { inherit pkgs; };
+           npmlock2nix = (import inputs.npmlock2nix { inherit pkgs; }).v1;
 
            ps =
              purs-nix.purs
                { dependencies =
-                   with purs-nix.ps-pkgs;
                    [ "console"
                      "effect"
                      "prelude"

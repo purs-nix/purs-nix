@@ -2,7 +2,8 @@ with builtins;
 { ps-pkgs, licenses, ... }:
   { dependencies =
       with ps-pkgs;
-      [ "console"
+      [ "assert"
+        "console"
         "effect"
         "node-path"
         "node-process"

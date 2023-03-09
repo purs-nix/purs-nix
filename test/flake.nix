@@ -151,7 +151,7 @@
                  ).outPath;
              };
 
-           checks =
+           checks = l.deepSeq switches
              mapAttrs
                (n: v: p.runCommand n {} "${v}\ntouch $out")
                { "compiler flags" =
@@ -499,6 +499,7 @@
                   // package-tests
                   // { "'check' api" = ps.test.check {}; };
 
+           packages.default = ps.output {};
            devShells.default =
              make-shell
                { packages =

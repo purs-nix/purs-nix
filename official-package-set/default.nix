@@ -6060,20 +6060,22 @@ web-promise =
       };
   };
 
-web-resize-observer =
-  { src.git =
-      { repo = "https://github.com/nsaunders/purescript-web-resize-observer.git";
-        rev = "68a925704f684a3740aef55e6d2fbb5af33640e5";
-      };
+# no longer found
 
-    info =
-      { version = "1.0.0";
+# web-resize-observer =
+#   { src.git =
+#       { repo = "https://github.com/nsaunders/purescript-web-resize-observer.git";
+#         rev = "68a925704f684a3740aef55e6d2fbb5af33640e5";
+#       };
 
-        dependencies =
-          [ "arrays" "control" "either" "foldable-traversable" "foreign" "record" "transformers" "web-dom" 
-          ];
-      };
-  };
+#     info =
+#       { version = "1.0.0";
+
+#         dependencies =
+#           [ "arrays" "control" "either" "foldable-traversable" "foreign" "record" "transformers" "web-dom" 
+#           ];
+#       };
+#   };
 
 web-socket =
   { src.git =
