@@ -9,8 +9,8 @@ with builtins;
     buckets =
       set-buckets 1 ps-pkgs
       // set-buckets 2 (get-namespace "ursi")
-      // { event = 2;
-           task = 2;
+      // { task = 2;
+           event = 3;
          };
 
     get-namespace = ns: l.filterAttrs (n: _: l.hasPrefix "${ns}." n) ps-pkgs;
