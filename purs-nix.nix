@@ -753,5 +753,40 @@ with builtins;
                 touch $out
                 '';
           };
+
+        exact-dependencies =
+          let
+            dep-graph-for = srcs:
+              l.mapAttrs (_: i: i.depends) (parser (map (a: "${a}") srcs));
+            deps-by-mod =
+              listToAttrs (concatMap
+                (dep: l.mapAttrsToList
+                  (mod: _: l.nameValuePair mod (u.dep-name dep))
+                  (dep-graph-for [ dep.src ]))
+                all-dependencies);
+            exact-for = srcs: declared-deps:
+              let
+                get-dep-by-mod = mod:
+                  l.optional (deps-by-mod?${mod}) deps-by-mod.${mod};
+                used-mods =
+                  concatMap l.id (l.attrValues (dep-graph-for srcs));
+                used-deps =
+                  to-set (concatMap get-dep-by-mod used-mods);
+                to-set = strs:
+                  listToAttrs (map (str: l.nameValuePair str null) strs);
+                dep-names = map u.dep-name declared-deps;
+              in
+              {
+                unused =
+                  attrNames (removeAttrs (to-set dep-names) (attrNames used-deps));
+                undeclared =
+                  attrNames (removeAttrs used-deps dep-names);
+              };
+          in
+          {
+            build = exact-for srcs (args.dependencies or []);
+          } // l.optionalAttrs (args?test-dependencies) {
+            test = exact-for (srcs ++ [ test-src ]) args.test-dependencies;
+          };
       };
   }
