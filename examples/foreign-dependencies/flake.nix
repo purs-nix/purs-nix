@@ -7,11 +7,7 @@
       # purs-nix.url = "github:ursi/purs-nix/ps-0.15";
       # ps-tools.follows = "purs-nix/ps-tools";
 
-      npmlock2nix =
-        { flake = false;
-          url = "github:nix-community/npmlock2nix";
-        };
-
+      buildNodeModules.url = "github:ursi/buildNodeModules";
       utils.url = "github:numtide/flake-utils";
     };
 
@@ -29,7 +25,7 @@
 
            p = pkgs;
            pkgs = nixpkgs.legacyPackages.${system};
-           npmlock2nix = (import inputs.npmlock2nix { inherit pkgs; }).v1;
+           inherit (inputs.buildNodeModules.lib.${system}) buildNodeModules;
 
            ps =
              purs-nix.purs
@@ -42,7 +38,8 @@
                  dir = ./.;
 
                  foreign.Main.node_modules =
-                   npmlock2nix.node_modules { src = ./.; } + /node_modules;
+                   buildNodeModules { packageRoot = ./.; inherit (p) nodejs; }
+                   + /node_modules;
                };
          in
          rec

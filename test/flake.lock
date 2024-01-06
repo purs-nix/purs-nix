@@ -1,5 +1,23 @@
 {
   "nodes": {
+    "buildNodeModules": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1704497466,
+        "narHash": "sha256-L10H5hh9S6y20c7AKuKJ2h9BczODqpTCoGEZBDPJhd0=",
+        "owner": "ursi",
+        "repo": "buildNodeModules",
+        "rev": "3793f5f93bd437c34d7770acf75dbe09a74f2f17",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ursi",
+        "repo": "buildNodeModules",
+        "type": "github"
+      }
+    },
     "get-flake": {
       "locked": {
         "lastModified": 1644686428,
@@ -15,20 +33,18 @@
         "type": "github"
       }
     },
-    "npmlock2nix": {
-      "flake": false,
+    "nixpkgs": {
       "locked": {
-        "lastModified": 1654775747,
-        "narHash": "sha256-9pXHDpIjmsK5390wmpGHu9aA4QOPpegPBvThHeBlef4=",
-        "owner": "nix-community",
-        "repo": "npmlock2nix",
-        "rev": "5c4f247688fc91d665df65f71c81e0726621aaa8",
+        "lastModified": 1700108881,
+        "narHash": "sha256-+Lqybl8kj0+nD/IlAWPPG/RDTa47gff9nbei0u7BntE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "7414e9ee0b3e9903c24d3379f577a417f0aae5f1",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
-        "repo": "npmlock2nix",
-        "type": "github"
+        "id": "nixpkgs",
+        "type": "indirect"
       }
     },
     "purs-nix-test-packages": {
@@ -50,8 +66,8 @@
     },
     "root": {
       "inputs": {
+        "buildNodeModules": "buildNodeModules",
         "get-flake": "get-flake",
-        "npmlock2nix": "npmlock2nix",
         "purs-nix-test-packages": "purs-nix-test-packages"
       }
     }

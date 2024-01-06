@@ -1,10 +1,6 @@
 { inputs =
-    { get-flake.url = "github:ursi/get-flake";
-
-      npmlock2nix =
-        { flake = false;
-          url = "github:nix-community/npmlock2nix";
-        };
+    { buildNodeModules.url = "github:ursi/buildNodeModules";
+      get-flake.url = "github:ursi/get-flake";
 
       purs-nix-test-packages =
         { flake = false;
@@ -116,8 +112,11 @@
                       Class2.src = ./foreign-js;
 
                       IsNumber.node_modules =
-                        (p.callPackages inputs.npmlock2nix {})
-                        .node_modules { src = ./foreign-js; } + /node_modules;
+                        inputs.buildNodeModules.lib.${system}.buildNodeModules
+                          { packageRoot = ./foreign-js;
+                            inherit (p) nodejs;
+                          }
+                          + /node_modules;
 
                       Nested.src = ./foreign-js;
                     };
@@ -228,7 +227,7 @@
                  "custom node package" =
                    # don't pull this out into its own project, it is also a test for
                    # 2f5285a97c9a575e70bebf8e614fff3a42b0fe68
-                   let nodejs = p.nodejs-14_x; in
+                   let nodejs = p.nodejs-18_x; in
                    make-test "node version"
                      (run-app-custom { inherit nodejs; } "Node")
                      (i: "[[ ${i} == v${nodejs.version} ]]");
@@ -391,7 +390,8 @@
                                     version: override-test
                                     repo:    https://github.com/purs-nix/test-packages.git
                                     path:    /nix/store/lvic9hidqlk859fsmfksrxsy9swp2gk5-4n1s3a8183r7zrl0xwyxpya0z59ym7gj-source
-                                    source:  /nix/store/lwi69xspjlqrgbnn4dd4q1jqscph9p4r-effect-override-test"
+                                    source:  /nix/store/r2qinwklq6yghdcz0qxc8zq2p04dq3w6-effect-override-test"
+
 
                                     [[ ${i} == $info ]]
                                     ''

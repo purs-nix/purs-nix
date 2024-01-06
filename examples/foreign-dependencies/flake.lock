@@ -1,5 +1,23 @@
 {
   "nodes": {
+    "buildNodeModules": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1704497466,
+        "narHash": "sha256-L10H5hh9S6y20c7AKuKJ2h9BczODqpTCoGEZBDPJhd0=",
+        "owner": "ursi",
+        "repo": "buildNodeModules",
+        "rev": "3793f5f93bd437c34d7770acf75dbe09a74f2f17",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ursi",
+        "repo": "buildNodeModules",
+        "type": "github"
+      }
+    },
     "get-flake": {
       "locked": {
         "lastModified": 1644686428,
@@ -17,11 +35,25 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1643472818,
-        "narHash": "sha256-qzVPxKDUubYIxKRSuDl/JgzXWSmGvUVYny9SxFMfPJM=",
+        "lastModified": 1700108881,
+        "narHash": "sha256-+Lqybl8kj0+nD/IlAWPPG/RDTa47gff9nbei0u7BntE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7f65e4abd5ecaad12d2d26e4380d1a7d8edafea7",
+        "rev": "7414e9ee0b3e9903c24d3379f577a417f0aae5f1",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1704161960,
+        "narHash": "sha256-QGua89Pmq+FBAro8NriTuoO/wNaUtugt29/qqA8zeeM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "63143ac2c9186be6d9da6035fa22620018c85932",
         "type": "github"
       },
       "original": {
@@ -31,27 +63,11 @@
         "type": "github"
       }
     },
-    "npmlock2nix": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1673447413,
-        "narHash": "sha256-sJM82Sj8yfQYs9axEmGZ9Evzdv/kDcI9sddqJ45frrU=",
-        "owner": "nix-community",
-        "repo": "npmlock2nix",
-        "rev": "9197bbf397d76059a76310523d45df10d2e4ca81",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "npmlock2nix",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
+        "buildNodeModules": "buildNodeModules",
         "get-flake": "get-flake",
-        "nixpkgs": "nixpkgs",
-        "npmlock2nix": "npmlock2nix",
+        "nixpkgs": "nixpkgs_2",
         "utils": "utils"
       }
     },
