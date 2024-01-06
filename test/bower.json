@@ -1,10 +1,10 @@
 {
   "dependencies": {
     "purescript-assert": "^v6.0.0",
-    "purescript-console": "^v6.0.0",
+    "purescript-console": "^v6.1.0",
     "purescript-effect": "^voverride-test",
     "purescript-node-path": "^v5.0.0",
-    "purescript-node-process": "^v10.0.0",
+    "purescript-node-process": "^v11.2.0",
     "purescript-prelude": "^voverride-test",
     "purescript-purs-nix.build-test": "https://github.com/purs-nix/test-packages.git#v1.0.0"
   },

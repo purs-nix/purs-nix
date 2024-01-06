@@ -279,7 +279,7 @@
                  "ps.dependencies" =
                    make-test "expected number"
                      "echo ${toString (length ps.dependencies)}"
-                     (i: "[[ ${i} == 48 ]]");
+                     (i: "[[ ${i} == 59 ]]");
 
                  "test run defaults" =
                    make-test "expected output"
@@ -400,37 +400,46 @@
                               make-test "purs-nix packages"
                                 "${command} packages"
                                 (i: ''
-                                    packages="arraybuffer-types: 3.0.2
-                                    arrays: 7.2.1
+                                    packages="aff: 7.1.0
+                                    arraybuffer-types: 3.0.2
+                                    arrays: 7.3.0
                                     assert: 6.0.0
                                     bifunctors: 6.0.0
-                                    console: 6.0.0
+                                    console: 6.1.0
                                     const: 6.0.0
                                     contravariant: 6.0.0
                                     control: 6.0.0
+                                    datetime: 6.1.0
                                     distributive: 6.0.0
                                     effect: override-test
                                     either: 6.1.0
+                                    enums: 6.0.1
                                     exceptions: 6.0.0
                                     exists: 6.0.0
                                     foldable-traversable: 6.0.0
+                                    foreign: 7.0.0
                                     foreign-object: 4.1.0
                                     functions: 6.0.0
                                     functors: 5.0.0
                                     gen: 4.0.0
                                     identity: 6.0.0
+                                    integers: 6.0.0
                                     invariant: 6.0.0
                                     lazy: 6.0.0
                                     lists: 7.0.0
                                     maybe: 6.0.0
                                     newtype: 5.0.0
-                                    node-buffer: 8.0.0
+                                    node-buffer: 9.0.0
+                                    node-event-emitter: 3.0.0
                                     node-path: 5.0.0
-                                    node-process: 10.0.0
-                                    node-streams: 7.0.0
+                                    node-process: 11.2.0
+                                    node-streams: 9.0.0
                                     nonempty: 7.0.0
                                     nullable: 6.0.0
+                                    numbers: 9.0.1
+                                    ordered-collections: 3.1.1
                                     orders: 6.0.0
+                                    parallel: 7.0.0
                                     partial: 4.0.0
                                     posix-types: 6.0.0
                                     prelude: override-test
@@ -441,7 +450,9 @@
                                     refs: 6.0.0
                                     safe-coerce: 2.0.0
                                     st: 6.2.0
+                                    strings: 6.0.1
                                     tailrec: 6.1.0
+                                    transformers: 6.0.0
                                     tuples: 7.0.0
                                     type-equality: 4.0.1
                                     typelevel-prelude: 7.0.0
