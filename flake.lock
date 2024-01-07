@@ -118,16 +118,15 @@
       "locked": {
         "lastModified": 1704594075,
         "narHash": "sha256-YGbe4tf/R00py3Nu/U05OOahpteifaVrXIjNt3Gd0Lo=",
-        "ref": "expose-packages",
+        "ref": "refs/heads/master",
         "rev": "7c28fe8921c630259e0f761d64fd46dd77689203",
         "revCount": 63,
         "type": "git",
-        "url": "https://gitlab.nixica.dev/mason/lint-utils.git"
+        "url": "https://gitlab.nixica.dev/nix/lint-utils.git"
       },
       "original": {
-        "ref": "expose-packages",
         "type": "git",
-        "url": "https://gitlab.nixica.dev/mason/lint-utils.git"
+        "url": "https://gitlab.nixica.dev/nix/lint-utils.git"
       }
     },
     "make-shell": {

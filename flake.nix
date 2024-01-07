@@ -7,7 +7,7 @@
     };
     get-flake.url = "github:ursi/get-flake";
     lint-utils = {
-      url = "git+https://gitlab.nixica.dev/mason/lint-utils.git?ref=expose-packages";
+      url = "git+https://gitlab.nixica.dev/nix/lint-utils.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     make-shell.url = "github:ursi/nix-make-shell/1";
