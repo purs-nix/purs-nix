@@ -127,6 +127,7 @@
             devShells.default = make-shell {
               packages = with p; [
                 deadnix
+                lint-utils.nixfmt-rfc166
                 statix
               ];
 
