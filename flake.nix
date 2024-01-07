@@ -100,15 +100,12 @@
             };
 
             checks =
+              let
+                lu = inputs.lint-utils.linters.${system};
+              in
               {
-                lint = p.runCommand "lint" { } ''
-                  ${p.deadnix}/bin/deadnix -f $(find ${./.} -name "*.nix")
-
-                  # https://github.com/nerdypepper/statix/issues/51
-                  ln -s ${./statix.toml} statix.toml
-                  ${p.statix}/bin/statix check ${./.}
-                  touch $out
-                '';
+                deadnix = lu.deadnix { src = ./.; };
+                statix = lu.statix { src = ./.; };
               }
               // (
                 if system == "x86_64-linux" then
