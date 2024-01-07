@@ -6,6 +6,12 @@
         };
 
       get-flake.url = "github:ursi/get-flake";
+
+      lint-utils =
+        { url = "git+https://gitlab.nixica.dev/mason/lint-utils.git?ref=expose-packages";
+          inputs.nixpkgs.follows = "nixpkgs";
+        };
+
       make-shell.url = "github:ursi/nix-make-shell/1";
       nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
       parsec.url = "github:nprindle/nix-parsec";
@@ -53,7 +59,7 @@
          { inherit inputs;
            systems = [ "x86_64-linux" "x86_64-darwin" ];
          }
-         ({ make-shell, pkgs, system, ... }:
+         ({ make-shell, lint-utils, pkgs, system, ... }:
             let
               p = pkgs;
               u = import ./utils.nix p;
@@ -104,6 +110,9 @@
                     aliases.lint = ''deadnix **/*.nix; statix check'';
                     env.GIT_LFS_SKIP_SMUDGE = 1;
                   };
+
+              formatter = p.writeShellScriptBin "format"
+                ''${lint-utils.nixfmt-rfc166}/bin/nixfmt -w 80 "$@"'';
             }
          );
 }
