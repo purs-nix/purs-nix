@@ -105,6 +105,10 @@
               in
               {
                 deadnix = lu.deadnix { src = ./.; };
+                nix-rfc166 = lu.nix-rfc166 {
+                  src = ./.;
+                  width = 80;
+                };
                 statix = lu.statix { src = ./.; };
               }
               // (
