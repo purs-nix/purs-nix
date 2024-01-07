@@ -1,7 +1,7 @@
-_:
-  { dependencies =
-      [ "console"
-        "effect"
-        "prelude"
-      ];
-  }
+_: {
+  dependencies = [
+    "console"
+    "effect"
+    "prelude"
+  ];
+}
