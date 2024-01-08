@@ -269,11 +269,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1701634170,
-        "narHash": "sha256-u04AT9D/2EoNHWGcNtX0PdqD7aODNweEi3mH8lmak6A=",
+        "lastModified": 1704567308,
+        "narHash": "sha256-WbFPIkKLtyQOPBUjintckKIYnfs7MvIbmfVsLRSAPlc=",
         "owner": "purs-nix",
         "repo": "purescript-tools",
-        "rev": "32483e84479a5fa5ac6455bfe61016a7143ba5b2",
+        "rev": "ac626313141cbee78f06eb3c5e90359f695aef9b",
         "type": "github"
       },
       "original": {

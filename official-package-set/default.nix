@@ -5036,11 +5036,11 @@ with ps-pkgs; {
   metadata = {
     src.git = {
       repo = "https://github.com/purescript/purescript-metadata.git";
-      rev = "b78fc69507b0aace2ad7934ac92f9159ed973a3d";
+      rev = "967a4b4b22df0fd3bd8e02a335db76a029a80c69";
     };
 
     info = {
-      version = "0.15.13";
+      version = "0.15.14";
 
       dependencies = [ ];
     };
@@ -8499,11 +8499,11 @@ with ps-pkgs; {
   spec-mocha = {
     src.git = {
       repo = "https://github.com/purescript-spec/purescript-spec-mocha.git";
-      rev = "5f5e394a6899eff41e349c7db4d18e41447b55e4";
+      rev = "0790cf238e2eed0e778980b32ecec41fde0a6b2a";
     };
 
     info = {
-      version = "5.0.0";
+      version = "5.1.0";
 
       dependencies = [
         "aff"
