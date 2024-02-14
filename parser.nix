@@ -61,14 +61,14 @@ foldl'
     acc:
     { path, parser-stuff }:
     acc
-    // {
+      // {
       ${parser-stuff.name} = {
         depends = filter (a: !l.hasPrefix "Prim" a) parser-stuff.imports;
         inherit path;
       };
     }
   )
-  { }
+{ }
   (
     map
       (f: {

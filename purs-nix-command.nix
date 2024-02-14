@@ -1,42 +1,30 @@
-with builtins;
-{
-  all-dependencies,
-  all-dep-globs,
-  defaults,
-  dep-globs,
-  docs-search,
-  nodejs,
-  pkgs,
-  ps-pkgs,
-  purescript,
-  repl-globs,
-  srcs',
-  test',
-  test-module',
-  utils,
-  foreign,
+{ all-dependencies
+, all-dep-globs
+, defaults
+, dep-globs
+, docs-search
+, nodejs
+, pkgs
+, ps-pkgs
+, purescript
+, repl-globs
+, srcs'
+, test'
+, test-module'
+, utils
+, foreign
 }:
-let
-  l = p.lib;
-  p = pkgs;
-  u = utils;
-in
-{
-  srcs ? srcs',
-  src-globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs),
-  output ? l.attrByPath
-    [
-      "compile"
-      "output"
-    ]
-    "output"
-    defaults,
-  bundle ? { },
-  compile ? { },
-  package ? { },
-  test ? test',
-  test-module ? test-module',
-  name ? "purs-nix",
+with builtins;
+let l = p.lib; p = pkgs; u = utils; in
+{ srcs ? srcs'
+, src-globs ? toString (map (src: ''"${src}/**/*.purs"'') srcs)
+, output ? l.attrByPath [ "compile" "output" ] "output" defaults
+, bundle ? { }
+, compile ? { }
+, package ? { }
+, test ? test'
+, test-module ? test-module'
+, name ? "purs-nix"
 }:
 let
   compiler-output = output;
@@ -48,10 +36,10 @@ let
   };
 
   bundle' =
-    {
-      esbuild ? { },
-      main ? true,
-      module ? "Main",
+    { esbuild ? { }
+    , main ? true
+    , module ? "Main"
+    ,
     }:
     u.bundle {
       entry-point = "./${compiler-output}/${module}/index.js";
@@ -63,13 +51,10 @@ let
     ${bundle' args}
   '';
 
-  make-compile =
-    args:
+  make-compile = args:
     let
       with-docs =
-        let
-          all-args = defaults.compile or { } // compile // args;
-        in
+        let all-args = defaults.compile or { } // compile // args; in
         if all-args ? codegen then
           if l.hasInfix "docs" all-args.codegen then
             all-args
@@ -97,30 +82,29 @@ let
   package-info = p.writeShellScript "package-info" ''
     case $1 in
 
-    ${concatStringsSep "\n" (
-      map (pkg: "${pkg.purs-nix-info.name} ) ${u.package-info pkg};;")
-        all-dependencies
-    )}
+    ${concatStringsSep "\n"
+        (map
+           (pkg: "${pkg.purs-nix-info.name} ) ${u.package-info pkg};;")
+           all-dependencies)
+    }
 
     * ) echo "There is no package in your project with the name '$1'.";;
     esac
   '';
 
   packages = p.writeShellScript "packages" ''
-    ${concatStringsSep "\n" (
-      map
-        (
-          pkg:
-          let
-            info = pkg.purs-nix-info;
-          in
-          if u.has-version pkg then
-            "echo ${info.name}: ${info.version}"
-          else
-            "echo ${info.name}"
-        )
-        all-dependencies
-    )}
+    ${concatStringsSep "\n"
+        (map
+           (pkg:
+              let
+                info = pkg.purs-nix-info;
+              in
+              if u.has-version pkg then
+                "echo ${info.name}: ${info.version}"
+              else
+                "echo ${info.name}")
+           all-dependencies)
+    }
   '';
 
   bower =
@@ -139,14 +123,15 @@ let
       make-error "pursuit.repo"
     else
       let
-        bower-packages-registry = l.importJSON (
-          fetchGit {
-            url = "https://github.com/purescript/registry.git";
-            ref = "main";
-            rev = "c03e3c7834bc5153a4f6f5d47276a763bab83bfe";
-          }
-          + /bower-packages.json
-        );
+        bower-packages-registry =
+          l.importJSON
+            (fetchGit
+              {
+                url = "https://github.com/purescript/registry.git";
+                ref = "main";
+                rev = "c03e3c7834bc5153a4f6f5d47276a763bab83bfe";
+              }
+            + /bower-packages.json);
 
         bower-set = with package; {
           name = "purescript-${pursuit.name}";
@@ -164,60 +149,54 @@ let
             output
           ];
 
-          dependencies = l.listToAttrs (
-            map
-              (
-                pkg:
-                let
-                  info = u.dep-info ps-pkgs pkg;
-                  registry-name = "purescript-${info.pursuit.name or info.name}";
-                in
-                l.nameValuePair registry-name (
-                  if bower-packages-registry ? ${registry-name} && info ? version then
-                    "^v${info.version}"
-                  else
-                    "${info.repo}#${if info ? version then "v${info.version}" else info.rev}"
-                )
-              )
-              (package.dependencies or [ ])
-          );
+          dependencies =
+            l.listToAttrs
+              (map
+                (pkg:
+                  let
+                    info = u.dep-info ps-pkgs pkg;
+                    registry-name = "purescript-${info.pursuit.name or info.name}";
+                  in
+                  l.nameValuePair registry-name
+                    (if bower-packages-registry ? ${registry-name} && info ? version then
+                      "^v${info.version}"
+                    else
+                      "${info.repo}#${if info ? version then "v${info.version}" else info.rev}"
+                    ))
+                (package.dependencies or [ ]));
         };
       in
       "echo ${l.escapeShellArg (toJSON bower-set)} | ${p.jq}/bin/jq . > bower.json";
 
   exe =
     let
-      bowers = toString (
-        map
-          (
-            dep:
-            let
-              bower-json =
-                let
-                  info = dep.purs-nix-info;
-                in
-                toFile "${info.name}-bower.json" (
-                  toJSON (
-                    {
-                      inherit (info) name;
+      bowers =
+        toString
+          (map
+            (dep:
+              let
+                bower-json =
+                  let info = dep.purs-nix-info; in
+                  toFile "${info.name}-bower.json"
+                    (toJSON
+                      ({
+                        inherit (info) name;
 
-                      dependencies =
-                        foldl' (acc: dep: acc // { ${u.dep-name dep} = ""; }) { }
-                          info.dependencies;
-                    }
-                    // l.optionalAttrs (info ? repo) {
-                      repository = {
-                        type = "git";
-                        url = info.repo;
-                      };
-                    }
-                  )
-                );
-            in
-            "--bower-jsons ${bower-json}"
-          )
-          all-dependencies
-      );
+                        dependencies =
+                          foldl' (acc: dep: acc // { ${u.dep-name dep} = ""; }) { }
+                            info.dependencies;
+                      }
+                      // l.optionalAttrs
+                        (info ? repo)
+                        {
+                          repository = {
+                            type = "git";
+                            url = info.repo;
+                          };
+                        }));
+              in
+              "--bower-jsons ${bower-json}")
+            all-dependencies);
 
       node-command =
         command: module:

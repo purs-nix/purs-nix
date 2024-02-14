@@ -1,48 +1,33 @@
+{ overlays ? [ ], pkgs, utils }:
 with builtins;
-{
-  overlays ? [ ],
-  pkgs,
-  utils,
-}:
 let
   l = p.lib;
   p = pkgs;
   u = utils;
 
-  build =
-    { name, ... }@args:
-    if
-      l.hasAttrByPath
-        [
-          "src"
-          "flake"
-        ]
-        args
-    then
+  build = { name, ... }@args:
+    if l.hasAttrByPath [ "src" "flake" ] args then
       l.recursiveUpdate
-        (getFlake args.src.flake.url)
-        .packages.${p.system}.${args.src.flake.package or "default"}
-        {
-          purs-nix-info = {
-            inherit name;
-          } // args.src;
-        }
+        (getFlake args.src.flake.url).packages.${p.system}.${args.src.flake.package or "default"}
+        { purs-nix-info = { inherit name; } // args.src; }
     else
       let
         legacy =
-          l.warnIf (args ? repo)
+          l.warnIf (args?repo)
             ''
               Package: "${name}" is being specified with a deprecated API.
               see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/adding-packages.md
             ''
-            args ? repo;
+            (args?repo);
 
         ref =
           let
             get-ref =
               a: b: a.ref or (if b ? version then "refs/tags/v" + b.version else null);
           in
-          if legacy then get-ref args args else get-ref args.src.git args.info;
+          if legacy
+          then get-ref args args
+          else get-ref args.src.git args.info;
 
         info' = args.info or null;
 
@@ -50,31 +35,25 @@ let
           let
             fetch-git =
               { repo, rev, ... }:
-              fetchGit (
-                {
+              fetchGit
+                ({
                   url = repo;
                   inherit rev;
-                }
-                // (if ref == null then { } else { inherit ref; })
-              );
+                } // (if ref == null then { } else { inherit ref; }));
           in
           if legacy then
             fetch-git args
           else
-            let
-              src' = args.src;
-            in
+            let src' = args.src; in
             if src' ? git then
               fetch-git src'.git
             else if src' ? path then
               filterSource
-                (
-                  path: type:
+                (path: type:
                   type == "directory"
                   || l.hasSuffix ".purs" path
                   || l.hasSuffix ".js" path
-                  || (if isPath info' then l.hasSuffix (toString args.info) path else false)
-                )
+                  || (if isPath info' then l.hasSuffix (toString args.info) path else false))
                 src'.path
             else
               abort "'src' has no 'flake', 'git', or 'path' attribute";
@@ -104,12 +83,13 @@ let
         ps-src = info.src or "src";
         version = info.version or null;
 
-        add-optional =
-          attribute:
-          if info ? ${attribute} then { ${attribute} = info.${attribute}; } else { };
+        add-optional = attribute:
+          if info ? ${attribute}
+          then { ${attribute} = info.${attribute}; }
+          else { };
       in
-      p.stdenv.mkDerivation (
-        {
+      p.stdenv.mkDerivation
+        ({
           inherit src;
           phases = [
             "unpackPhase"
@@ -119,83 +99,63 @@ let
           passthru = {
             overlay =
               let
-                f = foldl' (
-                  acc: dep:
-                  if typeOf dep == "string" then
-                    acc
-                  else
-                    let
-                      info = dep.purs-nix-info;
-                    in
-                    {
-                      current = acc.current // {
-                        ${info.name} = dep;
-                      };
+                f = foldl'
+                  (acc: dep:
+                    if typeOf dep == "string" then
+                      acc
+                    else
+                      let info = dep.purs-nix-info; in
+                      {
+                        current = acc.current // { ${info.name} = dep; };
 
-                      overlays =
-                        let
-                          a = f acc info.dependencies;
-                        in
-                        a.overlays ++ [ (_: _: a.current) ] ++ acc.overlays;
-                    }
-                );
+                        overlays =
+                          let a = f acc info.dependencies; in
+                          a.overlays ++ [ (_: _: a.current) ] ++ acc.overlays;
+                      });
 
-                a =
-                  f
-                    {
-                      current = { };
-                      overlays = [ ];
-                    }
-                    dependencies;
+                a = f { current = { }; overlays = [ ]; } dependencies;
                 inherit (a) current overlays;
               in
               l.composeManyExtensions (overlays ++ [ (_: _: current) ]);
 
-            purs-nix-info =
-              {
-                inherit dependencies name;
-                src = ps-src;
-              }
-              // (
-                if legacy then
-                  { inherit (args) repo rev; }
-                else if args.src ? git then
-                  { inherit (args.src.git) repo rev; }
-                else if
-                  l.hasAttrByPath
-                    [
-                      "pursuit"
-                      "repo"
-                    ]
-                    info
-                then
-                  { inherit (info.pursuit) repo; }
-                else
-                  { }
-              )
-              // add-optional "version"
-              // add-optional "foreign"
-              // add-optional "pursuit";
+            purs-nix-info = {
+              inherit dependencies name;
+              src = ps-src;
+            }
+            // (
+              if legacy then
+                { inherit (args) repo rev; }
+              else if args.src ? git then
+                { inherit (args.src.git) repo rev; }
+              else if
+                l.hasAttrByPath [ "pursuit" "repo" ] info
+              then
+                { inherit (info.pursuit) repo; }
+              else
+                { }
+            )
+            // add-optional "version"
+            // add-optional "foreign"
+            // add-optional "pursuit";
           };
 
           installPhase =
             (if legacy then args else info).install or "ln -s $src/${ps-src} $out";
         }
-        // u.make-name name version
-      );
+        // u.make-name name version);
 
   build-set =
     f: l.fix (self: mapAttrs (n: v: build (v // { name = n; })) (f self));
 
   overlay-stuff =
     let
-      build-set' = mapAttrs (
-        n: v:
-        if v ? type && v.type == "derivation" then v else build (v // { name = n; })
-      );
+      build-set' =
+        mapAttrs
+          (n: v:
+            if v ? type && v.type == "derivation" then v else build (v // { name = n; })
+          );
 
-      composeExtensions =
-        f: g: final: prev:
+      composeExtensions = f: g: final: prev:
         let
           fApplied = f final prev;
           prev' = build-set' (prev // fApplied);
@@ -204,8 +164,7 @@ let
     in
     # modified versions of the functions in lib.fixedPoints
     {
-      extends =
-        f: rattrs: self:
+      extends = f: rattrs: self:
         let
           super = rattrs self;
           a = f self super;
@@ -215,20 +174,19 @@ let
       composeManyExtensions = l.foldr composeExtensions (_: _: { });
     };
 
-  ps-pkgs = l.fix (
-    overlay-stuff.extends (overlay-stuff.composeManyExtensions overlays) (
-      self: mapAttrs (n: v: build (v // { name = n; })) (import ./ps-pkgs.nix l self)
-    )
-  );
+  ps-pkgs = l.fix
+    (overlay-stuff.extends
+      (overlay-stuff.composeManyExtensions overlays)
+      (self:
+        mapAttrs
+          (n: v: build (v // { name = n; }))
+          (import ./ps-pkgs.nix l self)));
 
   ps-pkgs-ns =
     foldl'
-      (
-        acc:
+      (acc:
         { name, value }:
-        let
-          m = match "(.+)\\.(.+)" name;
-        in
+        let m = match "(.+)\\.(.+)" name; in
         if m == null then
           acc
         else
@@ -238,19 +196,11 @@ let
           in
           acc
           // {
-            ${namespace} = (acc.${namespace} or { }) // {
-              ${no-namespace} = value;
-            };
+            ${namespace} =
+              (acc.${namespace} or { }) // { ${no-namespace} = value; };
           }
       )
       { }
       (l.mapAttrsToList l.nameValuePair ps-pkgs);
 in
-{
-  inherit
-    build
-    build-set
-    ps-pkgs
-    ps-pkgs-ns
-    ;
-}
+{ inherit build build-set ps-pkgs ps-pkgs-ns; }

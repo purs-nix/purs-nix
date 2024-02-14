@@ -12,14 +12,13 @@
   };
 
   outputs =
-    {
-      get-flake,
-      nixpkgs,
-      utils,
-      ...
+    { get-flake
+    , nixpkgs
+    , utils
+    , ...
     }@inputs:
-    utils.lib.eachDefaultSystem (
-      system:
+    utils.lib.eachDefaultSystem
+      (system:
       let
         main-project-flake = get-flake ../../.;
 
@@ -62,6 +61,5 @@
             ps-tools.for-0_15.purescript-language-server
           ];
         };
-      }
-    );
+      });
 }

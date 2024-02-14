@@ -1,12 +1,11 @@
-with builtins;
-{
-  defaults,
-  docs-search,
-  overlays,
-  parsec,
-  pkgs,
-  ps-tools,
+{ defaults
+, docs-search
+, overlays
+, parsec
+, pkgs
+, ps-tools
 }:
+with builtins;
 let
   l = p.lib;
   p = pkgs;
@@ -26,22 +25,20 @@ in
     build
     build-set
     ps-pkgs
-    ps-pkgs-ns
-    ;
+    ps-pkgs-ns;
   inherit (pkgs) esbuild;
   inherit (pkgs.lib) licenses;
   purescript = purescript';
 
   purs =
-    {
-      nodejs ? pkgs.nodejs,
-      purescript ? purescript',
-      foreign ? { },
-      # this parameter is purposely undocumented because I don't see a reason to make
+    { nodejs ? pkgs.nodejs
+    , purescript ? purescript'
+    , foreign ? { }
+    , # this parameter is purposely undocumented because I don't see a reason to make
       # it part of the API. However, I have already done the work to make it optional,
       # so I will leave it here for now just in case.
-      _compile-packages-separately ? true,
-      ...
+      _compile-packages-separately ? true
+    , ...
     }@args:
     let
       inherit (p.stdenv) mkDerivation;
@@ -70,37 +67,31 @@ in
 
       test-module = args.test-module or "Test.Main";
 
-      create-closure-set =
-        deps:
+      create-closure-set = deps:
         let
-          f =
-            direct:
-            let
-              g = f false;
-            in
-            foldl' (
-              acc: dep:
-              let
-                name = u.dep-name dep;
-                included = acc ? ${name};
-              in
-              if typeOf dep == "string" then
-                if !included then
-                  g (acc // { ${dep} = ps-pkgs.${dep}; })
-                    ps-pkgs.${dep}.purs-nix-info.dependencies
-                else
-                  acc
-              else
+          f = direct:
+            let g = f false; in
+            foldl'
+              (acc: dep:
                 let
-                  info = dep.purs-nix-info;
+                  name = u.dep-name dep;
+                  included = acc ? ${name};
                 in
-                if direct then
-                  g (acc // { ${info.name} = dep; }) info.dependencies
-                else if !included then
-                  g (acc // { ${info.name} = ps-pkgs.${info.name}; }) info.dependencies
+                if typeOf dep == "string" then
+                  if !included then
+                    g (acc // { ${dep} = ps-pkgs.${dep}; })
+                      ps-pkgs.${dep}.purs-nix-info.dependencies
+                  else
+                    acc
                 else
-                  acc
-            );
+                  let info = dep.purs-nix-info; in
+                  if direct then
+                    g (acc // { ${info.name} = dep; }) info.dependencies
+                  else if !included then
+                    g (acc // { ${info.name} = ps-pkgs.${info.name}; })
+                      info.dependencies
+                  else
+                    acc);
         in
         f true { } deps;
 
@@ -123,9 +114,9 @@ in
       local-graph =
         include-test:
         let
-          partial = parser (
-            map (a: "${a}") (srcs ++ (if include-test then [ test-src ] else [ ]))
-          );
+          partial = parser
+            (map (a: "${a}")
+              (srcs ++ (if include-test then [ test-src ] else [ ])));
         in
         mapAttrs
           (_: v: {
@@ -139,11 +130,9 @@ in
       local-graph-tests = local-graph true;
       local-graph-no-tests = local-graph false;
 
-      link-foreign =
-        foreign: prefix:
+      link-foreign = foreign: prefix:
         let
-          make-module =
-            drv:
+          make-module = drv:
             if (readDir drv) ? "package.json" then
               drv
             else
@@ -155,12 +144,9 @@ in
               '';
         in
         foldl'
-          (
-            acc:
+          (acc:
             { name, value }:
-            let
-              module-path = "${prefix}/${name}";
-            in
+            let module-path = "${prefix}/${name}"; in
             ''
               ${acc}
 
@@ -181,16 +167,15 @@ in
                     abort "The only supported foreign options are 'node_modules' and 'src'."
                 }
               fi
-            ''
-          )
+            '')
           ""
           (l.mapAttrsToList l.nameValuePair foreign);
 
-      link-all-foreign =
-        deps:
+      link-all-foreign = deps:
         let
           combined =
-            foldl' (acc: dep: l.recursiveUpdate acc (dep.purs-nix-info.foreign or { }))
+            foldl'
+              (acc: dep: l.recursiveUpdate acc (dep.purs-nix-info.foreign or { }))
               foreign
               deps;
         in
@@ -199,33 +184,32 @@ in
       copy = "cp --no-preserve=mode --preserve=timestamps -r";
 
       compile-and-process =
-        {
-          name,
-          deps,
-          postprocessing ? null,
-          pre-compile ? null,
+        { name
+        , deps
+        , postprocessing ? null
+        , pre-compile ? null
         }:
         args:
         let
           unprocessed = mkDerivation {
             inherit name;
-            phases = [
-              "buildPhase"
-              "installPhase"
-            ];
+            phases = [ "buildPhase" "installPhase" ];
 
             buildPhase =
               if deps != [ ] then
                 ''
-                  ${if pre-compile != null then "${copy} ${pre-compile args} output" else ""}
+                  ${if pre-compile != null then
+                      "${copy} ${pre-compile args} output"
+                    else
+                      ""
+                  }
 
-                  ${u.compile purescript (
-                    args
-                    // {
-                      globs = make-dep-globs deps;
-                      output = "output";
-                    }
-                  )}
+                  ${u.compile purescript
+                      (args
+                       // { globs = make-dep-globs deps;
+                            output = "output";
+                          })
+                  }
                 ''
               else
                 "mkdir output";
@@ -240,8 +224,8 @@ in
 
       get-leaves =
         deps:
-        attrValues (
-          foldl'
+        attrValues
+          (foldl'
             (
               acc: d:
               let
@@ -252,24 +236,22 @@ in
             )
             { }
             deps
-        );
+          );
 
       incremental-compile =
-        {
-          lookups,
-          acc,
-          local-globs ? "",
-          dependencies,
-          name,
-          foreign ? { },
+        { lookups
+        , acc
+        , local-globs ? ""
+        , dependencies
+        , name
+        , foreign ? { }
         }:
         args:
         let
           lookup = package: lookups.${u.dep-name package};
           all-deps = map lookup (create-closure (map lookup dependencies));
 
-          bin =
-            acc': package:
+          bin = acc': package:
             let
               info = package.purs-nix-info;
 
@@ -312,16 +294,12 @@ in
 
           augmentations =
             foldl'
-              (
-                acc': d:
-                let
-                  result = bin acc'.acc (lookup d);
-                in
+              (acc': d:
+                let result = bin acc'.acc (lookup d); in
                 {
                   acc = acc' // result.acc;
                   command = acc'.command + result.augment + ";";
-                }
-              )
+                })
               {
                 inherit acc;
                 command = "";
@@ -330,22 +308,21 @@ in
 
           unprocessed = mkDerivation {
             inherit name;
-            phases = [
-              "buildPhase"
-              "installPhase"
-            ];
+            phases = [ "buildPhase" "installPhase" ];
 
             buildPhase = ''
               ${augmentations.command}
 
               ${u.compile purescript (
                 args
-                // {
-                  globs = "${
-                    if local-globs == "" then "" else ''"${local-globs}"''
-                  } ${make-dep-globs all-deps}";
-                  output = "output";
-                }
+                // { globs =
+                       "${if local-globs == "" then
+                            ""
+                          else
+                            ''"${local-globs}"''
+                        } ${make-dep-globs all-deps}";
+                     output = "output";
+                   }
               )}
 
               ${link-foreign foreign "output"}
@@ -360,10 +337,9 @@ in
         };
 
       compile-package =
-        {
-          lookups ? create-closure-set package.purs-nix-info.dependencies,
-          acc,
-          package,
+        { lookups ? create-closure-set package.purs-nix-info.dependencies
+        , acc
+        , package
         }:
         args:
         let
@@ -382,16 +358,11 @@ in
         in
         {
           inherit (a) drv;
-          acc = a.acc // {
-            ${info.name} = a.drv;
-          };
+          acc = a.acc // { ${info.name} = a.drv; };
         };
 
-      pp.foreign =
-        name: _: output:
-        let
-          foreign' = link-foreign foreign ".";
-        in
+      pp.foreign = name: _: output:
+        let foreign' = link-foreign foreign "."; in
         if foreign' == "" then
           output
         else
@@ -402,9 +373,7 @@ in
           '';
 
       built-deps =
-        let
-          name = "dependencies";
-        in
+        let name = "dependencies"; in
         if _compile-packages-separately then
           args:
           (incremental-compile
@@ -441,25 +410,23 @@ in
           };
 
       build-single =
-        {
-          include-test ? false,
-          name,
-          local-deps,
+        { include-test ? false
+        , name
+        , local-deps
         }:
         let
           src =
             let
               graph-path =
-                (if include-test then local-graph-tests else local-graph-no-tests).${name}.path;
+                (if include-test
+                then local-graph-tests
+                else local-graph-no-tests).${name}.path;
 
               purs-path =
-                let
-                  matches = match "/nix/store/[^/]+/(.+)$" graph-path;
-                in
-                if matches != null then
-                  head matches
-                else
-                  throw "${name}: there should be a match here!";
+                let matches = match "/nix/store/[^/]+/(.+)$" graph-path; in
+                if matches != null
+                then head matches
+                else throw "${name}: there should be a match here!";
 
               js-path = replaceStrings [ ".purs" ] [ ".js" ] purs-path;
 
@@ -475,13 +442,13 @@ in
                 in
                 if matches == null then src' else src' + head matches;
             in
-            filterSource (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
+            filterSource
+              (path: _: l.hasSuffix purs-path path || l.hasSuffix js-path path)
               subsrc;
 
           output =
-            {
-              top-level ? true,
-              include-test ? false,
+            { top-level ? true
+            , include-test ? false
             }:
             args:
             let
@@ -510,30 +477,28 @@ in
             in
             mkDerivation {
               name = "${name}-compiled";
-              phases = [
-                "buildPhase"
-                "installPhase"
-              ];
+              phases = [ "buildPhase" "installPhase" ];
 
               buildPhase =
                 let
-                  augmentations = toString (
-                    map (a: "${a.bin include-test args} output;") trans-deps
-                  );
+                  augmentations =
+                    toString
+                      (map (a: "${a.bin include-test args} output;")
+                        trans-deps);
 
-                  local-dep-globs = toString (map (a: ''"${a.src}/**/*.purs"'') trans-deps);
+                  local-dep-globs =
+                    toString (map (a: ''"${a.src}/**/*.purs"'') trans-deps);
                 in
                 ''
                   ${copy} ${dg.deps-drv stripped} output
                   ${if incremental then augmentations else ""}
 
-                  ${u.compile purescript (
-                    stripped
-                    // {
-                      globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dg.globs}'';
-                      output = "output";
-                    }
-                  )}
+                  ${u.compile purescript
+                      (stripped
+                       // { globs = ''"${src}/**/*.purs" ${local-dep-globs} ${dg.globs}'';
+                            output = "output";
+                          })
+                  }
                 '';
 
               installPhase = ''
@@ -545,33 +510,26 @@ in
             };
 
           bundle =
-            {
-              esbuild ? { },
-              main ? true,
-              incremental ? false,
+            { esbuild ? { }
+            , main ? true
+            , incremental ? false
             }:
-            p.runCommand "${name}-bundle" { } (
-              u.bundle {
-                entry-point = output { } { inherit incremental; } + "/${name}/index.js";
-
-                esbuild = esbuild // {
-                  outfile = "$out";
-                };
+            p.runCommand "${name}-bundle" { }
+              (u.bundle {
+                entry-point =
+                  output { } { inherit incremental; } + "/${name}/index.js";
+                esbuild = esbuild // { outfile = "$out"; };
                 inherit main;
-              }
-            );
+              });
 
           script =
-            {
-              esbuild ? { },
-              incremental ? false,
+            { esbuild ? { }
+            , incremental ? false
             }:
             let
               bundle' = bundle {
-                esbuild = {
-                  minify = true;
-                } // esbuild // { platform = "node"; };
-
+                esbuild =
+                  { minify = true; } // esbuild // { platform = "node"; };
                 inherit incremental;
               };
             in
@@ -582,15 +540,14 @@ in
             '';
 
           app =
-            {
-              name,
-              version ? null,
-              command ? name,
-              esbuild ? { },
-              incremental ? false,
+            { name
+            , version ? null
+            , command ? name
+            , esbuild ? { }
+            , incremental ? false
             }:
-            mkDerivation (
-              {
+            mkDerivation
+              ({
                 phases = [ "installPhase" ];
 
                 installPhase = ''
@@ -601,8 +558,7 @@ in
                     ${l.escapeShellArg command}
                 '';
               }
-              // u.make-name name version
-            );
+              // u.make-name name version);
         in
         {
           inherit
@@ -612,11 +568,9 @@ in
             name
             output
             script
-            src
-            ;
+            src;
 
-          bin =
-            include-test: args:
+          bin = include-test: args:
             let
               merge-cache = p.writeShellScript "merge-cache" ''
                 f=$(mktemp)
@@ -641,20 +595,14 @@ in
 
       builds =
         mapAttrs
-          (
-            name: v:
+          (name: v:
             build-single {
               inherit name;
               local-deps = map (v: builds.${v}) v.depends;
-            }
-          )
+            })
           local-graph-no-tests;
 
-      output =
-        {
-          test-modules ? false,
-        }:
-        args:
+      output = { test-modules ? false }: args:
         let
           dg =
             if test-modules then
@@ -684,33 +632,25 @@ in
           ((defaults.compile or { }) // args);
 
       bundle =
-        {
-          module ? "Main",
-          esbuild ? { },
-          main ? true,
+        { module ? "Main"
+        , esbuild ? { }
+        , main ? true
         }:
-        p.runCommand "${module}-bundle" { } (
-          u.bundle {
+        p.runCommand "${module}-bundle" { }
+          (u.bundle {
             entry-point = output { } { } + "/${module}/index.js";
-
-            esbuild = esbuild // {
-              outfile = "$out";
-            };
+            esbuild = esbuild // { outfile = "$out"; };
             inherit main;
-          }
-        );
+          });
 
       script =
-        {
-          module ? "Main",
-          esbuild ? { },
+        { module ? "Main"
+        , esbuild ? { }
         }:
         let
           bundle' = bundle {
-            esbuild = {
-              minify = true;
-            } // esbuild // { platform = "node"; };
-
+            esbuild =
+              { minify = true; } // esbuild // { platform = "node"; };
             inherit module;
           };
         in
@@ -721,15 +661,14 @@ in
         '';
 
       app =
-        {
-          name,
-          module ? "Main",
-          version ? null,
-          command ? name,
-          esbuild ? { },
+        { name
+        , module ? "Main"
+        , version ? null
+        , command ? name
+        , esbuild ? { }
         }:
-        mkDerivation (
-          {
+        mkDerivation
+          ({
             phases = [ "installPhase" ];
 
             installPhase = ''
@@ -740,8 +679,7 @@ in
                 ${l.escapeShellArg command}
             '';
           }
-          // u.make-name name version
-        );
+          // u.make-name name version);
     in
     {
       dependencies = all-dependencies;
@@ -754,14 +692,12 @@ in
             The `modules` API is deprecated.
             see: https://github.com/purs-nix/purs-nix/blob/ps-0.15/docs/derivations.md
           ''
-          (
-            mapAttrs
-              (_: v: {
-                inherit (v) bundle script app;
-                output = v.output { };
-              })
-              builds
-          );
+          (mapAttrs
+            (_: v: {
+              inherit (v) bundle script app;
+              output = v.output { };
+            })
+            builds);
 
       command = import ./purs-nix-command.nix {
         inherit
@@ -773,8 +709,7 @@ in
           nodejs
           pkgs
           ps-pkgs
-          purescript
-          ;
+          purescript;
 
         repl-globs = make-dep-globs (all-dependencies ++ [ ps-pkgs.psci-support ]);
         srcs' = (a: if args ? dir then args.srcs or a else a) [ "src" ];
@@ -787,17 +722,14 @@ in
       test = rec {
         run =
           args:
-          let
-            output' = output { test-modules = true; } args;
-          in
-          p.writeScript "${test-module}-run" (
-            u.node-command {
+          let output' = output { test-modules = true; } args; in
+          p.writeScript "${test-module}-run"
+            (u.node-command {
               argv-1 = "${test-module}-run";
               inherit nodejs;
               import = "${output'}/${test-module}/index.js";
               starting-arg = 1;
-            }
-          );
+            });
 
         check =
           args:

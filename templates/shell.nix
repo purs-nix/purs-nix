@@ -1,19 +1,19 @@
 with builtins;
 let
-  get-flake = import (
-    fetchGit {
-      url = "https://github.com/ursi/get-flake.git";
-      rev = "703f15558daa56dfae19d1858bb3046afe68831a";
-    }
-  );
+  get-flake =
+    import
+      (fetchGit {
+        url = "https://github.com/ursi/get-flake.git";
+        rev = "703f15558daa56dfae19d1858bb3046afe68831a";
+      });
 
-  purs-nix-flake = get-flake (
-    fetchGit {
-      url = "https://github.com/purs-nix/purs-nix.git";
-      # rev = "";
-      ref = "ps-0.15";
-    }
-  );
+  purs-nix-flake =
+    get-flake
+      (fetchGit {
+        url = "https://github.com/purs-nix/purs-nix.git";
+        # rev = "";
+        ref = "ps-0.15";
+      });
 
   system = currentSystem;
   pkgs = purs-nix-flake.inputs.nixpkgs.legacyPackages.${system};

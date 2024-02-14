@@ -1,18 +1,10 @@
-with builtins;
 l: self:
-with self;
-{
+with builtins;
+with self; {
   event =
-    let
-      info = hyrule.purs-nix-info;
-    in
-    {
-      src.git = {
-        inherit (info) repo rev;
-      };
-      info = {
-        inherit (info) version dependencies;
-      };
+    let info = hyrule.purs-nix-info; in {
+      src.git = { inherit (info) repo rev; };
+      info = { inherit (info) version dependencies; };
     };
 
   html-parser-halogen = {
@@ -69,7 +61,4 @@ with self;
   };
 }
 // import ./official-package-set self
-// import ./ps-pkgs-ns.nix {
-  inherit l;
-  ps-pkgs = self;
-}
+  // import ./ps-pkgs-ns.nix { inherit l; ps-pkgs = self; }

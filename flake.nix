@@ -7,7 +7,7 @@
     };
     get-flake.url = "github:ursi/get-flake";
     lint-utils = {
-      url = "git+https://gitlab.nixica.dev/nix/lint-utils.git";
+      url = "github:homotopic/lint-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     make-shell.url = "github:ursi/nix-make-shell/1";
@@ -17,21 +17,14 @@
     utils.url = "github:ursi/flake-utils/8";
   };
 
-  outputs =
-    {
-      get-flake,
-      parsec,
-      utils,
-      ...
-    }@inputs:
+  outputs = { get-flake, parsec, utils, ... }@inputs:
     with builtins;
     {
-      __functor =
-        _:
-        {
-          defaults ? { },
-          overlays ? [ ],
-          system,
+      __functor = _:
+        { defaults ? { }
+        , overlays ? [ ]
+        , system
+        ,
         }:
         import ./purs-nix.nix {
           docs-search = (get-flake inputs.docs-search).packages.${system}.default;
@@ -50,9 +43,11 @@
         flake = {
           description = "The flake.nix only - for converting existing projects";
 
-          path = toString (
-            filterSource (path: _: baseNameOf path == "flake.nix") ./templates/default
-          );
+          path =
+            toString
+              (filterSource
+                (path: _: baseNameOf path == "flake.nix")
+                ./templates/default);
         };
 
         package = {
@@ -63,80 +58,68 @@
 
       herculesCI.ciSystems = [ "x86_64-linux" ];
     }
-    //
-      utils.apply-systems
+    // utils.apply-systems
+      {
+        inherit inputs;
+        systems = [ "x86_64-linux" "x86_64-darwin" ];
+      }
+      ({ make-shell
+       , lint-utils
+       , pkgs
+       , system
+       , ...
+       }:
+        let
+          p = pkgs;
+          u = import ./utils.nix p;
+
+          inherit
+            (import ./build-pkgs.nix {
+              inherit pkgs;
+              utils = u;
+            })
+            ps-pkgs;
+        in
         {
-          inherit inputs;
-          systems = [
-            "x86_64-linux"
-            "x86_64-darwin"
-          ];
-        }
-        (
-          {
-            make-shell,
-            lint-utils,
-            pkgs,
-            system,
-            ...
-          }:
-          let
-            p = pkgs;
-            u = import ./utils.nix p;
+          legacyPackages = {
+            package-info =
+              mapAttrs
+                (_: v: p.writeScriptBin v.purs-nix-info.name (u.package-info v))
+                ps-pkgs;
+          };
 
-            inherit
-              (import ./build-pkgs.nix {
-                inherit pkgs;
-                utils = u;
-              })
-              ps-pkgs
-              ;
-          in
-          {
-            legacyPackages = {
-              package-info =
-                mapAttrs (_: v: p.writeScriptBin v.purs-nix-info.name (u.package-info v))
-                  ps-pkgs;
-            };
+          checks =
+            let lu = inputs.lint-utils.linters.${system}; in
+            {
+              deadnix = lu.deadnix { src = ./.; };
+              formatting = lu.nixpkgs-fmt { src = ./.; };
+              statix = lu.statix { src = ./.; };
+            }
+            // (
+              if system == "x86_64-linux" then
+                (get-flake ./test).checks.${system}
+                // {
+                  "hello world example" =
+                    (get-flake ./examples/hello-world).packages.${system}.default;
 
-            checks =
-              let
-                lu = inputs.lint-utils.linters.${system};
-              in
-              {
-                deadnix = lu.deadnix { src = ./.; };
-                nix-rfc166 = lu.nix-rfc166 {
-                  src = ./.;
-                  width = 80;
-                };
-                statix = lu.statix { src = ./.; };
-              }
-              // (
-                if system == "x86_64-linux" then
-                  (get-flake ./test).checks.${system}
-                  // {
-                    "hello world example" =
-                      (get-flake ./examples/hello-world).packages.${system}.default;
+                  "foreign deps example" =
+                    (get-flake ./examples/foreign-dependencies).packages.${system}.default;
+                }
+              else
+                { }
+            );
 
-                    "foreign deps example" =
-                      (get-flake ./examples/foreign-dependencies).packages.${system}.default;
-                  }
-                else
-                  { }
-              );
+          devShells.default = make-shell {
+            packages = with p; [
+              deadnix
+              lint-utils.nixpkgs-fmt
+              statix
+            ];
 
-            devShells.default = make-shell {
-              packages = with p; [
-                deadnix
-                lint-utils.nixfmt-rfc166
-                statix
-              ];
+            aliases.lint = "deadnix **/*.nix; statix check";
+            env.GIT_LFS_SKIP_SMUDGE = 1;
+          };
 
-              aliases.lint = "deadnix **/*.nix; statix check";
-              env.GIT_LFS_SKIP_SMUDGE = 1;
-            };
-
-            formatter = p.writeShellScriptBin "format" ''${lint-utils.nixfmt-rfc166}/bin/nixfmt -w 80 "$@"'';
-          }
-        );
+          formatter = lint-utils.nixpkgs-fmt;
+        });
 }

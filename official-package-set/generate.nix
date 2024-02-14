@@ -7,11 +7,8 @@ let
   package-set-repo = fetchGit "https://github.com/purescript/package-sets";
   packages = l.importJSON (package-set-repo + /packages.json);
 
-  escape-reserved-word =
-    str:
-    let
-      reserved-words = [ "assert" ];
-    in
+  escape-reserved-word = str:
+    let reserved-words = [ "assert" ]; in
     if elem str reserved-words then ''"${str}"'' else str;
 
   prev = import ./. null;
@@ -19,9 +16,7 @@ in
 l.pipe packages [
   (l.mapAttrsToList (n: v: { inherit n v; }))
   (foldl'
-    (
-      acc:
-      { n, v }:
+    (acc: { n, v }:
       let
         repo =
           # don't fetch versions we already have
