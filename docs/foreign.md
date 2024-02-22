@@ -1,6 +1,6 @@
 # Foreign Dependencies
 
-**purs-nix** allows you to package foreign code with your your PureScript packages, so that when people add them as a dependency, there is no more "also install XYZ with npm" required for you code to work. The `foreign` attrset is structured as follows:
+**purs-nix** allows you to package foreign code with your your PureScript packages, so that when people add them as a dependency, there is no more "also install XYZ with npm" required for your code to work. The `foreign` attrset is structured as follows:
 
 ```nix
 foreign."Module.Name".src = path-to-directory-with-foreign-code;
@@ -19,4 +19,4 @@ package-with-foreign =
   lib.recursiveUpdate package { purs-nix-info.foreign = ...; }
 ```
 
-And then use that package (preferably not in an overlay, but as a [derivation dependency](modifying-package-set.md#generating-overlays-from-packages).
+And then use that package (preferably not in an overlay, but as a [derivation dependency](modifying-package-set.md#generating-overlays-from-packages)).
