@@ -423,7 +423,7 @@
                           effect: override-test
                           either: 6.1.0
                           enums: 6.0.1
-                          exceptions: 6.0.0
+                          exceptions: 6.1.0
                           exists: 6.0.0
                           foldable-traversable: 6.0.0
                           foreign: 7.0.0
@@ -446,13 +446,13 @@
                           nonempty: 7.0.0
                           nullable: 6.0.0
                           numbers: 9.0.1
-                          ordered-collections: 3.1.1
+                          ordered-collections: 3.2.0
                           orders: 6.0.0
                           parallel: 7.0.0
                           partial: 4.0.0
                           posix-types: 6.0.0
                           prelude: override-test
-                          profunctor: 6.0.0
+                          profunctor: 6.0.1
                           purs-nix.build-test: 1.0.0
                           purs-nix.is-even: 1.0.0
                           purs-nix.is-odd: 1.0.0
@@ -461,7 +461,7 @@
                           st: 6.2.0
                           strings: 6.0.1
                           tailrec: 6.1.0
-                          transformers: 6.0.0
+                          transformers: 6.1.0
                           tuples: 7.0.0
                           type-equality: 4.0.1
                           typelevel-prelude: 7.0.0
