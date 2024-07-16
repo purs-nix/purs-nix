@@ -48,7 +48,6 @@ To update the purs-nix package set:
 ```
 $ cd official-package-set
 $ ./generate.sh
-$ nix fmt
 ```
 
 ## Migrating from [`spago`](https://github.com/purescript/spago)
