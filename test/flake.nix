@@ -409,7 +409,7 @@
                       make-test "purs-nix packages"
                         "${command} packages"
                         (i: ''
-                          packages="aff: 7.1.0
+                          packages="aff: 8.0.0
                           arraybuffer-types: 3.0.2
                           arrays: 7.3.0
                           assert: 6.0.0
