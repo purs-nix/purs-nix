@@ -23,14 +23,13 @@
       __functor = _:
         { defaults ? { }
         , overlays ? [ ]
+        , pkgs ? inputs.nixpkgs.legacyPackages.${system}
         , system
-        ,
         }:
         import ./purs-nix.nix {
           docs-search = (get-flake inputs.docs-search).packages.${system}.default;
-          inherit defaults overlays;
+          inherit defaults overlays pkgs;
           inherit (parsec.lib) parsec;
-          pkgs = inputs.nixpkgs.legacyPackages.${system};
           ps-tools = inputs.ps-tools.legacyPackages.${system};
         };
 

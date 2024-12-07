@@ -5,12 +5,14 @@
 ```
 { defaults ? {}
 , overlays ? []
+, pkgs ? inputs.nixpkgs.legacyPackages.${system}
 , system
 }
 ```
 
 - `defaults`: Arguments to be applied to everything by default. Currently the only argument is `compile`, accepting [these](purs-nix.md#compile) arguments.
 - `overlays`: A list of [overlays](modifying-package-set.md) to modify `ps-pkgs`/`ps-pkgs-ns`.
+- `pkgs`: The nixpkgs package set purs-nix will use.
 - `system`: The system you're building on.
 
 and returns an attribute set with the following attributes:
