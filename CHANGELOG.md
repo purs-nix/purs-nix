@@ -1,3 +1,9 @@
+## 2024-12-7
+### Breaking: No
+
+- Added a `pkgs` argument to the top level functor of the purs-nix flake. This was done to allow users to override the `pkgs` that purs-nix uses, in ways other than setting `inputs.nixpkgs.follows`.
+
+
 ## 2023-2-28
 ### Breaking: Potentially
 
