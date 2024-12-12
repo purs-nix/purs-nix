@@ -119,24 +119,30 @@ rec {
       false;
 
   package-info = pkg:
-    let info = pkg.purs-nix-info; in
+    let
+      info = pkg.purs-nix-info;
+      source-info =
+        if info ? flake then
+          ''
+            echo "flake:   ${info.flake.url}"
+            echo "package: ${info.flake.package or "default"}"''
+        else if info ? repo then
+          let
+            more-info =
+              if info ? rev
+              then ''echo "commit:  ${info.rev}"''
+              else ''echo "path:    ${pkg.src}"'';
+          in
+          ''
+            echo "repo:    ${info.repo}"
+            ${more-info}''
+        else
+          ''echo "path:    ${pkg.src}"'';
+    in
     ''
       echo "name:    ${info.name}"
       echo "version: ${if has-version pkg then info.version else "none"}"
-      ${if info ? flake then
-          ''
-          echo "flake:   ${info.flake.url}"
-          echo "package: ${info.flake.package or "default"}"''
-        else if info ? repo then
-          ''
-          echo "repo:    ${info.repo}"
-          ${if info ? rev
-            then ''echo "commit:  ${info.rev}"''
-            else ''echo "path:    ${pkg.src}"''
-          }''
-        else
-          ''echo "path:    ${pkg.src}"''
-      }
+      ${source-info}
       echo "source:  ${pkg}"
     '';
 
