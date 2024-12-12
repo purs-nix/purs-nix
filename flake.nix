@@ -83,7 +83,7 @@
           legacyPackages = {
             package-info =
               mapAttrs
-                (_: v: p.writeScriptBin v.purs-nix-info.name (u.package-info v))
+                (_: v: p.writeShellScriptBin v.purs-nix-info.name (u.package-info v))
                 ps-pkgs;
           };
 
