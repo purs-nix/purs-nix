@@ -16,7 +16,7 @@ purs-nix
                       rev = "0000000000000000000000000000000000000000";
                     };
 
-                  info = ./package.nix;
+                  info = /package.nix;
                 };
            }
         )
