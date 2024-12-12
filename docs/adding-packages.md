@@ -1,6 +1,6 @@
 # Adding Packages
 
-## Package Set: Git
+## Using Git
 
 Packages are added by adding a package description attributes set to either [ps-pkgs.nix](/ps-pkgs.nix) or `namespaces/<namespace>.nix`, or by adding your package to the [official package set](https://github.com/purescript/package-sets) and [updating the generated](/official-package-set) nix.\
 The packages descriptions sets consist of two parts:
@@ -100,6 +100,6 @@ purs-nix exports a `build` function that can be used to add packages to your pro
 ## <code id="user-content-build-set">build-set</code>
 purs-nix exports a `build-set` function that can be used to add packages to your project from arbitrary sources. It is used to build the standard `ps-pkgs` package set and therefore takes an attrset in the same form shown above.
 
-## Package Set: Flake
+## Using a Flake
 
 If your package includes foreign dependencies, the easiest way to include it in the package set is to build the package with `build`, using `src.path = ./.;` and then expose that as a package on your flake. Then you can add it to the package set by using `src.flake.url`. The `info` attribute is not used because the package is already built. If your package is not `default`, you can use `src.flake.package` and give it a string corresponding to the package name. We do it this way, instead of just using `builtins.getFlake` directly, so that this information can be collected for `purs-nix package-info`/`nix run purs-nix#package-info.<package>`.
