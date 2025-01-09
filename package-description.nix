@@ -48,15 +48,15 @@ let
       };
 
       foreign = mkOption {
-        description = "How to install the package from the source";
+        description = "The foreign code available to each module";
         type = t.nullOr (t.attrsOf (oneOfSubmodule {
           node_modules = mkOption {
-            description = "abc";
+            description = "A path to a node_modules directory";
             type = t.path;
           };
 
           src = mkOption {
-            description = "abc";
+            description = "A path to a directory containing foreign code";
             type = t.path;
           };
         }));
