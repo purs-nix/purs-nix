@@ -60,7 +60,7 @@
     // utils.apply-systems
       {
         inherit inputs;
-        systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+        systems = [ "x86_64-linux" "x86_64-darwin" ]; # TODO "aarch64-linux"
       }
       ({ make-shell
        , lint-utils
