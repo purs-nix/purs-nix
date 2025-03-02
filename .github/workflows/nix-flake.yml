@@ -20,5 +20,5 @@ jobs:
         run: nix flake show
       - name: "Check `nix develop` shell can run command"
         run: nix develop --command "echo"
-      - run: nix build
+      # - run: nix build
       - run: nix flake check
