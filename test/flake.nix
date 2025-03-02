@@ -440,9 +440,9 @@
                           newtype: 5.0.0
                           node-buffer: 9.0.0
                           node-event-emitter: 3.0.0
-                          node-path: 5.0.0
+                          node-path: 5.0.1
                           node-process: 11.2.0
-                          node-streams: 9.0.0
+                          node-streams: 9.0.1
                           nonempty: 7.0.0
                           nullable: 6.0.0
                           numbers: 9.0.1
