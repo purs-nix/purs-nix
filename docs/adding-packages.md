@@ -76,7 +76,7 @@
 ## Package Set: Git
 
 Packages are added by adding a package description attributes set to either [ps-pkgs.nix](/ps-pkgs.nix) or `namespaces/<namespace>.nix`, or by adding your package to the [official package set](https://github.com/purescript/package-sets) and [updating the generated](/official-package-set) nix.\
-The packages descriptions sets are described below. The source of truth is [package-description.nix](/package-description.nix).
+The package description sets are described below. The source of truth is [package-description.nix](/package-description.nix).
 ```
 { src.git
 , info
