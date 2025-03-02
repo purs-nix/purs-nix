@@ -832,12 +832,12 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/purescript-contrib/purescript-avar.git";
-          rev = "d00f5784d9cc8f079babd62740f5c52b87e5caa5";
+          rev = "6765404538bc3662ab58b7e2c1e5b4ccd10cb40a";
         };
 
       info =
         {
-          version = "5.0.0";
+          version = "5.0.1";
 
           dependencies =
             [
@@ -1963,6 +1963,48 @@ with ps-pkgs;
         };
     };
 
+  css-class-name-extractor =
+    {
+      src.git =
+        {
+          repo = "https://github.com/himanoa/purescript-css-class-name-extractor.git";
+          rev = "b8ba99ca7208385e40d55bebde4ed1533dac42c4";
+        };
+
+      info =
+        {
+          version = ".0.4";
+
+          dependencies =
+            [
+              "aff"
+              "arrays"
+              "console"
+              "control"
+              "effect"
+              "either"
+              "enums"
+              "exceptions"
+              "foldable-traversable"
+              "identity"
+              "interpolate"
+              "lists"
+              "maybe"
+              "node-buffer"
+              "node-fs"
+              "node-path"
+              "ordered-collections"
+              "parsing"
+              "prelude"
+              "spec"
+              "spec-discovery"
+              "strings"
+              "transformers"
+              "tuples"
+            ];
+        };
+    };
+
   css-frameworks =
     {
       src.git =
@@ -2340,6 +2382,36 @@ with ps-pkgs;
               "prelude"
               "tuples"
               "type-equality"
+            ];
+        };
+    };
+
+  dodo-printer =
+    {
+      src.git =
+        {
+          repo = "https://github.com/natefaubion/purescript-dodo-printer.git";
+          rev = "7a3c7f050754478d15b72d20cebb1d99d9c0f338";
+        };
+
+      info =
+        {
+          version = "2.2.3";
+
+          dependencies =
+            [
+              "ansi"
+              "either"
+              "foldable-traversable"
+              "integers"
+              "lists"
+              "maybe"
+              "newtype"
+              "partial"
+              "prelude"
+              "safe-coerce"
+              "strings"
+              "tuples"
             ];
         };
     };
@@ -5875,12 +5947,12 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/natefaubion/purescript-language-cst-parser.git";
-          rev = "67323ef7038ee6514c1912684398e3da5a3fd207";
+          rev = "c3fa31b309d15f21fce0626e36c7ce79c0fe0f13";
         };
 
       info =
         {
-          version = "0.14.0";
+          version = "0.14.1";
 
           dependencies =
             [
@@ -7290,12 +7362,12 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/natefaubion/purescript-node-glob-basic.git";
-          rev = "d8501e9e0b79b5b427c9f664f5f9e14a51194928";
+          rev = "13e8afa444c9d9a1a2eef48d2fb31ad09835cb08";
         };
 
       info =
         {
-          version = "1.3.0";
+          version = "2.0.0";
 
           dependencies =
             [
@@ -7488,12 +7560,12 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/purescript-node/purescript-node-path.git";
-          rev = "d5f08cfde829b831408c4c6587cec83f2cd6a58e";
+          rev = "ebff905adeaa493b8518ba6a83b1e3d169a678f3";
         };
 
       info =
         {
-          version = "5.0.0";
+          version = "5.0.1";
 
           dependencies =
             [
@@ -7630,23 +7702,29 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/purescript-node/purescript-node-streams.git";
-          rev = "8aaec35f1c6316924e360274cd248edee01eae4f";
+          rev = "9063a88c23b268f3ba8aa6e38a6f9a4bb76490e6";
         };
 
       info =
         {
-          version = "9.0.0";
+          version = "9.0.1";
 
           dependencies =
             [
               "aff"
+              "arrays"
               "effect"
               "either"
               "exceptions"
+              "maybe"
               "node-buffer"
               "node-event-emitter"
               "nullable"
               "prelude"
+              "refs"
+              "st"
+              "tailrec"
+              "unsafe-coerce"
             ];
         };
     };
@@ -7701,6 +7779,40 @@ with ps-pkgs;
               "nullable"
               "prelude"
               "tuples"
+            ];
+        };
+    };
+
+  node-workerbees =
+    {
+      src.git =
+        {
+          repo = "https://github.com/natefaubion/purescript-node-workerbees.git";
+          rev = "5f429932c6fbb0d0adb595d9970f249523a20041";
+        };
+
+      info =
+        {
+          version = "0.3.1";
+
+          dependencies =
+            [
+              "aff"
+              "argonaut-core"
+              "arraybuffer-types"
+              "arrays"
+              "avar"
+              "effect"
+              "either"
+              "exceptions"
+              "foldable-traversable"
+              "foreign-object"
+              "newtype"
+              "parallel"
+              "prelude"
+              "transformers"
+              "tuples"
+              "variant"
             ];
         };
     };
@@ -8975,12 +9087,12 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/purescript/purescript-prelude.git";
-          rev = "d71bc5e81f59a401005970ceaf233a1d62f21d8f";
+          rev = "2a51e602c067f1e2f9387600307544b97b02a239";
         };
 
       info =
         {
-          version = "6.0.1";
+          version = "6.0.2";
 
           dependencies =
             [
@@ -10683,6 +10795,28 @@ with ps-pkgs;
         };
     };
 
+  shuffle =
+    {
+      src.git =
+        {
+          repo = "https://github.com/joellefkowitz/shuffle.git";
+          rev = "a95edd50e8ac0a4aadc18cdb642b15c3dd136b00";
+        };
+
+      info =
+        {
+          version = "1.1.0";
+
+          dependencies =
+            [
+              "arrays"
+              "effect"
+              "maybe"
+              "prelude"
+            ];
+        };
+    };
+
   signal =
     {
       src.git =
@@ -11619,6 +11753,49 @@ with ps-pkgs;
         };
     };
 
+  tanstack-query =
+    {
+      src.git =
+        {
+          repo = "https://github.com/rowtype-yoga/purescript-tanstack-query.git";
+          rev = "db26fed694f26cbecdd0dd5e47ecffdee973a5b7";
+        };
+
+      info =
+        {
+          version = "2.0.0";
+
+          dependencies =
+            [
+              "aff"
+              "arrays"
+              "console"
+              "datetime"
+              "effect"
+              "either"
+              "exceptions"
+              "foldable-traversable"
+              "foreign"
+              "forgetmenot"
+              "js-promise"
+              "js-promise-aff"
+              "literals"
+              "maybe"
+              "nullable"
+              "partial"
+              "prelude"
+              "react-basic"
+              "react-basic-hooks"
+              "record"
+              "remotedata"
+              "typelevel-prelude"
+              "undefined-is-not-a-problem"
+              "unsafe-coerce"
+              "yoga-json"
+            ];
+        };
+    };
+
   tecton =
     {
       src.git =
@@ -11805,6 +11982,84 @@ with ps-pkgs;
         };
     };
 
+  tidy =
+    {
+      src.git =
+        {
+          repo = "https://github.com/natefaubion/purescript-tidy.git";
+          rev = "215f0d521ca1b13631e4d5b63ea95eeafa6b62a3";
+        };
+
+      info =
+        {
+          version = "0.11.1";
+
+          dependencies =
+            [
+              "arrays"
+              "control"
+              "dodo-printer"
+              "either"
+              "foldable-traversable"
+              "language-cst-parser"
+              "lists"
+              "maybe"
+              "newtype"
+              "ordered-collections"
+              "partial"
+              "prelude"
+              "strings"
+              "tuples"
+            ];
+        };
+    };
+
+  tidy-codegen =
+    {
+      src.git =
+        {
+          repo = "https://github.com/natefaubion/purescript-tidy-codegen.git";
+          rev = "4220d7659d9c72b8e596367a0fea087364183e8b";
+        };
+
+      info =
+        {
+          version = "4.0.1";
+
+          dependencies =
+            [
+              "arrays"
+              "bifunctors"
+              "control"
+              "dodo-printer"
+              "effect"
+              "either"
+              "enums"
+              "foldable-traversable"
+              "free"
+              "identity"
+              "integers"
+              "language-cst-parser"
+              "lazy"
+              "lists"
+              "maybe"
+              "newtype"
+              "ordered-collections"
+              "partial"
+              "prelude"
+              "record"
+              "safe-coerce"
+              "st"
+              "strings"
+              "tidy"
+              "transformers"
+              "tuples"
+              "type-equality"
+              "unicode"
+            ];
+        };
+    };
+
   tldr =
     {
       src.git =
@@ -11932,6 +12187,34 @@ with ps-pkgs;
               "maybe"
               "prelude"
               "tailrec"
+            ];
+        };
+    };
+
+  trivial-unfold =
+    {
+      src.git =
+        {
+          repo = "https://github.com/UnrelatedString/purescript-trivial-unfold.git";
+          rev = "5b109362456afb7dc6c37603fde9ad8589d474cf";
+        };
+
+      info =
+        {
+          version = "0.1.1";
+
+          dependencies =
+            [
+              "bifunctors"
+              "enums"
+              "exists"
+              "foldable-traversable"
+              "maybe"
+              "newtype"
+              "prelude"
+              "quickcheck"
+              "tuples"
+              "unfoldable"
             ];
         };
     };
@@ -12864,6 +13147,36 @@ with ps-pkgs;
         };
     };
 
+  vitest =
+    {
+      src.git =
+        {
+          repo = "https://github.com/rowtype-yoga/purescript-vitest.git";
+          rev = "e7f2614c55d34905464971921c3fa4ab25a4ae3d";
+        };
+
+      info =
+        {
+          version = "1.0.0";
+
+          dependencies =
+            [
+              "aff"
+              "effect"
+              "exceptions"
+              "js-promise"
+              "js-promise-aff"
+              "maybe"
+              "nullable"
+              "prelude"
+              "transformers"
+              "unsafe-coerce"
+              "web-dom"
+              "web-html"
+            ];
+        };
+    };
+
   web-clipboard =
     {
       src.git =
@@ -13508,6 +13821,69 @@ with ps-pkgs;
         };
     };
 
+  whine-core =
+    {
+      src.git =
+        {
+          repo = "https://github.com/collegevine/purescript-whine.git";
+          rev = "063fd5f5a30eae73211479376fac9fa2c681ffc1";
+        };
+
+      info =
+        {
+          version = "0.0.28";
+
+          dependencies =
+            [
+              "aff"
+              "aff-promise"
+              "ansi"
+              "arrays"
+              "bifunctors"
+              "codec"
+              "codec-json"
+              "console"
+              "control"
+              "datetime"
+              "effect"
+              "either"
+              "elmish"
+              "exceptions"
+              "foldable-traversable"
+              "foreign"
+              "foreign-object"
+              "formatters"
+              "functions"
+              "identity"
+              "json"
+              "language-cst-parser"
+              "lists"
+              "maybe"
+              "newtype"
+              "node-buffer"
+              "node-fs"
+              "node-path"
+              "node-process"
+              "now"
+              "nullable"
+              "optparse"
+              "ordered-collections"
+              "parsing"
+              "prelude"
+              "profunctor"
+              "record"
+              "safe-coerce"
+              "strings"
+              "stringutils"
+              "transformers"
+              "tuples"
+              "type-equality"
+              "typelevel-prelude"
+              "untagged-union"
+            ];
+        };
+    };
+
   xterm =
     {
       src.git =
@@ -13675,6 +14051,40 @@ with ps-pkgs;
               "prelude"
               "transformers"
               "unsafe-coerce"
+            ];
+        };
+    };
+
+  yoga-react-dom =
+    {
+      src.git =
+        {
+          repo = "https://github.com/rowtype-yoga/purescript-yoga-react-dom.git";
+          rev = "c72b9263fda03bed69ff4ca905b1601b443d17bf";
+        };
+
+      info =
+        {
+          version = "1.0.1";
+
+          dependencies =
+            [
+              "datetime"
+              "effect"
+              "forgetmenot"
+              "functions"
+              "nullable"
+              "prelude"
+              "react-basic"
+              "react-basic-hooks"
+              "record"
+              "type-equality"
+              "typelevel-prelude"
+              "unsafe-coerce"
+              "web-dom"
+              "web-events"
+              "web-html"
+              "web-touchevents"
             ];
         };
     };
