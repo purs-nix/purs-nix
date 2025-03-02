@@ -1,0 +1,24 @@
+name: "Nix Flake"
+on:
+  pull_request:
+  push:
+jobs:
+  nix-flake:
+    strategy:
+      matrix:
+        os:
+        - ubuntu-latest
+        - ubuntu-24.04-arm
+    name: Nix Flake on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: "true"
+      - name: "Check `nix flake show`"
+        run: nix flake show
+      - name: "Check `nix develop` shell can run command"
+        run: nix develop --command "echo"
+      - run: nix build
+      - run: nix flake check
