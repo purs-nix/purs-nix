@@ -60,5 +60,8 @@ with self; {
     info = /package.nix;
   };
 }
-// import ./official-package-set self
+// removeAttrs (import ./official-package-set self)
+  # These packages are not available on GitHub anymore
+  # Once we switch to using the registry, we can remove this
+  [ "logging" "logging-journald" ]
   // import ./ps-pkgs-ns.nix { inherit l; ps-pkgs = self; }
