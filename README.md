@@ -1,5 +1,7 @@
 # purs-nix
 
+[![Nix Flake](https://github.com/purs-nix/purs-nix/actions/workflows/nix-flake.yml/badge.svg)](https://github.com/purs-nix/purs-nix/actions/workflows/nix-flake.yml)
+
 **purs-nix** is a tool for Nix-based PureScript development. It comes with both a Nix API, as well as a CLI you can use for development.
 
 **This project is currently unstable**. That being said, most of the current API has been stable for some time, and we try to maintain backwards compatibility when introducing new APIs if possible.
