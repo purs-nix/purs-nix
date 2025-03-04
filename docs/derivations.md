@@ -32,9 +32,11 @@ These arguments correspond to the flags you can pass to `purs compile`.
 }
 
 ```
-
+- `esbuild`: Any attribute set you put in here will be converted to flags for `esbuild`.
+  - Flags that don't have an argument but are merely present or not, are specified using a boolean value.
+  - Flags that can be specified multiple times with different areguments are specified using a list of strings.
+  - String are escaped for the shell, unless they start with `"`, `'`, or `$`.
 - `main`: whether or not to automatically execute the main function of the module you're bundling.
-Note: turning this off will not disable the separate compiling of dependencies.
 - `module`: The module to bundle.
 
 ## script
@@ -49,7 +51,6 @@ Note: turning this off will not disable the separate compiling of dependencies.
 
 - `esbuild`: Arguments to pass to `esbuild` when bundling.
 - `module`: The module whose `main` function will be turned into an executable.
-Note: turning this off will not disable the separate compiling of dependencies.
 
 ## app
 `app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Main`.
@@ -82,91 +83,9 @@ You access these derivations via the [test](./purs-nix.md#user-content-purs-test
 
 `test.check {}` Is a derivation that runs `test.run`. It's a convenience function for adding your tests as a Nix flake check. It takes the same arguments as [output](#output).
 
-## modules (deprecated)
-
-You access these derivations via the [modules](./purs-nix.md#user-content-purs-modules) attribute set, using the name of your module as the attribute.
-
-NOTE: If the module name contains a `.`, it will require quotation marks around its name (e.g. `modules."Foo.Bar.Main".bundle`)
-
-There are four different attributes for each module.
-
-### output
-```
-{ verbose-errors ? false
-, comments ? false
-, codegen ? null
-, no-prefix ? false
-, json-errors ? false
-
-, incremental ? false
-}
-```
-
-- `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
-Note: turning this off will not disable the separate compiling of dependencies.
-
-The upper options correspond to the flags you can pass `purs compile`.
-
-`modules.Module.output {}` is a derivation containing the compiler output for all your project's dependencies plus all of `Module`'s local dependencies.
-
-### bundle
-
-```
-{ esbuild # additional esbuild flags
-  ? { format ? "esm"
-    , log-level ? "warning"
-    , outfile ? "main.js"
-    }
-, main ? true
-, incremental ? false
-}
-
-```
-
-- `main`: whether or not to automatically execute the main function of the module you're bundling.
-- `incremental`: whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
-Note: turning this off will not disable the separate compiling of dependencies.
-
-`modules.Module.bundle {}` is a derivation containing the bundled code of the module `Module`.
-
-### script
-
-```
-{ esbuild ? { minify ? true }
-, incremental ? false
-}
-```
-- `esbuild`: Arguments to pass to `esbuild` when bundling.
-- `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
-Note: turning this off will not disable the separate compiling of dependencies.
-
-- `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules
-
-`modules.Module.script {}` is a derivation that is an executable that will run the `main` `Effect` of the module `Module`.
-
-### app
-
-```
-{ name
-, version ? null
-, command ? name
-, esbuild ? { minify ? true }
-, incremental ? false
-}
-```
-- `name`: The `pname`/`name` of the derivation.
-- `version`: The version of the derivation.
-- `command`: The name of the executable.
-- `esbuild`: Arguments to pass to `esbuild` when bundling.
-- `incremental`: Whether or not to build the modules incrementally. This will almost certainly cause your build times to be slower, but may give some improvements when iterating on certain modules in very large projects.
-Note: turning this off will not disable the separate compiling of dependencies.
-
-`modules.Module.app { name = "my-command"; version = "1.0.0"; }` is a derivation containing an executable at `bin/my-command` that will execute the `main` `Effect` of the module `Module`.
-
 ## test
 
 You access these derivations via the [test](./purs-nix.md#user-content-purs-test) attribute.
-
 
 ### run
 
