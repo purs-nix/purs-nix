@@ -413,7 +413,7 @@
                           arraybuffer-types: 3.0.2
                           arrays: 7.3.0
                           assert: 6.0.0
-                          bifunctors: 6.0.0
+                          bifunctors: 6.1.0
                           console: 6.1.0
                           const: 6.0.0
                           contravariant: 6.0.0

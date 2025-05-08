@@ -931,17 +931,60 @@ with ps-pkgs;
         };
     };
 
+  benchlib =
+    {
+      src.git =
+        {
+          repo = "https://github.com/m-bock/purescript-benchlib.git";
+          rev = "f0c7096485da89b23cd22dd109d5eeca2c1da992";
+        };
+
+      info =
+        {
+          version = "0.0.4";
+
+          dependencies =
+            [
+              "aff"
+              "argonaut"
+              "arrays"
+              "codec-argonaut"
+              "console"
+              "datetime"
+              "effect"
+              "filterable"
+              "foldable-traversable"
+              "integers"
+              "maybe"
+              "newtype"
+              "node-buffer"
+              "node-fs"
+              "node-path"
+              "node-process"
+              "now"
+              "numbers"
+              "ordered-collections"
+              "prelude"
+              "profunctor"
+              "refs"
+              "strings"
+              "tuples"
+              "unfoldable"
+            ];
+        };
+    };
+
   bifunctors =
     {
       src.git =
         {
           repo = "https://github.com/purescript/purescript-bifunctors.git";
-          rev = "16ba2fb6dd7f05528ebd9e2f9ca3a068b325e5b3";
+          rev = "d35e0f1e5a33d59a226859b6bc53075fb58ced87";
         };
 
       info =
         {
-          version = "6.0.0";
+          version = "6.1.0";
 
           dependencies =
             [
@@ -3083,6 +3126,43 @@ with ps-pkgs;
         };
     };
 
+  express =
+    {
+      src.git =
+        {
+          repo = "https://github.com/purescript-express/purescript-express.git";
+          rev = "50d18c3fff00a97a2ac42189815c4599916ccdd0";
+        };
+
+      info =
+        {
+          version = "0.9.1";
+
+          dependencies =
+            [
+              "aff"
+              "effect"
+              "either"
+              "exceptions"
+              "foldable-traversable"
+              "foreign"
+              "foreign-object"
+              "maybe"
+              "newtype"
+              "node-http"
+              "node-path"
+              "nullable"
+              "open-foreign-generic"
+              "prelude"
+              "record"
+              "strings"
+              "transformers"
+              "typelevel-prelude"
+              "unsafe-coerce"
+            ];
+        };
+    };
+
   ezfetch =
     {
       src.git =
@@ -3154,6 +3234,32 @@ with ps-pkgs;
               "react-basic-emotion"
               "tuples"
               "typelevel-prelude"
+              "unsafe-coerce"
+            ];
+        };
+    };
+
+  fakerjs =
+    {
+      src.git =
+        {
+          repo = "https://github.com/purescript-open-community/purescript-fakerjs.git";
+          rev = "12a0fef0ce8dd5e487c2f185bd2da189027979f9";
+        };
+
+      info =
+        {
+          version = "0.0.1";
+
+          dependencies =
+            [
+              "arrays"
+              "effect"
+              "exceptions"
+              "functions"
+              "maybe"
+              "nullable"
+              "prelude"
               "unsafe-coerce"
             ];
         };
@@ -4200,6 +4306,49 @@ with ps-pkgs;
         };
     };
 
+  gesso =
+    {
+      src.git =
+        {
+          repo = "https://github.com/smilack/purescript-gesso.git";
+          rev = "0d99e5884b6b39eee21c5b87740d8a25e85257c7";
+        };
+
+      info =
+        {
+          version = "1.0.0";
+
+          dependencies =
+            [
+              "aff"
+              "canvas"
+              "css"
+              "dom-indexed"
+              "effect"
+              "foldable-traversable"
+              "halogen"
+              "halogen-subscriptions"
+              "integers"
+              "lists"
+              "maybe"
+              "numbers"
+              "ordered-collections"
+              "prelude"
+              "record"
+              "transformers"
+              "tuples"
+              "typelevel-prelude"
+              "web-clipboard"
+              "web-dom"
+              "web-events"
+              "web-html"
+              "web-pointerevents"
+              "web-touchevents"
+              "web-uievents"
+            ];
+        };
+    };
+
   gojs =
     {
       src.git =
@@ -4226,6 +4375,30 @@ with ps-pkgs;
               "variant"
               "web-events"
               "web-html"
+            ];
+        };
+    };
+
+  golem-fetch =
+    {
+      src.git =
+        {
+          repo = "https://github.com/kalxd/purescript-golem-fetch.git";
+          rev = "fc184dc60d8ea2be184c6b184c235f37f9e064f2";
+        };
+
+      info =
+        {
+          version = "0.1.0";
+
+          dependencies =
+            [
+              "aff"
+              "argonaut-codecs"
+              "argonaut-core"
+              "maybe"
+              "prelude"
+              "tuples"
             ];
         };
     };
@@ -4465,6 +4638,32 @@ with ps-pkgs;
         };
     };
 
+  halogen-declarative-canvas =
+    {
+      src.git =
+        {
+          repo = "https://github.com/UnrelatedString/purescript-halogen-declarative-canvas.git";
+          rev = "92f53c9cbda737342ed0b260615ddad97f8ed4e2";
+        };
+
+      info =
+        {
+          version = "0.0.8";
+
+          dependencies =
+            [
+              "canvas"
+              "effect"
+              "foldable-traversable"
+              "halogen"
+              "maybe"
+              "prelude"
+              "unsafe-coerce"
+              "web-html"
+            ];
+        };
+    };
+
   halogen-echarts-simple =
     {
       src.git =
@@ -4532,18 +4731,19 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/katsujukou/purescript-halogen-helix.git";
-          rev = "c646ed3429b172bc7c1c4b88c98f8bb46c7e34ea";
+          rev = "f1735cdb6ca099de69d9502313a66636c6f6c60b";
         };
 
       info =
         {
-          version = "1.0.1";
+          version = "1.1.0";
 
           dependencies =
             [
               "effect"
               "halogen-hooks"
               "halogen-subscriptions"
+              "halogen-use-trigger-hooks"
               "lazy"
               "maybe"
               "prelude"
@@ -4771,6 +4971,32 @@ with ps-pkgs;
               "strings"
               "transformers"
               "typelevel-prelude"
+            ];
+        };
+    };
+
+  halogen-use-trigger-hooks =
+    {
+      src.git =
+        {
+          repo = "https://github.com/katsujukou/purescript-halogen-use-trigger-hooks.git";
+          rev = "2c541c12bf6dd33e02cc45227a89373d7796de5b";
+        };
+
+      info =
+        {
+          version = "1.0.0";
+
+          dependencies =
+            [
+              "arrays"
+              "effect"
+              "foldable-traversable"
+              "halogen-hooks"
+              "maybe"
+              "prelude"
+              "refs"
+              "tuples"
             ];
         };
     };
@@ -8574,12 +8800,12 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/purescript-contrib/purescript-parsing.git";
-          rev = "d4d53c89bc02f1bd71ad7e359560b0ecf2e2fd9f";
+          rev = "83a3c4f27830912bb8ae67e21b43bc72716e3067";
         };
 
       info =
         {
-          version = "10.2.0";
+          version = "10.3.0";
 
           dependencies =
             [
@@ -10178,6 +10404,37 @@ with ps-pkgs;
         };
     };
 
+  record-extra-srghma =
+    {
+      src.git =
+        {
+          repo = "https://github.com/srghma/purescript-record-extra-srghma.git";
+          rev = "79d4ae2fc52115510c09371c3dd03eb09a0f35d8";
+        };
+
+      info =
+        {
+          version = "0.2.8";
+
+          dependencies =
+            [
+              "arrays"
+              "control"
+              "functions"
+              "lists"
+              "maybe"
+              "nonempty"
+              "parallel"
+              "prelude"
+              "record"
+              "strings"
+              "tuples"
+              "typelevel-prelude"
+              "unfoldable"
+            ];
+        };
+    };
+
   record-ptional-fields =
     {
       src.git =
@@ -10293,6 +10550,31 @@ with ps-pkgs;
               "strings"
               "stringutils"
               "tuples"
+            ];
+        };
+    };
+
+  resize-arrays =
+    {
+      src.git =
+        {
+          repo = "https://github.com/m-bock/purescript-resize-arrays.git";
+          rev = "3ddcdf7e64ccfed2c979603fe96ca187f468ad76";
+        };
+
+      info =
+        {
+          version = "0.0.1";
+
+          dependencies =
+            [
+              "foldable-traversable"
+              "lists"
+              "maybe"
+              "prelude"
+              "tailrec"
+              "tuples"
+              "unordered-collections"
             ];
         };
     };
@@ -12196,23 +12478,29 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/UnrelatedString/purescript-trivial-unfold.git";
-          rev = "5b109362456afb7dc6c37603fde9ad8589d474cf";
+          rev = "13a31afb27956e5f67cb0c1b97bcf30be1cca8bf";
         };
 
       info =
         {
-          version = "0.1.1";
+          version = "0.5.0";
 
           dependencies =
             [
               "bifunctors"
+              "control"
+              "either"
               "enums"
               "exists"
+              "filterable"
               "foldable-traversable"
+              "invariant"
               "maybe"
               "newtype"
               "prelude"
+              "profunctor"
               "quickcheck"
+              "these"
               "tuples"
               "unfoldable"
             ];
@@ -12911,11 +13199,30 @@ with ps-pkgs;
         };
     };
 
+  url-regex-safe =
+    {
+      src.git =
+        {
+          repo = "https://github.com/srghma/purescript-url-regex-safe.git";
+          rev = "db43abe498e2d7a56bbf20f88fe05f08ab2929a9";
+        };
+
+      info =
+        {
+          version = "0.1.1";
+
+          dependencies =
+            [
+              "strings"
+            ];
+        };
+    };
+
   uuid =
     {
       src.git =
         {
-          repo = "https://github.com/megamaddu/purescript-uuid.git";
+          repo = "https://github.com/maddie927/purescript-uuid.git";
           rev = "bfc1f0b21dbbcfa5443914dbf8b452fdffaadf88";
         };
 
@@ -13023,6 +13330,32 @@ with ps-pkgs;
             [
               "prelude"
               "unsafe-coerce"
+              "variant"
+            ];
+        };
+    };
+
+  variant-gen =
+    {
+      src.git =
+        {
+          repo = "https://github.com/purescript-open-community/purescript-variant-gen.git";
+          rev = "ca75f0e7f0775cea5f13007a88e1821658869865";
+        };
+
+      info =
+        {
+          version = "1.0.0";
+
+          dependencies =
+            [
+              "gen"
+              "lists"
+              "nonempty"
+              "prelude"
+              "record"
+              "tuples"
+              "typelevel-prelude"
               "variant"
             ];
         };
@@ -13826,12 +14159,12 @@ with ps-pkgs;
       src.git =
         {
           repo = "https://github.com/collegevine/purescript-whine.git";
-          rev = "063fd5f5a30eae73211479376fac9fa2c681ffc1";
+          rev = "ab47c38ad20012102cc0d3884228157197054d1e";
         };
 
       info =
         {
-          version = "0.0.28";
+          version = "0.0.30";
 
           dependencies =
             [
