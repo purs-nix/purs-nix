@@ -296,7 +296,7 @@ let
 
     repl           Enter the REPL
     docs <args>    Generate HTML documentation for all the modules in your
-                   project.
+                   project. (currently broken #52)
     ------------------------------------------------------------------------
     package-info <name>    Show the info of a specific package.
     packages               Show all packages used in your project.
