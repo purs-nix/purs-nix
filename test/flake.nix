@@ -343,7 +343,7 @@
                           };
 
                           compile.codegen = "docs,js";
-                          inherit name package;
+                          inherit name;
                         }
                         args)
                     + "/bin/${name}";
@@ -473,10 +473,6 @@
                         ''
                         ) +
 
-                      make-test "purs-nix bower"
-                        ""
-                        (_: "${command} bower") +
-
                       make-test "purs-nix test"
                         "${command} test"
                         (i: "[[ ${i} == testing ]]")) +
@@ -583,10 +579,6 @@
                         ""
                         (_: "ls ${outfile}") +
 
-                      make-test "bower.json is what we expect"
-                        "diff bower.json ${./bower.json}"
-                        (i: "[[ -z ${i} ]]") +
-
                       make-test "${outfile} does not call main" "tail -n 1 ${outfile}"
                         (i: ''
                           # for some reason this doesn't fail if the file doesn't exists
@@ -654,14 +646,12 @@
 
               (ps.command {
                 bundle.esbuild.platform = "node";
-                inherit package;
                 srcs = [ "src" "src2" ];
               })
 
               (ps2.command {
                 name = "ps2";
                 bundle.esbuild.platform = "node";
-                inherit package;
                 srcs = [ "src3" ];
               })
 
