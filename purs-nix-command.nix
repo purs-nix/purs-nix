@@ -5,7 +5,6 @@
 , docs-search
 , nodejs
 , pkgs
-, ps-pkgs
 , purescript
 , repl-globs
 , srcs'
@@ -21,7 +20,6 @@ let l = p.lib; p = pkgs; u = utils; in
 , output ? l.attrByPath [ "compile" "output" ] "output" defaults
 , bundle ? { }
 , compile ? { }
-, package ? { }
 , test ? test'
 , test-module ? test-module'
 , name ? "purs-nix"
@@ -107,75 +105,6 @@ let
     }
   '';
 
-  bower =
-    let
-      make-error =
-        a:
-        ''echo "You need to define 'package.${a}' in the set you pass to 'command' to use this command". Make sure to re-enter the Nix shell after you fix this.'';
-    in
-    if !(u.has package "pursuit") then
-      make-error "pursuit"
-    else if !(u.has package.pursuit "name") then
-      make-error "pursuit.name"
-    else if !(u.has package.pursuit "license") then
-      make-error "pursuit.license"
-    else if !(u.has package.pursuit "repo") then
-      make-error "pursuit.repo"
-    else
-      let
-        bower-packages-registry =
-          l.importJSON
-            (fetchGit
-              {
-                url = "https://github.com/purescript/registry.git";
-                ref = "main";
-                rev = "c03e3c7834bc5153a4f6f5d47276a763bab83bfe";
-              }
-            + /bower-packages.json);
-
-        bower-set = with package; {
-          name = "purescript-${pursuit.name}";
-          license = [ pursuit.license.spdxId ];
-
-          repository = {
-            type = "git";
-            url = pursuit.repo;
-          };
-
-          ignore = [
-            "**/.*"
-            "node_modules"
-            "bower_components"
-            output
-          ];
-
-          dependencies =
-            l.listToAttrs
-              (map
-                (pkg:
-                  let
-                    info = u.dep-info ps-pkgs pkg;
-                    registry-name =
-                      let
-                        name =
-                          if u.hasByPath info [ "pursuit" "name" ] then
-                            info.pursuit.name
-                          else
-                            info.name;
-                      in
-                      "purescript-${name}";
-                  in
-                  l.nameValuePair registry-name
-                    (if bower-packages-registry ? ${registry-name} && info ? version then
-                      "^v${info.version}"
-                    else
-                      "${info.repo}#${if info ? version then "v${info.version}" else info.rev}"
-                    ))
-                (package.dependencies or [ ]));
-        };
-      in
-      "echo ${l.escapeShellArg (toJSON bower-set)} | ${p.jq}/bin/jq . > bower.json";
-
   exe =
     let
       bowers =
@@ -253,7 +182,6 @@ let
 
         package-info ) ${package-info} "$2";;
         packages ) ${packages};;
-        bower ) ${bower};;
         output ) ${purescript}/bin/purs "''${@:2}" "${compiler-output}/**/*.js";;
 
         srcs )
@@ -276,7 +204,6 @@ let
         "docs"
         "package-info"
         "packages"
-        "bower"
         "output"
         "srcs"
       ];
@@ -300,8 +227,6 @@ let
     ------------------------------------------------------------------------
     package-info <name>    Show the info of a specific package.
     packages               Show all packages used in your project.
-    ------------------------------------------------------------------------
-    bower    Generate a bower.json for publishing to Pursuit.
     ------------------------------------------------------------------------
     srcs    Echo all PureScript globs for your project.
     ------------------------------------------------------------------------

@@ -708,7 +708,6 @@ in
           docs-search
           nodejs
           pkgs
-          ps-pkgs
           purescript;
 
         repl-globs = make-dep-globs (all-dependencies ++ [ ps-pkgs.psci-support ]);

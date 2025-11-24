@@ -73,7 +73,6 @@ Read more about `output`, `bundle`, `script`, `app`, and `test` [here](derivatio
 , output ? "output"
 , bundle ? {}
 , compile ? {}
-, package ? {}
 , test ? see below
 , test-module ? see below
 , name ? "purs-nix"
@@ -105,26 +104,6 @@ Read more about `output`, `bundle`, `script`, `app`, and `test` [here](derivatio
   , json-errors ? false
   }
   ```
-
-- `package`: The options that will be used to generate a `bower.json` with `purs-nix bower`.
-
-  ```
-  { dependencies
-  , pursuit
-  }
-  ```
-    - `dependencies`: A list of your project's dependencies.
-	- `pursuit`: An attribute set of all the additional information required to make a `bower.json` in order to publish to Pursuit.
-
-	  ```
-	  { name
-	  , repo
-	  , license
-	  }
-	  ```
-	  - `name`: The name of the package in [the registry](https://github.com/purescript/registry) (without the `purescript-`).
-	  - `repo`: The url of the git repository.
-	  - `license`: One of [these licenses](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix).
 
 - `test`: A string representing the path of your testing code. The default value is the `test` value provided to `purs` if you're defining `dir`, otherwise it's `"test"`.
 - `test-module`: The name of the module whose `main` function will be run when using `purs-nix test`. The default value is the `test-module` value provided to `purs`.
