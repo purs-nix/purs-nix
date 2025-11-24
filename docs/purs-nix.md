@@ -1,4 +1,4 @@
-## purs-nix (nix)
+## purs-nix (library)
 
 **purs-nix** is a nix library used to set up your PureScript environment and/or to compile/bundle your PureScript code in a Nix derivation. The `outputs` of the flake has a `__functor` attribute, so it can be used as a function. It takes the following arguments:
 
