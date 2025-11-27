@@ -1,12 +1,6 @@
-l: self:
+{ l, official-package-set, registry }: self:
 with builtins;
-with self; {
-  event =
-    let info = hyrule.purs-nix-info; in {
-      src.git = { inherit (info) repo rev; };
-      info = { inherit (info) version dependencies; };
-    };
-
+(with self; {
   html-parser-halogen = {
     info.dependencies = [
       "arrays"
@@ -59,6 +53,22 @@ with self; {
 
     info = /package.nix;
   };
+})
+// (
+  # We have to use the legacy package set to get the dependency lists.
+  # We can't get them from the purs.json for this use case, because it requires IFD,
+  # Which to due to how Nix works, means the packages cannot be fetched in parallel.
+  mapAttrs
+    (_: v: {
+      src.registry = {
+        ref = v.version;
+        dependency-override = v.dependencies;
+      };
+    })
+    (l.filterAttrs (n: _: n != "metadata")
+      (l.importJSON "${official-package-set}/packages.json"))
+)
+  // import ./ps-pkgs-ns.nix {
+  inherit l;
+  ps-pkgs = self;
 }
-// import ./official-package-set self
-  // import ./ps-pkgs-ns.nix { inherit l; ps-pkgs = self; }

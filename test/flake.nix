@@ -48,9 +48,20 @@
               overlays = [
                 (_: super: assert !super ? test-package; { })
 
-                (self: super:
+                (self: _:
                   with self; {
-                    inherit (super) console;
+                    "assert" = {
+                      info = {
+                        version = "6.0.0";
+                        dependencies = [ "console" "effect" "prelude" ];
+                      };
+                      src.git = {
+                        repo = "https://github.com/purescript/purescript-assert.git";
+                        rev = "27c0edb57d2ee497eb5fab664f5601c35b613eda";
+                      };
+                    };
+
+                    console.src.registry.version = "6.0.0";
 
                     effect = {
                       src.path = purs-nix-test-packages;
@@ -380,7 +391,7 @@
                     (if less then
                       ""
                     else
-                      make-test "purs-nix package-info prelude"
+                      make-test "purs-nix package-info prelude (flake source)"
                         "${command} package-info prelude"
                         (i: ''
                           info="name:    prelude
@@ -393,7 +404,7 @@
                         ''
                         ) +
 
-                      make-test "purs-nix package-info effect"
+                      make-test "purs-nix package-info effect (path source)"
                         "${command} package-info effect"
                         (i: ''
                           info="name:    effect
@@ -402,6 +413,29 @@
                           path:    /nix/store/4n1s3a8183r7zrl0xwyxpya0z59ym7gj-source
                           source:  /nix/store/nllpdqzb9hl375wmgq29gidr92d39szg-effect-override-test"
 
+                          [[ ${i} == $info ]]
+                        '') +
+
+                      make-test "purs-nix package-info console (registry source)"
+                        "${command} package-info console"
+                        (i: ''
+                          info="name:    console
+                          version: 6.0.0
+                          repo:    https://github.com/purescript/purescript-console.git
+                          url:     https://packages.registry.purescript.org/console/6.0.0.tar.gz
+                          source:  /nix/store/l538jf2psvfzf80dap07z8gaj6rkvi5b-console-6.0.0"
+
+                          [[ ${i} == $info ]]
+                        '') +
+
+                      make-test "purs-nix package-info assert (git source)"
+                        "${command} package-info assert"
+                        (i: ''
+                          info="name:    assert
+                          version: 6.0.0
+                          repo:    https://github.com/purescript/purescript-assert.git
+                          commit:  27c0edb57d2ee497eb5fab664f5601c35b613eda
+                          source:  /nix/store/qgs0wbdikrr96741fkym0lp8r0f6sd2q-assert-6.0.0"
 
                           [[ ${i} == $info ]]
                         '') +
@@ -413,8 +447,8 @@
                           arraybuffer-types: 3.0.2
                           arrays: 7.3.0
                           assert: 6.0.0
-                          bifunctors: 6.0.0
-                          console: 6.1.0
+                          bifunctors: 6.1.0
+                          console: 6.0.0
                           const: 6.0.0
                           contravariant: 6.0.0
                           control: 6.0.0
@@ -440,9 +474,9 @@
                           newtype: 5.0.0
                           node-buffer: 9.0.0
                           node-event-emitter: 3.0.0
-                          node-path: 5.0.0
+                          node-path: 5.0.1
                           node-process: 11.2.0
-                          node-streams: 9.0.0
+                          node-streams: 9.0.1
                           nonempty: 7.0.0
                           nullable: 6.0.0
                           numbers: 9.0.1

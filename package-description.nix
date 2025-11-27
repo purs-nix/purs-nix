@@ -124,6 +124,31 @@ in
           };
         };
 
+        registry = mkOption {
+          description = "a package from the PureScript registry";
+          type = t.submodule {
+            options = {
+              version = mkOption {
+                description = "the version of the package";
+                type = t.nullOr t.str;
+                default = null;
+              };
+
+              ref = mkOption {
+                description = "find the version of the package based on a git ref";
+                type = t.nullOr t.str;
+                default = null;
+              };
+
+              dependency-override = mkOption {
+                description = "This is used internally to build the package set for performance reasons. See ps-pkgs.nix";
+                type = t.nullOr (t.listOf t.str);
+                default = null;
+              };
+            };
+          };
+        };
+
         flake = mkOption {
           description = "flake source";
           type = t.submodule {

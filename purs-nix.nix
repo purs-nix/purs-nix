@@ -1,9 +1,11 @@
 { defaults
 , docs-search
+, official-package-set
 , overlays
 , parsec
 , pkgs
 , ps-tools
+, registry
 }:
 with builtins;
 let
@@ -14,7 +16,7 @@ let
   purescript' = ps-tools.for-0_15.purescript;
 
   ps-package-stuff = import ./build-pkgs.nix {
-    inherit overlays pkgs;
+    inherit official-package-set overlays pkgs registry;
     utils = u;
   };
 

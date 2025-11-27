@@ -9,7 +9,7 @@ let
   buckets =
     set-buckets 1 ps-pkgs
     // set-buckets 2 (get-namespace "ursi")
-    // { task = 2; event = 3; };
+    // { task = 2; };
 
   get-namespace = ns: l.filterAttrs (n: _: l.hasPrefix "${ns}." n) ps-pkgs;
   set-buckets = n: mapAttrs (_: _: n);
