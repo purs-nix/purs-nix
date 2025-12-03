@@ -146,26 +146,28 @@ in
         foldl'
           (acc:
             { name, value }:
-            let module-path = "${prefix}/${name}"; in
+            let
+              module-path = "${prefix}/${name}";
+              module-linker =
+                if u.has value "node_modules" then
+                  "ln -fsT ${value.node_modules} ${module-path}/node_modules"
+                else if u.has value "src" then
+                  ''
+                    if [[ -h ${module-path} ]]; then
+                      echo "Error: You're trying to add foreign dependencies to the module '${name}', but that module is not part of this project. Add the foreign dependencies to the package that contains '${name}'."
+                      exit 1
+                    else
+                      ln -fsT ${make-module value.src} ${module-path}/foreign
+                    fi
+                  ''
+                else
+                  abort "The only supported foreign options are 'node_modules' and 'src'.";
+            in
             ''
               ${acc}
 
               if [[ -e ${module-path} ]]; then
-                ${
-                  if u.has value "node_modules" then
-                    "ln -fsT ${value.node_modules} ${module-path}/node_modules"
-                  else if u.has value "src" then
-                    ''
-                      if [[ -h ${module-path} ]]; then
-                        echo "Error: You're trying to add foreign dependencies to the module '${name}', but that module is not part of this project. Add the foreign dependencies to the package that contains '${name}'."
-                        exit 1
-                      else
-                        ln -fsT ${make-module value.src} ${module-path}/foreign
-                      fi
-                    ''
-                  else
-                    abort "The only supported foreign options are 'node_modules' and 'src'."
-                }
+                ${module-linker}
               fi
             '')
           ""
