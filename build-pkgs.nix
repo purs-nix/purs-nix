@@ -1,4 +1,4 @@
-{ overlays ? [ ], pkgs, utils }:
+{ overlays ? [ ], official-package-set, pkgs, registry, utils }:
 with builtins;
 let
   l = p.lib;
@@ -29,6 +29,53 @@ let
       l.recursiveUpdate
         (getFlake args.src.flake.url).packages.${p.system}.${args.src.flake.package or "default"}
         { purs-nix-info = { inherit name; } // args.src; }
+    else if u.has args.src "registry" then
+      let
+        reg = args.src.registry;
+        metadata = l.importJSON "${registry}/metadata/${name}.json";
+
+        version =
+          if u.has reg "version" then
+            reg.version
+          else
+            let inherit (reg) ref; in
+            (l.findFirst
+              ({ value, ... }: value.ref == ref)
+              (throw "No version of '${name}' was found matching the ref: ${ref}")
+              (l.attrsToList metadata.published)).name;
+
+        registry-url = "https://packages.registry.purescript.org/${name}/${version}.tar.gz";
+
+        src =
+          let
+            tarball = p.fetchurl {
+              name = "${name}-${version}.tar.gz";
+              url = registry-url;
+              inherit (metadata.published.${version}) hash;
+            };
+          in
+          p.runCommand "${name}-${version}" { } ''
+            tar -xzf ${tarball}
+            mv ${name}-${version} $out
+          '';
+
+        purs-json = l.importJSON "${src}/purs.json";
+
+        dependencies =
+          if u.has reg "dependency-override" then
+            reg.dependency-override
+          else
+            attrNames purs-json.dependencies;
+      in
+      l.recursiveUpdate
+        src
+        {
+          purs-nix-info = {
+            inherit dependencies name purs-json registry-url version;
+            repo = "https://github.com/${purs-json.location.githubOwner}/${purs-json.location.githubRepo}.git";
+            src = "src";
+          };
+        }
     else
       let
         inherit (args.ro) info;
@@ -125,7 +172,7 @@ let
       (self:
         mapAttrs
           (n: v: build (v // { name = n; }))
-          (import ./ps-pkgs.nix l self)));
+          (import ./ps-pkgs.nix { inherit l official-package-set registry; } self)));
 
   ps-pkgs-ns =
     foldl'

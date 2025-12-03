@@ -131,9 +131,12 @@ rec {
         else if has info "repo" then
           let
             more-info =
-              if has info "rev"
-              then ''echo "commit:  ${info.rev}"''
-              else ''echo "path:    ${pkg.src}"'';
+              if has info "registry-url" then
+                ''echo "url:     ${info.registry-url}"''
+              else if has info "rev" then
+                ''echo "commit:  ${info.rev}"''
+              else
+                ''echo "path:    ${pkg.src}"'';
           in
           ''
             echo "repo:    ${info.repo}"

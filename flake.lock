@@ -161,6 +161,22 @@
         "type": "github"
       }
     },
+    "official-package-set": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1764661239,
+        "narHash": "sha256-sqUlNPSILyodSY+HeOamDCvXJ3iuyQF/+yMrhPHFBUE=",
+        "owner": "purescript",
+        "repo": "package-sets",
+        "rev": "13024bf2d1fd7d1392672d9530dc288d33d12ddf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purescript",
+        "repo": "package-sets",
+        "type": "github"
+      }
+    },
     "parsec": {
       "locked": {
         "lastModified": 1635533376,
@@ -196,6 +212,22 @@
         "type": "github"
       }
     },
+    "registry": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1764676690,
+        "narHash": "sha256-DKfto/IJleHIunz6IMub0TIvVGEpPc9fcxpF5BvmcM8=",
+        "owner": "purescript",
+        "repo": "registry",
+        "rev": "3a4a20a9008b547b8873912ade526027d3b19c2a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "purescript",
+        "repo": "registry",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "docs-search": "docs-search",
@@ -203,8 +235,10 @@
         "lint-utils": "lint-utils",
         "make-shell": "make-shell",
         "nixpkgs": "nixpkgs",
+        "official-package-set": "official-package-set",
         "parsec": "parsec",
         "ps-tools": "ps-tools",
+        "registry": "registry",
         "utils": "utils_2"
       }
     },

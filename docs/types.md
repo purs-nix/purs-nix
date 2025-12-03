@@ -136,7 +136,7 @@ The package should be a purs-nix package built with [`build`](adding-packages.md
 
 ## `PackageData`
 
-[`NormalPackageData`](#NormalPackageData) | [`FlakePackageData`](#FlakePackageData)
+[`NormalPackageData`](#NormalPackageData) | [`RegistryPackageData`](#RegistryPackageData) | [`FlakePackageData`](#FlakePackageData)
 
 ## `NormalPackageData`
 ```
@@ -206,3 +206,23 @@ The package should be a purs-nix package built with [`build`](adding-packages.md
 - `license`: `License`
 
   use one of the values in `lib.license`
+
+## `RegistryPackageData`
+```
+{ name;
+  src.registry.version; # optional
+  src.registry.ref;     # optional
+}
+```
+
+- `name`: `String`
+
+  the name of the package in the registry
+
+- `src.registry.version`: String
+
+  The version of the package in the registry. You need to specify either this or or `src.registry.ref`.
+
+- `src.registry.ref`: String
+
+ Use this to look up a package version based on its `ref` value. You need to specify either his or `src.registry.version`.
