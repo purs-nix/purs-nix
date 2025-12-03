@@ -13,13 +13,12 @@
     make-shell.url = "github:ursi/nix-make-shell/1";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     official-package-set = { url = "github:purescript/package-sets"; flake = false; };
-    parsec.url = "github:nprindle/nix-parsec";
     ps-tools.url = "github:purs-nix/purescript-tools";
     registry = { url = "github:purescript/registry"; flake = false; };
     utils.url = "github:ursi/flake-utils/8";
   };
 
-  outputs = { get-flake, official-package-set, parsec, registry, utils, ... }@inputs:
+  outputs = { get-flake, official-package-set, registry, utils, ... }@inputs:
     with builtins;
     {
       __functor = _:
@@ -31,7 +30,6 @@
         import ./purs-nix.nix {
           docs-search = (get-flake inputs.docs-search).packages.${system}.default;
           inherit defaults official-package-set overlays pkgs registry;
-          inherit (parsec.lib) parsec;
           ps-tools = inputs.ps-tools.legacyPackages.${system};
         };
 
