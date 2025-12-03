@@ -8,7 +8,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     # purs-nix.url = "github:ursi/purs-nix/ps-0.15";
     # ps-tools.follows = "purs-nix/ps-tools";
-    buildNodeModules.url = "github:ursi/buildNodeModules";
     utils.url = "github:numtide/flake-utils";
   };
 
@@ -17,7 +16,7 @@
     , nixpkgs
     , utils
     , ...
-    }@inputs:
+    }:
     utils.lib.eachDefaultSystem
       (system:
       let
@@ -31,7 +30,6 @@
 
         p = pkgs;
         pkgs = nixpkgs.legacyPackages.${system};
-        inherit (inputs.buildNodeModules.lib.${system}) buildNodeModules;
 
         ps = purs-nix.purs {
           dependencies = [
@@ -43,11 +41,8 @@
           dir = ./.;
 
           foreign.Main.node_modules =
-            buildNodeModules
-              {
-                packageRoot = ./.;
-                inherit (p) nodejs;
-              }
+            p.importNpmLock.buildNodeModules
+              { npmRoot = ./.; inherit (p) nodejs; }
             + /node_modules;
         };
       in
