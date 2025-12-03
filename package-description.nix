@@ -226,7 +226,7 @@ in
             } // (l.optionalAttrs (ref != null) { inherit ref; }))
         else if u.has config.src "flake" then
           let cfg = config.src.flake; in
-          (getFlake cfg.url).packages.${p.system}.${cfg.package}
+          (getFlake cfg.url).packages.${p.stdenv.hostPlatform.system}.${cfg.package}
         else if u.has config.src "path" then
           config.src.path
         else

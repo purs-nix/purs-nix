@@ -16,7 +16,7 @@
     , nixpkgs
     , utils
     , ...
-    }@inputs:
+    }:
     utils.lib.eachDefaultSystem
       (system:
       let

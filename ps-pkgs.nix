@@ -1,4 +1,4 @@
-{ l, official-package-set, registry }: self:
+{ l, official-package-set }: self:
 with builtins;
 (with self; {
   html-parser-halogen = {

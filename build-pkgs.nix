@@ -27,7 +27,7 @@ let
     in
     if u.has args.src "flake" then
       l.recursiveUpdate
-        (getFlake args.src.flake.url).packages.${p.system}.${args.src.flake.package or "default"}
+        (getFlake args.src.flake.url).packages.${p.stdenv.hostPlatform.system}.${args.src.flake.package or "default"}
         { purs-nix-info = { inherit name; } // args.src; }
     else if u.has args.src "registry" then
       let
@@ -172,7 +172,7 @@ let
       (self:
         mapAttrs
           (n: v: build (v // { name = n; }))
-          (import ./ps-pkgs.nix { inherit l official-package-set registry; } self)));
+          (import ./ps-pkgs.nix { inherit l official-package-set; } self)));
 
   ps-pkgs-ns =
     foldl'

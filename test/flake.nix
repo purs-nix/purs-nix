@@ -243,7 +243,7 @@
                 "custom node package" =
                   # don't pull this out into its own project, it is also a test for
                   # 2f5285a97c9a575e70bebf8e614fff3a42b0fe68
-                  let nodejs = p.nodejs-18_x; in
+                  let nodejs = p.nodejs_20; in
                   make-test "node version"
                     (run-app-custom { inherit nodejs; } "Node")
                     (i: "[[ ${i} == v${nodejs.version} ]]");
@@ -411,7 +411,7 @@
                           version: override-test
                           repo:    https://github.com/purs-nix/test-packages.git
                           path:    /nix/store/4n1s3a8183r7zrl0xwyxpya0z59ym7gj-source
-                          source:  /nix/store/nllpdqzb9hl375wmgq29gidr92d39szg-effect-override-test"
+                          source:  /nix/store/rq2yfrw44ib9i3f6d9cg66cpjdml627d-effect-override-test"
 
                           [[ ${i} == $info ]]
                         '') +
@@ -423,7 +423,7 @@
                           version: 6.0.0
                           repo:    https://github.com/purescript/purescript-console.git
                           url:     https://packages.registry.purescript.org/console/6.0.0.tar.gz
-                          source:  /nix/store/l538jf2psvfzf80dap07z8gaj6rkvi5b-console-6.0.0"
+                          source:  /nix/store/1pydxb1rzqqlc5h6id907dh8s5p0zsbp-console-6.0.0"
 
                           [[ ${i} == $info ]]
                         '') +
@@ -435,7 +435,7 @@
                           version: 6.0.0
                           repo:    https://github.com/purescript/purescript-assert.git
                           commit:  27c0edb57d2ee497eb5fab664f5601c35b613eda
-                          source:  /nix/store/qgs0wbdikrr96741fkym0lp8r0f6sd2q-assert-6.0.0"
+                          source:  /nix/store/a9n4mycf90b8p71lz8si2b07fl99rvsf-assert-6.0.0"
 
                           [[ ${i} == $info ]]
                         '') +
@@ -607,7 +607,7 @@
                     test = command:
                       make-test "list flags work"
                         "echo ${command}"
-                        (_: ''cat ${command} | grep -- "--external:'1' --external:\"2\" --external:\$three --external:'4'"'') +
+                        (_: ''cat ${command} | grep -- "--external:1 --external:\"2\" --external:\$three --external:'4'"'') +
 
                       make-test "custom-named output exists"
                         ""
