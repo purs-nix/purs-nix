@@ -10,15 +10,14 @@
       url = "github:homotopic/lint-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    make-shell.url = "github:ursi/nix-make-shell/1";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     official-package-set = { url = "github:purescript/package-sets"; flake = false; };
     ps-tools.url = "github:purs-nix/purescript-tools";
     registry = { url = "github:purescript/registry"; flake = false; };
-    utils.url = "github:ursi/flake-utils/8";
+    utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { get-flake, official-package-set, registry, utils, ... }@inputs:
+  outputs = { get-flake, official-package-set, registry, ... }@inputs:
     with builtins;
     {
       __functor = _:
@@ -55,20 +54,13 @@
         };
       };
     }
-    // utils.apply-systems
-      {
-        inherit inputs;
-        systems = [ "x86_64-linux" "x86_64-darwin" ];
-      }
-      ({ make-shell
-       , lint-utils
-       , pkgs
-       , system
-       , ...
-       }:
+    // inputs.utils.lib.eachSystem [ "x86_64-linux" "x86_64-darwin" ]
+      (system:
         let
+          pkgs = inputs.nixpkgs.legacyPackages.${system};
           p = pkgs;
           u = import ./utils.nix p;
+          lu-pkgs = inputs.lint-utils.packages.${system};
 
           inherit
             (import ./build-pkgs.nix {
@@ -106,17 +98,16 @@
                 { }
             );
 
-          devShells.default = make-shell {
+          devShells.default = p.mkShell {
             packages = with p; [
               deadnix
-              lint-utils.nixpkgs-fmt
+              lu-pkgs.nixpkgs-fmt
               statix
             ];
 
-            aliases.lint = "deadnix **/*.nix; statix check";
-            env.GIT_LFS_SKIP_SMUDGE = 1;
+            GIT_LFS_SKIP_SMUDGE = 1;
           };
 
-          formatter = lint-utils.nixpkgs-fmt;
+          formatter = lu-pkgs.nixpkgs-fmt;
         });
 }

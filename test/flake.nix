@@ -13,22 +13,11 @@
     { get-flake, purs-nix-test-packages, ... }@inputs:
       with builtins;
       let purs-nix-flake = get-flake ../.; in
-      purs-nix-flake.inputs.utils.apply-systems
-        {
-          inputs = inputs // {
-            purs-nix = purs-nix-flake;
-            inherit (purs-nix-flake.inputs) make-shell nixpkgs ps-tools;
-          };
-
-          systems = [ "x86_64-linux" ];
-        }
-        ({ make-shell
-         , pkgs
-         , ps-tools
-         , system
-         , ...
-         }:
+      purs-nix-flake.inputs.utils.lib.eachSystem [ "x86_64-linux" ]
+        (system:
         let
+          pkgs = purs-nix-flake.inputs.nixpkgs.legacyPackages.${system};
+          ps-tools = purs-nix-flake.inputs.ps-tools.legacyPackages.${system};
           rev = "fd4a6c6796412cabbc3a03bfa7e4eda92d5e196c";
           output-default = "output-default";
 
@@ -674,7 +663,7 @@
             };
 
           packages.default = ps.output { };
-          devShells.default = make-shell {
+          devShells.default = p.mkShell {
             packages = with pkgs; [
               nodejs
 
