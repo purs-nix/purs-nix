@@ -54,8 +54,6 @@
           path = "${./templates/package}";
         };
       };
-
-      herculesCI.ciSystems = [ "x86_64-linux" ];
     }
     // utils.apply-systems
       {
