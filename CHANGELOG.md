@@ -1,3 +1,8 @@
+## 2025-12-3
+### Breaking: Unlikely
+- Added support for the PureScript registry
+- Removed all deprecated APIs
+
 ## 2024-12-7
 ### Breaking: No
 
