@@ -12,7 +12,14 @@
     };
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     official-package-set = { url = "github:purescript/package-sets"; flake = false; };
-    ps-tools.url = "github:purs-nix/purescript-tools";
+    ps-tools = {
+      url = "github:purs-nix/purescript-tools";
+      inputs = {
+        lint-utils.follows = "lint-utils";
+        nixpkgs.follows = "nixpkgs";
+        utils.follows = "utils";
+      };
+    };
     registry = { url = "github:purescript/registry"; flake = false; };
     utils.url = "github:numtide/flake-utils";
   };
