@@ -142,7 +142,7 @@ The package should be a purs-nix package built with [`build`](adding-packages.md
 ```
 { name;
   src;
-  info;
+  info; # optional
 }
 ```
 
