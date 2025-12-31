@@ -177,7 +177,7 @@ in
     info = mkOption {
       description = "info for the package, or a path to the info";
       type = t.either t.path info;
-      default = {};
+      default = { };
     };
 
     ro = {
