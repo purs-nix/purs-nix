@@ -424,7 +424,7 @@
                           version: 6.0.0
                           repo:    https://github.com/purescript/purescript-assert.git
                           commit:  27c0edb57d2ee497eb5fab664f5601c35b613eda
-                          source:  /nix/store/a9n4mycf90b8p71lz8si2b07fl99rvsf-assert-6.0.0"
+                          source:  /nix/store/vs27k1xg31r3csj7wyzhjky8b319g176-assert-6.0.0"
 
                           [[ ${i} == $info ]]
                         '') +

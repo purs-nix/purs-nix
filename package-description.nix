@@ -222,6 +222,7 @@ in
           in
           fetchGit
             ({
+              name = "${config.name}-git";
               url = cfg.repo;
               inherit (cfg) rev;
             } // (l.optionalAttrs (ref != null) { inherit ref; }))
