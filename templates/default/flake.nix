@@ -33,7 +33,9 @@
             entr
             nodejs
             (ps.command { })
-            ps-tools.for-0_15.purescript-language-server
+            ps-tools.purescript-backend-optimizer
+            ps-tools.purescript-language-server
+            ps-tools.purs-tidy
             purs-nix.esbuild
             purs-nix.purescript
           ];

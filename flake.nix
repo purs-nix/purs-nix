@@ -55,10 +55,10 @@
                 ./templates/default);
         };
 
-        package = {
-          description = "A basic purs-nix package setup";
-          path = "${./templates/package}";
-        };
+        # package = {
+        #   description = "A basic purs-nix package setup";
+        #   path = "${./templates/package}";
+        # };
       };
     }
     // inputs.utils.lib.eachSystem [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ]
