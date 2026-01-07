@@ -508,13 +508,13 @@
                       "${command} run argument"
                       run-output +
 
-                    # make-test "purs-nix docs"
-                    #   ""
-                    #   (_: "${command} docs") +
+                    make-test "purs-nix docs"
+                      ""
+                      (_: "${command} docs") +
 
-                    # make-test "purs-nix docs --format markdown"
-                    #   ""
-                    #   (_: "${command} docs --format markdown") +
+                    make-test "purs-nix docs --format markdown"
+                      ""
+                      (_: "${command} docs --format markdown") +
 
                     "\n" + test command + "\n" +
 

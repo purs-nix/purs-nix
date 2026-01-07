@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "docs-search": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1675992564,
-        "narHash": "sha256-Tk9VSogFHXtXe9O9vuCEfM/PV/S7plMIO0I++fCZn7U=",
-        "owner": "purs-nix",
-        "repo": "purescript-docs-search",
-        "rev": "35822b1d6ce65b1a07f80dd9e2caf15c3ee83e2c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "purs-nix",
-        "repo": "purescript-docs-search",
-        "type": "github"
-      }
-    },
     "flake-utils": {
       "locked": {
         "lastModified": 1644229661,
@@ -143,7 +127,6 @@
     },
     "root": {
       "inputs": {
-        "docs-search": "docs-search",
         "get-flake": "get-flake",
         "lint-utils": "lint-utils",
         "nixpkgs": "nixpkgs",

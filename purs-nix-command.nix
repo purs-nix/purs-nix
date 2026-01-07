@@ -2,7 +2,7 @@
 , all-dep-globs
 , defaults
 , dep-globs
-, docs-search
+  # , docs-search
 , nodejs
 , pkgs
 , purescript
@@ -107,34 +107,6 @@ let
 
   exe =
     let
-      bowers =
-        toString
-          (map
-            (dep:
-              let
-                bower-json =
-                  let info = dep.purs-nix-info; in
-                  toFile "${info.name}-bower.json"
-                    (toJSON
-                      ({
-                        inherit (info) name;
-
-                        dependencies =
-                          foldl' (acc: dep: acc // { ${u.dep-name dep} = ""; }) { }
-                            info.dependencies;
-                      }
-                      // l.optionalAttrs
-                        (info ? repo)
-                        {
-                          repository = {
-                            type = "git";
-                            url = info.repo;
-                          };
-                        }));
-              in
-              "--bower-jsons ${bower-json}")
-            all-dependencies);
-
       node-command =
         command: module:
         u.node-command {
@@ -173,12 +145,7 @@ let
 
         docs ) ${purescript}/bin/purs docs \
           --compile-output ${output} \
-          "''${@:2}" ${globs.all}
-
-          ${docs-search}/bin/purescript-docs-search \
-            build-index \
-            --docs-files "${output}/**/docs.json" \
-            ${bowers};;
+          "''${@:2}" ${globs.all};;
 
         package-info ) ${package-info} "$2";;
         packages ) ${packages};;
@@ -223,7 +190,7 @@ let
 
     repl           Enter the REPL
     docs <args>    Generate HTML documentation for all the modules in your
-                   project. (currently broken #52)
+                   project.
     ------------------------------------------------------------------------
     package-info <name>    Show the info of a specific package.
     packages               Show all packages used in your project.

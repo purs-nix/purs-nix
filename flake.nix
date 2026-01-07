@@ -1,10 +1,10 @@
 {
   inputs = {
-    docs-search = {
-      # to prevent lock file explosion
-      flake = false;
-      url = "github:purs-nix/purescript-docs-search";
-    };
+    # docs-search = {
+    #   # to prevent lock file explosion
+    #   flake = false;
+    #   url = "github:purs-nix/purescript-docs-search";
+    # };
     get-flake.url = "github:ursi/get-flake";
     lint-utils = {
       url = "github:homotopic/lint-utils";
@@ -34,7 +34,7 @@
         , system
         }:
         import ./purs-nix.nix {
-          docs-search = (get-flake inputs.docs-search).packages.${system}.default;
+          # docs-search = (get-flake inputs.docs-search).packages.${system}.default;
           inherit defaults official-package-set overlays pkgs registry;
           ps-tools = inputs.ps-tools.legacyPackages.${system};
         };

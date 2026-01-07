@@ -1,5 +1,5 @@
 { defaults
-, docs-search
+  # , docs-search
 , official-package-set
 , overlays
 , pkgs
@@ -482,7 +482,7 @@ in
           all-dep-globs
           defaults
           dep-globs
-          docs-search
+          # docs-search
           nodejs
           pkgs
           purescript;
