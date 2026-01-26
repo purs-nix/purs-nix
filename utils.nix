@@ -56,10 +56,10 @@ rec {
     }:
     let
       flags = toString [
-        (make-flag "--output " output)
+        (make-flag "--output" output)
         (make-flag "--verbose-errors" verbose-errors)
         (make-flag "--comments" comments)
-        (make-flag "--codegen " codegen)
+        (make-flag "--codegen" codegen)
         (make-flag "--no-prefix" no-prefix)
         (make-flag "--json-errors" json-errors)
       ];
@@ -73,8 +73,8 @@ rec {
     }:
     let
       flags = toString [
-        (make-flag "--node-path " node-path)
-        (make-flag "--node-opts " node-opts)
+        (make-flag "--node-path" node-path)
+        (make-flag "--node-opts" node-opts)
       ];
     in
     "${purescript}/bin/purs repl ${flags} ${globs}";
@@ -84,6 +84,8 @@ rec {
       ""
     else if arg == true then
       flag
+    else if match ".*[[:alnum:]]$" flag != null then
+      "${flag} ${arg}"
     else
       flag + arg;
 
