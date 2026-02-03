@@ -64,7 +64,7 @@
             (ps.command { })
             purs-nix.esbuild
             purs-nix.purescript
-            ps-tools.for-0_15.purescript-language-server
+            ps-tools.purescript-language-server
           ];
         };
       });
