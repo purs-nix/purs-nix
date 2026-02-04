@@ -1,4 +1,4 @@
-{ overlays ? [ ], official-package-set, pkgs, registry, utils }:
+{ overlays ? [ ], pkgs, registry, utils }:
 with builtins;
 let
   l = p.lib;
@@ -172,7 +172,12 @@ let
       (self:
         mapAttrs
           (n: v: build (v // { name = n; }))
-          (import ./ps-pkgs.nix { inherit l official-package-set; } self)));
+          (import ./ps-pkgs.nix
+            {
+              inherit l;
+              package-set = u.get-package-set registry;
+            }
+            self)));
 
   ps-pkgs-ns =
     foldl'

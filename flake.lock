@@ -67,22 +67,6 @@
         "type": "github"
       }
     },
-    "official-package-set": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1767512513,
-        "narHash": "sha256-zNRYCDXkTzw8QjmTRcv/n5Uedvhn9aIgmamcqCD2g8Q=",
-        "owner": "purescript",
-        "repo": "package-sets",
-        "rev": "603e17fc270eb4e9584ad815b8d4972dd56fdde2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "purescript",
-        "repo": "package-sets",
-        "type": "github"
-      }
-    },
     "ps-tools": {
       "inputs": {
         "lint-utils": [
@@ -112,11 +96,11 @@
     "registry": {
       "flake": false,
       "locked": {
-        "lastModified": 1767531332,
-        "narHash": "sha256-t3Mzoh4atyTXPavEXQmvxKbUzjmuKUz+K7wlmEV5uo8=",
+        "lastModified": 1770240638,
+        "narHash": "sha256-fgCY6D+x4VOHhM11ASWiLxaBgsLJ33fsGhy1W1hR1ZU=",
         "owner": "purescript",
         "repo": "registry",
-        "rev": "62242b47093f47c17689adc7897bf8483b08202c",
+        "rev": "15b8a097f098f515d4bb0cfc8486c409eb066fba",
         "type": "github"
       },
       "original": {
@@ -130,7 +114,6 @@
         "get-flake": "get-flake",
         "lint-utils": "lint-utils",
         "nixpkgs": "nixpkgs",
-        "official-package-set": "official-package-set",
         "ps-tools": "ps-tools",
         "registry": "registry",
         "utils": "utils"

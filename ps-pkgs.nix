@@ -1,4 +1,4 @@
-{ l, official-package-set }: self:
+{ l, package-set }: self:
 with builtins;
 (with self; {
   html-parser-halogen = {
@@ -55,18 +55,11 @@ with builtins;
   };
 })
 // (
-  # We have to use the legacy package set to get the dependency lists.
-  # We can't get them from the purs.json for this use case, because it requires IFD,
-  # Which to due to how Nix works, means the packages cannot be fetched in parallel.
   mapAttrs
-    (_: v: {
-      src.registry = {
-        ref = v.version;
-        dependency-override = v.dependencies;
-      };
+    (_: version: {
+      src.registry = { inherit version; };
     })
-    (l.filterAttrs (n: _: n != "metadata")
-      (l.importJSON "${official-package-set}/packages.json"))
+    package-set.packages
 )
   // import ./ps-pkgs-ns.nix {
   inherit l;

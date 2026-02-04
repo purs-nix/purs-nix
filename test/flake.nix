@@ -412,7 +412,7 @@
                           version: 6.0.0
                           repo:    https://github.com/purescript/purescript-console.git
                           url:     https://packages.registry.purescript.org/console/6.0.0.tar.gz
-                          source:  /nix/store/1pydxb1rzqqlc5h6id907dh8s5p0zsbp-console-6.0.0"
+                          source:  /nix/store/67lp3pp1jlaxpqhdm1dz4zk7zp0s1a4h-console-6.0.0"
 
                           [[ ${i} == $info ]]
                         '') +

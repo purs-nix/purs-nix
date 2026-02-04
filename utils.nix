@@ -168,4 +168,15 @@ rec {
     (if typeOf dep == "string"
     then ps-pkgs.${dep}
     else dep).purs-nix-info;
+
+  get-package-set = registry:
+    let
+      latest = l.pipe "${registry}/package-sets" [
+        readDir
+        attrNames
+        (sort l.versionOlder)
+        l.last
+      ];
+    in
+    l.importJSON "${registry}/package-sets/${latest}";
 }

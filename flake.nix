@@ -11,7 +11,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    official-package-set = { url = "github:purescript/package-sets"; flake = false; };
     ps-tools = {
       url = "github:purs-nix/purescript-tools";
       inputs = {
@@ -24,7 +23,7 @@
     utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { get-flake, official-package-set, registry, ... }@inputs:
+  outputs = { get-flake, registry, ... }@inputs:
     with builtins;
     {
       __functor = _:
@@ -35,7 +34,7 @@
         }:
         import ./purs-nix.nix {
           # docs-search = (get-flake inputs.docs-search).packages.${system}.default;
-          inherit defaults official-package-set overlays pkgs registry;
+          inherit defaults overlays pkgs registry;
           ps-tools = inputs.ps-tools.legacyPackages.${system};
         };
 
@@ -71,7 +70,7 @@
 
           inherit
             (import ./build-pkgs.nix {
-              inherit official-package-set pkgs registry;
+              inherit pkgs registry;
               utils = u;
             })
             ps-pkgs;
