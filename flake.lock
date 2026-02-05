@@ -80,11 +80,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1765692861,
-        "narHash": "sha256-8UeEtzOtqK1yKJcYsy+ikr13ssXWKE5mmt+KvmL0TeQ=",
+        "lastModified": 1770243793,
+        "narHash": "sha256-DnX8XJa5YvAYc0+pchI71C0928gLpFX6FtZXI+gbDJE=",
         "owner": "purs-nix",
         "repo": "purescript-tools",
-        "rev": "9d5b05dc6abd02e65c47d702e6a5fb97fec3a290",
+        "rev": "913348dfc63faf105485e492fec0a66bed8d15ab",
         "type": "github"
       },
       "original": {
