@@ -33,7 +33,7 @@ The package should be a purs-nix package built with [`build`](adding-packages.md
 
 ### Example
 ```nix
-{ src = ./foreign-js; }
+{ src = ./cool-function.js; }
 ```
 
 ## `GitSrc`
@@ -106,7 +106,10 @@ The package should be a purs-nix package built with [`build`](adding-packages.md
       "prelude"
     ];
 
-  foreign.MyModule.node_modules = node_modules;
+  foreign.MyModule.node_modules =
+    pkgs.importNpmLock.buildNodeModules
+      { npmRoot = ./.; inherit (pkgs) nodejs; }
+    + /node_modules;
 };
 ```
 
